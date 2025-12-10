@@ -1,0 +1,126 @@
+﻿@model ILOps_Inventory.Areas.Inventory_Add.Models.InventoryItems
+
+
+
+@{
+    Layout = "/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Add Inventory Items";
+}
+
+<h2>Add Inventory Items</h2>
+
+<form asp-action="AddInventoryItems" method="post" class="mt-3">
+    <div class="row mb-3">
+        <div class="col-md-2">
+            <label class="form-label">Warehouse:</label>
+        </div>
+        <div class="col-md-4">
+            <select class="form-select" name="Warehouse">
+                <option value="CO">CO</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-2">
+            <label class="form-label">Part Number:</label>
+        </div>
+        <div class="col-md-6">
+            <input type="text" class="form-control" name="PartNumber" />
+        </div>
+        <div class="col-md-2 text-end">
+            <label class="form-label">Length</label>
+        </div>
+        <div class="col-md-2">
+            <input type="text" class="form-control" name="Length1" />
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-2">
+            <label class="form-label">Description:</label>
+        </div>
+        <div class="col-md-6">
+            <input type="text" class="form-control" name="Description" />
+        </div>
+        <div class="col-md-2"></div>
+        <div class="col-md-2">
+            <input type="text" class="form-control" name="Length2" />
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-2">
+            <label class="form-label">French Description:</label>
+        </div>
+        <div class="col-md-6">
+            <input type="text" class="form-control" name="FrenchDescription" />
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-2">
+            <label class="form-label">Type:</label>
+        </div>
+        <div class="col-md-2">
+            <select class="form-select" name="Type">
+                <option>Hardware</option>
+                <option>Accessory</option>
+                <option>License</option>
+            </select>
+        </div>
+
+        <div class="col-md-2">
+            <label class="form-label">Accessory Group:</label>
+        </div>
+        <div class="col-md-2">
+            <select class="form-select" name="AccessoryGroup">
+                <option>REGULAR</option>
+                <option>SPECIAL</option>
+                <option>LICENSE</option>
+                <option>SIM</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-2">
+            <label class="form-label">Product Code:</label>
+        </div>
+        <div class="col-md-2">
+            <input type="text" class="form-control" name="ProductCode" />
+        </div>
+
+        <div class="col-md-2">
+            <label class="form-label">Sales Dept:</label>
+        </div>
+        <div class="col-md-2">
+            <input type="text" class="form-control" name="SalesDept" />
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-2">
+            <label class="form-label">Cost Price:</label>
+        </div>
+        <div class="col-md-2">
+            <input type="number" step="0.01" class="form-control" name="CostPrice" value="0.00" />
+        </div>
+
+        <div class="col-md-2">
+            <label class="form-label">Selling Price:</label>
+        </div>
+        <div class="col-md-2">
+            <input type="number" step="0.01" class="form-control" name="SellingPrice" value="0.00" />
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-3 offset-md-3">
+            <button type="submit" class="btn btn-primary w-100">Add Item</button>
+        </div>
+        <div class="col-md-3">
+            <a asp-action="Index" class="btn btn-secondary w-100">Exit</a>
+        </div>
+    </div>
+</form>
