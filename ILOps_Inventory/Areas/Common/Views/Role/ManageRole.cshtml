@@ -1,0 +1,250 @@
+﻿@model List<ILOps_Inventory.Areas.Common.Models.UserRole>
+@{
+    ViewData["Title"] = "User Roles - Settings";
+}
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .table-responsive {
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .table td.text-truncate {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .btn-group-sm .btn {
+        padding: 0.25rem 0.4rem;
+    }
+
+    @@media (max-width: 576px) {
+        .w-75 {
+            width: 100% !important;
+        }
+
+        .table th:nth-child(3), .table td:nth-child(3) {
+            display: none;
+        }
+    }
+</style>
+
+<div class="d-flex justify-content-center">
+    <div class="card shadow-sm border-0 w-75">
+        <div class="card-body p-0">
+            @Html.AntiForgeryToken()
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success py-2 mx-3 mt-3">@TempData["Success"]</div>
+            }
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger py-2 mx-3 mt-3">@TempData["Error"]</div>
+            }
+
+            <div class="card-header bg-white border-bottom py-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="mb-0 fw-semibold">User Roles</h5>
+                        <small class="text-muted">Manage application roles</small>
+                    </div>
+                </div>
+
+                <div class="row g-2 align-items-end mb-3">
+                    <input type="hidden" id="selectedRoleId" />
+                    <div class="col-sm-4">
+                        <label class="form-label mb-1" for="roleNameInput">User Role</label>
+                        <input type="text" id="roleNameInput" class="form-control" placeholder="Enter role name" maxlength="100" />
+                    </div>
+                    <div class="col-sm-3 d-flex align-items-end gap-2">
+                        <button id="addBtn" class="btn btn-primary btn-sm">Add Role</button>
+                        <button id="updateBtn" class="btn btn-warning btn-sm" style="display:none;">Update Role</button>
+                        <button id="resetBtn" class="btn btn-outline-secondary btn-sm">Reset</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-responsive" style="overflow-x: auto;">
+                <table class="table table-sm table-hover mb-0">
+                    <thead class="table-light sticky-top">
+                        <tr>
+                            <th style="width:60px">Id</th>
+                            <th>User Role</th>
+                            <th style="width:100px">Status</th>
+                            <th style="width:200px" class="text-end">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int srNo = 1;
+                        }
+                        @if (Model != null && Model.Any())
+                        {
+                            @foreach (var role in Model)
+                            {
+                                <tr data-id="@role.Id">
+                                    <td>@srNo</td>
+                                    <td class="text-truncate" style="max-width: 200px;" title="@role.Name">@role.Name</td>
+                                    <td>
+                                        @if (role.IsActive)
+                                        {
+                                            <span class="badge bg-success">Active</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">Inactive</span>
+                                        }
+                                    </td>
+                                    <td class="text-end px-1 py-1">
+                                        <div class="btn-group btn-group-sm" role="group">
+                                            <button class="btn btn-outline-secondary edit-role" data-id="@role.Id" data-name="@role.Name" title="Edit">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
+                                            <form method="post" action="@Url.Action("ToggleActive", "Role", new { area = "Common" })" class="d-inline">
+                                                <input type="hidden" name="id" value="@role.Id" />
+                                                <button type="submit" class="btn @(role.IsActive ? "btn-outline-danger" : "btn-outline-success")"
+                                                        onclick="return confirm('Toggle @role.Name status?')" title="@(role.IsActive ? "Deactivate" : "Activate")">
+                                                    <i class="bi bi-power"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                srNo++;
+                            }
+                        }
+                        else
+                        {
+                            <tr><td colspan="4" class="text-center text-muted py-4">No roles found.</td></tr>
+                        }
+                    </tbody>
+                </table>
+
+                <div class="d-flex justify-content-end p-2">
+                    <nav>
+                        <ul class="pagination pagination-sm mb-0" id="pagination"></ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            function getAntiForgeryToken() {
+                return $('.card-body input[name="__RequestVerificationToken"]').first().val();
+            }
+
+            $('.edit-role').click(function() {
+                $('#selectedRoleId').val($(this).data('id'));
+                $('#roleNameInput').val($(this).data('name')).focus();
+                $('#addBtn').hide();
+                $('#updateBtn').show();
+                $('#resetBtn').html('Cancel');
+                $('html,body').animate({scrollTop: 0}, 300);
+            });
+
+            $('#addBtn').click(function(e) {
+                e.preventDefault();
+                var name = $('#roleNameInput').val().trim();
+                if (!name) return alert('Role name required!');
+
+                $.post('@Url.Action("Create", "Role", new { area = "Common" })',
+                    {
+                        name: name,
+                        __RequestVerificationToken: getAntiForgeryToken()
+                    })
+                .done(function(data) {
+                    if (data.success) {
+                        alert(data.message);
+                        location.reload();
+                    } else {
+                        alert(data.message);
+                    }
+                }).fail(function(xhr) {
+                    alert('Add failed! Status: ' + xhr.status);
+                });
+            });
+
+            $('#updateBtn').click(function(e) {
+                e.preventDefault();
+                var id = $('#selectedRoleId').val();
+                var name = $('#roleNameInput').val().trim();
+                if (!id || !name) return alert('Select role first!');
+
+                $.post('@Url.Action("UpdateRole", "Role", new { area = "Common" })',
+                    {
+                        id: id,
+                        name: name,
+                        __RequestVerificationToken: getAntiForgeryToken()
+                    })
+                .done(function(data) {
+                    if (data.success) {
+                        alert(data.message);
+                        location.reload();
+                    } else {
+                        alert(data.message);
+                    }
+                }).fail(function(xhr) {
+                    alert('Update failed! Status: ' + xhr.status);
+                });
+            });
+
+            $('#resetBtn').click(function(e) {
+                e.preventDefault();
+                $('#selectedRoleId').val('');
+                $('#roleNameInput').val('').focus();
+                $('#addBtn').show();
+                $('#updateBtn').hide();
+                $(this).html('Reset');
+            });
+        
+
+
+
+                    // ===== Pagination =====
+        var rowsPerPage = 3;
+        var rows = $('table tbody tr');
+        var rowsCount = rows.length;
+        var pageCount = Math.ceil(rowsCount / rowsPerPage);
+
+        function showPage(page) {
+            rows.hide();
+            rows.slice((page - 1) * rowsPerPage, page * rowsPerPage).show();
+
+            $('#pagination li').removeClass('active');
+            $('#pagination li').eq(page - 1).addClass('active');
+        }
+
+        // Create pagination buttons
+        for (let i = 1; i <= pageCount; i++) {
+            $('#pagination').append(
+                `<li class="page-item ${i === 1 ? 'active' : ''}">
+                    <a class="page-link" href="#">${i}</a>
+                </li>`
+            );
+        }
+
+        // Click event
+        $('#pagination').on('click', 'a', function (e) {
+            e.preventDefault();
+            var page = parseInt($(this).text());
+            showPage(page);
+        });
+
+        // Initial page
+        showPage(1);
+
+        
+        });
+    </script>
+}

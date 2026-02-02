@@ -1,0 +1,151 @@
+﻿ @{
+    ViewData["Title"] = "IMEI Receive";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@*
+<style>
+    .imei-menu {
+        width: 260px;
+    }
+
+        .imei-menu a {
+            display: block;
+            margin-bottom: 10px;
+            padding: 12px;
+            text-align: center;
+            font-weight: 500;
+            border-radius: 6px;
+            background: linear-gradient(#e8f1ff, #cddffc);
+            border: 1px solid #9bb6e8;
+            color: #000;
+            text-decoration: none;
+        }
+
+            .imei-menu a:hover {
+                background: #bcd3ff;
+            }
+</style>
+
+<h4>IMEI Receive</h4>
+
+<div class="imei-menu">
+    <a href="@Url.Action("ReceiveImei", "Imei", new { area = "Inventory" })">
+        Receive IMEI's
+    </a>
+
+    <a href="@Url.Action("Index", "InvoiceCredit", new { area = "Inventory" })">
+        Enter Invoice / Credits
+    </a>
+
+    <a href="@Url.Action("Reports", "Imei", new { area = "Inventory" })">
+        Reports
+    </a>
+
+    <a href="@Url.Action("FindByImei", "FindByIMEI", new { area = "Inventory" })">
+        Find By IMEI
+    </a>
+
+    <a href="@Url.Action("ReverseReceipt", "Imei", new { area = "Inventory" })">
+        Reverse Receipt
+    </a>
+
+    <a href="@Url.Action("ImeiExceptions", "Imei", new { area = "Inventory" })">
+        IMEI Exceptions
+    </a>
+
+    <a href="@Url.Action("ExitReceive", "Imei", new { area = "Inventory" })">
+        Exit IMEI Receive
+    </a>
+</div>
+ *@
+
+
+
+
+
+<style>
+    .imei-wrapper {
+        max-width: 420px;
+        margin-top: 20px;
+    }
+
+    .imei-card {
+        background: #ffffff;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+        border: 1px solid #e5e7eb;
+    }
+
+    .imei-title {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 15px;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 8px;
+    }
+
+    .imei-menu a {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        padding: 12px 16px;
+        border-radius: 8px;
+        background: linear-gradient(135deg, #eef4ff, #dbe8ff);
+        border: 1px solid #c7d7ff;
+        color: #1f2937;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+        transition: all 0.2s ease-in-out;
+    }
+
+        .imei-menu a span {
+            font-size: 13px;
+            color: #4b5563;
+        }
+
+        .imei-menu a:hover {
+            background: linear-gradient(135deg, #dbe8ff, #c7dbff);
+            transform: translateX(4px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            color: #111827;
+        }
+</style>
+
+<div class="imei-wrapper">
+    <div class="imei-card">
+        <div class="imei-title">IMEI Receive</div>
+
+        <div class="imei-menu">
+            <a href="@Url.Action("ReceiveImei", "Imei", new { area = "Inventory" })">
+                Receive IMEI's <span>➜</span>
+            </a>
+
+            <a href="@Url.Action("Index", "InvoiceCredit", new { area = "Inventory" })">
+                Enter Invoice / Credits <span>➜</span>
+            </a>
+
+            <a href="@Url.Action("Reports", "Imei", new { area = "Inventory" })">
+                Reports <span>➜</span>
+            </a>
+
+            <a href="@Url.Action("FindByImei", "FindByIMEI", new { area = "Inventory" })">
+                Find By IMEI <span>➜</span>
+            </a>
+
+            <a href="@Url.Action("ReverseReceipt", "Imei", new { area = "Inventory" })">
+                Reverse Receipt <span>➜</span>
+            </a>
+
+            <a href="@Url.Action("ImeiExceptions", "Imei", new { area = "Inventory" })">
+                IMEI Exceptions <span>➜</span>
+            </a>
+
+            <a href="@Url.Action("ExitReceive", "Imei", new { area = "Inventory" })">
+                Exit IMEI Receive <span>➜</span>
+            </a>
+        </div>
+    </div>
+</div>

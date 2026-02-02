@@ -1,0 +1,208 @@
+﻿@{
+    ViewData["Title"] = "Find By IMEI";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<a class="btn btn-secondary"
+   href="@Url.Action("Index", "Imei", new { area = "Inventory" })">
+    ⬅ Back
+</a>
+
+<div class="container mt-4">
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Find By IMEI</h5>
+        </div>
+        <div class="card-body">
+
+            <div class="row mb-3 align-items-center">
+                <div class="col-md-6 col-lg-4">
+                    <input id="imeiInput" class="form-control form-control-sm" placeholder="Enter IMEI" />
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-primary btn-sm w-100" onclick="searchIMEI()">Search</button>
+                </div>
+            </div>
+
+            <!-- RECEIPT GRID -->
+            <div class="table-responsive mb-4">
+                <h6 class="text-secondary">Hardware Receipt</h6>
+                <table class="table table-bordered table-hover table-sm align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Vendor</th>
+                            <th>BVReceiptNo</th>
+                            <th>BVReceipDate</th>
+                            <th>CMO</th>
+                            <th>PO</th>
+                            <th>Part</th>
+                            <th>Qty</th>
+                            <th>ReceipUnitCost</th>
+                            <th>RogersTotal</th>
+                            <th>Variance</th>
+                            <th>RogersCount</th>
+                        </tr>
+                    </thead>
+                    <tbody id="receiptBody"></tbody>
+                </table>
+            </div>
+
+            <!-- ROGERS GRID -->
+            <div class="table-responsive">
+                <h6 class="text-secondary">Rogers Invoices / Credits / Debit</h6>
+                <table class="table table-bordered table-hover table-sm align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Type</th>
+                            <th>RefNo</th>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <th>Qty</th>
+                            <th>Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rogersBody"></tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Improve table aesthetics */
+    table th, table td {
+        vertical-align: middle !important;
+        font-size: 13px;
+    }
+
+    table thead {
+        font-weight: 600;
+        letter-spacing: 0.5px;
+    }
+
+    table tbody tr:hover {
+        background-color: #f1f5f9;
+        transition: 0.2s;
+    }
+
+    .card-header h5 {
+        font-weight: 600;
+        letter-spacing: 0.5px;
+    }
+
+    h6.text-secondary {
+        font-weight: 500;
+        margin-bottom: 10px;
+    }
+</style>
+
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<script>
+
+         (function () {
+        const originalFetch = window.fetch;
+        let active = 0;
+
+        window.fetch = function () {
+            if (active === 0) Spinner.show();
+            active++;
+
+            return originalFetch.apply(this, arguments)
+                .finally(() => {
+                    active--;
+                    if (active <= 0) {
+                        active = 0;
+                        Spinner.hide();
+                    }
+                });
+        };
+    })();
+
+      function searchIMEI() {
+        const imei = document.getElementById("imeiInput").value.trim();
+
+        if (!imei) {
+            alert("Please enter IMEI");
+            return;
+        }
+
+        fetch('/Inventory/FindByIMEI/Search', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'imei=' + encodeURIComponent(imei)
+        })
+        .then(r => r.json())
+        .then(res => {
+            if (!res.success) {
+                alert(res.message);
+                document.getElementById("receiptBody").innerHTML = "";
+                document.getElementById("rogersBody").innerHTML = "";
+                return;
+            }
+
+            const r = res.receipt;
+
+            // First load Rogers invoices to calculate totals
+            fetch('/Inventory/FindByIMEI/GetRogersInvoices?bvReceiptNo=' + encodeURIComponent(r.bvReceiptNo))
+                .then(resp => resp.json())
+                .then(rogers => {
+                    let rogersTotal = 0;
+                    let rogersCount = 0;
+
+                    rogers.forEach(x => {
+                        rogersTotal += x.perUnitAmount * x.qty;
+                        rogersCount += x.qty;
+                    });
+
+                    const variance = rogersTotal - (r.qtyReceived * r.unitCost);
+
+                    document.getElementById("receiptBody").innerHTML = `
+                        <tr>
+                         <td>${r.vendorName || ''}</td>
+                            <td>${r.bvReceiptNo}</td>
+                            <td>${new Date(r.receiptDate).toLocaleDateString()}</td>
+                            <td>${r.poNumber}</td>
+                            <td>${r.partNo}</td>
+                            <td>${r.qtyReceived}</td>
+                            <td>${r.unitCost.toFixed(2)}</td>
+                            <td>${r.cmo}</td>
+                            <td>${rogersTotal.toFixed(2)}</td>
+                            <td>${variance.toFixed(2)}</td>
+                            <td>${rogersCount}</td>
+                        </tr>`;
+
+                    // Now populate the Rogers grid as before
+                    loadRogers(r.bvReceiptNo, r.unitCost);
+                });
+        });
+    }
+
+    function loadRogers(bvReceiptNo) {
+        fetch('/Inventory/FindByIMEI/GetRogersInvoices?bvReceiptNo=' + encodeURIComponent(bvReceiptNo))
+            .then(r => r.json())
+            .then(data => {
+                const body = document.getElementById("rogersBody");
+                body.innerHTML = "";
+
+                if (!data.length) {
+                    body.innerHTML = '<tr><td colspan="6" class="text-center text-muted">No invoices found</td></tr>';
+                    return;
+                }
+
+                data.forEach(x => {
+                    body.innerHTML += `
+                        <tr>
+                            <td>${x.transType}</td>
+                            <td>${x.refNo}</td>
+                            <td>${new Date(x.transDate).toLocaleDateString()}</td>
+                            <td>${x.perUnitAmount.toFixed(2)}</td>
+                            <td>${x.qty}</td>
+                            <td>${x.remarks || ''}</td>
+                        </tr>`;
+                });
+            });
+    }
+</script>

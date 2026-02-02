@@ -1,0 +1,330 @@
+﻿@model System.Data.DataTable
+@{
+    ViewData["Title"] = ViewBag.Title ?? "Cost Validation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    string exportViewType = "";
+    if (ViewBag.Title != null)
+    {
+        if (ViewBag.Title.ToString().Contains("Latest"))
+            exportViewType = "Latest";
+        else if (ViewBag.Title.ToString().Contains("Discrepancies"))
+            exportViewType = "Discrepancies";
+        else if (ViewBag.Title.ToString().Contains("Across Warehouses"))
+            exportViewType = "CostVarianceAcrossWarehouses";
+        else if (ViewBag.Title.ToString().Contains("Current vs Avg"))
+            exportViewType = "CurrentVsAvg";
+        else if (ViewBag.Title.ToString().Contains("RD Hardware"))
+            exportViewType = "RDHardwareToSpire";
+    }
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+<style>
+    .table-danger-light {
+        background: #fde2e1 !important;
+    }
+
+    .side-menu .btn {
+        margin-bottom: 10px;
+        text-align: left;
+        font-weight: 500;
+        padding: 12px 16px;
+        font-size: 15px;
+    }
+
+
+    .table {
+        font-size: 14.5px;
+    }
+
+        .table td, .table th {
+            padding: 10px 12px;
+        }
+
+    .top-bar .btn {
+        min-width: 180px;
+    }
+
+    .top-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #f8f9fa;
+        padding: 12px;
+        border-radius: 8px;
+    }
+
+    .file-input-slim {
+        height: 36px;
+        font-size: 14px;
+        padding: 4px 10px;
+    }
+
+    .btn-sky {
+        background-color: #e3f2fd;
+        color: #0d6efd;
+        border: 1px solid #b6ddff;
+    }
+
+    .equal-height-row {
+        display: flex;
+    }
+
+    .right-panel {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .tab-content {
+        flex: 1;
+        // min-height: 420px;
+    }
+
+        .equal-height-row > div {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .btn-sky:hover {
+            background-color: #d0e9ff;
+            color: #0a58ca;
+        }
+</style>
+
+<h4><i class="fas fa-coins"></i> Cost Validation</h4>
+
+<!-- TOP BAR -->
+<div class="top-bar mb-3">
+    <form id="hpcUploadForm"
+          asp-action="LoadHPC"
+          asp-controller="CostValidation"
+          asp-area="Inventory"
+          enctype="multipart/form-data"
+          class="d-flex gap-2">
+
+        <input type="file" name="excelFile" class="form-control file-input-slim" />
+        <button class="btn btn-primary">
+            <i class="fas fa-upload"></i> Upload
+        </button>
+    </form>
+
+    <a class="btn btn-sky"
+       href="@Url.Action("DownloadHPCTemplate", "CostValidation", new { area = "Inventory" })">
+        <i class="fas fa-download"></i> Download Template
+    </a>
+</div>
+
+<div id="hpcUploadMessage"></div>
+
+@if (ViewBag.InsertedCount != null)
+{
+    <div class="alert alert-info">
+        Inserted: @ViewBag.InsertedCount | Invalid: @ViewBag.FailedCount
+    </div>
+}
+
+<div class="row mt-3 equal-height-row">
+    <!-- LEFT MENU -->
+    <div class="col-md-3 side-menu">
+        <a class="btn @(ViewBag.AutoLoaded == true ? "btn-secondary disabled" : "btn-outline-dark") w-100"
+           href="@Url.Action("Index", "CostValidation", new { area = "Inventory", viewType = "Latest" })">
+            View HPC
+        </a>
+
+        <a class="btn btn-outline-dark w-100"
+           href="@Url.Action("Index", "CostValidation", new { area = "Inventory", viewType = "Discrepancies" })">
+            View HPC Discrepancy
+        </a>
+
+        <a class="btn btn-outline-dark w-100"
+           href="@Url.Action("CostVarianceAcrossWarehouses", "CostValidation", new { area = "Inventory" })">
+            Cost Variance Across Warehouses
+        </a>
+
+        <a class="btn btn-outline-dark w-100"
+           href="@Url.Action("CostVarianceCurrentVsAvg", "CostValidation", new { area = "Inventory" })">
+            Compare Current vs Avg
+        </a>
+
+        <a class="btn btn-outline-dark w-100"
+           href="@Url.Action("RDHardwareToSpireCurrent", "CostValidation", new { area = "Inventory" })">
+            RD vs Spire Cost
+        </a>
+    </div>
+
+    <!-- RIGHT CONTENT -->
+    <div class="col-md-9 right-panel">
+        <ul class="nav nav-tabs mb-2">
+            <li class="nav-item">
+                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tabAll">
+                    View All
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tabInvalid">
+                    Invalid Records
+                </button>
+            </li>
+        </ul>
+
+        <div class="tab-content border p-2">
+
+            <!-- VIEW ALL -->
+            <div class="tab-pane fade show active" id="tabAll">
+                @if (Model != null && Model.Rows.Count > 0)
+                {
+                    if (!string.IsNullOrEmpty(exportViewType))
+                    {
+                        <div class="text-end mb-2">
+                            <a class="btn btn-success btn-sm"
+                               href="@Url.Action("ExportGrid", "CostValidation", new { area = "Inventory", viewType = exportViewType })">
+                                <i class="fas fa-file-excel"></i> Export
+                            </a>
+                        </div>
+                    }
+
+                    <small>@ViewBag.Title | Total: @Model.Rows.Count</small>
+
+                    <div class="table-responsive mt-2">
+                        <table class="table table-striped" id="mainTable">
+                            <thead class="table-dark">
+                                <tr>
+                                    @foreach (System.Data.DataColumn col in Model.Columns)
+                                    {
+                                        <th>@col.ColumnName</th>
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (System.Data.DataRow r in Model.Rows)
+                                {
+                                    <tr>
+                                        @foreach (var c in r.ItemArray)
+                                        {
+                                            <td>@c</td>
+                                        }
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <ul class="pagination justify-content-center" id="hpcPagination"></ul>
+                }
+                else
+                {
+                    <div class="table-responsive mt-2">
+                        <table class="table table-bordered">
+                          
+                            <tbody>
+                                <tr>
+                                    <td class="text-center text-muted py-5">
+                                        <i class="fas fa-info-circle me-2"></i>
+                                        No Record Found
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+
+            <!-- INVALID -->
+            <div class="tab-pane fade" id="tabInvalid">
+                @if (ViewBag.InvalidRows != null)
+                {
+                    var err = ViewBag.InvalidRows as System.Data.DataTable;
+                    <table class="table table-bordered">
+                        <thead class="table-dark">
+                            <tr>
+                                @foreach (System.Data.DataColumn c in err.Columns)
+                                {
+                                    <th>@c.ColumnName</th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (System.Data.DataRow r in err.Rows)
+                            {
+                                <tr class="table-danger-light">
+                                    @foreach (var c in r.ItemArray)
+                                    {
+                                        <td>@c</td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <div class="table-responsive mt-2">
+                        <table class="table table-bordered">
+                            <tbody>
+                                <tr>
+                                    <td class="text-center text-muted py-5">
+                                        <i class="fas fa-info-circle me-2"></i>
+                                        No Record Found
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                
+            </div>
+
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+
+
+       document.getElementById('hpcUploadForm').addEventListener('submit', async e => {
+        e.preventDefault();
+            Spinner.show();
+
+        const res = await fetch('@Url.Action("LoadHPC", "CostValidation", new { area = "Inventory" })', {
+            method: 'POST',
+            body: new FormData(e.target)
+        });
+
+        const json = await res.json();
+        const msg = document.getElementById('hpcUploadMessage');
+
+        msg.className = json.success ? 'alert alert-success' : 'alert alert-danger';
+        msg.innerHTML = json.message;
+
+        setTimeout(() => {
+            window.location.href =
+                '@Url.Action("Index", "CostValidation", new { area = "Inventory" })';
+        }, 800);
+    });
+
+    const rowsPerPage = 5;
+    const table = document.getElementById("mainTable");
+    const pager = document.getElementById("hpcPagination");
+
+    if (table) {
+        const rows = [...table.querySelectorAll("tbody tr")];
+        const pages = Math.ceil(rows.length / rowsPerPage);
+
+        window.show = p => {
+            rows.forEach((r, i) =>
+                r.style.display = i >= (p - 1) * rowsPerPage && i < p * rowsPerPage ? "" : "none"
+            );
+            pager.innerHTML = "";
+            for (let i = 1; i <= pages; i++) {
+                pager.innerHTML +=
+                    `<li class="page-item ${i == p ? "active" : ""}">
+                        <a class="page-link" href="#" onclick="show(${i})">${i}</a>
+                     </li>`;
+            }
+        };
+        show(1);
+    }
+</script>

@@ -1,0 +1,108 @@
+﻿@model ILOps_Inventory.Areas.Common.Controllers.RolePermissionController.RolePermissionViewModel
+@{
+    ViewData["Title"] = "Role Permissions";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="content-card">
+                @if (TempData["Debug"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show">
+                        @TempData["Debug"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                }
+
+                <form method="post" action="/Common/RolePermission/SavePermissions" novalidate id="permissionForm">
+                    @Html.AntiForgeryToken()
+
+                    <!-- Role Dropdown -->
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">Select Role <span class="text-danger">*</span></label>
+                            <select name="roleId" class="form-select" id="roleSelect">
+                                <option value="">Choose Role...</option>
+                                @if (Model.ActiveRoles != null)
+                                {
+                                    @foreach (var role in Model.ActiveRoles)
+                                    {
+                                        <option value="@role.Id">@role.Name</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Menus -->
+                    <div class="mb-4" id="permissionsSection">
+                        <label class="form-label fw-bold">Select Permissions</label>
+                        <div class="row g-3" id="menuContainer">
+                            @if (Model.Menus != null)
+                            {
+                                @foreach (var menu in Model.Menus.Where(m => !m.ParentMenuId.HasValue || m.ParentMenuId == 0))
+                                {
+                                    <div class="col-md-6 col-lg-4">
+                                        <div class="form-check">
+                                            <input class="form-check-input menu-checkbox" type="checkbox"
+                                                   name="selectedMenus" id="menu_@menu.MenuId" value="@menu.MenuId">
+                                            <label class="form-check-label fw-semibold" for="menu_@menu.MenuId">@menu.MenuName</label>
+                                        </div>
+                                        @foreach (var child in Model.Menus.Where(m => m.ParentMenuId == menu.MenuId))
+                                        {
+                                            <div class="ms-4 form-check mt-1">
+                                                <input class="form-check-input menu-checkbox" type="checkbox"
+                                                       name="selectedMenus" id="menu_@child.MenuId" value="@child.MenuId">
+                                                <label class="form-check-label" for="menu_@child.MenuId">&nbsp;&nbsp;@child.MenuName</label>
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+
+                    <!-- Save Button -->
+                    <button type="submit" class="btn btn-primary btn-lg px-4">
+                        <i class="bi bi-save me-2"></i>Save Permissions
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('🚀 RolePermission SCRIPT LOADED!');
+
+        const roleSelect = document.getElementById('roleSelect');
+        const menuCheckboxes = document.querySelectorAll('.menu-checkbox');
+
+        // Role change → Load permissions
+        roleSelect.addEventListener('change', function() {
+            const roleId = this.value;
+            console.log('🔄 Role changed:', roleId);
+
+            if (roleId) {
+                fetch(`/Common/RolePermission/GetRolePermissions?roleId=${roleId}`)
+                    .then(response => response.json())
+                    .then(menuIds => {
+                        console.log('✅ Loaded menus for role', roleId, ':', menuIds);
+
+                        // Clear all checkboxes
+                        menuCheckboxes.forEach(cb => cb.checked = false);
+
+                        // Check role's permissions
+                        menuIds.forEach(id => {
+                            const cb = document.getElementById(`menu_${id}`);
+                            if (cb) cb.checked = true;
+                        });
+                    })
+                    .catch(err => console.error('Load permissions error:', err));
+            }
+        });
+    });
+</script>

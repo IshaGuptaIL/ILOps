@@ -1,0 +1,761 @@
+﻿@using ILOps_Inventory.Areas.Inventory.Models
+@model ILOps_Inventory.Areas.Inventory.Models.InvoiceCreditPageVM
+
+@{
+    ViewData["Title"] = "Invoice Credit IMEI's";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var modelSafe = Model ?? new InvoiceCreditPageVM
+    {
+        MissingReceipts = new List<HardwareReceivedVM>(),
+        FindPO = "",
+        FindReceiptNo = "",
+        SelectedType = "Hardware",
+        CurrentPage = 1,
+        TotalPages = 1,
+        LastInvoiceRefNo = "",
+        LastInvoiceTransDate = null,
+        LastInvoiceTransType = "I",
+        RogersInvoices = new List<RogersInvoiceVM>()
+    };
+}
+
+<a class="btn btn-secondary mb-2"
+   href="@Url.Action("Index", "Imei", new { area = "Inventory" })">
+    ⬅ Back
+</a>
+
+<style>
+    body {
+        font-size: 13px;
+        background-color: #f5f5f5;
+    }
+
+    .section-title {
+        font-weight: bold;
+        margin-bottom: 8px;
+        font-size: 14px;
+    }
+
+    .box {
+        background: #fff;
+        border: 1px solid #ccc;
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 4px;
+    }
+
+    table th {
+        background: #e9ecef;
+        font-size: 12px;
+        white-space: nowrap;
+    }
+
+    table td {
+        font-size: 12px;
+        white-space: nowrap;
+    }
+
+    .form-control-sm {
+        height: 28px;
+        font-size: 12px;
+    }
+
+    .btn-sm {
+        padding: 3px 12px;
+        font-size: 12px;
+    }
+
+    #receiptMessage {
+        margin-top: 5px;
+        font-weight: bold;
+        color: green;
+    }
+
+        #receiptMessage.error {
+            color: red;
+        }
+
+    .receipt-row {
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+        .receipt-row:hover {
+            background-color: #f1f1f1;
+        }
+
+        .receipt-row.active {
+            background-color: #dbeafe !important;
+        }
+
+    .row.mb-1 > div {
+        padding-top: 4px;
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,.4);
+        z-index: 1000;
+    }
+
+    .modal-content {
+        background: #fff;
+        padding: 15px;
+        width: 400px;
+        margin: 10% auto;
+        border-radius: 4px;
+    }
+</style>
+
+<div class="container-fluid mt-2">
+
+    <!-- TOP SEARCH BAR -->
+    <form id="findReceiptForm" class="box row align-items-end g-2">
+        <div class="col-md-3">
+            <label>Find Receipt No:</label>
+            <input type="text" name="receiptNo" id="reciepts" value="@modelSafe.FindReceiptNo" class="form-control form-control-sm" />
+            <div id="receiptMessage"></div>
+        </div>
+
+        <div class="col-md-1">
+            <button type="submit" class="btn btn-primary btn-sm mt-2">Find</button>
+        </div>
+
+        <div class="col-md-2">
+            <label>Type:</label>
+            <select name="type" class="form-control form-control-sm">
+                <option value="Hardware" @(modelSafe.SelectedType == "Hardware" ? "selected" : "")>Hardware</option>
+                <option value="Accessory" @(modelSafe.SelectedType == "Accessory" ? "selected" : "")>Accessory</option>
+            </select>
+        </div>
+    </form>
+
+    <form action="/Inventory/InvoiceCredit/LoadLatestAccReceipts" method="post" class="mb-2">
+        <button type="submit" class="btn btn-secondary btn-sm">Load Latest ACC Receipts</button>
+    </form>
+
+    <div class="row mb-1">
+        <div class="col-3">Last Ref No</div>
+        <div class="col-9"><input id="lastInvoiceRefNo" class="form-control form-control-sm" value="@modelSafe.LastInvoiceRefNo" readonly /></div>
+    </div>
+    <div class="row mb-1">
+        <div class="col-3">Last Trans Date</div>
+        <div class="col-9"><input id="lastInvoiceTransDate" type="date" class="form-control form-control-sm" value="@(modelSafe.LastInvoiceTransDate?.ToString("yyyy-MM-dd") ?? "")" readonly /></div>
+    </div>
+    <div class="row mb-1">
+        <div class="col-3">Last Trans Type</div>
+        <div class="col-9"><input id="lastInvoiceTransType" class="form-control form-control-sm" value="@modelSafe.LastInvoiceTransType" readonly /></div>
+    </div>
+
+    <div class="col-md-3 text-end mb-2">
+        <button type="button"
+                class="btn btn-success btn-sm"
+                onclick="addNewWithLastInfo()">
+            Add New with Last Info
+        </button>
+    </div>
+
+    <div class="row mt-3">
+        <!-- LEFT : BV Receipt Info -->
+        <div class="col-md-4">
+            <div class="box">
+                <div class="section-title">BV Receipt Info:</div>
+                @* BV Receipt Fields *@
+                <div class="row mb-1"><div class="col-5">Receipt No</div><div class="col-7"><input id="bvReceiptNo" class="form-control form-control-sm" readonly /></div></div>
+                <div class="row mb-1">
+                    <div class="col-5">Vendor Name</div>
+                    <div class="col-7">
+                        <input id="bvVendorName" class="form-control form-control-sm" readonly />
+                    </div>
+                </div>
+                <div class="row mb-1">
+                    <div class="col-5">CMO</div>
+                    <div class="col-7">
+                        <input id="bvCMO" class="form-control form-control-sm" readonly />
+                    </div>
+                </div>
+                <div class="row mb-1"><div class="col-5">Receipt Date</div><div class="col-7"><input id="bvReceiptDate" class="form-control form-control-sm" readonly /></div></div>
+                <div class="row mb-1"><div class="col-5">PO</div><div class="col-7"><input id="bvPO" class="form-control form-control-sm" readonly /></div></div>
+                <div class="row mb-1"><div class="col-5">Warehouse</div><div class="col-7"><input id="bvWhse" class="form-control form-control-sm" readonly /></div></div>
+                <div class="row mb-1"><div class="col-5">Part No</div><div class="col-7"><input id="bvPartNo" class="form-control form-control-sm" readonly /></div></div>
+                <div class="row mb-1"><div class="col-5">Qty Received</div><div class="col-7"><input id="bvQty" class="form-control form-control-sm" readonly /></div></div>
+                <div class="row mb-1"><div class="col-5">Unit Cost</div><div class="col-7"><input id="bvUnitCost" class="form-control form-control-sm" readonly /></div></div>
+            </div>
+        </div>
+
+        <!-- RIGHT : Rogers Invoices -->
+        <div class="col-md-8">
+            <div class="box">
+                <div class="section-title">Rogers Invoices / Credits / Debit Memos:</div>
+                <div class="mb-2 d-flex justify-content-end">
+                    <button class="btn btn-primary btn-sm d-flex align-items-center"
+                            style="gap: 5px; font-weight: 500;"
+                            onclick="openInvoiceModal()">
+                        <i class="bi bi-plus-circle"></i> Add Invoice / Credit
+                    </button>
+                </div>
+                <table class="table table-bordered table-sm">
+                    <thead>
+                        <tr>
+                            <th>TransType</th>
+                            <th>RefNo</th>
+                            <th>TransDate</th>
+                            <th>PerUnitAmount</th>
+                            <th>Remarks</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rogersInvoicesBody">
+                        @if (modelSafe.RogersInvoices != null && modelSafe.RogersInvoices.Any())
+                        {
+                            foreach (var inv in modelSafe.RogersInvoices)
+                            {
+                                <tr class="invoice-row"
+                                    data-refno="@inv.RefNo"
+                                    data-transtype="@inv.TransType"
+                                    data-transdate="@inv.TransDate??.ToString("yyyy-MM-dd")"
+                                    data-perunitamount="@inv.PerUnitAmount.ToString("0.00")"
+                                    data-remarks="@inv.Remarks">
+
+                                    <td>@inv.TransType</td>
+                                    <td>@inv.RefNo</td>
+                                    <td>@inv.TransDate??.ToString("MM/dd/yyyy")</td>
+                                    <td>@inv.PerUnitAmount.ToString("0.00")</td>
+                                    <td>@inv.Remarks</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-link edit-invoice">✏️</button>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr><td colspan="6" class="text-center">No invoices found.</td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- RECEIPTS GRID -->
+    <form asp-action="FindMissingByPO" method="post" class="box mt-3">
+        <div class="row mb-2">
+            <div class="col-md-3">
+                <b>PO Number:</b>
+                <input name="po" class="form-control form-control-sm" value="@modelSafe.FindPO" />
+                <input type="hidden" name="type" value="@modelSafe.SelectedType" />
+            </div>
+            <div class="col-md-6 mt-3">
+                <button type="submit" id="btnFindByPO" class="btn btn-primary btn-sm">Find Missing By PO</button>
+                <button formaction="/Inventory/InvoiceCredit/ShowAll" formmethod="post" name="type" value="@modelSafe.SelectedType" class="btn btn-secondary btn-sm">Show All</button>
+            </div>
+        </div>
+
+        <table class="table table-bordered table-sm">
+            <thead>
+                <tr>
+                    <th>BVReceiptNo</th>
+                    <th>ReceiptDate</th>
+                    <th>PONumber</th>
+                    <th>PartNo</th>
+                    <th>QtyReceived</th>
+                    <th>UnitCost</th>
+                    <th>CMO</th>
+                    <th>Type</th>
+                </tr>
+            </thead>
+            <tbody id="receiptsTableBody">
+                @if (modelSafe.MissingReceipts.Any())
+                {
+                    foreach (var receipt in modelSafe.MissingReceipts)
+                    {
+                        <tr class="receipt-row"
+                            data-receiptno="@receipt.BVReceiptNo"
+                            data-vendorname="@receipt.VendorName"
+                            data-cmo="@receipt.CMO"
+                            data-date="@receipt.ReceiptDate.ToString("MM/dd/yyyy")"
+                            data-po="@receipt.PONumber"
+                            data-whse="@receipt.Whse"
+                            data-part="@receipt.PartNo"
+                            data-qty="@receipt.QtyReceived"
+                            data-unitcost="@receipt.UnitCost.ToString("0.00")">
+                            <td>@receipt.BVReceiptNo</td>
+                            <td>@receipt.ReceiptDate.ToString("MM/dd/yyyy")</td>
+                            <td>@receipt.PONumber</td>
+                            <td>@receipt.PartNo</td>
+                            <td>@receipt.QtyReceived</td>
+                            <td>@receipt.UnitCost.ToString("0.00")</td>
+                            <td>@receipt.CMO</td>
+                            <td>@receipt.Type</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr><td colspan="8" class="text-center">No receipts found.</td></tr>
+                }
+            </tbody>
+        </table>
+
+        <!-- PAGINATION -->
+        @if (modelSafe.TotalPages > 1)
+        {
+            <nav class="mt-3">
+                <ul class="pagination pagination-sm justify-content-center">
+                    <li class="page-item @(modelSafe.CurrentPage == 1 ? "disabled" : "")">
+                        <a class="page-link" href="@Url.Action("Index", new { page = modelSafe.CurrentPage - 1, type = modelSafe.SelectedType, po = modelSafe.FindPO })">Prev</a>
+                    </li>
+
+                    @{
+                        int startPage = Math.Max(1, modelSafe.CurrentPage - 2);
+                        int endPage = Math.Min(modelSafe.TotalPages, modelSafe.CurrentPage + 2);
+                    }
+
+                    @if (startPage > 1)
+                    {
+                        <li class="page-item"><a class="page-link" href="@Url.Action("Index", new { page = 1, type = modelSafe.SelectedType, po = modelSafe.FindPO })">1</a></li>
+                        @if (startPage > 2)
+                        {
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                        }
+                    }
+
+                    @for (int i = startPage; i <= endPage; i++)
+                    {
+                        <li class="page-item @(i == modelSafe.CurrentPage ? "active" : "")">
+                            <a class="page-link" href="@Url.Action("Index", new { page = i, type = modelSafe.SelectedType, po = modelSafe.FindPO })">@i</a>
+                        </li>
+                    }
+
+                    @if (endPage < modelSafe.TotalPages)
+                    {
+                        @if (endPage < modelSafe.TotalPages - 1)
+                        {
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                        }
+                        <li class="page-item"><a class="page-link" href="@Url.Action("Index", new { page = modelSafe.TotalPages, type = modelSafe.SelectedType, po = modelSafe.FindPO })">@modelSafe.TotalPages</a></li>
+                    }
+
+                    <li class="page-item @(modelSafe.CurrentPage == modelSafe.TotalPages ? "disabled" : "")">
+                        <a class="page-link" href="@Url.Action("Index", new { page = modelSafe.CurrentPage + 1, type = modelSafe.SelectedType, po = modelSafe.FindPO })">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        }
+    </form>
+</div>
+
+<!-- INVOICE MODAL -->
+<div id="invoiceModal" class="modal">
+    <div class="modal-content">
+        <h5 id="invoiceModalTitle">Add Rogers Invoice / Credit</h5>
+
+        <input type="hidden" id="invReceiptNo" />
+
+        <label>Trans Type</label>
+        <select id="invTransType" class="form-control form-control-sm">
+            <option value="I">Invoice / Debit</option>
+            <option value="C">Credit</option>
+        </select>
+
+        <label>Ref No</label>
+        <input id="invRefNo" class="form-control form-control-sm" />
+
+        <label>Date</label>
+        <input type="date" id="invDate" class="form-control form-control-sm" />
+
+        <label>Per Unit Amount</label>
+        <input type="number" step="0.01" id="invAmount" class="form-control form-control-sm" />
+
+        <label>Remarks</label>
+        <input id="invRemarks" class="form-control form-control-sm" />
+
+        <div>
+            <input type="checkbox" id="hasMoreEntries" checked /> More entries coming
+        </div>
+
+        <div class="mt-2">
+            <button class="btn btn-secondary btn-sm" onclick="closeInvoiceModal()">Cancel</button>
+            <button class="btn btn-primary btn-sm" onclick="saveInvoice()">Save</button>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<script>
+
+
+
+                    (function () {
+        const originalFetch = window.fetch;
+        let active = 0;
+
+        window.fetch = function () {
+            if (active === 0) Spinner.show();
+            active++;
+
+            return originalFetch.apply(this, arguments)
+                .finally(() => {
+                    active--;
+                    if (active <= 0) {
+                        active = 0;
+                        Spinner.hide();
+                    }
+                });
+        };
+    })();
+    /* ===============================
+       GLOBAL FUNCTIONS
+    ================================ */
+
+        function loadRogersInvoices(bvReceiptNo) {
+        fetch('/Inventory/InvoiceCredit/GetRogersInvoices?bvReceiptNo=' + bvReceiptNo)
+            .then(r => r.json())
+            .then(data => {
+
+                const tbody = document.getElementById('rogersInvoicesBody');
+                tbody.innerHTML = '';
+
+                if (!data || data.length === 0) {
+                    tbody.innerHTML =
+                        '<tr><td colspan="6" class="text-center">No invoices found.</td></tr>';
+                    return;
+                }
+
+                data.forEach(inv => {
+                    const tr = document.createElement('tr');
+                    tr.classList.add("invoice-row");
+
+                    tr.dataset.refno = inv.refNo;
+                    tr.dataset.transtype = inv.transType;
+                    tr.dataset.transdate = inv.transDate?.substring(0, 10);
+                    tr.dataset.perunitamount = inv.perUnitAmount;
+                    tr.dataset.remarks = inv.remarks || "";
+
+                    tr.innerHTML = `
+                        <td>${inv.transType}</td>
+                        <td>${inv.refNo}</td>
+                        <td>${new Date(inv.transDate).toLocaleDateString()}</td>
+                        <td>${Number(inv.perUnitAmount).toFixed(2)}</td>
+                        <td>${inv.remarks || ''}</td>
+                        <td>
+                            <button class="btn btn-sm btn-link edit-invoice">✏️</button>
+                        </td>
+                    `;
+
+                    tbody.appendChild(tr);
+                });
+            });
+    }
+        document.getElementById("rogersInvoicesBody")
+        .addEventListener("click", function (e) {
+
+        const btn = e.target.closest(".edit-invoice");
+        if (!btn) return;
+
+        const row = btn.closest(".invoice-row");
+
+        // Patch modal fields
+        document.getElementById("invTransType").value = row.dataset.transtype;
+        document.getElementById("invRefNo").value = row.dataset.refno;
+        document.getElementById("invDate").value = row.dataset.transdate;
+        document.getElementById("invAmount").value = row.dataset.perunitamount;
+        document.getElementById("invRemarks").value = row.dataset.remarks;
+
+        document.getElementById("invReceiptNo").value =
+            document.getElementById("bvReceiptNo").value;
+
+        // Mark as EDIT
+        document.getElementById("invoiceModal").dataset.editing =
+            row.dataset.refno;
+
+        document.getElementById("invoiceModal").style.display = "block";
+    });
+
+        function openInvoiceModal() {
+
+        const receiptNo = document.getElementById("bvReceiptNo").value;
+        if (!receiptNo) {
+            alert("Please select a receipt first.");
+            return;
+        }
+
+        document.getElementById("invoiceModalTitle").innerText =
+    "Add Rogers Invoice / Credit";
+
+        // Clear fields
+        document.getElementById("invTransType").value = "I";
+        document.getElementById("invRefNo").value = "";
+        document.getElementById("invDate").value = "";
+        document.getElementById("invAmount").value = "";
+        document.getElementById("invRemarks").value = "";
+
+        document.getElementById("invReceiptNo").value = receiptNo;
+
+        // Clear edit flag
+        document.getElementById("invoiceModal").dataset.editing = "";
+
+        document.getElementById("invoiceModal").style.display = "block";
+    }
+
+    function closeInvoiceModal() {
+        document.getElementById("invoiceModal").style.display = "none";
+    }
+
+             function saveInvoice() {
+        const modal = document.getElementById("invoiceModal");
+        const editingRefNo = modal.dataset.editing || null;
+
+        const BVReceiptNo = document.getElementById("invReceiptNo").value;
+        const TransType = document.getElementById("invTransType").value;
+        const RefNo = document.getElementById("invRefNo").value;
+        const TransDate = document.getElementById("invDate").value;
+        const PerUnitAmount = parseFloat(document.getElementById("invAmount").value || 0);
+        const Remarks = document.getElementById("invRemarks").value;
+        const HasMoreEntries = document.getElementById("hasMoreEntries").checked;
+
+        // -------------------------
+        // VALIDATION
+        // -------------------------
+        if (!RefNo) {
+            alert("You must enter a reference number.");
+            return;
+        }
+        if (!TransDate) {
+            alert("You must enter a transaction date.");
+            return;
+        }
+        if (PerUnitAmount === 0) {
+            if (!confirm("Are you sure you want the amount of the entry to be zero?")) {
+                return;
+            }
+        }
+
+        // -------------------------
+        // CALCULATE TOTAL AND COMPARE TO BV RECEIPT
+        // -------------------------
+        let totalRogers = 0;
+
+        document.querySelectorAll("#rogersInvoicesBody .invoice-row").forEach(row => {
+            let amt = parseFloat(row.dataset.perunitamount);
+            if (row.dataset.transtype === "C") amt = -amt;
+            totalRogers += amt;
+        });
+
+        // Include the current invoice being added/edited
+        let currentAmt = PerUnitAmount;
+        if (TransType === "C") currentAmt = -PerUnitAmount;
+
+        if (editingRefNo) {
+            // If editing, subtract old value
+            const oldRow = document.querySelector(`#rogersInvoicesBody .invoice-row[data-refno='${editingRefNo}']`);
+            if (oldRow) {
+                let oldAmt = parseFloat(oldRow.dataset.perunitamount);
+                if (oldRow.dataset.transtype === "C") oldAmt = -oldAmt;
+                totalRogers -= oldAmt;
+            }
+        }
+
+        totalRogers += currentAmt;
+
+        const BVUnitCost = parseFloat(document.getElementById("bvUnitCost").value || 0);
+
+        if (BVUnitCost !== totalRogers) {
+            const proceed = confirm(
+                `The total Rogers per unit cost (${totalRogers.toFixed(2)}) does not match the BV receipt cost (${BVUnitCost.toFixed(2)}). ` +
+                `Do you want to continue?`
+            );
+            if (!proceed) return;
+
+            if (!HasMoreEntries && document.getElementById("bvPartNo").value) {
+                // Send notification (example: call server API)
+                fetch('/Inventory/InvoiceCredit/NotifyMismatch', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        BVReceiptNo,
+                        RefNo,
+                        TransType,
+                        TransDate,
+                        PerUnitAmount,
+                        TotalRogers: totalRogers,
+                        BVUnitCost
+                    })
+                });
+            }
+        }
+
+        // -------------------------
+        // SAVE TO SERVER
+        // -------------------------
+            const payload = {
+        BVReceiptNo,
+        TransType,
+        RefNo,
+        TransDate,
+        PerUnitAmount,
+        Remarks,
+        HasMoreEntries,
+        EditingRefNo: editingRefNo
+    };
+        fetch('/Inventory/InvoiceCredit/SaveInvoice', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        })
+        .then(r => r.json())
+        .then(resp => {
+            modal.style.display = "none";
+            modal.dataset.editing = "";
+            loadRogersInvoices(BVReceiptNo);
+        })
+        .catch(() => alert("Save failed"));
+    }
+
+
+
+         function addNewWithLastInfo() {
+
+        const receiptNo = document.getElementById("bvReceiptNo").value;
+
+        if (!receiptNo) {
+            alert("Please select a receipt first");
+            return;
+        }
+
+        // SAME AS: DoCmd.GoToRecord , , acNewRec
+        openInvoiceModal();
+
+        fetch('/Inventory/InvoiceCredit/GetLastInvoice?bvReceiptNo=' + receiptNo)
+            .then(r => r.json())
+            .then(data => {
+                console.log("isha",data)
+                if (data) {
+                   document.getElementById("invRefNo").value = data.refNo || "";
+
+                    // Me!frmRogersInvoiceEntry.Form.TransDate = Me.txtLastTransDate
+                    document.getElementById("invDate").value =
+                        data.transDate?.substring(0, 10) || "";
+
+                    // Me!frmRogersInvoiceEntry.Form.TransType = Me.txtLastType
+                    document.getElementById("invTransType").value =
+                        data.transType || "I";
+
+
+
+                           document.getElementById("lastInvoiceTransType").value = data.transType ||"I"
+                document.getElementById("lastInvoiceTransDate").value = data.transDate?.substring(0, 10) || "";
+                document.getElementById("lastInvoiceRefNo").value = data.refNo || "";
+
+                } else {
+                    // no previous entry
+                    document.getElementById("invRefNo").value = "";
+                    document.getElementById("invDate").value =
+                        new Date().toISOString().split("T")[0];
+                    document.getElementById("invTransType").value = "I";
+                }
+
+                // focus like Access
+                document.getElementById("invAmount").focus();
+            });
+    }
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const messageDiv = document.getElementById('receiptMessage');
+        const tableBody = document.getElementById('receiptsTableBody');
+        const form = document.getElementById('findReceiptForm');
+
+        function patchReceiptInfo(row) {
+            document.getElementById("bvReceiptNo").value = row.dataset.receiptno || "";
+                 document.getElementById("bvVendorName").value = row.dataset.vendorname || "";
+    document.getElementById("bvCMO").value = row.dataset.cmo || "";
+            document.getElementById("bvReceiptDate").value = row.dataset.date || "";
+            document.getElementById("bvPO").value = row.dataset.po || "";
+            document.getElementById("bvWhse").value = row.dataset.whse || "";
+            document.getElementById("bvPartNo").value = row.dataset.part || "";
+            document.getElementById("bvQty").value = row.dataset.qty || "";
+            document.getElementById("bvUnitCost").value = row.dataset.unitcost || "";
+
+     document.getElementById("reciepts").value = row.dataset.receiptno
+        }
+
+        // Receipt row click
+        tableBody.addEventListener("click", function (e) {
+            const row = e.target.closest(".receipt-row");
+            if (!row) return;
+
+            document.querySelectorAll(".receipt-row")
+                .forEach(r => r.classList.remove("active"));
+
+            row.classList.add("active");
+
+            patchReceiptInfo(row);
+            loadRogersInvoices(row.dataset.receiptno);
+        });
+
+        // Auto select first row
+        const firstRow = tableBody.querySelector(".receipt-row");
+        if (firstRow) {
+            firstRow.classList.add("active");
+            patchReceiptInfo(firstRow);
+            loadRogersInvoices(firstRow.dataset.receiptno);
+        }
+
+        // Find receipt AJAX
+        if (form) {
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                const receiptNo =
+                    this.querySelector("input[name='receiptNo']").value;
+
+                if (!receiptNo) {
+                    messageDiv.innerText = "";
+                    messageDiv.className = "";
+                    return;
+                }
+
+                const formData = new FormData(this);
+
+                fetch('/Inventory/InvoiceCredit/FindReceipt', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                   .then(data => {
+        messageDiv.innerText = data.message;
+        messageDiv.className = data.success ? "" : "error";
+
+               if (data.success && data.data) {
+        const r = data.data;
+
+        document.getElementById("bvReceiptNo").value = r.bvReceiptNo || "";
+            document.getElementById("bvVendorName").value = r.vendorName || "";
+    document.getElementById("bvCMO").value = r.cmo || "";
+
+        // Format date for input[type=date]
+        if (r.receiptDate) {
+            const d = new Date(r.receiptDate);
+            document.getElementById("bvReceiptDate").value = d.toISOString().split('T')[0];
+        } else {
+            document.getElementById("bvReceiptDate").value = "";
+        }
+
+        document.getElementById("bvPO").value = r.poNumber || "";
+        document.getElementById("bvWhse").value = r.whse || "";
+        document.getElementById("bvPartNo").value = r.partNo || "";
+        document.getElementById("bvQty").value = r.qtyReceived != null ? r.qtyReceived : "";
+        document.getElementById("bvUnitCost").value = r.unitCost != null ? Number(r.unitCost).toFixed(2) : "";
+
+        loadRogersInvoices(r.bvReceiptNo);
+    }
+       
+    })
+            });
+        }
+    });
+</script>
