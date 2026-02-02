@@ -1,0 +1,199 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+.sidebar-nav .nav-link {
+    color: #f8f9ff;
+    opacity: 0.9;
+}
+
+    .sidebar-nav .nav-link i {
+        color: #ffd54f; /* warm yellow icons */
+    }
+    .sidebar-nav .nav-link:hover {
+        background: rgba(255, 255, 255, 0.08);
+        opacity: 1;
+    }
+
+    .sidebar-nav .nav-link.active i {
+        color: #ffeb3b;
+    }
+
+.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
+  color: var(--bs-secondary-color);
+  text-align: end;
+}
+
+.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
+  text-align: start;
+}
+
+/*isha added*/
+
+/* ===== BASE STYLES ===== */
+html, body {
+    height: 100%;
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.sidebar {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    z-index: 1040 !important;
+    width: 260px !important;
+    height: 100vh !important;
+    display: block !important;
+}
+
+/* Sidebar Header */
+.sidebar-header {
+    padding: 2rem 1.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    text-align: center;
+}
+
+    .sidebar-header h4 {
+        margin: 0;
+        font-weight: 600;
+        font-size: 1.4rem;
+    }
+
+/* Sidebar Navigation */
+.sidebar .nav-link {
+    color: rgba(255,255,255,0.9) !important;
+    padding: 1rem 1.5rem !important;
+    margin: 0.25rem 1rem;
+    border-radius: 12px !important;
+    font-weight: 500;
+    transition: all 0.3s ease !important;
+}
+
+    .sidebar .nav-link:hover {
+        background: rgba(255,255,255,0.25) !important;
+        color: white !important;
+        transform: translateX(8px);
+        box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    }
+
+/* Dropdown Fixes */
+.sidebar .dropdown-menu {
+    background: rgba(0,0,0,0.9) !important;
+    backdrop-filter: blur(10px);
+}
+
+.sidebar .dropdown-item:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff !important;
+}
+
+.nav-link.active {
+    background: rgba(255,255,255,0.2);
+    border-radius: 8px;
+}
+/* Main Content */
+.main-content {
+    margin-left: 10px !important; /* Sidebar width */
+    /*padding: 2rem !important;*/
+    background: #f8f9fa;
+    min-height: calc(100vh - 70px);
+}
+.bg-gradient-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+}
+.hover-row:hover {
+    background-color: rgba(0,123,255,0.05) !important;
+}
+.navbar .navbar-brand {
+    margin-left: 0;
+    padding-left: 1rem;
+}
+
+main > .container-fluid,
+main > div {
+    padding-left: 0 !important;
+    margin-left: 0 !important;
+}
+.sidebar-nav {
+    overflow-y: auto;
+}
+.navbar {
+    z-index: 1020; /* Above content */
+}
+
+@media (max-width: 991px) {
+    .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s;
+    }
+
+    .main-content {
+        margin-left: 0 !important;
+    }
+}
+ul.nav.flex-column * {
+    font-size: 17px !important;
+}
+
+/* Top Navbar */
+.navbar-brand {
+    font-weight: 700 !important;
+    font-size: 1.2rem !important;
+}
+
+/* Login Page */
+.bg-gradient, .login-container {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    min-height: 100vh;
+}
+
+/* Cards */
+.card-modern {
+    border: none !important;
+    border-radius: 20px !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1) !important;
+    transition: all 0.3s ease !important;
+}
+
+    .card-modern:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.15) !important;
+    }
+
+/* Responsive */
+@media (max-width: 992px) {
+    .sidebar {
+        transform: translateX(-100%);
+    }
+
+    .main-content {
+        margin-left: 0 !important;
+    }
+}
+
+/* Form Focus */
+.btn:focus, .form-control:focus {
+    box-shadow: 0 0 0 0.25rem rgba(102, 126, 234, 0.25) !important;
+}
+.vh-100 {
+    height: 100vh !important;
+}
