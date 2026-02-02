@@ -1,0 +1,444 @@
+﻿@{
+    ViewData["Title"] = "Receive IMEI's";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid px-3 py-2">
+
+    <!-- ================= TOP HEADER ================= -->
+    <div class="row align-items-center mb-2 g-2">
+        <div class="col-2">
+            <label>Purchase Order</label>
+            <select id="ddlPO" class="form-select form-select-sm">
+                <option value="">-- Select PO --</option>
+            </select>
+        </div>
+
+        <div class="col-2">
+            <label>Warehouse</label>
+            <input id="txtWhse" class="form-control form-control-sm" readonly />
+        </div>
+
+        <div class="col-2">
+            <label>Part No</label>
+            <input id="txtPartNo" class="form-control form-control-sm" readonly />
+        </div>
+
+        <div class="col-2">
+            <label>Ordered Qty</label>
+            <input id="txtOrdQty" class="form-control form-control-sm text-end" readonly />
+        </div>
+
+        <div class="col-2">
+            <label>Received Qty</label>
+            <input id="txtRcvdQty" class="form-control form-control-sm text-end" readonly />
+        </div>
+
+        <div class="col-2">
+            <label>Errors</label>
+            <input id="txtErrorCount" class="form-control form-control-sm d-inline w-25" readonly />
+        </div>
+
+      
+      
+
+    </div>
+
+    <!-- ================= FILE IMPORT ================= -->
+    <div class="row mb-2 g-2">
+        <div class="col-3">
+            <label class="fw-bold">Scan File (XLSX)</label>
+            <input id="scanFile" type="file" class="form-control form-control-sm" accept=".xlsx" />
+            <button id="btnImportScanList" class="btn btn-primary btn-sm w-100 mt-1">Import Scan List</button>
+        </div>
+
+        <div class="col-3">
+            <label class="fw-bold">Packing Slip (XLSX)</label>
+            <input id="packingSlipFile" type="file" class="form-control form-control-sm" accept=".xlsx" />
+            <button id="btnImportPackingSlip" class="btn btn-primary btn-sm w-100 mt-1">Import Packing Slip</button>
+        </div>
+
+        <div class="col-3">
+            <label class="fw-bold">Mode</label><br />
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" id="modeReceipt" name="mode" value="false" checked />
+                <label class="form-check-label" for="modeReceipt">Receipt</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" id="modeReversal" name="mode" value="true" />
+                <label class="form-check-label" for="modeReversal">Reversal</label>
+            </div>
+            <!-- ✅ CHECK ERRORS BUTTON -->
+            <div class="col-6 d-flex align-items-start">
+                <button id="btnCheckErrors" class="btn btn-warning btn-sm me-2">
+                    Check Errors
+                </button>
+                <div id="errorBox" class="alert alert-danger small d-none mb-0 p-1 flex-grow-1">
+                    <ul id="lstErrors" class="mb-0"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= GRIDS ================= -->
+    <div class="row g-2">
+
+        <div class="col">
+            <div class="border p-1">
+                <div class="fw-bold text-center small mb-1">Scan List</div>
+                <div style="height:240px; overflow:auto;">
+                    <table id="tblScanList" class="table table-sm table-bordered mb-0">
+                        <thead><tr><th>IMEI</th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="small mt-1">
+                    Count: <input size="3" readonly />
+                    Invalid: <input size="3" readonly />
+                    Dupes: <input size="3" readonly />
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="border p-1">
+                <div class="fw-bold text-center small mb-1">Packing Slip</div>
+                <div style="height:240px; overflow:auto;">
+                    <table id="tblPackingSlip" class="table table-sm table-bordered mb-0">
+                        <thead><tr><th>IMEI</th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="small mt-1">
+                    Count: <input size="3" readonly />
+                    Invalid: <input size="3" readonly />
+                    Dupes: <input size="3" readonly />
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="border p-1">
+                <div class="fw-bold text-center small mb-1">Matches</div>
+                <div style="height:240px; overflow:auto;">
+                    <table id="tblMatches" class="table table-sm table-bordered mb-0">
+                        <thead><tr><th>IMEI</th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="small mt-1">
+                    Count: <input size="3" readonly />
+                    Invalid: <input size="3" readonly />
+                    Dupes: <input size="3" readonly />
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="border p-1">
+                <div class="fw-bold text-center small mb-1">Scan-NoPackSlip</div>
+                <div style="height:240px; overflow:auto;">
+                    <table id="tblScanNoPack" class="table table-sm table-bordered mb-0">
+                        <thead><tr><th>IMEI</th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="small mt-1">
+                    Count: <input size="3" readonly />
+                    Invalid: <input size="3" readonly />
+                    Dupes: <input size="3" readonly />
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="border p-1">
+                <div class="fw-bold text-center small mb-1">PackSlip-NoScan</div>
+                <div style="height:240px; overflow:auto;">
+                    <table id="tblPackNoScan" class="table table-sm table-bordered mb-0">
+                        <thead><tr><th>IMEI</th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="small mt-1">
+                    Count: <input size="3" readonly />
+                    Invalid: <input size="3" readonly />
+                    Dupes: <input size="3" readonly />
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="border p-1">
+                <div class="fw-bold text-center small mb-1">Scanned IMEI Onhand in Spire</div>
+                <div style="height:240px; overflow:auto;">
+                    <table id="tblOnhand" class="table table-sm table-bordered mb-0">
+                        <thead><tr><th>IMEI</th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="small mt-1">
+                    Count: <input size="3" readonly />
+                    Invalid: <input size="3" readonly />
+                    Dupes: <input size="3" readonly />
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ================= BOTTOM ================= -->
+    <div class="row mt-3 align-items-end g-2">
+        <div class="col-3">
+            <label>Unit Cost</label>
+            <input id="txtUnitCost" class="form-control form-control-sm" value="1215" />
+        </div>
+
+        <div class="col-3">
+            <label>HPC Cost</label>
+            <input id="txtHPCCost" class="form-control form-control-sm" value="1215" />
+        </div>
+        <div class="col-3">
+            <label>CMO Number</label>
+            <input id="txtCMONumber" class="form-control form-control-sm" />
+        </div>
+        <div class="col-3">
+            <button id="btnPostReceipts" class="btn btn-success w-100" disabled>Post Receipts</button>
+        </div>
+    </div>
+
+    <!-- ================= HIDDEN FIELDS ================= -->
+    <div style="display:none;">
+        <input type="hidden" id="hiddenGuid" />
+        <input type="hidden" id="hiddenVendor" />
+        <input type="hidden" id="hiddenLocation" />
+        <input type="hidden" id="hiddenPOID" />
+        <input type="hidden" id="hiddenPOItemID" />
+    </div>
+
+</div>
+
+<!-- ================= JAVASCRIPT ================= -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+@section Scripts {
+    <script>
+
+               $(document).ajaxStart(function () {
+            Spinner.show();
+        });
+
+        $(document).ajaxStop(function () {
+            Spinner.hide();
+        });
+
+        $(document).ajaxError(function () {
+            Spinner.hide();
+        });
+
+        $(function() {
+
+                    $('#btnCheckErrors').click(function () {
+            checkErrors();
+        });
+
+
+            // Bind PO change
+                $('#ddlPO').on('change', function () {
+            let opt = $(this).find(':selected');
+            if (!opt.val()) return;
+
+            $('#txtWhse').val(opt.data('whse'));
+            $('#txtPartNo').val(opt.data('part'));
+            $('#txtOrdQty').val(opt.data('ordqty'));
+            $('#txtRcvdQty').val(opt.data('rcvdqty'));
+
+            $('#hiddenGuid').val(opt.data('guid'));
+            $('#hiddenVendor').val(opt.data('vendor'));
+            $('#hiddenLocation').val(opt.data('location'));
+            $('#hiddenPOID').val(opt.data('poid'));
+            $('#hiddenPOItemID').val(opt.data('poitemid'));
+
+            // ✅ Unit Cost from PO
+            let unitCost = parseFloat(opt.data('unitcost')) || 0;
+            $('#txtUnitCost').val(unitCost.toFixed(2));
+
+            // ✅ HPC Cost = 10% of Unit Cost (or your formula)
+            $('#txtHPCCost').val((unitCost * 0.10).toFixed(2));
+
+            $('#txtCMONumber').val('');
+
+            $('#txtErrors').val('Not Checked');
+            $('#btnPostReceipts').prop('disabled', false);
+        });
+            // Load POs
+            $.getJSON('/Inventory/ReceiveIMEI/GetPurchaseOrders', function (data) {
+                $('#ddlPO').empty()
+                    .append('<option value="">-- Select PO / Item --</option>');
+
+                $.each(data, function (i, po) {
+                    $('#ddlPO').append(`
+                        <option value="${po.poNumber}"
+                            data-poid="${po.poId}"
+                            data-poitemid="${po.poItemId}"
+                            data-vendor="${po.vendor}"
+                            data-whse="${po.whse}"
+                            data-part="${po.part}"
+                            data-ordqty="${po.ordQty}"
+                            data-rcvdqty="0"
+                            data-guid="${po.guid}"
+                              data-unitcost="${po.unitCost}">
+                            ${po.poNumber} | ${po.whse} | ${po.part} | ORD:${po.ordQty}
+                        </option>
+                    `);
+                });
+            });
+
+            // Import Scan List
+            $('#btnImportScanList').click(function() {
+                var file = $('#scanFile')[0].files[0];
+                if (!file) { alert('Select a Scan file'); return; }
+
+                var formData = new FormData();
+                formData.append("poNumber", $('#ddlPO').val());
+                formData.append("recNo", $('#hiddenPOItemID').val());
+                formData.append("whse", $('#txtWhse').val());
+                formData.append("partNo", $('#txtPartNo').val());
+                formData.append("guid", $('#hiddenGuid').val());
+                formData.append("vendor", $('#hiddenVendor').val());
+                formData.append("location", $('#hiddenLocation').val());
+                formData.append("file", file);
+
+                $.ajax({
+                    url: '/Inventory/ReceiveIMEI/ImportScanList',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(resp){ alert(resp.message); loadGrids(); }
+                });
+            });
+
+            // Import Packing Slip
+            $('#btnImportPackingSlip').click(function() {
+                var file = $('#packingSlipFile')[0].files[0];
+                if (!file) { alert('Select a Packing Slip file'); return; }
+
+                var formData = new FormData();
+                formData.append("poNumber", $('#ddlPO').val());
+                formData.append("recNo", 0);
+                formData.append("whse", $('#txtWhse').val());
+                formData.append("partNo", $('#txtPartNo').val());
+                formData.append("guid", $('#hiddenGuid').val());
+                formData.append("file", file);
+
+                $.ajax({
+                    url: '/Inventory/ReceiveIMEI/ImportPackingSlip',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(resp){ alert(resp.message); loadGrids(); }
+                });
+            });
+
+            // Post Receipts
+            $('#btnPostReceipts').click(function() {
+                var cmo = $('#txtCMONumber').val();
+                if (!cmo) { alert('Enter CMO Number'); return; }
+
+                var poId = $('#hiddenPOID').val();
+                var poItemId = $('#hiddenPOItemID').val();
+                var isReversal = $('#modeReversal').is(':checked');
+
+                $.post('/Inventory/ReceiveIMEI/PostReceipts', { poId, poItemId, cmo, isReversal }, function(resp){
+                    alert(resp.message);
+                });
+            });
+
+             // ------------------- NEW CODE FOR HPC COST -------------------
+                   $('#txtUnitCost').on('input', function() {
+            let unitCost = parseFloat($(this).val()) || 0;
+            $('#txtHPCCost').val((unitCost * 0.10).toFixed(2));
+        });
+
+     
+            // Load grids initially
+            loadGrids();
+
+        });
+
+
+
+                function fillGrid(tableId, data) {
+            var tbody = $(tableId + " tbody");
+            tbody.empty();
+
+            data.forEach(function(item) {
+                tbody.append(`<tr><td>${item.imei}</td></tr>`);
+            });
+
+            // Optionally update Count / Invalid / Dupes inputs
+            var container = $(tableId).closest(".border");
+            var inputs = container.find("div.small input");
+            inputs.eq(0).val(data.length); // Count
+            inputs.eq(1).val(data.filter(i => i.invalid).length); // Invalid
+            inputs.eq(2).val(data.filter(i => i.dupe).length);    // Dupes
+        }
+
+        // ================= LOAD GRIDS =================
+        function loadGrids() {
+               $.getJSON('/Inventory/ReceiveIMEI/GetIMEIGrids', function(data) {
+            console.log("API Response:", data);
+
+            fillGrid("#tblScanList", data.scanList || []);
+            fillGrid("#tblPackingSlip", data.packingSlip || []);
+            fillGrid("#tblMatches", data.matches || []);
+            fillGrid("#tblScanNoPack", data.scanNoPack || []);
+            fillGrid("#tblPackNoScan", data.packNoScan || []);
+            fillGrid("#tblOnhand", data.onhand || []);
+        });
+        }
+  function checkErrors() {
+
+    let poId = $('#hiddenPOID').val();
+    let poItemId = $('#hiddenPOItemID').val();
+    let isReversal = $('#modeReversal').is(':checked');
+
+    $.getJSON('/Inventory/ReceiveIMEI/CheckErrors',
+        { poId, poItemId, isReversal },
+        function (resp) {
+
+            $('#lstErrors').empty();
+            $('#txtErrorCount').val(resp.errorCount);
+
+            if (resp.errorCount === 0) {
+
+                $('#errorBox')
+                    .removeClass('alert-danger')
+                    .addClass('alert-success')
+                    .removeClass('d-none');
+
+                $('#lstErrors').append('<li>No errors were found</li>');
+                $('#btnPostReceipts').prop('disabled', false);
+
+            } else {
+
+                $('#errorBox')
+                    .removeClass('alert-success')
+                    .addClass('alert-danger')
+                    .removeClass('d-none');
+
+                resp.errors.forEach(e => {
+                    $('#lstErrors').append(`<li>${e}</li>`);
+                });
+
+                $('#btnPostReceipts').prop('disabled', true);
+            }
+        });
+}
+
+
+               
+               </script>
+}

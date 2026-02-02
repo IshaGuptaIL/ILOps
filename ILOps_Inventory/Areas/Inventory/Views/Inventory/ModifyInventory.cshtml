@@ -1,0 +1,381 @@
+﻿@model ILOps_Inventory.Areas.Inventory.Models.ModifyInventory
+@{
+    ViewData["Title"] = "Modify Inventory Costs";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<!-- SEARCH -->
+<div>
+    <h2><i class="fas fa-boxes"></i> Modify Inventory </h2>
+</div>
+<div class="row mb-3">
+    <div class="col-md-8"></div>
+    <div class="col-md-4">
+        <form asp-action="Index" method="get" class="d-flex">
+            <input type="text" name="search" value="@Model.SearchTerm" class="form-control form-control-sm me-2" placeholder="Search Part No/Description..." />
+            <button class="btn btn-outline-primary btn-sm">Search</button>
+        </form>
+    </div>
+</div>
+
+<!-- TABLE -->
+<div class="card shadow">
+    <div class="card-body p-0">
+        <div class="p-2 bg-light border-bottom">
+            <small>Total: @Model.TotalItems | Page @Model.CurrentPage/@Model.TotalPages</small>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Whse</th>
+                        <th>Part No</th>
+                        <th>Description</th>
+                        <th>Product</th>
+                        <th>Current Cost</th>
+                        <th>Avg Cost</th>
+                        <th>Sell Price</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.InventoryItems.Any())
+                    {
+                        @foreach (var item in Model.InventoryItems)
+                        {
+                            <tr>
+                                <td>@item.Whse</td>
+                                <td><strong>@item.PartNo</strong></td>
+                                <td>@item.Description</td>
+                                <td>@(item.ProductCode ?? "-")</td>
+                                <td class="text-primary fw-bold">$@item.CurrentCost.ToString("0.00")</td>
+                                <td class="text-success fw-bold">$@item.AverageCost.ToString("0.00")</td>
+                                <td class="text-danger fw-bold">@(item.SellPrice.HasValue ? "$" + item.SellPrice.Value.ToString("0.00") : "N/A")</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#priceModal"
+                                            onclick="fillModal(@item.InventoryId, '@item.Whse', '@item.PartNo', @item.CurrentCost, @item.AverageCost, @(item.SellPrice ?? 0), @((item.UomId ?? 0)) )">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr><td colspan="8" class="text-center py-4 text-muted">No items found</td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <!-- PAGINATION -->
+        @if (Model.TotalPages > 1)
+        {
+            <nav class="p-2 bg-light border-top">
+                <ul class="pagination justify-content-center mb-0">
+                    <li class="page-item @(Model.CurrentPage == 1 ? "disabled" : "")">
+                        <a class="page-link" href="@Url.Action("Index", new { page = Model.CurrentPage - 1, search = Model.SearchTerm, size = Model.PageSize })">Prev</a>
+                    </li>
+
+                    @{
+                        int startPage = Math.Max(1, Model.CurrentPage - 2);
+                        int endPage = Math.Min(Model.TotalPages, Model.CurrentPage + 2);
+                    }
+
+                    @if (startPage > 1)
+                    {
+                        <li class="page-item"><a class="page-link" href="@Url.Action("Index", new { page = 1, search = Model.SearchTerm, size = Model.PageSize })">1</a></li>
+                        @if (startPage > 2)
+                        {
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                        }
+                    }
+
+                    @for (int i = startPage; i <= endPage; i++)
+                    {
+                        <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                            <a class="page-link" href="@Url.Action("Index", new { page = i, search = Model.SearchTerm, size = Model.PageSize })">@i</a>
+                        </li>
+                    }
+
+                    @if (endPage < Model.TotalPages)
+                    {
+                        @if (endPage < Model.TotalPages - 1)
+                        {
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                        }
+                        <li class="page-item"><a class="page-link" href="@Url.Action("Index", new { page = Model.TotalPages, search = Model.SearchTerm, size = Model.PageSize })">@Model.TotalPages</a></li>
+                    }
+
+                    <li class="page-item @(Model.CurrentPage == Model.TotalPages ? "disabled" : "")">
+                        <a class="page-link" href="@Url.Action("Index", new { page = Model.CurrentPage + 1, search = Model.SearchTerm, size = Model.PageSize })">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        }
+    </div>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal fade" id="priceModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Update Prices</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+
+            <form action="/Inventory/ModifyInventory/UpdatePrice"
+                  method="post"
+                  id="priceForm" novalidate>
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="InventoryId" id="modalInvId" />
+                <input type="hidden" name="UomId" id="modalUomId" />
+
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Warehouse <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control bg-light" name="Whse" id="modalWhse" readonly />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Part No <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control bg-light" name="PartNo" id="modalPartNo" readonly />
+                        </div>
+                    </div>
+
+                    <!-- APPLY TO ALL WAREHOUSES -->
+                    
+
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Current Cost <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" name="CurrentCost" id="modalCurrentCost"
+                                   step="0.01" min="0" required />
+                            <div id="modalCurrentCostError" class="validation-message"></div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Average Cost <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" name="AverageCost" id="modalAverageCost"
+                                   step="0.01" min="0" required />
+                            <div id="modalAverageCostError" class="validation-message"></div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Sell Price <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" name="SellPrice" id="modalSellPrice"
+                                   step="0.01" min="0" required />
+                            <div id="modalSellPriceError" class="validation-message"></div>
+                        </div>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" value="true" id="applyAllWarehouses" name="applyToAll">
+                        <label class="form-check-label" for="applyAllWarehouses">
+                            Apply to all warehouses for this part number
+                        </label>
+                    </div>
+                    <hr />
+                    <h6 class="mt-3">All Warehouses for this Part Number</h6>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Warehouse</th>
+                                    <th>Current Cost</th>
+                                    <th>Average Cost</th>
+                                    <th>Sell Price</th>
+                                </tr>
+                            </thead>
+                            <tbody id="allWarehousesBody">
+                                <!-- Rows will be populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-save"></i> Update Prices
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <script>
+               $(document).ajaxStart(function () {
+            Spinner.show();
+        });
+
+        $(document).ajaxStop(function () {
+            Spinner.hide();
+        });
+
+        $(document).ajaxError(function () {
+            Spinner.hide();
+        });
+
+        function clearErrors() {
+            $('.is-invalid').removeClass('is-invalid');
+            $('.validation-message').hide().empty();
+        }
+
+        function fillModal(invId, whse, partNo, current, avg, sell, uomId) {
+            $('#modalInvId').val(invId);
+            $('#modalUomId').val(uomId || 0);
+            $('#modalWhse').val(whse);
+            $('#modalPartNo').val(partNo);
+
+            $('#modalCurrentCost').val((current ?? 0).toFixed(2));
+            $('#modalAverageCost').val((avg ?? 0).toFixed(2));
+            $('#modalSellPrice').val((sell ?? 0).toFixed(2));
+
+            clearErrors();
+
+            // Reset Apply All checkbox
+            $('#applyAllWarehouses').prop('checked', false);
+            $('#modalWhse').prop('readonly', true);
+
+            // Fetch all warehouses
+            $.get('/Inventory/ModifyInventory/GetAllWarehouses',
+        { partNo: partNo, skipWhse: whse },  // pass current warehouse to skip
+        function (data) {
+            let rows = '';
+            if (data.length === 0) {
+                rows = '<tr><td colspan="4" class="text-center text-muted py-3">No records found</td></tr>';
+            } else {
+                data.forEach(item => {
+                    rows += `<tr>
+                                <td>${item.whse}</td>
+                                <td><input type="number" class="form-control" value="${(item.currentCost ?? 0).toFixed(2)}" readonly></td>
+                                <td><input type="number" class="form-control" value="${(item.averageCost ?? 0).toFixed(2)}" readonly></td>
+                                <td><input type="number" class="form-control" value="${(item.sellPrice ?? 0).toFixed(2)}" readonly></td>
+                             </tr>`;
+                });
+            }
+            $('#allWarehousesBody').html(rows);
+        });
+        }
+
+        $(function () {
+            const $form = $('#priceForm');
+
+            // Toggle readonly for warehouse when "Apply to All" is checked
+            $('#applyAllWarehouses').on('change', function () {
+                $('#modalWhse').prop('readonly', this.checked);
+            });
+
+            // Validation
+            $('#modalCurrentCost, #modalAverageCost, #modalSellPrice')
+                .on('blur change', function () { validateField($(this)); });
+
+            $form.on('submit', function (e) {
+                e.preventDefault();
+                clearErrors();
+                if (validateAllFields()) {
+                    $form.unbind('submit').submit();
+                }
+            });
+
+            function validateField($field) {
+                const val = parseFloat($field.val());
+                const id = $field.attr('id');
+                const $error = $('#' + id + 'Error');
+
+                $field.removeClass('is-invalid');
+                $error.hide().empty();
+
+                if (isNaN(val) || val < 0) {
+                    showError($field, 'Value cannot be negative');
+                    return false;
+                }
+                return true;
+            }
+
+            function validateAllFields() {
+                let valid = true;
+                $('#modalCurrentCost, #modalAverageCost, #modalSellPrice').each(function () {
+                    if (!validateField($(this))) valid = false;
+                });
+
+                const current = parseFloat($('#modalCurrentCost').val());
+                const avg = parseFloat($('#modalAverageCost').val());
+
+                if (!isNaN(current) && !isNaN(avg) && current !== avg) {
+                    showError($('#modalCurrentCost'), 'Current Cost and Average Cost must be the same');
+                    showError($('#modalAverageCost'), 'Current Cost and Average Cost must be the same');
+                    valid = false;
+                }
+                return valid;
+            }
+
+            function showError($field, message) {
+                const id = $field.attr('id');
+                const $error = $('#' + id + 'Error');
+
+                $field.addClass('is-invalid');
+                $error.html(`<i class="fas fa-exclamation-circle me-1"></i>${message}`).show();
+            }
+        });
+    </script>
+
+    <style>
+        .validation-message {
+            color: #dc3545 !important;
+            font-size: .875em;
+            margin-top: .25rem;
+            display: none;
+            animation: shake 0.4s;
+        }
+        @@keyframes shake {
+            0%, 100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-4px);
+            }
+
+            75% {
+                transform: translateX(4px);
+            }
+        }
+
+        .is-invalid {
+            border-color: #dc3545 !important;
+            box-shadow: 0 0 0 0.2rem rgba(220,53,69,0.25) !important;
+        }
+
+            .is-invalid:focus {
+                border-color: #dc3545 !important;
+                box-shadow: 0 0 0 0.2rem rgba(220,53,69,0.25) !important;
+            }
+
+        /* Remove number input spin arrows */
+        input[type=number]::-webkit-outer-spin-button,
+        input[type=number]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+    </style>
+}

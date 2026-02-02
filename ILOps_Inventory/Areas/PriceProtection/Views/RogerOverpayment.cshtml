@@ -1,0 +1,83 @@
+﻿@{
+    ViewBag.Title = "Rogers Overpayments";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="my-4">
+    <i class="fas fa-coins"></i> Rogers Overpayments
+</h2>
+
+<!-- Alerts -->
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="row">
+    <!-- IMPORT -->
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                Import Excel
+            </div>
+            <div class="card-body">
+                <form asp-area="PriceProtection" asp-controller="RogersOverpayments" asp-action="Import" method="post" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="fileInput" class="form-label">Select Excel File</label>
+                        <input type="file" class="form-control" id="fileInput" name="file" required />
+                    </div>
+                    <button type="submit" class="btn btn-success w-100">Import</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- DELETE -->
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-danger text-white">
+                Delete Records
+            </div>
+            <div class="card-body">
+                <form asp-area="PriceProtection" asp-action="DeleteByFile" asp-controller="RogersOverpayments" method="post">
+                    <div class="mb-3">
+                        <label for="fileSelect" class="form-label">Select File to Delete</label>
+                        <select class="form-select" id="fileSelect" name="fileName" required>
+                            <option value="">-- Select File --</option>
+                            @foreach (var file in ViewBag.FileList)
+                            {
+                                <option value="@file">@file</option>
+                            }
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-danger w-100">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- EXPORT -->
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-info text-white">
+                Export Excel
+            </div>
+            <div class="card-body d-flex align-items-center justify-content-center">
+                <a href="@Url.Action("Export", "RogersOverpayments", new { area = "PriceProtection" })" class="btn btn-primary w-100">
+                    Export to Excel
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
