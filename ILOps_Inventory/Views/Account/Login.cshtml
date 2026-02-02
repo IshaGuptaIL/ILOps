@@ -1,0 +1,103 @@
+﻿@using ILOps_Inventory.Models
+@model LoginViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Sign in";
+}
+
+    <style>
+        .login-wrapper {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f3f4f6;  
+        }
+
+    .login-card {
+        width: 100%;
+        max-width: 700px; 
+        background: #ffffff;
+        border-radius: 0.75rem;
+        box-shadow: 0 16px 40px rgba(15, 23, 42, 0.32);
+        padding: 2.5rem 3rem;
+    }
+
+        .login-card h2 {
+            font-weight: 700;
+        }
+
+        .login-subtitle {
+            font-size: 0.85rem;
+        }
+
+        .form-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            color: #6b7280;
+        }
+
+        .form-control-lg {
+            border-radius: 0.5rem;
+        }
+
+        .btn-login {
+            border-radius: 0.5rem;
+        }
+
+        .login-footer {
+            font-size: 0.78rem;
+        }
+    </style>
+
+<div class="login-page">
+    <div class="login-card">
+        <div class="text-center mb-4">
+            <div class="login-logo">
+                <i class="fas fa-box-open fa-lg"></i>
+            </div>
+            <h2 class="login-title mb-1">ILOps Inventory</h2>
+            <p class="text-muted login-subtitle mb-0">
+                Sign in to manage inventory, sales and reports.
+            </p>
+        </div>
+
+        <form asp-action="Login" method="post" novalidate>
+            @Html.AntiForgeryToken()
+
+
+            <div asp-validation-summary="All" class="text-danger mb-3"></div>
+            <div class="mb-3">
+                <label class="form-label">Email address</label>
+                <input asp-for="Email" class="form-control form-control-lg" placeholder="you@company.com" />
+                <span asp-validation-for="Email" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input asp-for="Password" type="password" class="form-control form-control-lg" placeholder="••••••••" />
+                <span asp-validation-for="Password" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-3">
+                <span asp-validation-summary="All" class="text-danger small d-block"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-login btn-lg w-100 py-2 fw-semibold">
+                <i class="fas fa-sign-in-alt me-2"></i>Sign in
+            </button>
+        </form>
+
+        <div class="text-center mt-4 pt-2 border-top">
+            <small class="text-muted login-footer">
+                <i class="fas fa-info-circle me-1"></i>
+                Demo login: <strong>abc@gmail.com</strong> / <strong>1234</strong>
+            </small>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
