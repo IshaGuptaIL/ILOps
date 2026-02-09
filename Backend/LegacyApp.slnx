@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="DAL/DAL.csproj" Id="0c6feee3-3a29-447c-b848-fbbc97a9475b" />
+  <Project Path="LegacyApp/LegacyApp.csproj" />
+</Solution>
