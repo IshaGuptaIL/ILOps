@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "N1PWjwEqaNY=",
+  "dgSpecHash": "EIdrdhGIU+w=",
   "success": true,
-  "projectFilePath": "C:\\Users\\igupta\\Downloads\\New folder\\ILOps\\ILOps_Inventory\\ILOps_Inventory.csproj",
+  "projectFilePath": "C:\\Users\\igupta\\Downloads\\New folder\\1\\ILOps\\ILOps_Inventory\\ILOps_Inventory.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\igupta\\.nuget\\packages\\azure.core\\1.47.1\\azure.core.1.47.1.nupkg.sha512",
     "C:\\Users\\igupta\\.nuget\\packages\\azure.identity\\1.14.2\\azure.identity.1.14.2.nupkg.sha512",

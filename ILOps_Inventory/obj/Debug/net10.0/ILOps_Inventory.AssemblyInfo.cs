@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ILOps_Inventory")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b12fefa15f96ed723e0df3e262ca86605e91e7e6")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+832626fd7dbe81b9720acb884b1d93e7229ad214")]
 [assembly: System.Reflection.AssemblyProductAttribute("ILOps_Inventory")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ILOps_Inventory")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
