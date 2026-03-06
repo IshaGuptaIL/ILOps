@@ -1,0 +1,4 @@
+System.InvalidCastException: Unable to cast object of type 'System.DateOnly' to type 'System.IConvertible'.
+   at System.Convert.ToDateTime(Object value)
+   at DAL.Inventory.OutputInvoice.OutputInvoiceDA.GetInvoiceDataFromDb(String invoiceNo, Boolean isSpire)
+   at DAL.Inventory.OutputInvoice.OutputInvoiceDA.ProcessInvoiceOutput(String invoiceNo, String folder, String prefix, Boolean isSpire)
