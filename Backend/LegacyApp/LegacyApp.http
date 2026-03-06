@@ -1,6 +1,0 @@
-@LegacyApp_HostAddress = http://localhost:5008
-
-GET {{LegacyApp_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
