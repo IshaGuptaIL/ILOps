@@ -1,0 +1,119 @@
+<div class="container-fluid py-4">
+  <div class="row">
+    <div class="col-12">
+      <h2 class="mb-4"><i class="fas fa-boxes me-2"></i>Inventory Types</h2>
+
+      <div class="row mb-4">
+        <div class="col-md-4">
+          <label class="fw-bold mb-2">Select Inventory Type</label>
+          <div class="btn-group w-100">
+            <button type="button" class="btn" 
+              [class.btn-primary]="currentType === 'HCC'" 
+              [class.btn-outline-primary]="currentType !== 'HCC'"
+              (click)="onTypeChange('HCC')">Hardware</button>
+            
+            <button type="button" class="btn" 
+              [class.btn-success]="currentType === 'ACC'" 
+              [class.btn-outline-success]="currentType !== 'ACC'"
+              (click)="onTypeChange('ACC')">Accessory</button>
+            
+            <button type="button" class="btn" 
+              [class.btn-warning]="currentType === 'LIC'" 
+              [class.btn-outline-warning]="currentType !== 'LIC'"
+              (click)="onTypeChange('LIC')">License</button>
+          </div>
+        </div>
+
+        <div class="col-md-8">
+          <form [formGroup]="addForm" (ngSubmit)="onAdd()" class="row g-2 bg-light p-3 border-start border-4 border-success rounded">
+            <div class="col-md-9">
+              <input type="text" formControlName="name" class="form-control" 
+                     placeholder="Enter name..." [class.is-invalid]="addForm.get('name')?.touched && addForm.get('name')?.invalid">
+              <div class="text-danger small mt-1" *ngIf="addForm.get('name')?.touched && addForm.get('name')?.invalid">
+                Name is required (max 100 chars).
+              </div>
+            </div>
+            <div class="col-md-3">
+              <button type="submit" class="btn btn-success w-100">
+                <i class="fas fa-plus me-1"></i>Add
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="card shadow">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">{{currentType}} List</h5>
+          <span class="badge bg-light text-dark">{{totalCount}} records</span>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th width="80">#</th>
+                  <th>Name</th>
+                  <th>Type</th>
+                  <th width="100" class="text-center">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of dataList; let i = index">
+                  <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+                  <td>{{ item.name }}</td>
+                  <td><span class="badge bg-info text-dark">{{ currentType }}</span></td>
+                  <td class="text-center">
+                    <button class="btn btn-sm btn-warning" (click)="openEdit(item)">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                  </td>
+                </tr>
+                <tr *ngIf="dataList.length === 0">
+                  <td colspan="4" class="text-center py-4 text-muted">No records found.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <nav class="mt-3" *ngIf="totalPages > 1">
+        <ul class="pagination justify-content-center">
+          <li class="page-item" [class.disabled]="currentPage === 1">
+            <a class="page-link" href="javascript:void(0)" (click)="changePage(currentPage - 1)">Prev</a>
+          </li>
+          <li class="page-item" *ngFor="let p of [].constructor(totalPages); let i = index" 
+              [class.active]="currentPage === i + 1">
+            <a class="page-link" href="javascript:void(0)" (click)="changePage(i + 1)">{{ i + 1 }}</a>
+          </li>
+          <li class="page-item" [class.disabled]="currentPage === totalPages">
+            <a class="page-link" href="javascript:void(0)" (click)="changePage(currentPage + 1)">Next</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop fade show" *ngIf="editForm.get('id')?.value"></div>
+<div class="modal fade show" id="editModal" tabindex="-1" *ngIf="editForm.get('id')?.value" style="display: block;">
+  <div class="modal-dialog modal-sm modal-dialog-centered">
+    <div class="modal-content shadow-lg">
+      <div class="modal-header bg-warning">
+        <h5 class="modal-title">Edit Name</h5>
+        <button type="button" class="btn-close" (click)="closeEdit()"></button>
+      </div>
+      <form [formGroup]="editForm" (ngSubmit)="onUpdate()">
+        <div class="modal-body">
+          <label class="fw-bold mb-1">New Name</label>
+          <input type="text" formControlName="name" class="form-control" required>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeEdit()">Cancel</button>
+          <button type="submit" class="btn btn-warning">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,126 @@
+<div class="access-wrapper">
+
+  <div class="access-title">
+    Inventory Counts - Spire
+  </div>
+
+  <div class="access-body">
+
+    <div class="left-panel">
+
+      <h4>Files currently accessible to InventoryCount:</h4>
+
+      <div class="field-row">
+        <label>Serial.btr:</label>
+        <input type="text" [value]="currentSerialDate" placeholder="Checking..." readonly>
+      </div>
+
+      <div class="field-row">
+        <label>Invent.btr:</label>
+        <input type="text" [value]="currentInventDate" placeholder="Checking..." readonly>
+      </div>
+
+      <h4 class="mt">Files prepared by "LastNightInvIMEI":</h4>
+
+      <div class="field-row">
+        <label>Serial.btr:</label>
+        <input type="text" [value]="lastNightSerialDate" readonly>
+      </div>
+
+      <div class="field-row">
+        <label>Invent.btr:</label>
+        <input type="text" [value]="lastNightInventDate" readonly>
+      </div>
+
+      <p class="info-text">
+        This process will capture the serial number and inventory from
+        Spire (Postgres) and load it into the SQL Count Database.
+      </p>
+
+      <div class="field-row mt">
+        <label>CountFile (HDW):</label>
+     <select [(ngModel)]="selectedHdwFile">
+  <option value="">--Select File--</option>
+  <option *ngFor="let file of hdwFilesList" [value]="file">{{file}}</option>
+  <option *ngIf="hdwFilesList.length === 0" disabled>No files found in DB</option>
+</select>
+      </div>
+
+    <div class="field-row">
+  <label>ACC Count File:</label>
+  <select [(ngModel)]="selectedAccFile">
+    <option value="">--Select File--</option>
+    <option *ngFor="let file of accFilesList" [value]="file">{{file}}</option>
+    <option *ngIf="accFilesList.length === 0" disabled>No files found in DB</option>
+  </select>
+</div>
+
+      <div class="field-row status-box">
+        <label>System Status:</label>
+        <input type="text" [value]="processStatus" class="status-input" readonly>
+      </div>
+
+      <div class="bottom-buttons">
+        <button class="access-btn btn-primary" (click)="onExportHardwareSheets()">
+          Create Hardware Count Sheet
+        </button>
+
+        <button class="access-btn btn-primary" (click)="onExportAccessorySheets()">
+          Create Accessory Count Sheets
+        </button>
+      </div>
+
+    </div>
+
+    <div class="right-panel">
+
+      <button class="access-btn" (click)="refreshFileDates()" [disabled]="true">
+        Get Dates
+      </button>
+
+      <button class="access-btn" (click)="onSyncLastNightFiles()" [disabled]="true">
+        Copy "LastNightInvIMEI"
+      </button>
+
+      <div class="snapshot-section">
+        <button class="access-btn btn-danger" (click)="onLoadLiveSnapshot()">
+          Load Snapshot of Live Spire
+        </button>
+
+        <div class="checkbox-group">
+          <label>
+            <input type="checkbox" [(ngModel)]="isImeiLoadEnabled"> 
+            Load Hardware (IMEI)
+          </label>
+          <label>
+            <input type="checkbox" [(ngModel)]="isAccLoadEnabled"> 
+            Load Accessories
+          </label>
+        </div>
+      </div>
+
+      <hr class="separator">
+
+    
+
+      <button class="btn btn-danger" (click)="onDeleteAllCounts(false)">
+  <i class="fa fa-trash"></i>Remove ALL Counts
+</button>
+
+<button class="btn btn-danger" (click)="onDeleteAllCounts(true)">
+  <i class="fa fa-trash"></i> Remove ACC Counts
+</button>
+
+      <button class="access-btn btn-warning" (click)="onDeleteByFile(false)">
+  <i class="fa fa-eraser"></i> Delete Counts From Single File
+</button>
+
+<button class="access-btn btn-warning" (click)="onDeleteByFile(true)">
+  <i class="fa fa-eraser"></i> Delete ACC Counts From Single File
+</button>
+
+    </div>
+
+  </div>
+
+  </div>

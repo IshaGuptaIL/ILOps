@@ -1,0 +1,19 @@
+<div class="imei-wrapper">
+    <div class="imei-card">
+        <div class="imei-title">IMEI Management</div>
+
+        <div class="imei-menu">
+            <button (click)="navigate('receive')">Receive IMEI's <span>➜</span></button>
+            <button (click)="navigate('credit')">Enter Invoice / Credits <span>➜</span></button>
+            <button (click)="navigate('find')">Find By IMEI <span>➜</span></button>
+            <button (click)="navigate('exception')">IMEI Exceptions <span>➜</span></button>
+            <button (click)="navigate('reports')">Reports <span>➜</span></button>
+        </div>
+
+        <hr />
+
+        <div class="imei-content-area">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>

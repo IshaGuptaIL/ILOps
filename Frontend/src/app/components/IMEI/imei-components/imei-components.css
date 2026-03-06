@@ -1,0 +1,71 @@
+.imei-wrapper {
+    width: 100%;
+    margin: 40px 0;
+}
+.imei-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+    border: 1px solid #e5e7eb;
+}
+
+.imei-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 18px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 8px;
+}
+
+.imei-menu {
+    display: flex;
+    flex-direction: row;   /* Horizontal */
+    flex-wrap: wrap;       /* Allows wrapping to next line if needed */
+    gap: 12px;
+}
+
+/* Button styling */
+.imei-menu button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #eef4ff, #dbe8ff);
+    border: 1px solid #c7d7ff;
+    color: #1f2937;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+/* Arrow */
+.imei-menu button span {
+    font-size: 13px;
+    color: #4b5563;
+}
+
+/* Hover effect */
+.imei-menu button:hover {
+    background: linear-gradient(135deg, #dbe8ff, #c7dbff);
+    transform: translateX(5px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.1);
+}
+
+/* Exit button special look */
+.exit-btn {
+    background: linear-gradient(135deg, #fee2e2, #fecaca);
+    border: 1px solid #fca5a5;
+    color: #7f1d1d;
+}
+
+.exit-btn:hover {
+    background: linear-gradient(135deg, #fecaca, #fca5a5);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

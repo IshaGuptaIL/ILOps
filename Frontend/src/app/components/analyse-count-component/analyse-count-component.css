@@ -1,0 +1,245 @@
+.main-container {
+  padding: 20px;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f2f2f2;
+  height: 100vh;
+}
+
+.top-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.folder-label {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.folder-input {
+  width: 400px;
+  padding: 5px;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: 40% 60%;
+  gap: 20px;
+}
+
+.left-text p {
+  margin-bottom: 30px;
+  color: #555;
+}
+
+.right-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.button-row {
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+}
+
+.vertical-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+button {
+  background: linear-gradient(#dbe5f1, #b8cce4);
+  border: 1px solid #7f9db9;
+  padding: 10px 15px;
+  min-width: 180px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+button:hover {
+  background: linear-gradient(#c3d3ec, #9fb6e3);
+}
+
+
+/* 2 Row */
+.acc-container {
+  padding: 20px;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f2f2f2;
+  height: 100vh;
+}
+
+/* Folder Section */
+.folder-section {
+  margin-bottom: 20px;
+}
+
+.folder-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.folder-row label {
+  width: 170px;
+  font-weight: bold;
+}
+
+.folder-row input {
+  width: 450px;
+  padding: 5px;
+}
+
+/* Main Layout */
+.main-layout {
+  display: flex;
+  align-items: flex-start;
+}
+
+/* Left Panel */
+.left-panel {
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* First Row Two Buttons */
+.button-row-top {
+  display: flex;
+  gap: 20px;
+}
+
+/* Buttons */
+button {
+  background: linear-gradient(#dbe5f1, #b8cce4);
+  border: 1px solid #7f9db9;
+  padding: 10px;
+  min-width: 200px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.wide-btn {
+  width: 100%;
+}
+
+button:hover {
+  background: linear-gradient(#c3d3ec, #9fb6e3);
+}
+
+.highlight {
+  opacity: 0.7;
+}
+
+/* Divider */
+.divider {
+  width: 1px;
+  height: 600px;
+  background: black;
+  margin: 0 40px;
+}
+
+/* Right Panel */
+.right-panel {
+  margin-top: 150px;
+}
+
+.right-panel h3 {
+  font-weight: normal;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.date-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.date-row label {
+  width: 100px;
+}
+
+.date-row input {
+  width: 180px;
+  padding: 5px;
+}
+.sticky-top {
+    top: 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+/* Row Hover Effect */
+.table-hover tbody tr:hover {
+    background-color: rgba(0, 123, 255, 0.03);
+    transition: background-color 0.2s ease;
+}
+
+/* Row highlight when editing */
+.table-primary-light {
+    background-color: #f0f7ff !important;
+}
+
+/* Input box cleaning */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.form-control-sm:focus {
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+}
+
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5); /* Black transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* Modal Box: Beech mein box dikhane ke liye */
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    max-width: 90%;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.modal-header h4 {
+    margin: 0;
+    color: #333;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.selected-row {
+    background-color: #d1ecf1 !important; /* Light Blue */
+    color: #0c5460;
+    font-weight: bold;
+    border: 2px solid #bee5eb;
+}
+
+.table-striped tbody tr:hover {
+    background-color: #f2f2f2;
+    cursor: pointer;
+}

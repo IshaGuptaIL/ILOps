@@ -1,0 +1,19 @@
+<div class="imei-wrapper">
+    <div class="imei-card">
+        <div class="imei-title">Inventory Count (Spire)</div>
+
+        <div class="imei-menu">
+            <button (click)="navigate('maintain-count')">
+                Load Live Snapshot <span>➜</span>
+            </button>
+            
+            <button (click)="navigate('analyse')">
+                Manage & Export Counts <span>➜</span>
+            </button>
+        </div>
+
+        <div class="imei-content-area">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,71 @@
+.imei-wrapper {
+    width: 100%;
+    margin: 20px 0; /* Space kam kar di upar se */
+}
+
+.imei-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+    border: 1px solid #e5e7eb;
+}
+
+.imei-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 18px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 8px;
+    color: #1f2937;
+}
+
+.imei-menu {
+    display: flex;
+    flex-direction: row;   /* Horizontal line mein buttons */
+    flex-wrap: wrap;       /* Mobile par auto-adjust */
+    gap: 12px;
+    margin-bottom: 15px;   /* Content area se balance */
+}
+
+/* Button styling - Same as your reference */
+.imei-menu button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;    /* Padding thodi compact ki hai */
+    min-width: 220px;      /* Consistent size */
+    border-radius: 10px;
+    background: linear-gradient(135deg, #eef4ff, #dbe8ff);
+    border: 1px solid #c7d7ff;
+    color: #1f2937;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+/* Arrow icon */
+.imei-menu button span {
+    font-size: 13px;
+    color: #4b5563;
+    margin-left: 10px;
+}
+
+/* Hover effect - Smooth slide */
+.imei-menu button:hover {
+    background: linear-gradient(135deg, #dbe8ff, #c7dbff);
+    transform: translateX(5px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.06);
+}
+
+.imei-content-area {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #f3f4f6;
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

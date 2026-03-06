@@ -1,0 +1,1219 @@
+<div class="main-container">
+
+  <!-- Top Folder Section -->
+  <div class="top-row">
+    <div class="mb-3">
+    <label for="fileInput" class="form-label">Select IMEI Count Excel File</label>
+    <input 
+      type="file" 
+      id="fileInput" 
+      class="form-control" 
+      (change)="onFileSelected($event)" 
+      accept=".xlsx, .xls"
+    />
+  </div>
+  </div>
+
+  <!-- Main Grid Layout -->
+  <div class="content-grid">
+
+    <!-- LEFT TEXT COLUMN -->
+    <div class="left-text">
+
+      <p>
+        This list contains IMEI's that are duplicated in the count list.
+        These should be reviewed and any duplicates removed.
+      </p>
+
+      <p>
+        This list contains IMEI's that are not 15 digits.
+      </p>
+
+      <p>
+        This list shows any IMEI that was counted that has never existed in BV with that part number
+      </p>
+
+      <p>
+        This list shows a comparison of the serial numbers BV considers onhand
+        to the actual number of serial numbers counted.
+      </p>
+
+    </div>
+
+    <!-- RIGHT BUTTON COLUMN -->
+    <div class="right-buttons">
+
+      <div class="button-row">
+        <button 
+    type="button" 
+    class="btn btn-primary" 
+    (click)="uploadFile()" 
+    [disabled]="!selectedFile ">
+    <i class="fas fa-upload me-2"></i>
+    <span>Import Count</span>
+  </button>
+        <button (click)="viewAllCounts()">View / Edit Counts</button>
+       <button (click)="spireNotCounted()">IMEI's BV Onhand</button>
+      </div>
+
+      <div class="button-row">
+        <button (click)="assignWarehouses()" [disabled]="true">Assign Counts to Warehouses</button>
+      </div>
+
+      <div class="button-row">
+        <button (click)="checkDuplicates()" [disabled]="true">View IMEI Duplicates Counted</button>
+        <div *ngIf="duplicateData.length > 0" class="mt-4">
+  <h6 class="text-warning font-weight-bold">Duplicate IMEI Detected:</h6>
+  <div class="table-responsive">
+    <table class="table table-sm table-striped border">
+      <thead class="table-dark">
+        <tr *ngFor="let item of duplicateData">
+          <th>IMEI</th>
+          <th>Whse</th>
+          <th>Part Number</th>
+          <th>Excel File</th>
+          <th>Row/Col</th>
+          <th>BV Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of duplicateData">
+          <td class="text-danger font-weight-bold">{{ item.imei }}</td>
+          <td>{{ item.whse }}</td>
+          <td>{{ item.partNumber }}</td>
+          <td>{{ item.countFile }}</td>
+          <td>R:{{ item.rowNumber }} | C:{{ item.columnNumber }}</td>
+          <td>
+            <span [class.badge-success]="item.existBV === 'InBV'" class="badge">
+              {{ item.existBV }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+        <button (click)="checkSystemDuplicates()" [disabled]="true">View IMEI Duplicates BV Onhand</button>
+<table class="table table-bordered table-sm bg-white shadow-sm">
+    <thead class="table-dark">
+      <tr *ngFor="let item of systemDuplicateData">
+        <th>Serial Number / IMEI</th>
+        <th>Times Exists in System</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of systemDuplicateData">
+        <td class="font-weight-bold">{{ item.imei }}</td>
+        <td class="text-center">
+          <span class="badge badge-pill badge-danger">{{ item.duplicateCount }}</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+        <div class="vertical-group">
+          <button (click)="findDuplicates()">Find Duplicates</button>
+          <button (click)="showCleanupPreview()">Show Duplicates</button>
+          <div class="table-responsive">
+    <table class="table table-sm table-bordered">
+      <thead class="table-dark">
+        <tr *ngFor="let row of cleanupPreviewData" >
+          <th>Warehouse</th>
+          <th>Part</th>
+          <th>IMEI</th>
+          <th>File Name</th>
+          <th>Row</th>
+          <th>Will Delete?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of cleanupPreviewData" 
+            [ngStyle]="{'background-color': row.willDelete === 'Yes' ? '#ffebee' : 'transparent'}">
+          <td>{{ row.warehouse }}</td>
+          <td>{{ row.part }}</td>
+          <td>{{ row.imei }}</td>
+          <td>{{ row.countFile }}</td>
+          <td>{{ row.rowNumber }}</td>
+          <td class="text-center">
+            <span *ngIf="row.willDelete === 'Yes'" class="badge badge-danger">Yes</span>
+            <span *ngIf="row.willDelete !== 'Yes'" class="badge badge-success">Keep Original</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+          <button (click)="finalDeleteDuplicates()">Remove Duplicates</button>
+        </div>
+      </div>
+
+      <div class="button-row">
+        <button (click)="checkSerialIntegrity()">View Invalid Counts</button>
+        <!-- <table class="table table-hover table-sm border">
+    <thead class="table-dark">
+      <tr *ngFor="let item of invalidSerials">
+        <th>Part Number</th>
+        <th>IMEI</th>
+        <th>Length</th>
+        <th>Spreadsheet</th>
+        <th>Row/Col</th>
+        <th>Error Code</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of invalidSerials">
+        <td>{{ item.partNumber }}</td>
+        <td class="text-danger font-weight-bold">{{ item.imei }}</td>
+        <td>{{ item.imeiLength }}</td>
+        <td>{{ item.spreadsheet }}</td>
+        <td>R:{{ item.row }} | C:{{ item.column }}</td>
+        <td><span class="badge badge-danger">Code: {{ item.verificationResult }}</span></td>
+      </tr>
+    </tbody>
+  </table> -->
+        <button (click)="checkSystemSerials()">View Invalid BV Onhand</button>
+
+        <!-- <div *ngIf="systemSerialData.length > 0">
+      <table class="table table-striped table-sm border">
+        <thead class="table-dark">
+          <tr>
+            <th>Warehouse</th>
+            <th>Part No</th>
+            <th>Serial / IMEI</th>
+            <th>Len</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of systemSerialData" [class.table-danger]="item.verificationCode !== 0">
+            <td>{{ item.warehouse }}</td>
+            <td>{{ item.partNo }}</td>
+            <td>{{ item.serial }}</td>
+            <td>{{ item.length }}</td>
+            <td>
+              <span class="badge" [ngClass]="item.verificationCode === 0 ? 'badge-success' : 'badge-danger'">
+                {{ item.status }} ({{item.verificationCode}})
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div> -->
+      </div>
+
+      <div class="button-row">
+        <button (click)="runDiscrepancyReport()">View Part No Discrepancies</button>
+        <div *ngIf="discrepancyData.length > 0" class="table-responsive shadow-sm border rounded">
+    <table class="table table-sm table-hover mb-0">
+      <thead class="table-dark">
+        <tr>
+          <th>IMEI</th>
+          <th>Counted Whse</th>
+          <th>System Whse</th>
+          <th>Counted Part</th>
+          <th>System Part</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of discrepancyData">
+          <td>{{ row.imei }}</td>
+          
+          <td [class.table-danger]="row.whseDisc !== ''">{{ row.whse }}</td>
+          <td>{{ row.onhandWhse }}</td>
+          
+          <td [class.table-danger]="row.partNoDisc !== ''">{{ row.partNumber }}</td>
+          <td>{{ row.onhandPartNo }}</td>
+          
+          <td>
+            <small class="text-danger font-weight-bold" *ngIf="row.whseDisc">{{ row.whseDisc }}<br></small>
+            <small class="text-danger font-weight-bold" *ngIf="row.partNoDisc">{{ row.partNoDisc }}</small>
+            <span *ngIf="!row.whseDisc && !row.partNoDisc" class="badge badge-success">Match OK</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+        <button (click)="searchReplaceSKU()" [disabled]="true">Search and Replace SKU</button>
+      </div>
+
+      <div class="button-row">
+        <button (click)="compareBVtoActual()"  [disabled]="true">Compare BV SN Counts to Actual Counts</button>
+        <button (click)="runQtyComparison()" [disabled]="true">Compare Actual Counts to BV SN Counts</button>
+        <div class="card-body p-0">
+    <div *ngIf="comparisonData.length > 0" class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Warehouse</th>
+            <th>Part Number</th>
+            <th class="text-center">Counted Qty</th>
+            <th class="text-center">Scanned Serials</th>
+            <th class="text-center">Difference</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of comparisonData">
+            <td>{{ item.whse }}</td>
+            <td>{{ item.partNumber }}</td>
+            <td class="text-center font-weight-bold">{{ item.countQty }}</td>
+            <td class="text-center">{{ item.scannedQty }}</td>
+            <td class="text-center" [class.text-danger]="item.difference !== 0">
+              {{ item.difference }}
+            </td>
+            <td>
+              <span class="badge" [ngClass]="item.status === 'Match' ? 'badge-success' : 'badge-danger'">
+                {{ item.status }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+      </div>
+
+      <!-- STATUS SECTION -->
+      <div class="status-row">
+        <label class="folder-label">Status:</label>
+        <input class="folder-input" [(ngModel)]="statusMessage" />
+      </div>
+
+      <!-- EXTRA ACTION BUTTONS -->
+      <div class="button-row">
+        <button (click)="fetchMissingItems()">Spire Onhand - Not Counted</button>
+<div *ngIf="onhandNotCountedData.length > 0" class="mt-4 border rounded p-3 bg-light">
+  <h6 class="text-danger"><i class="fa fa-warning"></i> Missing Items (System Onhand but Not Counted)</h6>
+  <table class="table table-bordered table-sm bg-white">
+    <thead class="table-danger">
+      <tr>
+        <th>IMEI / Serial</th>
+        <th>Part Number</th>
+        <th>Warehouse</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of onhandNotCountedData">
+        <td>{{ item.imei }}</td>
+        <td>{{ item.partNumber }}</td>
+        <td>{{ item.whse }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+        <button (click)="checkSpireStatus()">Counted but not onhand in Spire</button>
+      </div>
+
+      <div class="button-row">
+        <button  [disabled]="true">Available SN Versus Spire Onhand Qty</button>
+        <button  [disabled]="true">Fix Live Quantities</button>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+
+ <!-- 2Row  -->
+  <hr>
+  <hr>
+
+
+  <div class="acc-container">
+
+  <!-- TOP FOLDER SECTION -->
+  <div class="folder-section">
+    <div class="folder-row">
+      <label>ACC Count Folder:</label>
+   <input type="file" class="form-control" (change)="onAccFileSelected($event)" accept=".xlsx" />
+    </div>
+
+
+    <div class="mb-3">
+  <label class="form-label fw-bold">Select Backorders Excel File (.xlsx)</label>
+  <input 
+    type="file" 
+    class="form-control" 
+    (change)="onBackOrderFileSelected($event)" 
+    accept=".xlsx" 
+  />
+</div>
+    <!-- <div class="folder-row">
+      <label>ACC BO Folder:</label>
+      <input [(ngModel)]="accBOFolder" />
+    </div>
+  </div> -->
+
+  <div class="main-layout">
+
+    <!-- LEFT SIDE BUTTON STACK -->
+    <div class="left-panel">
+
+      <div class="button-row-top">
+        <button 
+        class="btn btn-success w-100" 
+        (click)="importACCCounts()" 
+        >
+        <i class="fas fa-file-import me-2"></i>
+        <span >Import ACC Counts</span>
+      </button>
+<!-- NEXT -->
+ <div class="mb-3">
+  <button 
+    class="btn btn-primary w-100" 
+    (click)="importBackOrders()"
+    [disabled]="!selectedBackOrderFile || isLoading">
+    <i class="fas fa-file-upload me-2"></i>
+    <span>Import Backorders</span>
+  </button>
+</div>
+
+<div>
+        <button (click)="viewEditCounts()">View / Edit Counts</button>
+
+  <!-- <div class="table-responsive" *ngIf="accEditData.length>0">
+  <table class="table table-sm table-hover table-bordered">
+     <thead>
+        <tr>
+          <th>Whse</th>
+          <th>Part No</th>
+          <th>Description</th>
+          <th style="width: 150px;">Qty Total</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+     <tbody>
+        <tr *ngFor="let item of accEditData">
+          <td>{{item.whse}}</td>
+          <td>{{item.partNo}}</td>
+          <td>{{item.description}}</td>
+          
+          <td>
+            <input *ngIf="item.isEditing" type="number" class="form-control form-control-sm" 
+                   [(ngModel)]="item.tempQty">
+            <span *ngIf="!item.isEditing" class="fw-bold">{{item.qtyTotal}}</span>
+          </td>
+
+          <td>
+            <div *ngIf="!item.isEditing">
+              <button class="btn btn-sm btn-outline-primary" (click)="item.isEditing = true">Edit</button>
+            </div>
+            <div *ngIf="item.isEditing" class="btn-group">
+              <button class="btn btn-sm btn-success" (click)="saveAccEdit(item)">Save</button>
+              <button class="btn btn-sm btn-secondary" (click)="cancelAccEdit(item)">X</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+
+  </table>
+  </div> -->
+</div>
+<!-- NEXT -->
+
+      </div>
+
+ <div class="card p-3 shadow-sm border-0 bg-light mb-4">
+    <h6 class="fw-bold text-secondary">Import ACC Backorders (Excel)</h6>
+    <div class="d-flex align-items-center gap-2">
+        <input type="file" #fileInput (change)="onFileSelected($event)" accept=".xlsx" hidden>
+        
+        <button class="btn btn-dark" (click)="fileInput.click()" >
+            <i class="bi bi-file-earmark-excel"></i> 
+           
+        </button>
+        
+        
+    </div>
+</div>
+
+<!-- <div class="mt-4 shadow-sm p-3 bg-white rounded border-top border-dark border-4" *ngIf="backorderDatas.length > 0">
+    <h5 class="fw-bold"><i class="bi bi-list-check"></i> Imported Backorder Preview</h5>
+    
+    <div class="table-responsive">
+        <table class="table table-sm table-hover table-bordered">
+            <thead class="table-secondary">
+                <tr>
+                    <th>Whse</th>
+                    <th>Part No</th>
+                    <th>Description</th>
+                    <th class="text-end">Qty Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of backorderDatas | slice: (p5-1)*pageSizes : p5*pageSizes">
+                    <td>{{ item.whse }}</td>
+                    <td class="fw-bold">{{ item.partNo }}</td>
+                    <td>{{ item.description }}</td>
+                    <td class="text-end fw-bold text-primary">{{ item.qtyTotal }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mt-2">
+        <small>Imported {{ backorderDatas.length }} rows</small>
+        <div class="btn-group">
+            <button class="btn btn-outline-dark btn-sm" [disabled]="p5 === 1" (click)="p5 = p5 - 1;">Prev</button>
+            <button class="btn btn-dark btn-sm" disabled>{{ p5 }}</button>
+            <button class="btn btn-outline-dark btn-sm" [disabled]="p5 * pageSizes >= backorderDatas.length" (click)="p5 = p5 + 1; ">Next</button>
+        </div>
+    </div>
+</div> -->
+
+<!-- NEXT -->
+
+<div class="modal-backdrop" *ngIf="showModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4>Analyse & Assign Warehouse</h4>
+        </div>
+        
+        <div class="modal-body">
+            <div >
+<div>
+  <label>
+    <input 
+      type="radio"
+      name="countType"
+      value="Hardware"
+      [(ngModel)]="countType"
+      (change)="onCountTypeChange()"
+    />
+    Hardware Counts
+  </label>
+
+  <label style="margin-left:20px;">
+    <input 
+      type="radio"
+      name="countType"
+      value="Accessory"
+      [(ngModel)]="countType"
+      (change)="onCountTypeChange()"
+    />
+    Accessory Counts
+  </label>
+</div>
+
+
+             <table class="table table-bordered table-striped">
+  <thead>
+    <tr>
+      <th>File Name</th>
+      <th>Warehouse</th>
+      <th>Total Entries</th>
+      <th>Total Qty</th>
+     
+  </thead>
+  <tbody>
+ <tr *ngFor="let item of countFiles" 
+    (click)="selectRow(item)" 
+    [class.selected-row]="selectedCountFile === item.countFile"
+    style="cursor: pointer;">
+    <td>{{item.countFile}}</td>
+    <td>{{item.whse}}</td>
+    <td>{{item.countEntries}}</td>
+    <td>{{item.sumOfQtyTotal}}</td>
+</tr>
+  </tbody>
+</table>
+                
+                <div class="form-group mt-3">
+                    <label>Select Target Warehouse:</label>
+                    <select [(ngModel)]="selectedWarehouse" class="form-control">
+                        <option value="" disabled>-- Choose --</option>
+                        <option *ngFor="let wh of warehouses" [value]="wh">{{ wh }}</option>
+                    </select>
+                </div>
+
+                <div class="summary-details mt-3 p-2 bg-light">
+
+<p>Total Qty: {{ fileSummary?.sumOfQtyTotal }}</p>
+<p>Total Entries: {{ fileSummary?.countEntries }}</p>
+<p>Selected File: {{ fileSummary?.countFile }}</p>
+                </div>
+            </div>
+
+           
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn btn-danger" (click)="showModal = false">Close</button>
+            <button class="btn btn-success" 
+                    
+                    (click)="confirmAssignment()">
+                Update Warehouse
+            </button>
+        </div>
+    </div>
+</div>
+
+      <button class="wide-btn" (click)="analyseAssignWarehouse()">
+        Analyse / Assign ACC Count Warehouse
+      </button>
+
+<!-- NEXT -->
+      <button class="wide-btn btn btn-info " (click)="loadedStockStatus()">
+    Loaded ACC Stock Status
+</button>
+
+<!-- <div class="mt-4 shadow-sm p-3 bg-white rounded border-top border-info border-4" *ngIf="stockStatusDatas.length > 0">
+    <h5 class="text-info fw-bold">
+        <i class="bi bi-box-seam"></i> Accessory Stock Status Report
+    </h5>
+    
+    <div class="table-responsive">
+        <table class="table table-sm table-hover table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>Whse</th>
+                    <th>InvGroup</th>
+                    <th>Prod</th>
+                    <th>Code</th>
+                    <th>Description</th>
+                    <th class="text-end">Onhand</th>
+                    <th class="text-end">Cost</th>
+                </tr>
+            </thead>
+            <tbody>
+               <tr *ngFor="let item of stockStatusDatas | slice: (p4-1)*pageSizes : p4*pageSizes">
+    <td>{{ item.whse }}</td>
+    <td>{{ item.invGroup }}</td>
+    <td>{{ item.prod }}</td>
+    <td class="fw-bold">{{ item.code }}</td>
+    <td><small>{{ item.description }}</small></td>
+    <td class="text-end" [ngClass]="item.onhand < 0 ? 'text-danger' : ''">
+        {{ item.onhand }}
+    </td>
+    <td class="text-end text-muted">{{ item.avgCost | number:'1.2-2' }}</td>
+</tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mt-2">
+        <small class="text-secondary">Showing {{ stockStatusDatas.length }} products</small>
+        <div class="btn-group shadow-sm">
+            <button class="btn btn-outline-info btn-sm" 
+                    [disabled]="p4 === 1" 
+                    (click)="p4 = p4 - 1;">
+                <i class="bi bi-chevron-left"></i> Prev
+            </button>
+            
+            <button class="btn btn-info btn-sm text-white" disabled>
+                Page {{ p4 }}
+            </button>
+            
+            <button class="btn btn-outline-info btn-sm" 
+                    [disabled]="p4 * pageSizes >= stockStatusDatas.length" 
+                    (click)="p4 = p4 + 1; ">
+                Next <i class="bi bi-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+</div> -->
+<!-- NEXT -->
+  <button class="wide-btn" (click)="onhandNotCounteds()">
+    Onhand BV Not Counted
+</button>
+
+<!-- <div class="mt-4" *ngIf="onhandNotCountedDatas.length > 0">
+    <div class="table-responsive shadow-sm">
+        <table class="table table-sm table-hover table-bordered bg-white">
+            <thead class="table-dark">
+                <tr>
+                    <th>Whse</th>
+                    <th>Code</th>
+                    <th>Description</th>
+                    <th class="text-end">BV Onhand</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of onhandNotCountedDatas | slice: (p3-1)*pageSizes : p3*pageSizes">
+                    <td>{{ item.whse }}</td>
+                    <td class="fw-bold">{{ item.code }}</td>
+                    <td><small>{{ item.description }}</small></td>
+                    <td class="text-end text-danger fw-bold">{{ item.onhand }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mt-2">
+        <small>Total Items: {{ onhandNotCountedDatas.length }}</small>
+        <div class="btn-group">
+            <button class="btn btn-outline-dark btn-sm" 
+                    [disabled]="p3 === 1" 
+                    (click)="p3 = p3 - 1; ">
+                Prev
+            </button>
+            <button class="btn btn-dark btn-sm" disabled>Page {{ p3 }}</button>
+            <button class="btn btn-outline-dark btn-sm" 
+                    [disabled]="p3 * pageSizes >= onhandNotCountedDatas.length" 
+                    (click)="p3 = p3 + 1;">
+                Next
+            </button>
+        </div>
+    </div>
+</div> -->
+
+<!-- NEXT -->
+
+     <button class="wide-btn btn btn-danger" (click)="countedNotBV()">
+    Counted Not In BV
+</button>
+
+<!-- <div class="mt-4 shadow-sm p-3 bg-white rounded border-top border-danger border-4" *ngIf="notInBVData.length > 0">
+    <h5 class="text-danger fw-bold"><i class="bi bi-exclamation-triangle"></i> Counted Items Not Found in BV</h5>
+    
+    <div class="table-responsive">
+        <table class="table table-sm table-hover table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>Whse</th>
+                    <th>Part No</th>
+                    <th>Prod</th>
+                    <th>Description</th>
+                    <th class="text-end">OnHand Qty</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of notInBVData | slice: (p2-1)*pageSizes : p2*pageSizes">
+                    <td>{{ item.whse }}</td>
+                    <td class="fw-bold text-primary">{{ item.code }}</td>
+                    <td>{{ item.prod }}</td>
+                    <td><small>{{ item.description }}</small></td>
+                    <td class="text-end fw-bold">{{ item.onhand }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mt-2">
+        <small>Found {{ notInBVData.length }} ghost items</small>
+        <div class="btn-group">
+            <button class="btn btn-outline-danger btn-sm" [disabled]="p2 === 1" (click)="p2 = p2 - 1; ">Prev</button>
+            <button class="btn btn-danger btn-sm" disabled>{{ p2 }}</button>
+            <button class="btn btn-outline-danger btn-sm" [disabled]="p2 * pageSizes >= notInBVData.length" (click)="p2 = p2 + 1; ">Next</button>
+        </div>
+    </div>
+</div> -->
+
+   <div class="container-fluid">
+
+    <button class="btn btn-primary mb-3" (click)="getDiscrepancies(1)">
+         Discrepancies
+    </button>
+
+    <!-- Table Section -->
+    <!-- <div class="mt-6" *ngIf="discrepanciesData && discrepanciesData.length > 0">
+
+        <div class="table-responsive">
+            <table class="table table-sm table-hover table-bordered shadow-sm">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Code</th>
+                        <th>Description</th>
+                        <th class="text-end">Count</th>
+                        <th class="text-end">OnHand</th>
+                        <th class="text-end">Diff</th>
+                        <th class="text-end">Req. Adj.</th>
+                        <th class="text-center">In Sheet?</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr *ngFor="let item of discrepanciesData"
+                        [ngClass]="{'table-danger': item.RequiredAdjustment != 0}">
+                        
+                        <td>{{item.code}}</td>
+                        <td>{{item.description}}</td>
+                        <td class="text-end">{{item.count}}</td>
+                        <td class="text-end">{{item.bvOnhand}}</td>
+                        <td class="text-end">{{item.diff}}</td>
+                        <td class="text-end">
+                            <strong>{{item.requiredAdjustment}}</strong>
+                        </td>
+                        <td class="text-center">
+                            <span class="badge"
+                                [ngClass]="item.inCountSheet === 'Yes' ? 'bg-success' : 'bg-secondary'">
+                                {{item.inCountSheet}}
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mt-3">
+
+            <small>
+                Showing Page {{ p }} 
+                <span *ngIf="discrepanciesData.length === pageSizes">
+                    ({{ pageSizes }} records loaded)
+                </span>
+            </small>
+
+            <div class="btn-group">
+
+                <button class="btn btn-outline-secondary btn-sm"
+                        [disabled]="p === 1"
+                        (click)="prevPage()">
+                    Prev
+                </button>
+
+                <button class="btn btn-light btn-sm" disabled>
+                    Page {{ p }}
+                </button>
+
+                <button class="btn btn-outline-secondary btn-sm"
+                        [disabled]="discrepanciesData.length < pageSizes"
+                        (click)="nextPage()">
+                    Next
+                </button>
+
+            </div>
+        </div>
+
+    </div> -->
+
+   
+
+</div>
+      <button class="wide-btn highlight" (click)="fixLiveQty()">
+        Fix Live ACC Quantities in CO
+      </button>
+
+      <button class="wide-btn" [disabled]="true" (click)="undoFixes()">
+        Undo ALL Fixes
+      </button>
+
+     <div class="container mt-4">
+  <div class="card p-3 shadow-sm mb-4">
+    <div class="row align-items-center">
+      <div class="col-md-3">
+        <label class="fw-bold">Load Spire Sales and Receipts Data</label>
+      </div>
+      
+      <div class="col-md-3">
+        <select class="form-select form-select-sm" [(ngModel)]="selectedLoadType" name="loadType">
+          <option value="Both">Both</option>
+          <option value="Sales">Sales</option>
+          <option value="Receipts">Receipts</option>
+        </select>
+      </div>
+
+      <div class="col-md-2">
+        <button class="btn btn-primary btn-sm w-100" (click)="loadSpireData()">
+          Load Data
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+    </div>
+
+    <!-- VERTICAL DIVIDER -->
+    <div class="divider"></div>
+
+    <!-- RIGHT SIDE DATE SECTION -->
+    <div class="right-panel">
+
+      <h3>Date Range for Sales / Receipts</h3>
+
+      <div class="date-row">
+        <label>Start Date:</label>
+        <input type="date" [(ngModel)]="startDate" />
+      </div>
+
+      <div class="date-row">
+        <label>End Date:</label>
+        <input type="date" [(ngModel)]="endDate" />
+      </div>
+
+     <button class="wide-btn" (click)="loadAnalysis()">
+  Accessory Analysis
+</button>
+
+<!-- <div class="table-responsive shadow-sm border rounded mt-2" *ngIf="analysisData && analysisData.length > 0">
+  <table class="table table-sm table-hover table-striped mb-0">
+    <thead class="table-dark">
+      <tr>
+        <th>WH</th><th>Group</th><th>Prod</th><th>Code</th><th>Description</th>
+        <th class="text-end">On Hand</th><th class="text-end">Open Bal</th>
+        <th class="text-end">Sales</th><th class="text-end">Receipts</th>
+        <th class="text-end">Closing</th><th class="text-end">Phys Count</th>
+        <th class="text-center">Diff</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of analysisData">
+        <td>{{ item.wh }}</td>
+        <td><small>{{ item.group }}</small></td>
+        <td>{{ item.prod }}</td>
+        <td><strong>{{ item.code }}</strong></td>
+        <td class="text-truncate" style="max-width: 250px;">{{ item.description }}</td>
+        
+        <td class="text-end">{{ item.onHand | number:'1.2-2' }}</td>
+        <td class="text-end">{{ item.openBalance | number:'1.2-2' }}</td>
+        
+        <td class="text-end text-danger">
+            {{ item.salesQty > 0 ? '-' + (item.salesQty | number:'1.2-2') : '0.00' }}
+        </td>
+        <td class="text-end text-success">
+            {{ item.receiptsQty > 0 ? '+' + (item.receiptsQty | number:'1.2-2') : '0.00' }}
+        </td>
+        
+        <td class="text-end font-weight-bold">{{ item.closingBal | number:'1.2-2' }}</td>
+        <td class="text-end bg-light">{{ item.physCount | number:'1.2-2' }}</td>
+        <td class="text-center" [ngClass]="item.difference != 0 ? 'text-danger fw-bold' : 'text-success'">
+          {{ item.difference | number:'1.2-2' }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="d-flex justify-content-between align-items-center p-2 bg-light border-top" *ngIf="totalPages > 1">
+    <span class="small text-muted">Page {{currentPage}} of {{totalPages}}</span>
+    <ul class="pagination pagination-sm mb-0">
+      <li class="page-item" [class.disabled]="currentPage === 1">
+        <button class="page-link" (click)="loadAnalysis(currentPage - 1)">Previous</button>
+      </li>
+      <li class="page-item" *ngFor="let p of pages" [class.active]="currentPage === p">
+        <button class="page-link" (click)="loadAnalysis(p)">{{p}}</button>
+      </li>
+      <li class="page-item" [class.disabled]="currentPage === totalPages">
+        <button class="page-link" (click)="loadAnalysis(currentPage + 1)">Next</button>
+      </li>
+    </ul>
+  </div>
+</div> -->
+
+
+
+   
+
+      <button class="wide-btn"  (click)="getAccessorySalesByChannel()">
+        Accessory Sales By Channel
+      </button>
+
+<div class="table-responsive shadow-sm border rounded" style="max-height: 500px; overflow-y: auto;" *ngFor="let item of accessoryData ">
+      <table class="table table-sm table-hover table-striped mb-0">
+        <thead class="table-dark sticky-top">
+          <tr>
+            <th>WH</th>
+            <th>Territory</th>
+            <th>Code</th>
+            <th>Description</th>
+            <th class="text-end">Qty (MTD)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of accessoryData ">
+            <td><span class="badge bg-secondary">{{ item.whse }}</span></td>
+            <td><strong>{{ item.territory }}</strong></td>
+            <td>{{ item.code }}</td>
+            <td class="text-truncate" style="max-width: 250px;" [title]="item.description">
+              {{ item.description }}
+            </td>
+            <td class="text-end fw-bold" [class.text-success]="item.sumOfBVCMTDQTY > 0">
+              {{ item.sumOfBVCMTDQTY | number:'1.0-0' }}
+            </td>
+          </tr>
+          
+          <tr *ngIf="(accessoryData).length === 0">
+            <td colspan="5" class="text-center py-3 text-muted">No matching records found.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+    <button class="wide-btn" (click)="showSales()">
+        Show Sales
+      </button>
+
+<div class="card-body p-0" *ngFor="let item of accessoryData">
+    <div class="table-responsive" style="max-height: 450px; overflow-y: auto;">
+      <table class="table table-sm table-hover table-striped mb-0">
+        <thead class="table-dark sticky-top">
+          <tr>
+            <th>WH</th>
+            <th>Group</th>
+            <th>Prod</th>
+            <th>Code</th>
+            <th>Description</th>
+            <th class="text-end">Total Qty</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of accessoryData">
+            <td><small class="text-muted">{{ item.whse }}</small></td>
+            <td><span class="badge border text-dark bg-light">{{ item.group }}</span></td>
+            <td>{{ item.prod }}</td>
+            <td><strong>{{ item.code }}</strong></td>
+            <td class="text-truncate" style="max-width: 200px;" [title]="item.description">
+              {{ item.description }}
+            </td>
+            <td class="text-end fw-bold text-primary">
+              {{ item.totalQty | number:'1.0-2' }}
+            </td>
+          </tr>
+
+          <tr *ngIf="!isLoading && accessoryData.length === 0">
+            <td colspan="6" class="text-center py-4 text-muted">
+              No sales data found for the selected period.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+      <!-- <div *ngIf="accessoryData.length > 0" class="mt-3">
+  <table class="table table-sm table-bordered">
+    <thead class="table-dark">
+      <tr>
+        <th>Whse</th>
+        <th>Code</th>
+        <th>Description</th>
+        <th>Prod</th>
+        <th>Group</th>
+        <th>Total Qty</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of accessoryData">
+        <td>{{ item.whse }}</td>
+        <td>{{ item.code }}</td>
+        <td>{{ item.description }}</td>
+        <td>{{ item.prod }}</td>
+        <td>{{ item.group }}</td>
+        <td>{{ item.totalQty | number }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div> -->
+
+    </div>
+
+  </div>
+<button class="wide-btn" (click)="showReceipts()">
+        Show Receipts
+      </button>
+
+      <div class="card-body p-0" *ngIf="accessoryData.length !== 0">
+    <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+      <table class="table table-sm table-hover mb-0">
+        <thead class="table-light sticky-top">
+          <tr>
+            <th>WH</th>
+            <th>Group</th>
+            <th>Code</th>
+            <th>Description</th>
+            <th class="text-end">Receipt Qty</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of accessoryData">
+            <td>{{ item.whse }}</td>
+            <td><span class="small border px-1 rounded">{{ item.group }}</span></td>
+            <td><strong>{{ item.code }}</strong></td>
+            <td class="text-truncate" style="max-width: 250px;">{{ item.description }}</td>
+            <td class="text-end fw-bold text-success">
+              +{{ item.totalQty | number:'1.0-2' }}
+            </td>
+          </tr>
+          
+          <tr *ngIf="accessoryData.length === 0 && !isLoading">
+            <td colspan="5" class="text-center p-4 text-muted">No receipts found for this period.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+</div>
+
+
+
+<hr>
+<hr>
+<hr>
+<div class="container-fluid">
+  <div class="row">
+  <div class="col-3">
+    <div class="d-grid gap-2">
+      <button class="btn" [ngClass]="activeTab === 'counts' ? 'btn-primary' : 'btn-outline-primary'" (click)="viewAllCounts(1)">View / Edit Counts</button>
+      <button class="btn" [ngClass]="activeTab === 'onhand' ? 'btn-secondary' : 'btn-outline-secondary'" (click)="spireNotCounted(1)">IMEI's BV Onhand</button>
+     <button class="btn" [ngClass]="activeTab === 'assign' ? 'btn-warning text-white' : 'btn-outline-warning'" 
+              (click)="assignWarehouses(1)">Assign Counts to Warehouses</button>
+              <button class="btn" [ngClass]="activeTab === 'duplicates' ? 'btn-danger' : 'btn-outline-danger'" (click)="checkDuplicates(1)">View IMEI Duplicates</button>
+    
+    <button class="btn" 
+        [ngClass]="activeTab === 'systemDuplicates' ? 'btn-dark' : 'btn-outline-dark'" 
+        (click)="checkSystemDuplicates(1)">
+  View IMEI Duplicates BV Onhand
+</button>
+<button class="btn" 
+        [ngClass]="activeTab === 'invalid' ? 'btn-danger' : 'btn-outline-danger'" 
+        (click)="checkSerialIntegrity(1)">
+  View Invalid Counts
+</button>
+
+<button class="btn" 
+        [ngClass]="activeTab === 'systemDuplicates' ? 'btn-dark' : 'btn-outline-dark'" 
+        (click)="checkSystemDuplicates(1)">
+  View IMEI Duplicates BV Onhand
+</button>
+
+            </div>
+  </div>
+
+  <div class="col-9">
+
+    <div class="table-responsive" *ngIf=" activeTab !== ''">
+      <table class="table table-sm table-bordered">
+        <thead class="table-dark">
+          <tr *ngIf="activeTab === 'counts'">
+            <th>ID</th><th>Whse</th><th>Part Number</th><th>IMEI</th><th>File</th>
+          </tr>
+          <tr *ngIf="activeTab === 'onhand'">
+            <th>Whse</th><th>Code</th><th>Description</th><th>Onhand</th><th>InvGroup</th>
+          </tr>
+          <tr *ngIf="activeTab === 'assign'">
+    <th>Warehouse</th>
+    <th>Part No</th>
+    <th>Serial Number</th>
+    <th>Prod</th>
+    <th>Onhand</th>
+    <!-- <th>Wholesale</th> -->
+    <!-- <th>Last Sale</th> -->
+  </tr>
+  <tr *ngIf="activeTab === 'duplicates'">
+          <th>IMEI</th><th>Whse</th><th>Part Number</th><th>File</th><th>Row/Col</th><th>Exist BV</th>
+        </tr>
+<tr *ngIf="activeTab === 'systemDuplicates'">
+    <th>IMEI / Number</th>
+    <th>Duplicate Count in System</th>
+    <th>Status</th>
+  </tr>
+  <tr *ngIf="activeTab === 'invalid'">
+    <th>Part #</th>
+    <th>IMEI</th>
+    <th>Len</th>
+    <th>File</th>
+    <th>Location (R/C)</th>
+    <th>Error Code</th>
+  </tr>
+  <tr *ngIf="activeTab === 'systemDuplicates'">
+          <th>IMEI / Serial Number</th>
+          <th>Total Occurrences in BV</th>
+          <th>Action Required</th>
+        </tr>
+        
+        </thead>
+        
+        <tbody>
+          <ng-container *ngIf="activeTab === 'counts'">
+            <tr *ngFor="let item of importedCounts">
+              <td>{{item.Id || item.id}}</td><td>{{item.Whse || item.whse}}</td>
+              <td>{{item.PartNumber || item.partNumber}}</td><td>{{item.Imei || item.imei}}</td>
+              <td>{{item.CountFile || item.countFile}}</td>
+            </tr>
+          </ng-container>
+
+          <ng-container *ngIf="activeTab === 'onhand'">
+            <tr *ngFor="let item of onhandNotCountedData">
+              <td>{{item.Whse}}</td><td>{{item.Code}}</td>
+              <td>{{item.Description}}</td><td>{{item.Onhand}}</td>
+              <td>{{item.InvGroup}}</td>
+            </tr>
+          </ng-container>
+
+          <ng-container *ngIf="activeTab === 'assign'">
+    <tr *ngFor="let item of assignWarehouseData">
+      <td>{{ item.warehouse }}</td>
+      <td>{{ item.partNo }}</td>
+      <td>{{ item.serialNumber }}</td>
+      <td><span class="badge bg-info">{{ item.prod }}</span></td>
+      <td>{{ item.onhand }}</td>
+      <!-- <td>{{ item.wholesale | currency }}</td>
+      <td>{{ item.lastSaleDate | date:'shortDate' }}</td> -->
+    </tr>
+  </ng-container>
+
+  <ng-container *ngIf="activeTab === 'duplicates'">
+          <tr *ngFor="let item of duplicateData">
+            <td><strong>{{ item.imei }}</strong></td>
+            <td>{{ item.whse }}</td>
+            <td>{{ item.partNumber }}</td>
+            <td>{{ item.countFile }}</td>
+            <td>{{ item.rowNumber }}/{{ item.columnNumber }}</td>
+            <td>
+              <span class="badge" [ngClass]="item.ExistBV === 'InBV' ? 'bg-success' : 'bg-secondary'">
+                {{ item.ExistBV || 'New' }}
+              </span>
+            </td>
+          </tr>
+        </ng-container>
+
+        <ng-container *ngIf="activeTab === 'systemDuplicates'">
+    <tr *ngFor="let item of systemDuplicateData">
+      <td><strong>{{ item.imei }}</strong></td>
+      <td>{{ item.duplicateCount }} times</td>
+      <td>
+        <span class="badge bg-warning text-dark">Check Warehouse Sync</span>
+      </td>
+    </tr>
+  </ng-container>
+<ng-container *ngIf="activeTab === 'invalid'">
+    <tr *ngFor="let item of invalidSerials">
+      <td>{{ item.partNumber }}</td>
+      <td class="text-danger"><strong>{{ item.imei }}</strong></td>
+      <td>{{ item.imeiLength }}</td>
+      <td>{{ item.spreadsheet }}</td>
+      <td>{{ item.row }}/{{ item.column }}</td>
+      <td><span class="badge bg-danger">Code: {{ item.verificationResult }}</span></td>
+    </tr>
+  </ng-container>
+<ng-container *ngIf="activeTab === 'systemDuplicates'">
+          <tr *ngFor="let item of systemDuplicateData">
+            <td><strong>{{ item.imei }}</strong></td>
+            <td class="text-center">
+              <span class="badge bg-danger">{{ item.duplicateCount }} times</span>
+            </td>
+            <td>
+              <small class="text-muted">Verify inventory sync</small>
+            </td>
+          </tr>
+        </ng-container>
+
+        </tbody>
+      </table>
+
+    <div class="d-flex justify-content-between p-2 bg-light border">
+  <button class="btn btn-sm btn-link" 
+          [disabled]="p === 1 || isLoading" 
+          (click)="changePage(-1)">
+    Previous
+  </button>
+
+  <span>Page <strong>{{p}}</strong></span>
+
+  <button class="btn btn-sm btn-link" 
+          [disabled]="isLoading || (activeTab === 'counts' && importedCounts.length < pageSize) || (activeTab === 'onhand' && onhandNotCountedData.length < pageSize) || (activeTab === 'assign' && assignWarehouseData.length < pageSize)"
+          (click)="changePage(1)">
+    Next
+  </button>
+</div>
+    </div>
+  </div>
+</div>
+</div>

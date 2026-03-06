@@ -1,0 +1,25 @@
+.app-container {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 320px;
+  background-color: #5b4d9d; /* purple */
+  color: white;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.main-content {
+  flex-grow: 1;
+  background-color: #f9fafc; /* light background */
+  padding: 2rem;
+  overflow-y: auto;
+}
+a.active {
+  font-weight: bold;
+  color: #00aaff;
+}

@@ -1,0 +1,53 @@
+<div class="container-fluid py-4">
+  <div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+      <h5 class="mb-0">Role Permissions</h5>
+    </div>
+    <div class="card-body">
+      
+      <div class="row mb-4">
+        <div class="col-md-4">
+          <label class="form-label fw-bold">Select Role <span class="text-danger">*</span></label>
+          <select class="form-select" [(ngModel)]="selectedRoleId" (change)="onRoleChange()">
+            <option [ngValue]="null">Choose Role...</option>
+            <option *ngFor="let role of roles" [value]="role.id">{{role.name}}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="mb-4" *ngIf="selectedRoleId">
+        <label class="form-label fw-bold">Select Permissions</label>
+        <div class="row g-3">
+          <div class="col-md-6 col-lg-4" *ngFor="let parent of getParentMenus()">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" 
+                     [id]="'menu_' + parent.id"
+                     [checked]="isMenuSelected(parent.id)"
+                     (change)="toggleMenu(parent.id)">
+              <label class="form-check-label fw-bold" [for]="'menu_' + parent.id">
+                <i [class]="parent.icon"></i> {{parent.menuName}}
+              </label>
+            </div>
+
+            <div class="ms-4 mt-2" *ngFor="let child of getChildMenus(parent.id)">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" 
+                       [id]="'menu_' + child.id"
+                       [checked]="isMenuSelected(child.id)"
+                       (change)="toggleMenu(child.id)">
+                <label class="form-check-label" [for]="'menu_' + child.id">
+                  {{child.menuName}}
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-success px-4" (click)="savePermissions()" [disabled]="!selectedRoleId">
+        <i class="bi bi-save me-2"></i> Save Changes
+      </button>
+
+    </div>
+  </div>
+</div>

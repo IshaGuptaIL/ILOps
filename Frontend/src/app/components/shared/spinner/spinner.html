@@ -1,0 +1,7 @@
+<div id="global-spinner" class="spinner-overlay" [class.active]="(spinnerService.isActive$ | async)">
+    <div class="spinner-card">
+        <div class="spinner-ring"></div>
+        <div class="spinner-core"></div>
+        <div class="spinner-text">Loading</div>
+    </div>
+</div>

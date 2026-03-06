@@ -1,0 +1,101 @@
+.access-wrapper {
+  width: 100%;
+  background: #e9e9e9;
+  font-family: Segoe UI, Tahoma, sans-serif;
+  border: 1px solid #c0c0c0;
+}
+
+.access-title {
+  background: #b7472a;
+  color: white;
+  padding: 10px;
+  font-weight: 600;
+}
+
+.access-body {
+  display: flex;
+  padding: 20px;
+  gap: 40px;
+}
+
+/* LEFT SIDE */
+.left-panel {
+  flex: 1;
+}
+
+.field-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.field-row label {
+  width: 120px;
+  font-size: 13px;
+}
+
+.field-row input,
+.field-row select {
+  width: 220px;
+  padding: 4px;
+  border: 1px solid #b5b5b5;
+  background: white;
+}
+
+.info-text {
+  font-size: 12px;
+  color: #555;
+  margin: 15px 0;
+  width: 400px;
+}
+
+.mt {
+  margin-top: 20px;
+}
+
+/* RIGHT SIDE */
+.right-panel {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ACCESS STYLE BUTTON */
+.access-btn {
+  background: linear-gradient(#dfe8f6, #b8cce4);
+  border: 1px solid #7f9db9;
+  padding: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.access-btn:hover {
+  background: linear-gradient(#eaf1fb, #c5d9f1);
+}
+
+.checkbox-group {
+  font-size: 12px;
+  margin: 5px 0;
+}
+
+/* BOTTOM BUTTONS */
+.bottom-buttons {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 250px;
+}
+
+/* OVERLAY */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(255,255,255,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}

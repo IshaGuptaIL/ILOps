@@ -1,0 +1,134 @@
+<div class="report-container">
+
+  <div class="card">
+    <h2 class="title">IMEI Report</h2>
+
+
+     <div class="card">
+    <button class="btn-primary" (click)="spireStockStatus()">
+      Spire Stock Status
+    </button>
+  </div>
+<hr>
+<hr>
+
+<div class="field-inline">
+  <label>Start Date:</label>
+  <input type="date" [(ngModel)]="receiptStartDate">
+
+
+  <label>End Date:</label>
+<input type="date" [(ngModel)]="receiptEndDate">
+
+  <button class="btn-primary" (click)="generateReceiptsReport()">
+    Spire Receipts
+  </button>
+</div>
+
+<hr>
+<hr>
+
+    <!-- Filters -->
+    <div class="grid">
+
+      <div class="field">
+        <label>Item Type</label>
+        <select [(ngModel)]="combo8" (change)="combo8Changed()">
+          <option value="">Select Type</option>
+          <option value="Hardware">Hardware</option>
+          <!-- <option value="Accessory">Accessory</option> -->
+        </select>
+      </div>
+
+      <div class="field checkbox">
+          <label>Vendor</label>
+       <select [(ngModel)]="vendor">
+    <option value="">All Vendors</option>
+    <option *ngFor="let v of vendors" [value]="v.id">
+      {{ v.name }}
+    </option>
+  </select>
+      </div>
+
+ <div class="field">
+  <label>Part</label>
+  <select [(ngModel)]="part">
+    <option [ngValue]="null">All Parts</option>
+    <option *ngFor="let p of parts" [ngValue]="p">
+      {{ p }}
+    </option>
+  </select>
+</div>
+
+      <div class="field">
+        <label>Start Date</label>
+        <input type="date" [(ngModel)]="imeiStartDate">
+      </div>
+      
+      <div class="field">
+        <label>End Date</label>
+        <input type="date" [(ngModel)]="imeiEndDate">                           
+      </div>
+
+    </div>
+
+    <!-- Actions -->
+    <!-- <div class="actions">
+      <label class="excel">
+        <input type="checkbox" [(ngModel)]="chkExcel">
+        Export to Excel
+      </label>
+
+   
+    </div> -->
+  </div>
+
+  <!-- Table -->
+  <div class="card" *ngIf="!chkExcel && reportData.length">
+    <table>
+      <thead>
+        <tr>
+          <th>Vendor</th>
+          <th>Receipt No</th>
+          <th>IMEI</th>
+          <th>Unit Cost</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let r of reportData">
+          <td>{{r.vendor}}</td>
+          <td>{{r.receiptNo}}</td>
+          <td>{{r.imei}}</td>
+          <td>{{r.cost | currency}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+ 
+
+  <div class="actions">
+  <button class="btn-primary" (click)="spireReceivedReport()">
+    Download Received Report
+  </button>
+</div>
+
+</div>
+
+
+
+
+
+
+<hr>
+<hr>
+
+    <label for="receiptNo">Receipt Number:</label>
+    <input id="receiptNo" [(ngModel)]="receiptNo" class="form-control" placeholder="Enter Receipt No">
+
+
+  
+    <label for="poNumber">PO Number:</label>
+    <input id="poNumber" [(ngModel)]="poNumber" class="form-control" placeholder="Enter PO Number">
+  
+  <button (click)="searchReceipts()" class="btn btn-primary mt-2">Search</button>

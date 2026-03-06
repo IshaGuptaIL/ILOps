@@ -1,0 +1,67 @@
+<nav class="sidebar d-flex flex-column vh-100  text-white shadow-lg" *ngIf="roleId">
+  
+  <!-- Header -->
+  <div class="sidebar-header p-4 text-center border-bottom ">
+    <h5 class="mb-0 text-white">
+      <i class="fas fa-box-open me-2"></i> ILOps Inventory
+    </h5>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="menuItems.length === 0 && roleId" class="p-4 text-center">
+    <div class="spinner-border spinner-border-sm text-white mb-2"></div>
+    <small>Loading menu...</small>
+  </div>
+
+  <!-- Menu Items -->
+  <ul class="nav flex-column p-3 flex-grow-1">
+  <ng-container *ngFor="let item of menuItems">
+    
+    <!-- Simple Link (No Children) -->
+    <li class="nav-item mb-1" *ngIf="item.children && item.children.length === 0">
+      <a class="nav-link text-white p-3" 
+         [routerLink]="item.route ? [item.route] : []"
+         routerLinkActive="active">
+        <i class="{{item.icon || 'bi-house'}} me-2"></i>
+        {{item.label}}
+      </a>
+    </li>
+
+    <!-- ✅ FIXED Dropdown Parent -->
+    <li class="nav-item mb-2" *ngIf="item.children && item.children.length > 0">
+      <!-- Parent Toggle -->
+      <div class="nav-link text-white p-3 cursor-pointer position-relative"
+           (click)="toggleMenu(item)"
+           [class.active]="item.expanded">
+        <div class="d-flex align-items-center justify-content-between w-100">
+          <div class="d-flex align-items-center">
+            <i class="{{item.icon || 'bi-house'}} me-2"></i>
+            <span>{{item.label}}</span>
+          </div>
+          <i class="fas fa-chevron-down chevron-icon" 
+             [class.rotated]="item.expanded"></i>
+        </div>
+      </div>
+      
+      <!-- ✅ Children INSIDE li tag -->
+      <ul class="submenu list-unstyled ms-4 ps-3" [class.show]="item.expanded">
+        <li class="nav-item py-1" *ngFor="let child of item.children">
+          <a class="nav-link text-white py-1 px-3 submenu-link small"
+             [routerLink]="child.menuUrl ? [child.menuUrl] : []"
+             routerLinkActive="active">
+            <i class="{{child.icon || 'bi-circle'}} me-2"></i>
+            {{child.label}}
+          </a>
+        </li>
+      </ul>
+    </li>  <!-- ✅ Proper closing -->
+  </ng-container>
+</ul>
+
+  <!-- Logout -->
+  <div class="sidebar-footer p-3 border-top">
+    <button class="btn btn-danger w-100" (click)="logout()">
+      <i class="fas fa-sign-out-alt me-2"></i> Logout
+    </button>
+  </div>
+</nav>
