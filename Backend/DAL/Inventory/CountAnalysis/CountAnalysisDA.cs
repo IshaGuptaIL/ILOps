@@ -622,7 +622,7 @@ WHERE tc.IMEI IN (
                             }
 
                             response.Success = true;
-                            response.Result = results; // Ab data frontend ko milega
+                            response.Result = results; 
                             response.Message = "Find Duplicates Completed Successfully.";
                         }
                         catch (Exception ex)
@@ -652,24 +652,22 @@ WHERE tc.IMEI IN (
                 {
                     await conn.OpenAsync();
 
-                    // Query updated with your exact column names
+                   
                     string sql = @"
                 SELECT 
-                    t1.ID,
-                    t1.warehouse, 
-                    t1.part, 
-                    t1.imei, 
-                    t1.countFile, 
-                    t1.rowNumber, 
-                    t1.columnNumber,
-                    CASE WHEN t1.ID <> t2.MinID THEN 'Yes' ELSE '' END AS WillDelete
-                FROM tblIMEICountDuplicates t1
-                INNER JOIN (
-                    SELECT imei, MIN(ID) as MinID 
-                    FROM tblIMEICountDuplicates 
-                    GROUP BY imei
-                ) t2 ON t1.imei = t2.imei
-                ORDER BY t1.warehouse, t1.part, t1.imei";
+                    ID,
+                    Warehouse, 
+                    Part, 
+                    IMEI, 
+                    CountFile, 
+                    RowNumber, 
+                    ColumnNumber,
+                    CASE 
+                        WHEN ID <> MIN(ID) OVER(PARTITION BY IMEI) THEN 'Yes' 
+                        ELSE '' 
+                    END AS WillDelete
+                FROM tblIMEICountDuplicates
+                ORDER BY Warehouse, Part, IMEI";
 
                     using (SqlCommand cmd = new SqlCommand(sql, conn))
                     using (var reader = await cmd.ExecuteReaderAsync())
@@ -678,18 +676,20 @@ WHERE tc.IMEI IN (
                         {
                             results.Add(new
                             {
+                                // Safely handle potential nulls and types
                                 Id = reader["ID"],
-                                Warehouse = reader["warehouse"]?.ToString(),
-                                Part = reader["part"]?.ToString(),
-                                Imei = reader["imei"]?.ToString(),
-                                CountFile = reader["countFile"]?.ToString(),
-                                RowNumber = reader["rowNumber"] != DBNull.Value ? Convert.ToInt32(reader["rowNumber"]) : 0,
-                                ColumnNumber = reader["columnNumber"] != DBNull.Value ? Convert.ToInt32(reader["columnNumber"]) : 0,
+                                Warehouse = reader["Warehouse"]?.ToString(),
+                                Part = reader["Part"]?.ToString(),
+                                Imei = reader["IMEI"]?.ToString(),
+                                CountFile = reader["CountFile"]?.ToString(),
+                                RowNumber = reader["RowNumber"] != DBNull.Value ? Convert.ToInt32(reader["RowNumber"]) : 0,
+                                ColumnNumber = reader["ColumnNumber"] != DBNull.Value ? Convert.ToInt32(reader["ColumnNumber"]) : 0,
                                 WillDelete = reader["WillDelete"]?.ToString()
                             });
                         }
                     }
                 }
+
                 response.Success = true;
                 response.Result = results;
             }
@@ -698,9 +698,9 @@ WHERE tc.IMEI IN (
                 response.Success = false;
                 response.Message = "Error: " + ex.Message;
             }
+
             return response;
         }
-
         public async Task<ApiResposne> DeleteDuplicateCounts()
         {
             var response = new ApiResposne();
@@ -1059,23 +1059,33 @@ WHERE tc.IMEI IN (
             {
                 using (SqlConnection conn = new SqlConnection(_sqlConn))
                 {
-                    // Humne BVSerialsOnhand ko replace kar diya asli Join query se
                     string sql = @"
+                -- Derived BVSerialsOnhand dataset
+                WITH BVSerialsOnhand AS (
+                    SELECT 
+                        ws.WAREHOUSE, 
+                        ws.PART_NO, 
+                        ws.NUMBER
+                    FROM WWSerialnumber ws
+                    INNER JOIN WWInventory wi 
+                        ON ws.PART_NO = wi.CODE
+                       AND ws.WAREHOUSE = wi.WHSE
+                    WHERE wi.PROD = 'HCC' OR wi.PROD = 'ACC'
+                )
+                -- Find missing from physical counts
                 SELECT 
-                    ws.WAREHOUSE, 
-                    ws.PART_NO, 
-                    ws.NUMBER, 
+                    bv.WAREHOUSE, 
+                    bv.PART_NO, 
+                    bv.NUMBER, 
                     'Should be onhand in BV' AS StatusNote
-                FROM WWSerialnumber ws
-                INNER JOIN WWInventory wi 
-                    ON ws.PART_NO = wi.CODE 
-                    AND ws.WAREHOUSE = wi.WHSE
+                FROM BVSerialsOnhand bv
                 LEFT JOIN tblCounts tc 
-                    ON ws.NUMBER = tc.IMEI
-                WHERE (wi.PROD = 'HCC' OR wi.PROD = 'ACC')
-                AND tc.IMEI IS NULL";
+                    ON bv.NUMBER = tc.IMEI
+                WHERE tc.IMEI IS NULL;
+            ";
 
                     await conn.OpenAsync();
+
                     using (SqlCommand cmd = new SqlCommand(sql, conn))
                     using (var reader = await cmd.ExecuteReaderAsync())
                     {
@@ -1091,7 +1101,8 @@ WHERE tc.IMEI IN (
                         }
                     }
                 }
-                response.Success = true;
+
+                 response.Success = true;
                 response.Result = results;
             }
             catch (Exception ex)
@@ -1099,6 +1110,7 @@ WHERE tc.IMEI IN (
                 response.Success = false;
                 response.Message = "Error: " + ex.Message;
             }
+
             return response;
         }
         public async Task<ApiResposne> ProcessCountedNotOnhandDetails()
@@ -1404,34 +1416,26 @@ ORDER BY WH, [Group], Expr1, Expr2;
                 {
                     string sql = @"
                 SELECT 
-                    S.WHSE, 
-                    S.CODE, 
-                    MAX(A.Description) AS Description, 
-                    S.Territory, 
-                    SUM(ISNULL(S.BVCMTDQTY, 0)) AS SumOfBVCMTDQTY,
-                    MAX(A.InvGroup) AS InvGroup
-                FROM WWSalesDetailTEMP S
-                INNER JOIN WWAccessories A ON S.WHSE = A.WHSE AND S.CODE = A.CODE
+                    WHSE,
+                    CODE,
+                    MAX(Description) AS Description,
+                    Territory,
+                    SUM(ISNULL(BVCMTDQTY, 0)) AS SumOfBVCMTDQTY
+                FROM WWSalesDetailTEMP 
                 WHERE (
-                    (S.ProdCode = 'ACC' OR S.ProdCode = 'OBA') 
-                    AND S.in_date >= @Start 
-                    AND S.in_date <= @End
+                    (ProdCode = 'ACC' OR ProdCode = 'OBA')
+                    AND in_date >= @StartDate
+                    AND in_date <= @EndDate
                 )
-                GROUP BY 
-                    S.WHSE, 
-                    S.CODE, 
-                    S.Territory
-                ORDER BY 
-                    S.WHSE, 
-                    S.CODE";
+                GROUP BY WHSE, CODE, Territory
+                ORDER BY WHSE, CODE, Territory";
 
                     await conn.OpenAsync();
 
                     using (SqlCommand cmd = new SqlCommand(sql, conn))
                     {
-                        // Date parameters
-                        cmd.Parameters.Add("@Start", SqlDbType.DateTime).Value = startDate.Date;
-                        cmd.Parameters.Add("@End", SqlDbType.DateTime).Value = endDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
+                        cmd.Parameters.Add("@StartDate", SqlDbType.DateTime).Value = startDate.Date;
+                        cmd.Parameters.Add("@EndDate", SqlDbType.DateTime).Value = endDate.Date.AddDays(1).AddTicks(-1); // End of day
 
                         cmd.CommandTimeout = 300;
 
@@ -1446,9 +1450,8 @@ ORDER BY WH, [Group], Expr1, Expr2;
                                     description = reader["Description"]?.ToString().Trim(),
                                     territory = reader["Territory"]?.ToString().Trim(),
                                     sumOfBVCMTDQTY = reader["SumOfBVCMTDQTY"] != DBNull.Value
-                                                    ? Convert.ToDecimal(reader["SumOfBVCMTDQTY"])
-                                                    : 0,
-                                    invGroup = reader["InvGroup"]?.ToString().Trim() // Naya field jo Access mein tha
+                                        ? Convert.ToDecimal(reader["SumOfBVCMTDQTY"])
+                                        : 0m
                                 });
                             }
                         }
@@ -1457,16 +1460,22 @@ ORDER BY WH, [Group], Expr1, Expr2;
 
                 response.Success = true;
                 response.Result = results;
+                response.Count = results.Count;
+                response.Message = $"Loaded {results.Count} accessory sales records.";
+            }
+            catch (SqlException ex)
+            {
+                response.Success = false;
+                response.Message = $"Database Error: {ex.Message}";
             }
             catch (Exception ex)
             {
                 response.Success = false;
-                response.Message = "Error in Accessory Sales: " + ex.Message;
+                response.Message = $"Error: {ex.Message}";
             }
 
             return response;
         }
-
         public async Task<ApiResposne> GetItemSalesSummary()
         {
             var response = new ApiResposne();
@@ -1993,183 +2002,263 @@ ORDER BY WH, [Group], Expr1, Expr2;
         public async Task<ApiResposne> LoadSpireSalesAndReceipts(string type)
         {
             var response = new ApiResposne();
-            // This list will hold the data to be returned for Excel export
             var exportData = new List<dynamic>();
 
             try
             {
-                // 1. Handle Sales Sync
+                string lastInvoice = "";
+                int lastRecNo = 0;
+
+                // ----------------------------
+                // SALES SYNC
+                // ----------------------------
                 if (type == "Sales" || type == "Both")
                 {
-                    string lastInvoice = "";
                     using (var sqlConn = new SqlConnection(_sqlConn))
                     {
                         await sqlConn.OpenAsync();
-                        var cmd = new SqlCommand("SELECT TOP 1 NUMBER FROM WWSalesDetailTEMP ORDER BY NUMBER DESC, RECNO DESC", sqlConn);
-                        var res = await cmd.ExecuteScalarAsync();
-                        lastInvoice = res?.ToString()?.Trim() ?? "";
+
+                        string lastSql = @"SELECT TOP 1 NUMBER, RECNO 
+                                   FROM WWSalesDetailTEMP 
+                                   ORDER BY NUMBER DESC, RECNO DESC";
+
+                        using var cmd = new SqlCommand(lastSql, sqlConn);
+                        using var reader = await cmd.ExecuteReaderAsync();
+
+                        if (await reader.ReadAsync())
+                        {
+                            lastInvoice = reader["NUMBER"]?.ToString()?.Trim() ?? "";
+                            lastRecNo = Convert.ToInt32(reader["RECNO"]);
+                        }
                     }
 
                     using (var pgConn = new NpgsqlConnection(_pgConn))
-                    using (var sqlConnForBulk = new SqlConnection(_sqlConn))
+                    using (var sqlConn = new SqlConnection(_sqlConn))
                     {
                         await pgConn.OpenAsync();
-                        await sqlConnForBulk.OpenAsync();
+                        await sqlConn.OpenAsync();
 
-                        string pgQuery = @"
-                    SELECT invoice_no, TO_CHAR(invoice_date, 'YYYYMMDD') as in_date, 
-                           sequence, whse, part_no, description, 
-                           product_code, committed_qty, unit_price 
-                    FROM sales_history_items 
-                    WHERE invoice_no > @lastInv 
+                        // -----------------------------------
+                        // 1. LOAD REMAINING LINES OF LAST INVOICE
+                        // -----------------------------------
+                        string pgQuery1 = @"
+                    SELECT invoice_no,
+                           TO_CHAR(invoice_date,'YYYYMMDD') AS in_date,
+                           sequence,
+                           whse,
+                           part_no,
+                           description,
+                           product_code,
+                           committed_qty,
+                           unit_price
+                    FROM sales_history_items
+                    WHERE invoice_no = @lastInv
+                    AND sequence > @lastSeq
                     ORDER BY invoice_no, sequence";
 
-                        using (var pgCmd = new NpgsqlCommand(pgQuery, pgConn))
+                        using (var cmd = new NpgsqlCommand(pgQuery1, pgConn))
                         {
-                            pgCmd.Parameters.AddWithValue("@lastInv", lastInvoice);
-                            pgCmd.CommandTimeout = 0;
+                            cmd.Parameters.AddWithValue("@lastInv", lastInvoice);
+                            cmd.Parameters.AddWithValue("@lastSeq", lastRecNo);
 
-                            using (var reader = await pgCmd.ExecuteReaderAsync())
-                            {
-                                using (var bulkCopy = new SqlBulkCopy(sqlConnForBulk))
-                                {
-                                    bulkCopy.DestinationTableName = "WWSalesDetailTEMP";
-                                    bulkCopy.BulkCopyTimeout = 0;
+                            using var reader = await cmd.ExecuteReaderAsync();
 
-                                    bulkCopy.ColumnMappings.Add("invoice_no", "NUMBER");
-                                    bulkCopy.ColumnMappings.Add("in_date", "IN_DATE");
-                                    bulkCopy.ColumnMappings.Add("sequence", "RECNO");
-                                    bulkCopy.ColumnMappings.Add("whse", "WHSE");             // FIXED TO CAPS
-                                    bulkCopy.ColumnMappings.Add("part_no", "CODE");          // FIXED TO CAPS
-                                    bulkCopy.ColumnMappings.Add("description", "Description"); // FIXED: Capital 'D'
-                                    bulkCopy.ColumnMappings.Add("product_code", "ProdCode");   // FIXED to match your list
-                                    bulkCopy.ColumnMappings.Add("committed_qty", "BVCMTDQTY");
-                                    bulkCopy.ColumnMappings.Add("unit_price", "BVUNITPRICE");
+                            using var bulk = new SqlBulkCopy(sqlConn);
+                            bulk.DestinationTableName = "WWSalesDetailTEMP";
+                            bulk.BulkCopyTimeout = 0;
 
-                                    await bulkCopy.WriteToServerAsync(reader);
-                                }
-                            
-                            }
+                            bulk.ColumnMappings.Add("invoice_no", "NUMBER");
+                            bulk.ColumnMappings.Add("in_date", "IN_DATE");
+                            bulk.ColumnMappings.Add("sequence", "RECNO");
+                            bulk.ColumnMappings.Add("whse", "WHSE");
+                            bulk.ColumnMappings.Add("part_no", "CODE");
+                            bulk.ColumnMappings.Add("description", "Description");
+                            bulk.ColumnMappings.Add("product_code", "ProdCode");
+                            bulk.ColumnMappings.Add("committed_qty", "BVCMTDQTY");
+                            bulk.ColumnMappings.Add("unit_price", "BVUNITPRICE");
+
+                            await bulk.WriteToServerAsync(reader);
                         }
 
-                        // Territory Update Logic
-                        string updateTerritorySql = @"
-                    UPDATE t SET t.Territory = s.CustTerritory 
+                        // -----------------------------------
+                        // 2. LOAD NEW INVOICES
+                        // -----------------------------------
+                        string pgQuery2 = @"
+                    SELECT invoice_no,
+                           TO_CHAR(invoice_date,'YYYYMMDD') AS in_date,
+                           sequence,
+                           whse,
+                           part_no,
+                           description,
+                           product_code,
+                           committed_qty,
+                           unit_price
+                    FROM sales_history_items
+                    WHERE invoice_no > @lastInv
+                    ORDER BY invoice_no, sequence";
+
+                        using (var cmd = new NpgsqlCommand(pgQuery2, pgConn))
+                        {
+                            cmd.Parameters.AddWithValue("@lastInv", lastInvoice);
+
+                            using var reader = await cmd.ExecuteReaderAsync();
+
+                            using var bulk = new SqlBulkCopy(sqlConn);
+                            bulk.DestinationTableName = "WWSalesDetailTEMP";
+                            bulk.BulkCopyTimeout = 0;
+
+                            bulk.ColumnMappings.Add("invoice_no", "NUMBER");
+                            bulk.ColumnMappings.Add("in_date", "IN_DATE");
+                            bulk.ColumnMappings.Add("sequence", "RECNO");
+                            bulk.ColumnMappings.Add("whse", "WHSE");
+                            bulk.ColumnMappings.Add("part_no", "CODE");
+                            bulk.ColumnMappings.Add("description", "Description");
+                            bulk.ColumnMappings.Add("product_code", "ProdCode");
+                            bulk.ColumnMappings.Add("committed_qty", "BVCMTDQTY");
+                            bulk.ColumnMappings.Add("unit_price", "BVUNITPRICE");
+
+                            await bulk.WriteToServerAsync(reader);
+                        }
+
+                        // -----------------------------------
+                        // TERRITORY UPDATE
+                        // -----------------------------------
+                        string updateTerritory = @"
+                    UPDATE t
+                    SET t.Territory = s.CustTerritory
                     FROM WWSalesDetailTEMP t
-                    INNER JOIN SalesActivations s ON t.NUMBER = s.invoice 
+                    INNER JOIN SalesActivations s 
+                        ON t.NUMBER = s.invoice
                     WHERE t.NUMBER >= @lastInv";
 
-                        using (var upCmd = new SqlCommand(updateTerritorySql, sqlConnForBulk))
+                        using (var cmd = new SqlCommand(updateTerritory, sqlConn))
                         {
-                            upCmd.Parameters.AddWithValue("@lastInv", lastInvoice);
-                            await upCmd.ExecuteNonQueryAsync();
+                            cmd.Parameters.AddWithValue("@lastInv", lastInvoice);
+                            await cmd.ExecuteNonQueryAsync();
                         }
 
-                        // Fetch newly added Sales data for Excel
-                        string fetchSales = "SELECT NUMBER, IN_DATE, WHSE, CODE, description, BVCMTDQTY as Qty FROM WWSalesDetailTEMP WHERE NUMBER > @lastInv";
-                        using (var fCmd = new SqlCommand(fetchSales, sqlConnForBulk))
+                        // -----------------------------------
+                        // FETCH SALES FOR EXPORT
+                        // -----------------------------------
+                        string fetchSales = @"SELECT NUMBER, IN_DATE, WHSE, CODE, Description, BVCMTDQTY
+                                      FROM WWSalesDetailTEMP
+                                      WHERE NUMBER >= @lastInv";
+
+                        using (var cmd = new SqlCommand(fetchSales, sqlConn))
                         {
-                            fCmd.Parameters.AddWithValue("@lastInv", lastInvoice);
-                            using (var rdr = await fCmd.ExecuteReaderAsync())
+                            cmd.Parameters.AddWithValue("@lastInv", lastInvoice);
+
+                            using var rdr = await cmd.ExecuteReaderAsync();
+
+                            while (await rdr.ReadAsync())
                             {
-                                while (await rdr.ReadAsync())
+                                exportData.Add(new
                                 {
-                                    exportData.Add(new
-                                    {
-                                        Number = rdr["NUMBER"],
-                                        Date = rdr["IN_DATE"],
-                                        Whse = rdr["WHSE"],
-                                        Code = rdr["CODE"],
-                                        Description = rdr["description"],
-                                        Qty = rdr["Qty"]
-                                    });
-                                }
+                                    Number = rdr["NUMBER"],
+                                    Date = rdr["IN_DATE"],
+                                    Whse = rdr["WHSE"],
+                                    Code = rdr["CODE"],
+                                    Description = rdr["Description"],
+                                    Qty = rdr["BVCMTDQTY"]
+                                });
                             }
                         }
                     }
                 }
 
-                // 2. Handle Receipts Sync
+                // ----------------------------
+                // RECEIPTS SYNC
+                // ----------------------------
                 if (type == "Receipts" || type == "Both")
                 {
-                    long lastReceiptKey = 0;
+                    long lastReceipt = 0;
+
                     using (var sqlConn = new SqlConnection(_sqlConn))
                     {
                         await sqlConn.OpenAsync();
-                        var cmd = new SqlCommand("SELECT ISNULL(MAX(RECPT_KEY), 0) FROM WWReceiptsTEMP", sqlConn);
-                        lastReceiptKey = Convert.ToInt64(await cmd.ExecuteScalarAsync());
+
+                        string lastRecSql = @"SELECT ISNULL(MAX(RECPT_KEY),0) 
+                                      FROM WWReceiptsTEMP";
+
+                        using var cmd = new SqlCommand(lastRecSql, sqlConn);
+                        lastReceipt = Convert.ToInt64(await cmd.ExecuteScalarAsync());
                     }
 
                     using (var pgConn = new NpgsqlConnection(_pgConn))
-                    using (var sqlConnForBulk = new SqlConnection(_sqlConn))
+                    using (var sqlConn = new SqlConnection(_sqlConn))
                     {
                         await pgConn.OpenAsync();
-                        await sqlConnForBulk.OpenAsync();
+                        await sqlConn.OpenAsync();
 
-                        // Note: using ::timestamp to prevent DateOnly conversion errors
                         string pgQuery = @"
-                    SELECT r.id, TO_CHAR(r.receive_date, 'YYYYMMDD') as invr_date, 
-                           i.whse, i.part_no, r.qty, r.receive_date::timestamp as receive_date 
-                    FROM inventory_receipts r 
-                    JOIN inventory i ON r.inventory_id = i.id 
+                    SELECT r.id,
+                           TO_CHAR(r.receive_date,'YYYYMMDD') AS invr_date,
+                           i.whse,
+                           i.part_no,
+                           r.qty,
+                           r.receive_date
+                    FROM inventory_receipts r
+                    INNER JOIN inventory i
+                        ON r.inventory_id = i.id
                     WHERE r.id > @lastId";
 
-                        using (var pgCmd = new NpgsqlCommand(pgQuery, pgConn))
+                        using (var cmd = new NpgsqlCommand(pgQuery, pgConn))
                         {
-                            pgCmd.Parameters.AddWithValue("@lastId", lastReceiptKey);
-                            pgCmd.CommandTimeout = 0;
+                            cmd.Parameters.AddWithValue("@lastId", lastReceipt);
 
-                            using (var reader = await pgCmd.ExecuteReaderAsync())
-                            {
-                                using (var bulkCopy = new SqlBulkCopy(sqlConnForBulk))
-                                {
-                                    bulkCopy.DestinationTableName = "WWReceiptsTEMP";
-                                    bulkCopy.BulkCopyTimeout = 0;
+                            using var reader = await cmd.ExecuteReaderAsync();
 
-                                    bulkCopy.ColumnMappings.Add("id", "RECPT_KEY");
-                                    bulkCopy.ColumnMappings.Add("invr_date", "INVR_DATE");
-                                    bulkCopy.ColumnMappings.Add("whse", "WHSE");
-                                    bulkCopy.ColumnMappings.Add("part_no", "CODE");
-                                    bulkCopy.ColumnMappings.Add("qty", "QTY");
-                                    bulkCopy.ColumnMappings.Add("receive_date", "ReceiptDate");
+                            using var bulk = new SqlBulkCopy(sqlConn);
+                            bulk.DestinationTableName = "WWReceiptsTEMP";
+                            bulk.BulkCopyTimeout = 0;
 
-                                    await bulkCopy.WriteToServerAsync(reader);
-                                }
-                            }
+                            bulk.ColumnMappings.Add("id", "RECPT_KEY");
+                            bulk.ColumnMappings.Add("invr_date", "INVR_DATE");
+                            bulk.ColumnMappings.Add("whse", "WHSE");
+                            bulk.ColumnMappings.Add("part_no", "CODE");
+                            bulk.ColumnMappings.Add("qty", "QTY");
+                            bulk.ColumnMappings.Add("receive_date", "ReceiptDate");
+
+                            await bulk.WriteToServerAsync(reader);
                         }
 
-                        // Fetch newly added Receipts data for Excel
-                        string fetchRec = "SELECT RECPT_KEY, INVR_DATE, WHSE, CODE, QTY FROM WWReceiptsTEMP WHERE RECPT_KEY > @lastId";
-                        using (var fCmd = new SqlCommand(fetchRec, sqlConnForBulk))
+                        // Fetch receipts for export
+                        string fetchRec = @"SELECT RECPT_KEY, INVR_DATE, WHSE, CODE, QTY
+                                    FROM WWReceiptsTEMP
+                                    WHERE RECPT_KEY > @lastId";
+
+                        using (var cmd = new SqlCommand(fetchRec, sqlConn))
                         {
-                            fCmd.Parameters.AddWithValue("@lastId", lastReceiptKey );
-                            using (var rdr = await fCmd.ExecuteReaderAsync())
+                            cmd.Parameters.AddWithValue("@lastId", lastReceipt);
+
+                            using var rdr = await cmd.ExecuteReaderAsync();
+
+                            while (await rdr.ReadAsync())
                             {
-                                while (await rdr.ReadAsync())
+                                exportData.Add(new
                                 {
-                                    exportData.Add(new
-                                    {
-                                        ID = rdr["RECPT_KEY"],
-                                        Date = rdr["INVR_DATE"],
-                                        Whse = rdr["WHSE"],
-                                        Code = rdr["CODE"],
-                                        Quantity = rdr["QTY"]
-                                    });
-                                }
+                                    ID = rdr["RECPT_KEY"],
+                                    Date = rdr["INVR_DATE"],
+                                    Whse = rdr["WHSE"],
+                                    Code = rdr["CODE"],
+                                    Qty = rdr["QTY"]
+                                });
                             }
                         }
                     }
                 }
 
-                response.Result = exportData; // This goes to Angular
                 response.Success = true;
+                response.Result = exportData;
                 response.Message = $"Sync successful. {exportData.Count} records loaded.";
             }
             catch (Exception ex)
             {
                 response.Success = false;
-                response.Message = "Sync Error: " + ex.Message + (ex.InnerException != null ? " | Inner: " + ex.InnerException.Message : "");
+                response.Message = "Sync Error: " + ex.Message +
+                                   (ex.InnerException != null ? " | Inner: " + ex.InnerException.Message : "");
             }
+
             return response;
         }
 
@@ -2184,36 +2273,50 @@ ORDER BY WH, [Group], Expr1, Expr2;
                 {
                     await conn.OpenAsync();
 
+                    // Complete SQL matching Access logic
                     string query = @"
-            WITH qryACCcountSummary AS (
-                SELECT Whse, PartNo, MAX(ProdCode) AS Prod, 
-                       MAX(Description) AS [Desc], 
-                       SUM(QtyTotal) AS SumOfQtyTotal
-                FROM tblACCCounts
-                GROUP BY Whse, PartNo
-                HAVING SUM(QtyTotal) <> 0
-            )
-            SELECT 
-                a.WHSE, a.InvGroup, a.PROD, a.CODE, a.Description, 
-                ISNULL(cs.SumOfQtyTotal, 0) AS [Count],
-                a.ONHAND AS BVOnhand,
-                (ISNULL(cs.SumOfQtyTotal, 0) - a.ONHAND) AS Diff,
-                ISNULL(bo.QtyTotal, 0) AS Backorders,
-                a.QtyAdjusted AS AlreadyAdjusted,
-                ISNULL(a.AdjustedBy, 0) AS AlreadyAdjustedBy,
-                (ISNULL(cs.SumOfQtyTotal, 0) - a.ONHAND - ISNULL(bo.QtyTotal, 0) - ISNULL(a.AdjustedBy, 0)) AS RequiredAdjustment,
-                a.CurrentCost, a.AvgCost,
-                CASE WHEN cs.SumOfQtyTotal IS NULL THEN 'No' ELSE 'Yes' END AS InCountSheet
-            FROM WWAccessories a
-            LEFT JOIN qryACCcountSummary cs 
-                ON a.CODE = cs.PartNo AND a.WHSE = cs.Whse
-            LEFT JOIN tblACCBackOrders bo 
-                ON a.CODE = bo.PartNo AND a.WHSE = bo.Whse 
-            WHERE 
-                (a.InvGroup <> 'SPECIAL' AND (ISNULL(cs.SumOfQtyTotal, 0) - a.ONHAND) <> 0)
-                OR 
-                (a.InvGroup <> 'SPECIAL' AND a.ONHAND <> 0 AND cs.SumOfQtyTotal IS NULL)
-            ORDER BY a.CODE";
+WITH qryACCcountSummary AS (
+    SELECT 
+        Whse, 
+        PartNo, 
+        MAX(ProdCode) AS Prod, 
+        MAX(Description) AS [Desc], 
+        SUM(QtyTotal) AS SumOfQtyTotal
+    FROM tblACCCounts
+    GROUP BY Whse, PartNo
+)
+, qryBackOrders AS (
+    SELECT Whse, PartNo, SUM(QtyTotal) AS QtyTotal
+    FROM tblACCBackOrders
+    GROUP BY Whse, PartNo
+)
+SELECT 
+    a.WHSE, 
+    a.InvGroup, 
+    a.PROD, 
+    a.CODE, 
+    a.Description, 
+    ISNULL(cs.SumOfQtyTotal, 0) AS [Count],
+    a.ONHAND AS BVOnhand,
+    (ISNULL(cs.SumOfQtyTotal, 0) - a.ONHAND) AS Diff,
+    ISNULL(bo.QtyTotal, 0) AS Backorders,
+    a.QtyAdjusted AS AlreadyAdjusted,
+    ISNULL(a.AdjustedBy, 0) AS AlreadyAdjustedBy,
+    (ISNULL(cs.SumOfQtyTotal, 0) - a.ONHAND - ISNULL(bo.QtyTotal, 0) - ISNULL(a.AdjustedBy, 0)) AS RequiredAdjustment,
+    a.CurrentCost, 
+    a.AvgCost,
+    CASE WHEN cs.SumOfQtyTotal IS NULL THEN 'No' ELSE 'Yes' END AS InCountSheet
+FROM WWAccessories a
+LEFT JOIN qryACCcountSummary cs
+    ON a.CODE = cs.PartNo AND a.WHSE = cs.Whse
+LEFT JOIN qryBackOrders bo
+    ON a.CODE = bo.PartNo AND a.WHSE = bo.Whse
+WHERE 
+    (a.InvGroup <> 'SPECIAL' AND (ISNULL(cs.SumOfQtyTotal, 0) - a.ONHAND) <> 0)
+    OR
+    (a.InvGroup <> 'SPECIAL' AND a.ONHAND <> 0 AND cs.SumOfQtyTotal IS NULL)
+ORDER BY a.CODE;
+";
 
                     using (var cmd = new SqlCommand(query, conn))
                     {
@@ -2224,16 +2327,20 @@ ORDER BY WH, [Group], Expr1, Expr2;
                                 list.Add(new
                                 {
                                     Whse = reader["WHSE"],
+                                    InvGroup = reader["InvGroup"],
+                                    Prod = reader["PROD"],
                                     Code = reader["CODE"],
                                     Description = reader["Description"],
                                     Count = reader["Count"],
                                     BVOnhand = reader["BVOnhand"],
                                     Diff = reader["Diff"],
                                     Backorders = reader["Backorders"],
+                                    AlreadyAdjusted = reader["AlreadyAdjusted"],
+                                    AlreadyAdjustedBy = reader["AlreadyAdjustedBy"],
                                     RequiredAdjustment = reader["RequiredAdjustment"],
-                                    InCountSheet = reader["InCountSheet"],
                                     CurrentCost = reader["CurrentCost"],
-                                    AvgCost = reader["AvgCost"]
+                                    AvgCost = reader["AvgCost"],
+                                    InCountSheet = reader["InCountSheet"]
                                 });
                             }
                         }
@@ -2246,7 +2353,8 @@ ORDER BY WH, [Group], Expr1, Expr2;
             catch (Exception ex)
             {
                 response.Success = false;
-                response.Message = "Error fetching Accessory Discrepancies: " + ex.Message;
+                response.Message = "Error fetching Accessory Discrepancies: " + ex.Message +
+                                   (ex.InnerException != null ? " | Inner: " + ex.InnerException.Message : "");
             }
 
             return response;

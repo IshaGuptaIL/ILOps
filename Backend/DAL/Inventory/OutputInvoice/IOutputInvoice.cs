@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DAL.Common.Login;
+using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -14,5 +16,7 @@ namespace DAL.Inventory.OutputInvoice
         Task<string> CheckSpireHistory(string invoiceNo);
          Task<bool> ProcessInvoiceOutput(string invoiceNo, string folder, string prefix, bool isSpire);
         Task<int> ProcessAllInvoices(string folder, string prefix, string invType);
+        Task<ApiResposne> UploadAndMatchTemplate(Stream excelStream);
+        Task<byte[]> GenerateInvoicesZip(string prefix);
     }
 }

@@ -401,6 +401,7 @@ namespace DAL.Common.User
             try
             {
                 var menus = await _dbContext.usermastermenus
+                    .Where(m => m.IsActive == true)
                     .Select(m => new
                     {
                         m.Id,

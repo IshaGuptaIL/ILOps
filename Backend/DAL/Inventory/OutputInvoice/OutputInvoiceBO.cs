@@ -11,7 +11,7 @@ namespace DAL.Inventory.OutputInvoice
     // REQUEST MODEL (API / Service call)
     public class InvoiceOutputRequest
     {
-        public string OutputFolder { get; set; }
+        //public string OutputFolder { get; set; }
         public string FilePrefix { get; set; }
         public string InvoiceType { get; set; } = "Normal";
     }
@@ -27,17 +27,15 @@ namespace DAL.Inventory.OutputInvoice
     public class InvoiceDetail
     {
         public string BillToName { get; set; }
-        public string BillToAddr { get; set; }
-
+        public string BillToAddress1 { get; set; }
+        public string BillToAddress2 { get; set; }
+        public string BillToCity { get; set; }
         public string ShipToName { get; set; }
-        public string ShipToAddr { get; set; }
-
+        public string ShipToAddress1 { get; set; }
+        public string ShipToCity { get; set; }
         public string CustNo { get; set; }
-
-        public string InvoiceNo { get; set; }
-
         public string InvoiceDate { get; set; }
-
+        public string OrderNo { get; set; }
         public List<InvoiceItemLine> Lines { get; set; } = new List<InvoiceItemLine>();
     }
 

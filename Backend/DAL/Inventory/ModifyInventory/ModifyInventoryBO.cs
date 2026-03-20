@@ -28,7 +28,8 @@ namespace DAL.Inventory.ModifyInventory
             public decimal AverageCost { get; set; }
             public decimal SellPrice { get; set; }
             public long? UomId { get; set; }
-        }
+        public int? SalesAcct { get; set; }
+    }
 
         public class WarehousePriceBO
         {
@@ -59,6 +60,9 @@ namespace DAL.Inventory.ModifyInventory
 
         [Required(ErrorMessage = "UOM ID is required")]
         public long? UomId { get; set; }
+        public int? SalesAcct { get; set; }
+
+        public string? ProductCode { get; set; }
     }
 }
 

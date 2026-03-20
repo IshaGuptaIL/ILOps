@@ -827,6 +827,120 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "LegacyApp.Controllers.Inventory.CustomSearchController",
+    "Method": "GetDetails",
+    "RelativePath": "api/CustomSearch/details",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "invoiceNo",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DAL.Common.Login.ApiResposne",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.CustomSearchController",
+    "Method": "GenerateInvoiceAsync",
+    "RelativePath": "api/CustomSearch/generate-invoice",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "invoiceNo",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "seq",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[DAL.Models.tblSpireInvoice, DAL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.CustomSearchController",
+    "Method": "GetHeaders",
+    "RelativePath": "api/CustomSearch/headers",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "fieldName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "value",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DAL.Common.Login.ApiResposne",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.CustomSearchController",
+    "Method": "GetTransactions",
+    "RelativePath": "api/CustomSearch/transactions",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "invoiceNo",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DAL.Common.Login.ApiResposne",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "ImeiController",
     "Method": "FindByImei",
     "RelativePath": "api/Imei/find",
@@ -1188,6 +1302,22 @@
   },
   {
     "ContainingType": "LegacyApp.Controllers.Inventory.OutputInvoiceController",
+    "Method": "GenerateZip",
+    "RelativePath": "api/OutputInvoice/generate-zip",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "DAL.Inventory.OutputInvoice.InvoiceOutputRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.OutputInvoiceController",
     "Method": "GetInvoiceList",
     "RelativePath": "api/OutputInvoice/list",
     "HttpMethod": "GET",
@@ -1219,6 +1349,22 @@
         "Name": "request",
         "Type": "DAL.Inventory.OutputInvoice.InvoiceOutputRequest",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.OutputInvoiceController",
+    "Method": "Upload",
+    "RelativePath": "api/OutputInvoice/upload-template",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "file",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -1501,6 +1647,26 @@
     "Order": 0,
     "Parameters": [],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.RunRateController",
+    "Method": "GetWFHInventory",
+    "RelativePath": "api/RunRate/GetWfhInventory",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[DAL.Inventory.RunRate.RunRateItem, DAL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "LegacyApp.Controllers.User.UserController",

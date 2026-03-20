@@ -27,16 +27,14 @@ namespace LegacyApp.Controllers.IEMI
 
         [HttpGet("received-report")]
         public async Task<IActionResult> GetReceivedReport(
-     string itemType,        // "HDW" or "ACC"
+     string itemType,      
      string vendor = null,
      string part = null,
      DateTime? startDate = null,
      DateTime? endDate = null)
         {
-            // Get data from DAL
             var data = await _reports.GetReceivedReport(itemType, vendor, part, startDate, endDate);
 
-            // Simply return as JSON
             return Ok(data);
         }
 

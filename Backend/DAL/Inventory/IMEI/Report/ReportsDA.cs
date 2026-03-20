@@ -73,7 +73,7 @@ namespace DAL.Inventory.IMEI.Report
             LEFT JOIN inventory_serial_numbers sn
                 ON i.part_no = sn.part_no
                AND i.whse = sn.whse
-LIMIT 10;
+LIMIT 1000;
             ";
 
             using (var conn = new NpgsqlConnection(_pgConn))
@@ -216,9 +216,9 @@ LIMIT 10;
             try
             {
                 using var conn = new SqlConnection(_sqlConn);
+
                 await conn.OpenAsync();
 
-                // ✅ Step 1: Get Hardware Received Data
                 var hardwareSQL = @"
             SELECT 
                 Vendor,
@@ -233,7 +233,6 @@ LIMIT 10;
             FROM HardwareReceived
             WHERE ItemType = @ItemType
         ";
-
                 if (!string.IsNullOrEmpty(vendor))
                     hardwareSQL += " AND Vendor = @Vendor";
 
@@ -244,6 +243,7 @@ LIMIT 10;
                     hardwareSQL += " AND BVReceiptDate BETWEEN @StartDate AND @EndDate";
 
                 using var cmd = new SqlCommand(hardwareSQL, conn);
+                cmd.CommandTimeout = 600;
                 cmd.Parameters.AddWithValue("@ItemType", itemType);
 
                 if (!string.IsNullOrEmpty(vendor))
@@ -313,6 +313,7 @@ LIMIT 10;
             ";
 
                     using var rogersCmd = new SqlCommand(rogersSQL, conn);
+                    rogersCmd.CommandTimeout = 600;
 
                     for (int i = 0; i < receiptNumbers.Count; i++)
                     {

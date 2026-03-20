@@ -59,12 +59,13 @@ namespace DAL.Inventory.ModifyInventory
                        COALESCE(i.current_cost,0),
                        COALESCE(i.average_cost,0),
                        COALESCE(sp.price,0),
-                       iu.id AS uom_id
+                       iu.id AS uom_id,
+ i.sales_acct 
                 FROM inventory i
                 LEFT JOIN inventory_uoms iu ON i.id = iu.inventory_id AND iu.uom='EA'
                 LEFT JOIN inventory_sell_prices sp 
                        ON sp.inventory_id=i.id AND sp.uom_id=iu.id AND sp.price_level_id=1
-                WHERE i.whse NOT IN ('FR','ZZ')
+                WHERE i.whse NOT IN ('FR','ZZ','00','DUMMY','GR','SLTEST','ROGOR')
                 AND (@search = '' OR i.part_no ILIKE @search OR i.description ILIKE @search)
                 ORDER BY i.part_no
                 LIMIT @size OFFSET @offset";
@@ -87,7 +88,8 @@ namespace DAL.Inventory.ModifyInventory
                     CurrentCost = reader.GetDecimal(5),
                     AverageCost = reader.GetDecimal(6),
                     SellPrice = reader.GetDecimal(7),
-                    UomId = reader.IsDBNull(8) ? null : reader.GetInt64(8)
+                    UomId = reader.IsDBNull(8) ? null : reader.GetInt64(8),
+                    SalesAcct = reader.IsDBNull(9) ? 0 : reader.GetInt16(9)
                 });
             }
 
@@ -161,6 +163,8 @@ namespace DAL.Inventory.ModifyInventory
             UPDATE inventory
             SET current_cost = @current,
                 average_cost = @avg,
+  product_code = @productCode,
+    sales_acct = @salesAcct,
                 _modified = NOW()
             WHERE part_no = @partNo
             {whseFilter}
@@ -173,6 +177,8 @@ namespace DAL.Inventory.ModifyInventory
                     invCmd.Parameters.AddWithValue("partNo", model.PartNo);
                     invCmd.Parameters.AddWithValue("current", model.CurrentCost);
                     invCmd.Parameters.AddWithValue("avg", model.AverageCost);
+                    invCmd.Parameters.AddWithValue("productCode", model.ProductCode ?? "");
+                    invCmd.Parameters.AddWithValue("salesAcct", model.SalesAcct);
 
                     if (!applyToAll)
                         invCmd.Parameters.AddWithValue("whse", model.Whse);

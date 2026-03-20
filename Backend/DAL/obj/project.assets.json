@@ -5054,11 +5054,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\igupta\\Downloads\\LegacyApp\\DAL\\DAL.csproj",
+      "projectUniqueName": "C:\\Users\\igupta\\OneDrive - Kilobytes Data Solutions Inc\\Desktop\\Commited Code\\ILOps\\Backend\\DAL\\DAL.csproj",
       "projectName": "DAL",
-      "projectPath": "C:\\Users\\igupta\\Downloads\\LegacyApp\\DAL\\DAL.csproj",
+      "projectPath": "C:\\Users\\igupta\\OneDrive - Kilobytes Data Solutions Inc\\Desktop\\Commited Code\\ILOps\\Backend\\DAL\\DAL.csproj",
       "packagesPath": "C:\\Users\\igupta\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\igupta\\Downloads\\LegacyApp\\DAL\\obj\\",
+      "outputPath": "C:\\Users\\igupta\\OneDrive - Kilobytes Data Solutions Inc\\Desktop\\Commited Code\\ILOps\\Backend\\DAL\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

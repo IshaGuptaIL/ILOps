@@ -5,6 +5,7 @@ using DAL.Inventory.AddInventory;
 using DAL.Inventory.CostValidation;
 using DAL.Inventory.Count;
 using DAL.Inventory.CountAnalysis;
+using DAL.Inventory.CustomSearch;
 using DAL.Inventory.IMEI;
 using DAL.Inventory.IMEI.Credit;
 using DAL.Inventory.IMEI.RecieveIMEI;
@@ -12,6 +13,7 @@ using DAL.Inventory.IMEI.Report;
 using DAL.Inventory.InventoryType;
 using DAL.Inventory.ModifyInventory;
 using DAL.Inventory.OutputInvoice;
+using DAL.Inventory.RunRate;
 using DAL.Models;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
@@ -78,6 +80,8 @@ builder.Services.AddScoped<ICount, CountDA>();
 builder.Services.AddScoped<ICountAnalysis,CountAnalysisDA>();
 builder.Services.AddScoped<IInventoryType, InventoryTypeDA>();
 builder.Services.AddTransient<IOutputInvoice,OutputInvoiceDA>();
+builder.Services.AddTransient<ICustomSearch,CustomSearchDA>();
+builder.Services.AddTransient<IRunRate,RunRateDA>();
 
 // =======================
 // Spire HttpClient (IMPORTANT)

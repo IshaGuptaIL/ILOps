@@ -43,6 +43,15 @@ namespace DAL.Models
         public DbSet<tblACCBackOrders> tblACCBackOrders { get; set; }
         public DbSet<tblOpeningBalanceACC> tblOpeningBalanceACC { get; set; }
         public DbSet<tblInvoiceList> tblInvoiceList { get; set; }
+        public DbSet<tblSalesActivations> tblSalesActivations { get; set; }
+        public DbSet<SalesActivations> SalesActivations { get; set; }
+
+        public DbSet<SalesActivationsDetail> SalesActivationsDetail { get; set; }
+
+        public DbSet<tblSpireInvoice> tblSpireInvoice { get; set; }
+
+
+
 
 
 

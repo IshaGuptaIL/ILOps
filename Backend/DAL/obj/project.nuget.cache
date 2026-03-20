@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "79f+6bElPn8=",
+  "dgSpecHash": "bxo+sERBwkM=",
   "success": true,
-  "projectFilePath": "C:\\Users\\igupta\\Downloads\\LegacyApp\\DAL\\DAL.csproj",
+  "projectFilePath": "C:\\Users\\igupta\\OneDrive - Kilobytes Data Solutions Inc\\Desktop\\Commited Code\\ILOps\\Backend\\DAL\\DAL.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\igupta\\.nuget\\packages\\azure.core\\1.47.1\\azure.core.1.47.1.nupkg.sha512",
     "C:\\Users\\igupta\\.nuget\\packages\\azure.identity\\1.14.2\\azure.identity.1.14.2.nupkg.sha512",

@@ -93,25 +93,31 @@ namespace DAL.Inventory.Count
 
                 if (options.LoadIMEI)
                 {
-                    // VBA logic: Purana data delete karein (Snapshot load se pehle)
-                    await ExecuteSqlAction("TRUNCATE TABLE tblCounts");
+                    await ExecuteSqlAction("TRUNCATE TABLE WWInventory");
 
-                    // Spire (Postgres) se data lane ki query
-                    string serialQuery = @"
+                    string query = @"
         SELECT 
             whse, 
             part_no, 
-            number AS imei_val, -- Alias for mapping
-            'LiveSnapshot' AS file_name -- Default value for CountFile
-        FROM public.inventory_serial_numbers
-        WHERE onhand_qty > 0 AND whse NOT IN ('ZZ', 'FR')";
+            description,
+            product_code,
+            onhand_qty,
+            current_cost,
+            average_cost,
+            misc_1
+        FROM public.inventory
+        WHERE whse NOT IN ('ZZ', 'FR')
+        AND (product_code IN ('HCL','HCC','OBH'))";
 
-                    await TransferDataFromPgToSql(serialQuery, "tblCounts", mapping => {
-                        // PG Column -> SQL Table Column
-                        mapping.Add("whse", "Whse");
-                        mapping.Add("part_no", "PartNumber");
-                        mapping.Add("imei_val", "IMEI");
-                        mapping.Add("file_name", "CountFile");
+                    await TransferDataFromPgToSql(query, "WWInventory", mapping => {
+                        mapping.Add("whse", "WHSE");
+                        mapping.Add("part_no", "CODE");
+                        mapping.Add("description", "INV_DESCRIPTION");
+                        mapping.Add("product_code", "PROD");
+                        mapping.Add("onhand_qty", "ONHAND");
+                        mapping.Add("current_cost", "WHOLESALE");
+                        mapping.Add("average_cost", "WEIGHTED");
+                        mapping.Add("misc_1", "misc_1");
                     });
                 }
 

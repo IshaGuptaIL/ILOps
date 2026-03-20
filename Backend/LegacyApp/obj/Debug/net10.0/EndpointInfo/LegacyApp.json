@@ -1234,6 +1234,182 @@
         }
       }
     },
+    "/api/CustomSearch/headers": {
+      "get": {
+        "tags": [
+          "CustomSearch"
+        ],
+        "parameters": [
+          {
+            "name": "fieldName",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "value",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResposne"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResposne"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResposne"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/CustomSearch/details": {
+      "get": {
+        "tags": [
+          "CustomSearch"
+        ],
+        "parameters": [
+          {
+            "name": "invoiceNo",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResposne"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResposne"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResposne"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/CustomSearch/generate-invoice": {
+      "post": {
+        "tags": [
+          "CustomSearch"
+        ],
+        "parameters": [
+          {
+            "name": "invoiceNo",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "seq",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/tblSpireInvoice"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/tblSpireInvoice"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/tblSpireInvoice"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/CustomSearch/transactions": {
+      "get": {
+        "tags": [
+          "CustomSearch"
+        ],
+        "parameters": [
+          {
+            "name": "invoiceNo",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResposne"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResposne"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResposne"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Imei/find": {
       "get": {
         "tags": [
@@ -1854,6 +2030,69 @@
         }
       }
     },
+    "/api/OutputInvoice/upload-template": {
+      "post": {
+        "tags": [
+          "OutputInvoice"
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "file": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/OutputInvoice/generate-zip": {
+      "post": {
+        "tags": [
+          "OutputInvoice"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InvoiceOutputRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InvoiceOutputRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/InvoiceOutputRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/RecieveImei/ImportPackingSlip": {
       "post": {
         "tags": [
@@ -2302,6 +2541,44 @@
                   "type": "array",
                   "items": {
                     "$ref": "#/components/schemas/HardwareReceiptBO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/RunRate/GetWfhInventory": {
+      "get": {
+        "tags": [
+          "RunRate"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RunRateItem"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RunRateItem"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RunRateItem"
                   }
                 }
               }
@@ -3182,10 +3459,6 @@
       "InvoiceOutputRequest": {
         "type": "object",
         "properties": {
-          "outputFolder": {
-            "type": "string",
-            "nullable": true
-          },
           "filePrefix": {
             "type": "string",
             "nullable": true
@@ -3289,6 +3562,15 @@
           "uomId": {
             "type": "integer",
             "format": "int64"
+          },
+          "salesAcct": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "productCode": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -3331,6 +3613,24 @@
           "xlsRow": {
             "type": "integer",
             "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "RunRateItem": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "onHand": {
+            "type": "number",
+            "format": "double"
           }
         },
         "additionalProperties": false
@@ -3499,6 +3799,171 @@
           }
         },
         "additionalProperties": false
+      },
+      "tblSpireInvoice": {
+        "type": "object",
+        "properties": {
+          "seq1": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "invoice_no": {
+            "type": "string",
+            "nullable": true
+          },
+          "cust_no": {
+            "type": "string",
+            "nullable": true
+          },
+          "invoice_date": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "territory_code": {
+            "type": "string",
+            "nullable": true
+          },
+          "terms_description": {
+            "type": "string",
+            "nullable": true
+          },
+          "whse": {
+            "type": "string",
+            "nullable": true
+          },
+          "part_no": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "committed_qty": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "unit_price": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "current_cost": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "subtotal": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "freight": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "total_discount": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "sales_tax_total1": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "sales_tax_total2": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "custoM_AddressesWB_link_table": {
+            "type": "string",
+            "nullable": true
+          },
+          "custoM_AddressesWB_1_link_table": {
+            "type": "string",
+            "nullable": true
+          },
+          "custoM_AddressesWB_addr_type": {
+            "type": "string",
+            "nullable": true
+          },
+          "custoM_AddressesWB_1_addr_type": {
+            "type": "string",
+            "nullable": true
+          },
+          "custoM_AddressesWB_name": {
+            "type": "string",
+            "nullable": true
+          },
+          "custoM_AddressesWB_address1": {
+            "type": "string",
+            "nullable": true
+          },
+          "custoM_AddressesWB_address2": {
+            "type": "string",
+            "nullable": true
+          },
+          "custoM_AddressesWB_city": {
+            "type": "string",
+            "nullable": true
+          },
+          "custoM_AddressesWB_prov_state": {
+            "type": "string",
+            "nullable": true
+          },
+          "custoM_AddressesWB_postal_zip": {
+            "type": "string",
+            "nullable": true
+          },
+          "custoM_AddressesWB_1_name": {
+            "type": "string",
+            "nullable": true
+          },
+          "custoM_AddressesWB_1_address1": {
+            "type": "string",
+            "nullable": true
+          },
+          "custoM_AddressesWB_1_address2": {
+            "type": "string",
+            "nullable": true
+          },
+          "custoM_AddressesWB_1_city": {
+            "type": "string",
+            "nullable": true
+          },
+          "custoM_AddressesWB_1_prov_state": {
+            "type": "string",
+            "nullable": true
+          },
+          "custoM_AddressesWB_1_postal_zip": {
+            "type": "string",
+            "nullable": true
+          },
+          "number": {
+            "type": "string",
+            "nullable": true
+          },
+          "strGUID": {
+            "type": "string",
+            "nullable": true
+          },
+          "serialized_qty": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
       }
     }
   },
@@ -3514,6 +3979,9 @@
     },
     {
       "name": "CountAnalysis"
+    },
+    {
+      "name": "CustomSearch"
     },
     {
       "name": "Imei"
@@ -3538,6 +4006,9 @@
     },
     {
       "name": "Reports"
+    },
+    {
+      "name": "RunRate"
     },
     {
       "name": "User"

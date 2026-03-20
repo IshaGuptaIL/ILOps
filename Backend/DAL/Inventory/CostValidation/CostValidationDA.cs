@@ -210,95 +210,118 @@ namespace DAL.Inventory.CostValidation
             return await Task.FromResult(result);
         }
 
-
-
-
-
         public async Task<List<HpcRecord>> GetHpcDiscrepanciesAsync()
         {
-            DataTable dtSql = GetSqlServerData("SELECT * FROM HPCExtractSummary");
+            DataTable dtSql = GetSqlServerData("SELECT Whse, Part, MaxOfF3, Cost FROM HPCExtractSummary");
+
             DataTable dtPg = GetPostgresData(@"
-                SELECT part_no, whse, description, product_code,
-                       current_cost, onhand_qty, purchase_qty
-                FROM inventory
-            ");
+        SELECT part_no, whse, description, product_code,
+               current_cost, onhand_qty, purchase_qty
+        FROM inventory");
+
+            var pgLookup = dtPg.AsEnumerable()
+                .ToDictionary(
+                    r => $"{r["part_no"]}_{r["whse"]}",
+                    r => r
+                );
 
             var list = new List<HpcRecord>();
 
             foreach (DataRow h in dtSql.Rows)
             {
-                string part = h["Part"].ToString();
-                string whse = h["Whse"].ToString();
+                string part = h["Part"]?.ToString();
+                string whse = h["Whse"]?.ToString();
 
-                DataRow pg = dtPg.AsEnumerable()
-                    .FirstOrDefault(r =>
-                        r["part_no"].ToString() == part &&
-                        r["whse"].ToString() == whse);
+                pgLookup.TryGetValue($"{part}_{whse}", out DataRow pg);
+
+                decimal rogersCost = Convert.ToDecimal(h["Cost"]);
+                decimal? spireCost = pg?["current_cost"] as decimal?;
+                string productCode = pg?["product_code"]?.ToString() ?? "";
+                string existInSpire = pg == null ? "No" : "Yes";
 
                 var record = new HpcRecord
                 {
                     Whse = whse,
                     Part = part,
                     Description = pg?["description"]?.ToString(),
-                    StartDate = (DateTime)h.Field<DateTime?>("MaxOfF3"),
-                    SpireProdCode = pg?["product_code"]?.ToString() ?? "",
-                    RogersCost = Convert.ToDecimal(h["Cost"]),
-                    SpireCost = pg?["current_cost"] as decimal?,
-                    ExistInSpire = pg == null ? "No" : "Yes",
+                    StartDate = h.Field<DateTime?>("MaxOfF3")?.Date.Date ?? DateTime.MinValue.Date,
+                    SpireProdCode = productCode,
+                    RogersCost = rogersCost,
+                    SpireCost = spireCost,
+                    ExistInSpire = existInSpire,
                     OnhandQty = pg?["onhand_qty"] as decimal?,
                     PurchaseQty = pg?["purchase_qty"] as decimal?
                 };
 
-                if (record.ExistInSpire == "No" ||
-                    Math.Round(record.RogersCost, 2) != Math.Round(record.SpireCost ?? 0, 2) ||
-                    record.SpireProdCode != "HCC")
+                bool addRecord = false;
+
+                if (existInSpire == "No")
                 {
-                    list.Add(record);
+                    addRecord = true; 
                 }
+                else
+                {
+                    bool costMismatch = Math.Round(rogersCost, 2) != Math.Round(spireCost ?? 0, 2);
+                    bool codeMismatch = productCode != "HCC";
+
+                    addRecord = costMismatch || codeMismatch;
+                }
+
+                if (addRecord)
+                    list.Add(record);
             }
 
             return await Task.FromResult(list);
         }
 
+
         //public async Task<List<HpcRecord>> GetHpcDiscrepanciesAsync()
         //{
         //    DataTable dtSql = GetSqlServerData("SELECT * FROM HPCExtractSummary");
         //    DataTable dtPg = GetPostgresData(@"
-        //SELECT part_no, whse, description, product_code, 
-        //       current_cost, onhand_qty, purchase_qty 
-        //FROM inventory");
+        //        SELECT part_no, whse, description, product_code,
+        //               current_cost, onhand_qty, purchase_qty
+        //        FROM inventory
+        //    ");
 
-        //    // LINQ Join use karein - Yeh bilkul VBA ke Left Join jaisa hai
-        //    var query = from h in dtSql.AsEnumerable()
-        //                join p in dtPg.AsEnumerable()
-        //                    on new { P = h["Part"].ToString().Trim().ToUpper(), W = h["Whse"].ToString().Trim().ToUpper() }
-        //                    equals new { P = p["part_no"].ToString().Trim().ToUpper(), W = p["whse"].ToString().Trim().ToUpper() }
-        //                    into joined
-        //                from pg in joined.DefaultIfEmpty() // Yeh line isse LEFT JOIN banati hai
-        //                select new HpcRecord
-        //                {
-        //                    Whse = h["Whse"].ToString(),
-        //                    Part = h["Part"].ToString(),
-        //                    Description = pg?["description"]?.ToString(),
-        //                    StartDate = h["MaxOfF3"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(h["MaxOfF3"]),
-        //                    SpireProdCode = pg?["product_code"]?.ToString() ?? "",
-        //                    RogersCost = Convert.ToDecimal(h["Cost"]),
-        //                    // Safe decimal conversion
-        //                    SpireCost = pg == null ? 0 : Convert.ToDecimal(pg["current_cost"]),
-        //                    ExistInSpire = pg == null ? "No" : "Yes",
-        //                    OnhandQty = pg == null ? 0 : Convert.ToDecimal(pg["onhand_qty"]),
-        //                    PurchaseQty = pg == null ? 0 : Convert.ToDecimal(pg["purchase_qty"])
-        //                };
+        //    var list = new List<HpcRecord>();
 
-        //    // Filter apply karein jaisa VBA ki WHERE clause mein tha
-        //    var result = query.Where(r =>
-        //        r.ExistInSpire == "No" ||
-        //        Math.Round(r.RogersCost, 2) != Math.Round(r.SpireCost ?? 0, 2) ||
-        //        r.SpireProdCode != "HCC"
-        //    ).OrderBy(r => r.Whse).ThenBy(r => r.Part).ToList();
+        //    foreach (DataRow h in dtSql.Rows)
+        //    {
+        //        string part = h["Part"].ToString();
+        //        string whse = h["Whse"].ToString();
 
-        //    return result;
+        //        DataRow pg = dtPg.AsEnumerable()
+        //            .FirstOrDefault(r =>
+        //                r["part_no"].ToString() == part &&
+        //                r["whse"].ToString() == whse);
+
+        //        var record = new HpcRecord
+        //        {
+        //            Whse = whse,
+        //            Part = part,
+        //            Description = pg?["description"]?.ToString(),
+        //            StartDate = (DateTime)h.Field<DateTime?>("MaxOfF3"),
+        //            SpireProdCode = pg?["product_code"]?.ToString() ?? "",
+        //            RogersCost = Convert.ToDecimal(h["Cost"]),
+        //            SpireCost = pg?["current_cost"] as decimal?,
+        //            ExistInSpire = pg == null ? "No" : "Yes",
+        //            OnhandQty = pg?["onhand_qty"] as decimal?,
+        //            PurchaseQty = pg?["purchase_qty"] as decimal?
+        //        };
+
+        //        if (record.ExistInSpire == "No" ||
+        //            Math.Round(record.RogersCost, 2) != Math.Round(record.SpireCost ?? 0, 2) ||
+        //            record.SpireProdCode != "HCC")
+        //        {
+        //            list.Add(record);
+        //        }
+        //    }
+
+        //    return await Task.FromResult(list);
         //}
+
+
         public async Task<List<CostVarianceCurrentVsAvg>> GetCostVarianceCurrentVsAvgAsync()
         {
             DataTable dt = GetPostgresData(@"

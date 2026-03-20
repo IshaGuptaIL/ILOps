@@ -40,7 +40,231 @@ namespace DAL.Models
         public string InvoiceNo { get; set; }
     }
 
+    public class tblSalesActivations
+    {
+        [Key]
+        public int ID { get; set; }
+        public int? Seq { get; set; }
+        public int? RDID { get; set; }
 
+        public string? Invoice { get; set; }
+        public string? Invoice10 { get; set; }
+        public string? OrderNo { get; set; }
+
+        public string? Customer { get; set; }
+        public string? CustName { get; set; }
+        public string? CustTerritory { get; set; }
+
+        public string? MSD { get; set; }
+
+        public DateTime? InvoiceDate { get; set; }
+        public DateTime? OrderDate { get; set; }
+
+        public string? RecordType { get; set; }
+        public string? RecordTypeExtended { get; set; }
+
+        public string? VoicePlan { get; set; }
+        public string? VoicePlanDescription { get; set; }
+
+        public int? CommissionVoice { get; set; }
+
+        public string? DataPlan { get; set; }
+        public string? DataPlanDescription { get; set; }
+
+        public int? CommissionData { get; set; }
+
+        public string? CAPHardware { get; set; }
+        public int? CapCost { get; set; }
+
+        public string? W00Code { get; set; }
+        public string? BVType { get; set; }
+
+        public int? BVInvoiceLine { get; set; }
+        public string? BVRecNo { get; set; }
+
+        public string? Whse { get; set; }
+        public string? PartNumber { get; set; }
+
+        public string? Description { get; set; }
+        public string? ProductCode { get; set; }
+
+        public string? CellPhoneNo { get; set; }
+        public string? IMEIESN { get; set; }
+
+        public int? Qty { get; set; }
+
+        public int? ItemCost { get; set; }
+        public int? ItemSellPrice { get; set; }
+
+        public string? CommissionSubsidy { get; set; }
+        public int? CommissionSubsidyCost { get; set; }
+
+        public string? CommissionSPIF { get; set; }
+        public int? CommissionSPIFCost { get; set; }
+
+        public string? TopUpSDF { get; set; }
+        public int? TopUpSDFCost { get; set; }
+
+        public string? TopUpSDFAcc { get; set; }
+        public int? TopUpSDFAccCost { get; set; }
+
+        public string? TopUpSDFLic { get; set; }
+        public int? TopUpSDFLicCost { get; set; }
+
+        public int? REBATE { get; set; }
+
+        public string? FreeAccessory { get; set; }
+
+        public int? AccessoryCost { get; set; }
+        public int? AccessoryPrice { get; set; }
+
+        public string? UserInitials { get; set; }
+        public string? Salesperson { get; set; }
+
+        public string? CustomerPONo { get; set; }
+        public string? SIMCardNo { get; set; }
+
+        public string? WebOrderID { get; set; }
+        public string? UserName { get; set; }
+
+        public string? OriginalInvoice { get; set; }
+
+        public string? AdjustmentType { get; set; }
+        public string? Fee { get; set; }
+
+        public bool? Supress { get; set; }
+
+        public string? PinNo { get; set; }
+
+        public string? CostBudgetCode { get; set; }
+        public string? Department { get; set; }
+
+        public string? Comments { get; set; }
+
+        public string? FeeType { get; set; }
+
+        public int? GSTRate { get; set; }
+        public int? PSTRate { get; set; }
+
+        public string? GSTFlag { get; set; }
+        public string? PSTFlag { get; set; }
+
+        public string? PayMeth { get; set; }
+
+        public string? CustomerPostal { get; set; }
+        public string? CustomerPostalFirstDigit { get; set; }
+
+        public string? Channel { get; set; }
+
+        public int? ImportLineID { get; set; }
+
+        public int? InvoiceNet { get; set; }
+        public int? InvoiceShipping { get; set; }
+        public int? InvoiceTaxes { get; set; }
+        public int? InvoiceTotal { get; set; }
+
+        public string? RodID { get; set; }
+
+        public string? PortedCTN { get; set; }
+
+        public int? Terms { get; set; }
+        public string? TermsText { get; set; }
+
+        public int? CAPCostHUP { get; set; }
+
+        public string? ShipToPostal { get; set; }
+
+        public string? FreeAccessoryPart { get; set; }
+
+        public int? AccessorySRP { get; set; }
+
+        public string? SCOA { get; set; }
+
+        public string? M2MOrderID { get; set; }
+
+        public string? ControlCentre { get; set; }
+
+        public string? TransactionNo { get; set; }
+
+        public string? AccountCode { get; set; }
+
+        public string? AuthorizedDepartment { get; set; }
+
+        public int? CommissionCable { get; set; }
+
+        public string? CablePlan { get; set; }
+
+        public string? CablePlanDescription { get; set; }
+
+        public string? RMANumber { get; set; }
+
+        public string? PCCPID { get; set; }
+
+        public decimal? PCCPAmount { get; set; }
+
+        public int? Tax1Code { get; set; }
+        public int? Tax2Code { get; set; }
+
+        public string? BVReceipt { get; set; }
+
+        public int? BVReceiptNo { get; set; }
+
+        public string? OriginalSKUBVPartNumber { get; set; }
+
+        public string? OriginalWebOrderID { get; set; }
+
+        public string? OriginalHardware { get; set; }
+
+        public string? OriginalIMEI { get; set; }
+
+        public string? CHTRWebID { get; set; }
+
+        public string? CHTRChaseID { get; set; }
+
+        public int? UpFrontEdgePrice { get; set; }
+
+        public int? InvoiceNetBeforeRVUE { get; set; }
+
+        public string? ClaimCarrier { get; set; }
+
+        public string? ClaimNumber { get; set; }
+
+        public int? DeviceOfferTypeID { get; set; }
+
+        public string? POLine { get; set; }
+
+        public string? ShipToPostalFirstDigit { get; set; }
+
+        public string? ShipToProvince { get; set; }
+
+        public string? R4BOrderID { get; set; }
+
+        public string? V21DealerCode { get; set; }
+
+        public decimal? CustPayAmount { get; set; }
+
+        public decimal? CustPayAmountOriginal { get; set; }
+
+        public string? AccessoryType { get; set; }
+
+        public string? AccountNumber { get; set; }
+
+        public string? AgentName { get; set; }
+
+        public string? AgentEmail { get; set; }
+
+        public string? AgentContactNumber { get; set; }
+
+        public decimal? RogersHWMarginShare { get; set; }
+
+        public int? Term { get; set; }
+
+        public bool? Isbulk { get; set; }
+
+        public int? SpireCount { get; set; }
+
+        public DateTime? CreatedDate { get; set; }
+    }
     public class tblOpeningBalanceACC
     {
         [Key]
@@ -394,8 +618,274 @@ public class tbIACCBckOrders
         public DateTime CreatedOn { get; set; }
     }
 
+    public class SalesActivationsDetail
+    {
+        [Key]
+        public string Invoice { get; set; }
 
-    public class hardwarereceived
+        public decimal? RECNO { get; set; }
+
+        public int? RecNoDetail { get; set; }
+
+        public string WHSE { get; set; }
+
+        public string CODE { get; set; }
+
+        public string Description { get; set; }
+
+        public string ProdCode { get; set; }
+
+        public decimal? Qty { get; set; }
+
+        public decimal? Price { get; set; }
+
+        public decimal? Cost { get; set; }
+
+        public string Tax1Flag { get; set; }
+
+        public string Tax2Flag { get; set; }
+
+        public decimal? TopUp { get; set; }
+
+        public decimal? CustPayAmount { get; set; }
+
+        public decimal? TopUpEdit { get; set; }
+
+        public decimal? WebSRP { get; set; }
+
+        public decimal? WebCost { get; set; }
+
+        public decimal? FeeAcc { get; set; }
+
+        public string OriginalWebOrderID { get; set; }
+
+        public string OriginalHardware { get; set; }
+
+        public string OriginalIMEI { get; set; }
+
+        public string OriginalSKUBVPartNumber { get; set; }
+
+        public decimal? CalcCost { get; set; }
+
+        public string ReceiptNo { get; set; }
+
+        public string BVReceiptNo { get; set; }
+
+        public int? BVReceiptNoInt { get; set; }
+
+        public int? BVReceiptQty { get; set; }
+
+        public decimal? BVReceiptCost { get; set; }
+
+        public DateTime? BVReceiptDate { get; set; }
+
+        public decimal? UpFrontEdgePrice { get; set; }
+
+        public string POLine { get; set; }
+
+        public decimal? AccPayback { get; set; }
+
+        public decimal? CustPayAmountOriginal { get; set; }
+
+        public string AccessoryType { get; set; }
+
+        public decimal? RogersACCMarginShare { get; set; }
+    }
+    public class SalesActivations
+    {
+        [Key]
+        public int Id { get; set; }
+
+        public string? Invoice { get; set; }
+        public string? Invoice10 { get; set; }
+        public string? OrderNo { get; set; }
+        public string? Customer { get; set; }
+        public string? CustName { get; set; }
+        public string? CustTerritory { get; set; }
+        public string? MSD { get; set; }
+
+        public DateTime? InvoiceDate { get; set; }
+        public DateTime? OrderDate { get; set; }
+
+        public string? RecordType { get; set; }
+        public string? RecordTypeExtended { get; set; }
+
+        public string? VoicePlan { get; set; }
+        public string? VoicePlanDescription { get; set; }
+        public double? CommissionVoice { get; set; }
+
+        public string? DataPlan { get; set; }
+        public string? DataPlanDescription { get; set; }
+        public double? CommissionData { get; set; }
+
+        public string? CAPHardware { get; set; }
+        public double? CapCost { get; set; }
+
+        public string? W00Code { get; set; }
+        public string? BVType { get; set; }
+        public int? BVInvoiceLine { get; set; }
+        public string? BVRecNo { get; set; }
+
+        public string? Whse { get; set; }
+        public string? PartNumber { get; set; }
+        public string? Description { get; set; }
+        public string? ProductCode { get; set; }
+
+        public string? CellPhoneNo { get; set; }
+        public string? IMEIESN { get; set; }
+
+        public double? Qty { get; set; }
+        public double? ItemCost { get; set; }
+        public double? ItemSellPrice { get; set; }
+
+        public string? CommissionSubsidy { get; set; }
+        public double? CommissionSubsidyCost { get; set; }
+
+        public string? CommissionSPIF { get; set; }
+        public double? CommissionSPIFCost { get; set; }
+
+        public string? TopUpSDF { get; set; }
+        public double? TopUpSDFCost { get; set; }
+
+        public string? TopUpSDFAcc { get; set; }
+        public double? TopUpSDFAccCost { get; set; }
+
+        public string? TopUpSDFLic { get; set; }
+        public double? TopUpSDFLicCost { get; set; }
+
+        public double? REBATE { get; set; }
+
+        public string? FreeAccessory { get; set; }
+        public double? AccessoryCost { get; set; }
+        public double? AccessoryPrice { get; set; }
+
+        public string? UserInitials { get; set; }
+        public string? Salesperson { get; set; }
+        public string? CustomerPONo { get; set; }
+        public string? SIMCardNo { get; set; }
+
+        public string? WebOrderID { get; set; }
+        public string? UserName { get; set; }
+
+        public string? OriginalInvoice { get; set; }
+        public string? AdjustmentType { get; set; }
+        public double? Fee { get; set; }
+        public bool? Supress { get; set; }
+
+        public string? PinNo { get; set; }
+        public string? CostBudgetCode { get; set; }
+        public string? Department { get; set; }
+
+        public string? Comments { get; set; }
+        public string? FeeType { get; set; }
+
+        public decimal? GSTRate { get; set; }
+        public decimal? PSTRate { get; set; }
+
+        public string? GSTFlag { get; set; }
+        public string? PSTFlag { get; set; }
+
+        public string? PayMeth { get; set; }
+
+        public string? CustomerPostal { get; set; }
+        public string? CustomerPostalFirstDigit { get; set; }
+
+        public string? Channel { get; set; }
+
+        public int? ImportLineID { get; set; }
+
+        public double? InvoiceNet { get; set; }
+        public double? InvoiceShipping { get; set; }
+        public double? InvoiceTaxes { get; set; }
+        public double? InvoiceTotal { get; set; }
+
+        public string? RodID { get; set; }
+        public string? PortedCTN { get; set; }
+
+        public int? Terms { get; set; }
+        public string? TermsText { get; set; }
+
+        public double? CAPCostHUP { get; set; }
+
+        public string? ShipToPostal { get; set; }
+
+        public string? FreeAccessoryPart { get; set; }
+        public int? AccessorySRP { get; set; }
+
+        public string? SCOA { get; set; }
+        public string? M2MOrderID { get; set; }
+
+        public string? ControlCentre { get; set; }
+        public string? TransactionNo { get; set; }
+
+        public string? AccountCode { get; set; }
+        public string? AuthorizedDepartment { get; set; }
+
+        public double? CommissionCable { get; set; }
+
+        public string? CablePlan { get; set; }
+        public string? CablePlanDescription { get; set; }
+
+        public string? RMANumber { get; set; }
+
+        public string? PCCPID { get; set; }
+        public decimal? PCCPAmount { get; set; }
+
+        public int? Tax1Code { get; set; }
+        public int? Tax2Code { get; set; }
+
+        public string? BVReceipt { get; set; }
+        public int? BVReceiptNo { get; set; }
+
+        public string? OriginalSKUBVPartNumber { get; set; }
+        public string? OriginalWebOrderID { get; set; }
+
+        public string? OriginalHardware { get; set; }
+        public string? OriginalIMEI { get; set; }
+
+        public string? CHTRWebID { get; set; }
+        public string? CHTRChaseID { get; set; }
+
+        public decimal? UpFrontEdgePrice { get; set; }
+        public decimal? InvoiceNetBeforeRVUE { get; set; }
+
+        public string? ClaimCarrier { get; set; }
+        public string? ClaimNumber { get; set; }
+
+        public int? DeviceOfferTypeID { get; set; }
+
+        public string? POLine { get; set; }
+
+        public string? ShipToPostalFirstDigit { get; set; }
+        public string? ShipToProvince { get; set; }
+
+        public string? R4BOrderID { get; set; }
+        public string? V21DealerCode { get; set; }
+
+        public decimal? CustPayAmount { get; set; }
+        public decimal? CustPayAmountOriginal { get; set; }
+
+        public string? AccessoryType { get; set; }
+
+        public string? AccountNumber { get; set; }
+
+        public string? AgentName { get; set; }
+        public string? AgentEmail { get; set; }
+        public string? AgentContactNumber { get; set; }
+
+        public decimal? RogersHWMarginShare { get; set; }
+
+        public int? Term { get; set; }
+
+        public bool? Bulk { get; set; }
+
+        public short? SpireCount { get; set; }
+
+        public DateTime? CreatedDate { get; set; }
+    }
+
+
+public class hardwarereceived
     {
         [Key]
         public int Id { get; set; }
@@ -600,6 +1090,52 @@ public class tbIACCBckOrders
         public int StockMinmiumThreshold { get; set; }
         public bool SerialNumberAvailable { get; set; }
         public bool ShowSTMPopupMessage { get; set; }
+    }
+
+    public class tblSpireInvoice
+    {
+        [Key]
+        public int Seq1 { get; set; }
+        public string invoice_no { get; set; } = string.Empty;
+        public string cust_no { get; set; } = string.Empty;
+        public DateTime? invoice_date { get; set; }
+        public string territory_code { get; set; } = string.Empty;
+        public string terms_description { get; set; } = string.Empty;
+        public string whse { get; set; } = string.Empty;
+        public string part_no { get; set; } = string.Empty;
+        public string description { get; set; } = string.Empty;
+        public int? committed_qty { get; set; }
+        public int? unit_price { get; set; }
+        public int? current_cost { get; set; }
+        public int? subtotal { get; set; }
+        public int? freight { get; set; }
+        public int? total_discount { get; set; }
+        public int? total { get; set; }
+        public int? sales_tax_total1 { get; set; }
+        public int? sales_tax_total2 { get; set; }
+
+        public string CUSTOM_AddressesWB_link_table { get; set; } = string.Empty;
+        public string CUSTOM_AddressesWB_1_link_table { get; set; } = string.Empty;
+        public string CUSTOM_AddressesWB_addr_type { get; set; } = string.Empty;
+        public string CUSTOM_AddressesWB_1_addr_type { get; set; } = string.Empty;
+
+        public string CUSTOM_AddressesWB_name { get; set; } = string.Empty;
+        public string CUSTOM_AddressesWB_address1 { get; set; } = string.Empty;
+        public string CUSTOM_AddressesWB_address2 { get; set; } = string.Empty;
+        public string CUSTOM_AddressesWB_city { get; set; } = string.Empty;
+        public string CUSTOM_AddressesWB_prov_state { get; set; } = string.Empty;
+        public string CUSTOM_AddressesWB_postal_zip { get; set; } = string.Empty;
+
+        public string CUSTOM_AddressesWB_1_name { get; set; } = string.Empty;
+        public string CUSTOM_AddressesWB_1_address1 { get; set; } = string.Empty;
+        public string CUSTOM_AddressesWB_1_address2 { get; set; } = string.Empty;
+        public string CUSTOM_AddressesWB_1_city { get; set; } = string.Empty;
+        public string CUSTOM_AddressesWB_1_prov_state { get; set; } = string.Empty;
+        public string CUSTOM_AddressesWB_1_postal_zip { get; set; } = string.Empty;
+
+        public string number { get; set; } = string.Empty;
+        public string strGUID { get; set; } = string.Empty;
+        public int? serialized_qty { get; set; }
     }
 
 
