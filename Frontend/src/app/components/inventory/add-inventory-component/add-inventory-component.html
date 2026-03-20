@@ -1,125 +1,197 @@
 <div class="container-fluid py-4">
   <div class="row justify-content-center">
-    <div class="col-lg-10 col-xl-8">
+    <div class="col-lg-10 col-xl-12">
       <div class="card border-0 shadow-lg rounded-3">
-        <div class="card-header bg-primary text-white py-3 rounded-top-3">
+        <!-- <div class="card-header bg-primary text-white py-3 rounded-top-3">
           <div class="d-flex justify-content-between align-items-center">
             <div>
               <h2 class="h4 mb-1 fw-bold">Add Inventory Item</h2>
             </div>
-            <span class="badge bg-light text-primary px-3 py-2 fw-semibold">Create new item fields.</span>
+           
           </div>
-        </div>
+        </div> -->
 
         <div class="card-body p-4">
           <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
 
-            <div class="mb-4">
-              <label class="form-label fw-semibold">
-                Warehouse <span class="text-danger">*</span>
-              </label>
-              <select class="form-select form-select-lg" formControlName="Whse">
-                <option value="">Select Warehouse</option>
-                <option *ngFor="let w of warehouses$ | async" [value]="w.whse">
-                  {{ w.whse }} - {{ w.description }}
-                </option>
-              </select>
-              <div class="text-danger small mt-1" *ngIf="isInvalid('Whse')">
-                Warehouse required
-              </div>
-            </div>
+          <div class="row mb-3 align-items-center">
+  <div class="col-md-3">
+    <label class="form-label fw-semibold">
+      Warehouse <span class="text-danger">*</span>
+    </label>
+  </div>
 
-            <div class="row g-4 mb-4">
-              <div class="col-md-6">
-                <label class="form-label fw-semibold">Part Number  <span class="text-danger">*</span></label>
-              <input class="form-control form-control-lg" formControlName="PartNo" (blur)="checkPartNo()" />
-<div class="text-danger small mt-1" *ngIf="form.get('PartNo')?.hasError('duplicate')">
+  <div class="col-md-9">
+    <select class="form-select form-select-lg" formControlName="Whse">
+      <option *ngFor="let w of warehouses$ | async" [value]="w.whse">
+        {{ w.whse }} - {{ w.description }}
+      </option>
+    </select>
+
+    <div class="text-danger small mt-1" *ngIf="isInvalid('Whse')">
+      Warehouse required
+    </div>
+  </div>
+</div>
+<div class="row mb-3 align-items-center">
+  <div class="col-md-3">
+    <label class="form-label fw-semibold">
+      Part Number <span class="text-danger">*</span>
+    </label>
+  </div>
+
+  <div class="col-md-9">
+    <input class="form-control form-control-lg" formControlName="PartNo" (blur)="checkPartNo()"  placeholder="Enter Part Number" />
+
+    <div class="text-danger small mt-1"
+     *ngIf="form.get('PartNo')?.touched && form.get('PartNo')?.hasError('required')">
+  Part Number is required
+</div>
+
+<div class="text-danger small mt-1"
+     *ngIf="form.get('PartNo')?.hasError('duplicate')">
   {{ partNoError }}
 </div>
-              </div>
-
-              <div class="col-md-6">
-                <label class="form-label fw-semibold">Product Code</label>
-                <input class="form-control form-control-lg" formControlName="ProductCode" (input)="onProductCode()" />
-              </div>
-            </div>
-        <span class="text-danger" *ngIf="form.get('ProductCode')?.touched && form.get('ProductCode')?.hasError('required')">
-  Product Code is required
-</span>
-
-            <div class="row g-4 mb-4">
-  <div class="col-md-6">
-    <label class="form-label fw-semibold">Description (EN) <span class="text-danger">*</span></label>
-    <input class="form-control form-control-lg" formControlName="Description" maxlength="80" />
-    <div class="d-flex justify-content-between">
-      <span class="text-danger small" *ngIf="isInvalid('Description')">Description is required</span>
-      <span class="text-muted small">{{ form.get('Description')?.value?.length || 0 }}/80</span>
-    </div>
+  </div>
+</div>
+           <div class="row mb-3 align-items-center">
+  <div class="col-md-3">
+    <label class="form-label fw-semibold">Product Code</label>
   </div>
 
-  <div class="col-md-6">
-    <label class="form-label fw-semibold">French Description <span class="text-danger">*</span></label>
-    <input class="form-control form-control-lg" formControlName="FrDescription" maxlength="80" />
-    <div class="d-flex justify-content-between">
-      <span class="text-danger small" *ngIf="isInvalid('FrDescription')">French Description is required</span>
-      <span class="text-muted small">{{ form.get('FrDescription')?.value?.length || 0 }}/80</span>
-    </div>
+  <div class="col-md-9">
+    <input class="form-control form-control-lg" formControlName="ProductCode" (input)="onProductCode()"  placeholder="Enter Product Code" />
+
+    <span class="text-danger small"
+      *ngIf="form.get('ProductCode')?.touched && form.get('ProductCode')?.hasError('required')">
+      Product Code is required
+    </span>
   </div>
 </div>
 
-            <div class="row g-4 mb-4">
-              <div class="col-md-4">
-                <label class="form-label fw-semibold">Type  <span class="text-danger">*</span></label>
-                <select class="form-select form-select-lg" formControlName="Type" (change)="onTypeChange()">
-                  <option value="">Select Type</option>
-                  <option value="Hardware">Hardware</option>
-                  <option value="Accessory">Accessory</option>
-                </select>
-              </div>
+     <div class="row mb-3 align-items-center">
+  <div class="col-md-3">
+    <label class="form-label fw-semibold">
+      Description (EN) <span class="text-danger">*</span>
+    </label>
+  </div>
 
-              <div class="col-md-8">
-                <label>{{ groupLabel }}</label>
-              <select formControlName="AccessoryGroup" class="form-select form-select-lg">
-  <option value="">Select {{ groupLabel }}</option>
-  <option *ngFor="let m of filteredManufacturers" [value]="m.id">
-    {{ m.name }}
-  </option>
-</select>
-                <span class="text-danger" *ngIf="form.get('AccessoryGroup')?.touched && form.get('AccessoryGroup')?.hasError('required')">
-  Manufacturer Group is required
-  </span>
-              </div>
+  <div class="col-md-9">
+    <input class="form-control form-control-lg" formControlName="Description" maxlength="80"   placeholder="Enter Description (EN)"/>
 
-            </div>
+    <div class="d-flex justify-content-between">
+      <span class="text-danger small" *ngIf="isInvalid('Description')">
+        Description is required
+      </span>
+      <span class="text-muted small">
+        {{ form.get('Description')?.value?.length || 0 }}/80
+      </span>
+    </div>
+  </div>
+</div>
+<div class="row mb-3 align-items-center">
+  <div class="col-md-3">
+    <label class="form-label fw-semibold">
+      French Description <span class="text-danger">*</span>
+    </label>
+  </div>
 
-            <div class="row g-4 mb-5">
-              <div class="col-md-4">
-                <label class="form-label fw-semibold">Sales Dept</label>
-                <input class="form-control form-control-lg" formControlName="SalesDept" readonly />
+  <div class="col-md-9">
+    <input class="form-control form-control-lg" formControlName="FrDescription" maxlength="80"  placeholder="Enter French Description" />
 
-                  <span class="text-danger" *ngIf="form.get('SalesDept')?.touched && form.get('SalesDept')?.hasError('required')">
- SalesDept is required
-</span>
-              </div>
-              <div class="col-md-4">
-  <label class="form-label fw-semibold">Cost Price <span class="text-danger">*</span></label>
-  <input type="number" min="0" class="form-control form-control-lg" formControlName="CostPrice" />
-  
-  <span class="text-danger small" *ngIf="form.get('CostPrice')?.touched && form.get('CostPrice')?.value === null">
-    Cost Price cannot be empty
-  </span>
+    <div class="d-flex justify-content-between">
+      <span class="text-danger small" *ngIf="isInvalid('FrDescription')">
+        French Description is required
+      </span>
+      <span class="text-muted small">
+        {{ form.get('FrDescription')?.value?.length || 0 }}/80
+      </span>
+    </div>
+  </div>
 </div>
 
-<div class="col-md-4">
-  <label class="form-label fw-semibold">Selling Price <span class="text-danger">*</span></label>
-  <input type="number" min="0" class="form-control form-control-lg" formControlName="SellingPrice" />
-  
-  <span class="text-danger small" *ngIf="form.get('SellingPrice')?.touched && form.get('SellingPrice')?.value === null">
-    Selling Price cannot be empty
-  </span>
-</div>
-            </div>
+            <div class="row mb-3 align-items-center">
+  <div class="col-md-3">
+    <label class="form-label fw-semibold">
+      Type <span class="text-danger">*</span>
+    </label>
+  </div>
 
+  <div class="col-md-9">
+    <select class="form-select form-select-lg" formControlName="Type" (change)="onTypeChange()">
+      <option value="">Select Type</option>
+      <option value="Hardware">Hardware</option>
+      <option value="Accessory">Accessory</option>
+    </select>
+  </div>
+</div>
+          <div class="row mb-3 align-items-center">
+  <div class="col-md-3">
+    <label class="form-label fw-semibold">{{ groupLabel }}</label>
+  </div>
+
+  <div class="col-md-9">
+    <select formControlName="AccessoryGroup" class="form-select form-select-lg">
+      <option value="">Select {{ groupLabel }}</option>
+      <option *ngFor="let m of filteredManufacturers" [value]="m.id">
+        {{ m.name }}
+      </option>
+    </select>
+
+    <span class="text-danger small"
+      *ngIf="form.get('AccessoryGroup')?.touched && form.get('AccessoryGroup')?.hasError('required')">
+      Manufacturer Group is required
+    </span>
+  </div>
+</div>
+
+<div class="row mb-3 align-items-center">
+  <div class="col-md-3">
+    <label class="form-label fw-semibold">Sales Dept</label>
+  </div>
+
+  <div class="col-md-9">
+    <input class="form-control form-control-lg" formControlName="SalesDept" readonly placeholder="Sales Dept" />
+
+    <span class="text-danger small"
+      *ngIf="form.get('SalesDept')?.touched && form.get('SalesDept')?.hasError('required')">
+      SalesDept is required
+    </span>
+  </div>
+</div>
+<div class="row mb-3 align-items-center">
+  <div class="col-md-3">
+    <label class="form-label fw-semibold">
+      Cost Price <span class="text-danger">*</span>
+    </label>
+  </div>
+
+  <div class="col-md-9">
+    <input type="number" min="0" class="form-control form-control-lg" formControlName="CostPrice"  placeholder="Enter Cost Price"/>
+
+    <span class="text-danger small"
+      *ngIf="form.get('CostPrice')?.touched && form.get('CostPrice')?.value === null">
+      Cost Price cannot be empty
+    </span>
+  </div>
+</div>
+
+<div class="row mb-4 align-items-center">
+  <div class="col-md-3">
+    <label class="form-label fw-semibold">
+      Selling Price <span class="text-danger">*</span>
+    </label>
+  </div>
+
+  <div class="col-md-9">
+    <input type="number" min="0" class="form-control form-control-lg" formControlName="SellingPrice"   placeholder="Enter Selling Price" />
+
+    <span class="text-danger small"
+      *ngIf="form.get('SellingPrice')?.touched && form.get('SellingPrice')?.value === null">
+      Selling Price cannot be empty
+    </span>
+  </div>
+</div>
             <div class="d-flex gap-3 justify-content-end border-top pt-4">
               <button type="submit" class="btn btn-primary btn-lg px-5">
  Add Item 

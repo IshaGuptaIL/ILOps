@@ -41,7 +41,7 @@ export class AddInventoryComponent implements OnInit {
       Description: ['', [Validators.required, Validators.maxLength(80)]],
       FrDescription: ['', [Validators.required, Validators.maxLength(80)]],
       Type: ['', Validators.required],
-    AccessoryGroup: [''],
+    AccessoryGroup: ['', Validators.required],
       SalesDept: [''],
    CostPrice: [0, [Validators.min(0)]], // Required hata diya, default 0 hai
   SellingPrice: [0, [Validators.min(0)]]
@@ -61,10 +61,17 @@ export class AddInventoryComponent implements OnInit {
 
     // Warehouses
     if (this.UserRoleId && this.UserRoleId > 0) {
-      this.warehouses$ = this.inventoryService.getWarehouses(this.UserRoleId).pipe(
-        delay(0),
-        tap(() => setTimeout(() => this.cdr.detectChanges(), 0))
-      );
+    this.warehouses$ = this.inventoryService.getWarehouses(this.UserRoleId).pipe(
+    tap((data: any[]) => {
+      if (data && data.length > 0) {
+        this.form.patchValue({
+          Whse: data[0].whse
+        });
+      }
+    }),
+    delay(0),
+    tap(() => setTimeout(() => this.cdr.detectChanges(), 0))
+  );
     }
 
     // Manufacturers
@@ -231,7 +238,7 @@ submit(): void {
  if (cost === 0 || sell === 0 || cost === null || sell === null) {
   const zeroType = (cost === 0 || cost === null) ? 'Cost' : 'Selling';
     Swal.fire({
-      title: 'Zero Price Warning',
+      title: 'Zero Price ',
       text: `You have entered a ${cost === 0 ? 'Cost' : 'Selling'} price of zero. Is this correct?`,
       icon: 'warning',
       showCancelButton: true,

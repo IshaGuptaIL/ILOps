@@ -21,7 +21,8 @@ export class ModifyInventoryComponent implements OnInit, AfterViewInit {
 
   @ViewChild('priceModal') priceModal!: ElementRef;
   private modalInstance: any;
-
+  modalSalesAcct: number = 0;
+  modalProductCode: string = '';
   inventoryItems: any[] = [];
   allWarehouses: any[] = [];
   searchTerm: string = '';
@@ -42,15 +43,15 @@ export class ModifyInventoryComponent implements OnInit, AfterViewInit {
   totalPages: number = 0;
 
   constructor(
-    private http: HttpClient, 
+    private http: HttpClient,
     private inventoryService: InventoryService,
     private toaster: ToastrService,
-    private spinner: SpinnerService, // Spinner Inject
+    private spinner: SpinnerService,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) { }
 
   ngOnInit(): void {
-    this.loadInventory();
+    // this.loadInventory();
   }
 
   ngAfterViewInit(): void {
@@ -62,15 +63,23 @@ export class ModifyInventoryComponent implements OnInit, AfterViewInit {
     }, 300);
   }
 
+
+  onSalesAcctChange() {
+    this.modalProductCode = this.getProductCodeBasedOnSalesAcct(Number(this.modalSalesAcct));
+  }
   fillModal(invId: number, whse: string, partNo: string,
-            current: number, avg: number, sell: number, uomId: number) {
+    current: number, avg: number, sell: number, uomId: number, salesAcct: number) {
     this.modalInvId = invId;
+    debugger
     this.modalUomId = uomId || 0;
     this.modalWhse = whse || '';
     this.modalPartNo = partNo || '';
     this.modalCurrentCost = Number(current) || 0;
     this.modalAverageCost = Number(avg) || 0;
     this.modalSellPrice = Number(sell) || 0;
+
+    this.modalSalesAcct = salesAcct;
+    this.modalProductCode = this.getProductCodeBasedOnSalesAcct(Number(salesAcct));
     this.applyToAll = false;
 
     this.getAllWarehouses(this.modalPartNo, this.modalWhse);
@@ -81,6 +90,11 @@ export class ModifyInventoryComponent implements OnInit, AfterViewInit {
         this.modalInstance.show();
       }
     });
+  }
+  getProductCodeBasedOnSalesAcct(salesAcct: number): string {
+    if (salesAcct === 4) return 'HCC';
+    if (salesAcct === 5) return 'ACC';
+    return 'OTH';
   }
 
   clearModalFields() {
@@ -95,15 +109,24 @@ export class ModifyInventoryComponent implements OnInit, AfterViewInit {
   }
 
   loadInventory(page: number = 1) {
+    debugger
+
+    if (!this.searchTerm || this.searchTerm.trim() === '') {
+        this.inventoryItems = [];
+        this.totalItems = 0;
+        this.totalPages = 0;
+        return; 
+    }
     if (page < 1) page = 1;
     this.currentPage = page;
 
-    this.spinner.show(); // 🔄 Start Spinner
+    this.spinner.show();
     this.inventoryService.getModifyInventoryList(this.searchTerm, this.currentPage, this.pageSize)
-      .pipe(finalize(() => this.spinner.hide())) // ⏹ Stop Spinner chahe success ho ya error
+      .pipe(finalize(() => this.spinner.hide()))
       .subscribe({
         next: (res) => {
           this.inventoryItems = res.inventoryItems || [];
+          console.log("ihsa", this.inventoryItems)
           this.totalItems = res.totalItems || 0;
           this.totalPages = this.totalItems > 0 ? Math.ceil(this.totalItems / this.pageSize) : 0;
           this.cdr.detectChanges();
@@ -115,10 +138,10 @@ export class ModifyInventoryComponent implements OnInit, AfterViewInit {
   }
 
   getAllWarehouses(partNo: string, skipWhse: string) {
-    this.spinner.show(); // 🔄 Start Spinner
+    this.spinner.show();
     this.inventoryService
       .getAllWarehousesForPart(partNo, skipWhse)
-      .pipe(finalize(() => this.spinner.hide())) // ⏹ Stop Spinner
+      .pipe(finalize(() => this.spinner.hide()))
       .subscribe({
         next: (res) => {
           this.allWarehouses = res;
@@ -128,26 +151,29 @@ export class ModifyInventoryComponent implements OnInit, AfterViewInit {
   }
 
   submitForm() {
+    debugger
     if (!this.validateAllFields()) return;
-
+    this.modalProductCode = this.getProductCodeBasedOnSalesAcct(Number(this.modalSalesAcct));
     const payload = {
       partNo: this.modalPartNo,
       whse: this.modalWhse,
       currentCost: this.modalCurrentCost,
       averageCost: this.modalAverageCost,
       sellPrice: this.modalSellPrice,
-      uomId: this.modalUomId
+      uomId: this.modalUomId,
+      salesAcct: this.modalSalesAcct,
+      productCode: this.modalProductCode
     };
 
-    this.spinner.show(); // 🔄 Start Spinner
+    this.spinner.show();
     this.inventoryService
       .updateInventoryPrice(payload, this.applyToAll)
-      .pipe(finalize(() => this.spinner.hide())) // ⏹ Stop Spinner
+      .pipe(finalize(() => this.spinner.hide()))
       .subscribe({
         next: (res) => {
           if (res.success) {
             this.toaster.success(res.message);
-            if (this.modalInstance) this.modalInstance.hide(); // ✅ Modal close on success
+            if (this.modalInstance) this.modalInstance.hide();
             this.loadInventory();
           } else {
             this.toaster.error(res.message);
@@ -159,7 +185,6 @@ export class ModifyInventoryComponent implements OnInit, AfterViewInit {
       });
   }
 
-  // VALIDATION METHODS (Same as your logic)
   validateField(id: string, value: number): boolean {
     const field = document.getElementById(id);
     const error = document.getElementById(id + 'Error');

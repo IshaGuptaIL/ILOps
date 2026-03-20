@@ -1,0 +1,214 @@
+
+<div class="container">
+
+  <div class="search-container">
+    <div class="search-section">
+      <div class="search-box">
+        <label class="search-label">Search For:</label>
+        <input type="text" [(ngModel)]="searchValue" placeholder="Enter search value..." class="modern-input" />
+      </div>
+  
+      <div class="button-grid">
+        <button (click)="onSearch('WebOrderID')">Web Order ID</button>
+        <button (click)="onSearch('IMEIESN')">IMEI</button>
+        <button (click)="onSearch('CellPhoneNo')">Cell Phone No</button>
+        <button (click)="onSearch('Invoice')">Invoice</button>
+        <button (click)="onSearch('CustomerName')">Customer Name</button>
+        <button (click)="onSearch('CHTRChaseID')">CHTR Chase ID</button>
+        <button (click)="onSearch('CustomerPO')">Customer PO</button>
+        <button (click)="onSearch('SimCardNo')">SIM</button>
+        <button (click)="onSearch('PortedCTN')">Ported CTN</button>
+        <button (click)="onSearch('OriginalInvoice')">Original Invoice</button>
+        <button (click)="onSearch('UserName')">User Name</button>
+        <button (click)="onSearch('CHTRWebID')">CHTR Web ID</button>
+      </div>
+  
+      <div class="invoice-section">
+        <div class="invoice-input-group">
+          <label>Invoice:</label>
+         <input type="text" class="modern-input-small" [(ngModel)]="invoiceNo" placeholder="Invoice #" readonly>
+        </div>
+        <div class="invoice-buttons">
+          <button class="btn-action" (click)="generateInvoice()">View Invoice</button>
+          <button class="btn-action" (click)="generateTransactionPDF()">View Transaction</button>
+        </div>
+      </div>
+    </div>
+  
+    <hr class="separator" />
+  
+    <div class="table-container">
+  
+    <h3>Invoice Summary</h3>
+  
+    <table class="result-table">
+      <thead>
+        <tr>
+          <th>Seq</th>
+          <th>Invoice</th>
+          <th>Invoice Date</th>
+          <th>Customer No</th>
+          <th>Customer Name</th>
+          <th>Invoice Total</th>
+          <th>Cust Territory</th>
+          <th>Web Order ID</th>
+          <th>Original Invoice</th>
+          <th>Upfront Edge</th>
+          <th>Adjustment</th>
+          <th>Payment Method</th>
+          <th>Transaction No</th>
+        </tr>
+      </thead>
+  
+  <tbody>
+    <tr *ngFor="let item of headerPagedData"
+        (click)="onRowSelect(item)"
+        [class.selected]="item.invoice === selectedInvoice">
+
+      <td>{{item.seq}}</td>
+      <td>{{item.invoice}}</td>
+      <td>{{item.invoiceDate | date:'shortDate'}}</td>
+      <td>{{item.customerNo}}</td>
+      <td>{{item.customerName}}</td>
+      <td>{{item.invoiceTotal | currency}}</td>
+      <td>{{item.custTerritory}}</td>
+      <td>{{item.webOrderId}}</td>
+      <td>{{item.originalInvoice}}</td>
+      <td>{{item.upfrontEdge || 0}}</td>
+      <td>{{item.adjustment}}</td>
+      <td>{{item.paymentMethod}}</td>
+      <td>{{item.transactionNumber}}</td>
+    </tr>
+
+    <tr *ngIf="headerList.length === 0">
+      <td colspan="13" class="no-data">No records found</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ✅ MOVE HERE -->
+<ul class="pagination justify-content-center" *ngIf="headerTotalPages > 1">
+
+  <li class="page-item" [class.disabled]="headerPage === 1">
+    <a class="page-link" (click)="goToHeaderPage(headerPage - 1)">«</a>
+  </li>
+
+  <!-- First page -->
+  <li class="page-item" *ngIf="headerPage > 3">
+    <a class="page-link" (click)="goToHeaderPage(1)">1</a>
+  </li>
+
+  <li class="page-item disabled" *ngIf="headerPage > 4">
+    <span class="page-link">...</span>
+  </li>
+
+  <!-- Dynamic pages -->
+  <li class="page-item"
+      *ngFor="let p of getHeaderPages()"
+      [class.active]="p === headerPage">
+    <a class="page-link" (click)="goToHeaderPage(p)">
+      {{ p }}
+    </a>
+  </li>
+
+  <!-- Last dots -->
+  <li class="page-item disabled" *ngIf="headerPage < headerTotalPages - 3">
+    <span class="page-link">...</span>
+  </li>
+
+  <li class="page-item" *ngIf="headerPage < headerTotalPages - 2">
+    <a class="page-link" (click)="goToHeaderPage(headerTotalPages)">
+      {{ headerTotalPages }}
+    </a>
+  </li>
+
+  <li class="page-item" [class.disabled]="headerPage === headerTotalPages">
+    <a class="page-link" (click)="goToHeaderPage(headerPage + 1)">»</a>
+  </li>
+
+</ul>
+  </div>
+  <hr class="separator" />
+   <div class="table-container">
+  
+    <h3>Invoice Details</h3>
+  
+    <table class="result-table">
+      <thead>
+        <tr>
+          <th>Whse</th>
+          <th>Part No</th>
+          <th>Description</th>
+          <th>Serial No</th>
+          <th>Comment</th>
+          <th>Committed</th>
+          <th>Unit Price</th>
+        </tr>
+      </thead>
+  
+   
+    <tbody>
+    <tr *ngFor="let item of detailPagedData">
+      <td>{{item.whse}}</td>
+      <td>{{item.partNo}}</td>
+      <td>{{item.description}}</td>
+      <td>{{item.serialNo}}</td>
+      <td>{{item.comment}}</td>
+      <td>{{item.committed}}</td>
+      <td>{{item.unitPrice | currency}}</td>
+    </tr>
+
+    <tr *ngIf="detailList.length === 0">
+      <td colspan="7" class="no-data">Select an invoice to view details</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ✅ MOVE HERE -->
+<ul class="pagination justify-content-center" *ngIf="detailTotalPages > 1">
+
+  <!-- Previous -->
+  <li class="page-item" [class.disabled]="detailPage === 1">
+    <a class="page-link" (click)="goToDetailPage(detailPage - 1)">«</a>
+  </li>
+
+  <!-- First Page -->
+  <li class="page-item" *ngIf="detailPage > 3">
+    <a class="page-link" (click)="goToDetailPage(1)">1</a>
+  </li>
+
+  <!-- Dots -->
+  <li class="page-item disabled" *ngIf="detailPage > 4">
+    <span class="page-link">...</span>
+  </li>
+
+  <!-- Dynamic Pages -->
+  <li class="page-item"
+      *ngFor="let p of getDetailPages()"
+      [class.active]="p === detailPage">
+    <a class="page-link" (click)="goToDetailPage(p)">
+      {{ p }}
+    </a>
+  </li>
+
+  <!-- Ending Dots -->
+  <li class="page-item disabled" *ngIf="detailPage < detailTotalPages - 3">
+    <span class="page-link">...</span>
+  </li>
+
+  <!-- Last Page -->
+  <li class="page-item" *ngIf="detailPage < detailTotalPages - 2">
+    <a class="page-link" (click)="goToDetailPage(detailTotalPages)">
+      {{ detailTotalPages }}
+    </a>
+  </li>
+
+  <!-- Next -->
+  <li class="page-item" [class.disabled]="detailPage === detailTotalPages">
+    <a class="page-link" (click)="goToDetailPage(detailPage + 1)">»</a>
+  </li>
+
+</ul>
+  </div>
+  </div>
+</div>

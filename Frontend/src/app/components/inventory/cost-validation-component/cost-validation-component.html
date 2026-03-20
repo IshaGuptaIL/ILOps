@@ -54,11 +54,39 @@
   
   <!-- Sidebar -->
   <div class="col-md-3 side-menu">
-    <a class="btn btn-secondary w-100 mb-2" (click)="loadHpcLatest()">View HPC</a>
-    <a class="btn btn-outline-dark w-100 mb-2" (click)="loadHpcDiscrepancies()">HPC Discrepancy</a>
-    <a class="btn btn-outline-dark w-100 mb-2" (click)="CostVarianceAcrossWarehousesMethod()">Cost Variance</a>
-    <a class="btn btn-outline-dark w-100 mb-2" (click)="CostVarianceCurrentVsAvgMethod()">Current vs Avg</a>
-    <a class="btn btn-outline-dark w-100" (click)="RDMethod()">RD vs Spire</a>
+ <a 
+  class="btn w-100 mb-2"
+  [ngClass]="activeSection === 'HPC' ? 'btn-secondary' : 'btn-outline-dark'"
+  (click)="loadHpcLatest()">
+  View HPC
+</a>
+
+<a 
+  class="btn w-100 mb-2"
+  [ngClass]="activeSection === 'Discrepancy' ? 'btn-secondary' : 'btn-outline-dark'"
+  (click)="loadHpcDiscrepancies()">
+  HPC Discrepancy
+</a>
+
+<a 
+  class="btn w-100 mb-2"
+  [ngClass]="activeSection === 'CostVarianceAcrossWarehouses' ? 'btn-secondary' : 'btn-outline-dark'"
+  (click)="CostVarianceAcrossWarehousesMethod()">
+  Cost Variance Across Warehouses
+</a>
+   <a 
+  class="btn w-100 mb-2"
+  [ngClass]="activeSection === 'CostVarianceCurrentVsAvg' ? 'btn-secondary' : 'btn-outline-dark'"
+  (click)="CostVarianceCurrentVsAvgMethod()">
+  Cost Variance Current / Avg Per Item
+</a>
+
+<a 
+  class="btn w-100 mb-2"
+  [ngClass]="activeSection === 'RD' ? 'btn-secondary' : 'btn-outline-dark'"
+  (click)="RDMethod()">
+  Compare RD Cost To Spire Current
+</a>
   </div>
 
   <!-- Right Panel -->
@@ -119,7 +147,7 @@
           <table class="table table-striped table-bordered table-hover">
             <thead class="table-dark">
               <tr>
-                <th *ngFor="let col of modelColumns">{{ col }}</th>
+                <th *ngFor="let col of modelColumns">{{ formatHeader(col) }}</th>
               </tr>
             </thead>
             <tbody>

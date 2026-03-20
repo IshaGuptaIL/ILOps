@@ -19,7 +19,18 @@ export class OutputInvoiceService {
     }
   });
 }
+uploadInvoiceTemplate(file: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', file); 
 
+    return this.http.post(`${this.apiUrl}/upload-template`, formData);
+  }
+
+  generateInvoicesZip(payload: any): Observable<Blob> {
+  return this.http.post(`${this.apiUrl}/generate-zip`, payload, {
+    responseType: 'blob'
+  });
+}
   clearData(): Observable<any> {
     return this.http.delete(`${this.apiUrl}/clear`);
   }

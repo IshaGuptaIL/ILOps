@@ -1,0 +1,289 @@
+.container{
+  width: 1298px;
+  margin: 40px auto;
+  font-family: Arial;
+  border: 1px solid #dcdcdc;
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.title{
+  margin-bottom: 15px;
+}
+
+.radio-group{
+  display: flex;
+  gap: 30px;
+  margin-bottom: 15px;
+  font-weight: 500;
+}
+
+.options{
+  padding: 10px 0 15px 5px;
+  display: flex;
+  gap: 25px;
+}
+
+.excel-options{
+  display: none;
+}
+
+.radio-group input:nth-child(1):checked ~ .excel-options{
+  display:none;
+}
+
+.radio-group input:nth-child(1):checked ~ .load-options{
+  display:flex;
+}
+
+.radio-group input:nth-child(2):checked ~ .excel-options{
+  display:flex;
+}
+
+.radio-group input:nth-child(2):checked ~ .load-options{
+  display:none;
+}
+
+.remove-section{
+  margin: 20px 0;
+}
+
+.remove-section button{
+  padding: 8px 14px;
+  border: none;
+  background: #f44336;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 10px; 
+}
+.remove-section button:last-child{
+  background: #ff9800;
+}
+
+.bottom-section{
+  display: flex;
+  border-top: 1px solid #eee;
+  padding-top: 20px;
+}
+
+.box{
+  width: 50%;
+  padding: 15px;
+}
+
+.box:first-child{
+  border-right: 1px solid #eee;
+}
+
+.box button{
+  display: block;
+  margin-top: 10px;
+  padding: 7px 14px;
+  border: 1px solid #ddd;
+  background: #f5f5f5;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.main-container{
+  max-width:1200px;
+}
+
+.button-group{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.action-buttons{
+  display:flex;
+  flex-wrap:wrap;
+}
+
+.options{
+  font-weight:500;
+}
+
+.source-toggle {
+  display: inline-flex;
+  gap: 12px;          
+  padding: 5px;
+  background: transparent; 
+  border: none;        
+}
+
+.source-toggle label {
+  padding: 10px 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f0f0f0;  
+  transition: all 0.3s ease;
+  font-weight: 500;
+  border-radius: 30px; 
+  border: 1px solid #ddd; 
+}
+
+.source-toggle label:hover {
+  background: #e2e6ea;
+  transform: translateY(-1px); 
+}
+
+#snapshot:checked + label {
+  background: #0d6efd;
+  color: white;
+  border-color: #0d6efd;
+  box-shadow: 0 4px 10px rgba(13, 110, 253, 0.2);
+}
+
+#excel:checked + label {
+  background: #217346;
+  color: white;
+  border-color: #217346;
+  box-shadow: 0 4px 10px rgba(33, 115, 70, 0.2);
+}
+
+#sales:checked + label {
+  background: #ffc107; 
+  color: #000;
+  border-color: #ffc107;
+  box-shadow: 0 4px 10px rgba(255, 193, 7, 0.2);
+}
+
+
+/* MODAL  */
+.modal-backdrop {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 25px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 700px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.35);
+}
+
+.modal-header h4 {
+  margin: 0 0 15px 0;
+  font-weight: 600;
+  color: #333;
+}
+
+.modal-body {
+  font-size: 14px;
+  color: #444;
+}
+
+.modal-body label {
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.modal-body input[type="radio"] {
+  margin-right: 8px;
+  accent-color: #0d6efd; 
+}
+
+.table {
+  width: 100%;
+  margin-top: 15px;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 6px;
+  overflow: hidden;
+}
+.action-section .card {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.action-section .btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 20px;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  border-radius: 8px; 
+}
+
+.action-section .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+}
+
+.btn-group .btn {
+  border-radius: 8px !important; 
+  margin-right: 11px;
+}
+.table thead th {
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #dee2e6;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.5px;
+}
+
+.table tbody td {
+  padding: 10px 12px;
+}
+
+.table tbody tr:hover {
+  background-color: #e9f5ff;
+}
+
+.selected-row {
+  background-color: #e7f1ff !important;
+  border-left: 4px solid #0d6efd; 
+}
+
+.form-group label {
+  font-weight: 500;
+}
+
+.form-control {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.summary-details {
+  background: #f8f9fa;
+  border-radius: 6px;
+  padding: 12px 15px;
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.btn {
+  border-radius: 6px;
+  padding: 6px 16px;
+  font-weight: 500;
+}
+
+.btn-danger {
+  border: 1px solid #dc3545;
+}
+
+.btn-success {
+  border: 1px solid #198754;
+}

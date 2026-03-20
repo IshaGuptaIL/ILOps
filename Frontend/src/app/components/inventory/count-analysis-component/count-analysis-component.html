@@ -1,0 +1,466 @@
+<h4 class="mb-3"><i class="fas fa-coins"></i> Count Analysis</h4>
+
+<div class="container main-container">
+
+  <!-- SELECT TYPE -->
+  <div class="card p-3 mb-3" >
+    <h5 class="title">Select Type</h5>
+
+    <div class="source-toggle">
+
+  <input
+    type="radio"
+    id="snapshot"
+    name="source"
+    value="snapshot"
+    [(ngModel)]="selectedSource"
+    (change)="onSourceChange()"
+  />
+  <label for="snapshot">
+    <i class="fa fa-database"></i>
+    Select Spire Snapshot
+  </label>
+
+  <input
+    type="radio"
+    id="excel"
+    name="source"
+    value="excel"
+    [(ngModel)]="selectedSource"
+    (change)="onSourceChange()"
+  />
+  <label for="excel">
+    <i class="fa-solid fa-file-excel"></i>
+    Import physical count
+  </label>
+
+  <input type="radio" id="sales" name="source" value="sales" [(ngModel)]="selectedSource" (change)="onSourceChange()" />
+  <label for="sales">
+    <i class="fas fa-coins"></i> Sales/Receipts
+  </label>
+
+</div>
+
+    <!-- Load Snapshot -->
+    <!-- SNAPSHOT OPTIONS -->
+<div class="options load-options mb-3" *ngIf="selectedSource==='snapshot'">
+
+  <label class="me-4">
+    <input type="checkbox" [(ngModel)]="isImeiLoadEnabled">
+     Hardware
+  </label>
+
+  <label>
+    <input type="checkbox" [(ngModel)]="isAccLoadEnabled">
+     Accessory
+  </label>
+
+  <!-- SNAPSHOT BUTTON -->
+  <button class="btn btn-danger"
+          *ngIf="selectedSource==='snapshot' && (isImeiLoadEnabled || isAccLoadEnabled)"
+          (click)="onLoadLiveSnapshot()">
+    Load Spire Snapshot 
+  </button>
+</div>
+
+
+
+
+
+<!-- EXCEL OPTIONS -->
+<div class="options excel-options mt-3" *ngIf="selectedSource==='excel'">
+
+  <label class="me-4">
+    <input type="checkbox"
+           [(ngModel)]="excelHardware"
+           (change)="onExcelHardwareChange()">
+    Hardware Count
+  </label>
+
+  <label>
+    <input type="checkbox"
+           [(ngModel)]="excelAccessory"
+           (change)="onExcelAccessoryChange()">
+    Accessory Count
+  </label>
+
+</div>
+
+<div class="row mt-3" *ngIf="selectedSource==='excel' && (excelHardware || excelAccessory)">
+  
+  <div class="col-md-6" *ngIf="excelHardware">
+    <div class="p-2 border rounded bg-light">
+      <label class="form-label fw-bold small">Import Hardware</label>
+      <input  #hdwDropdown type="file" class="form-control mb-2" (change)="onFileSelected($event)">
+      <button class="btn btn-primary w-100" (click)="uploadFile()">
+        <i class="fa fa-upload"></i> Import Hardware
+      </button>
+    </div>
+  </div>
+
+  <div class="col-md-6" *ngIf="excelAccessory">
+    <div class="p-2 border rounded bg-light">
+      <label class="form-label fw-bold small">Import Accessories</label>
+      <input #accDropdown type="file" class="form-control mb-2" (change)="onAccFileSelected($event)">
+      <button class="btn btn-success w-100" (click)="importACCCounts()">
+        <i class="fa fa-upload"></i> Import Accessories
+      </button>
+    </div>
+  </div>
+
+</div>
+<!-- HARDWARE IMPORT -->
+<!-- <div *ngIf="selectedSource==='excel' && excelHardware" class="mt-3">
+
+  <input type="file" class="form-control mb-2" (change)="onFileSelected($event)" >
+
+  <button class="btn btn-primary" (click)="uploadFile()">
+    Import Hardware
+  </button>
+
+</div> -->
+
+
+
+<!-- ACCESSORY IMPORT -->
+<!-- <div *ngIf="selectedSource==='excel' && excelAccessory" class="mt-3">
+
+  <input type="file" class="form-control mb-2" (change)="onAccFileSelected($event)">
+
+  <button class="btn btn-success" (click)="importACCCounts()">
+    Import Accessories
+  </button>
+
+</div> -->
+    <!-- FILE SELECT -->
+    <div class="row g-3" *ngIf="selectedSource === 'excel'">
+
+      <div class="col-md-6">
+        <label class="form-label">CountFile (HDW)</label>
+        <select class="form-control" [(ngModel)]="selectedHdwFile">
+          <option value="" disabled selected>-- Select File --</option>
+          <option *ngFor="let file of hdwFilesList" [value]="file">
+            {{file}}
+          </option>
+        </select>
+      </div>
+
+  <div class="col-md-6">
+  <label class="form-label">ACC Count File</label>
+  <select class="form-control" [(ngModel)]="selectedAccFile" #accDropdown>
+    <option [ngValue]="null" disabled selected>-- Select File --</option>
+    <option *ngFor="let file of accFilesList" [value]="file">
+      {{file}}
+    </option>
+  </select>
+</div>
+
+    </div>
+
+    <!-- Excel Import -->
+
+
+  </div>
+
+
+  <!-- ACTION BUTTONS -->
+  <div class="action-buttons mb-4" *ngIf="selectedSource !='sales'">
+
+    <div class="card shadow-sm border-0 bg-light">
+    <div class="card-body d-flex flex-wrap align-items-center gap-3">
+      
+      <div class="btn-group shadow-sm">
+
+
+    <button class="btn btn-danger me-2" (click)="onDeleteAllCounts(false)"><i class="fas fa-trash-alt me-2"></i>Remove All Count</button>
+    <button class="btn btn-outline-primary" (click)="onDeleteByFile(false)"><i class="fas fa-trash-alt me-2"></i>Delete Count From Single File</button>
+    <div class="modal-backdrop" *ngIf="showModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4>Analyse & Assign Warehouse</h4>
+        </div>
+        
+        <div class="modal-body">
+            <div >
+<div>
+  <label>
+    <input 
+      type="radio"
+      name="countType"
+      value="Hardware"
+      [(ngModel)]="countType"
+      (change)="onCountTypeChange()"
+    />
+    Hardware Counts
+  </label>
+
+  <label style="margin-left:20px;">
+    <input 
+      type="radio"
+      name="countType"
+      value="Accessory"
+      [(ngModel)]="countType"
+      (change)="onCountTypeChange()"
+    />
+    Accessory Counts
+  </label>
+</div>
+
+
+             <table class="table table-bordered table-striped">
+  <thead>
+    <tr>
+      <th>File Name</th>
+      <th>Warehouse</th>
+      <th>Total Entries</th>
+      <th>Total Qty</th>
+     
+  </thead>
+  <tbody>
+ <tr *ngFor="let item of countFiles" 
+    (click)="selectRow(item)" 
+    [class.selected-row]="selectedCountFile === item.countFile"
+    style="cursor: pointer;">
+    <td>{{item.countFile}}</td>
+    <td>{{item.whse}}</td>
+    <td>{{item.countEntries}}</td>
+    <td>{{item.sumOfQtyTotal}}</td>
+</tr>
+
+  <!-- No Records Found Row -->
+    <tr *ngIf="countFiles.length === 0">
+      <td colspan="4" class="text-center text-muted py-4">
+        <i class="fa fa-inbox fa-2x mb-2"></i>
+        <div>No Records Found</div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+                
+                <div class="form-group mt-3">
+                    <label>Select Target Warehouse:</label>
+                    <select [(ngModel)]="selectedWarehouse" class="form-control">
+                        <option value="" disabled>-- Choose --</option>
+                        <option *ngFor="let wh of warehouses" [value]="wh">{{ wh }}</option>
+                    </select>
+                </div>
+
+                <div class="summary-details mt-3 p-2 bg-light">
+
+<p>Total Qty: {{ fileSummary?.sumOfQtyTotal }}</p>
+<p>Total Entries: {{ fileSummary?.countEntries }}</p>
+<p>Selected File: {{ fileSummary?.countFile }}</p>
+                </div>
+            </div>
+
+           
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn btn-danger" (click)="showModal = false">Close</button>
+            <button class="btn btn-success" 
+                    
+                    (click)="confirmAssignment()">
+                Update Warehouse
+            </button>
+        </div>
+    </div>
+</div>
+
+      <button class="btn btn-outline-primary" (click)="analyseAssignWarehouse()"><i class="fas fa-warehouse me-2"></i>
+        Analyse / Assign ACC Count Warehouse
+      </button>
+  </div>
+
+</div>
+</div>
+</div>
+
+  <!-- BOTTOM SECTION -->
+  <div class="row" *ngIf="selectedSource !='sales'">
+
+    <!-- HARDWARE -->
+    <div class="col-md-6">
+      <div class="card p-3">
+
+        <!-- <label class="fw-bold mb-2">
+          <input type="radio" name="type"> Select Hardware
+        </label> -->
+
+        <label class="fw-bold mb-2">
+            Hardware
+        </label>
+
+        <div class="button-group">
+
+          <button class="btn btn-outline-primary"  (click)="onExportHardwareSheets()">Create Hardware Count Sheet</button>
+          <button class="btn btn-outline-primary" (click)="viewAllCounts()">View / Edit Counts</button>
+          <button class="btn btn-outline-primary" (click)="spireNotCounted()">IMEI's BV Onhand</button>
+
+          <button class="btn btn-outline-secondary" [disabled]="true">Assign Counts to Warehouses</button>
+          <button class="btn btn-outline-secondary" disabled>View IMEI Duplicates Counted</button>
+          <button class="btn btn-outline-secondary" disabled>View IMEI Duplicates BV Onhand</button>
+
+          <button class="btn btn-outline-primary" (click)="findDuplicates()">Find Duplicates</button>
+          <button class="btn btn-outline-primary" (click)="showCleanupPreview()">Show Duplicates</button>
+          <button class="btn btn-outline-primary"  (click)="finalDeleteDuplicates()">Remove Duplicates</button>
+
+          <button class="btn btn-outline-primary" (click)="checkSerialIntegrity()">View Invalid Counts</button>
+          <button class="btn btn-outline-primary" (click)="checkSystemSerials()">View Invalid BV Onhand</button>
+
+          <button class="btn btn-outline-primary" (click)="runDiscrepancyReport()">View Part No Discrepancies</button>
+
+          <button class="btn btn-outline-secondary" disabled>Search and Replace SKU</button>
+
+          <button class="btn btn-outline-secondary" disabled>
+            Compare BV SN Counts to Actual Counts
+          </button>
+
+          <button class="btn btn-outline-secondary" disabled>
+            Compare Actual Counts to BV SN Counts
+          </button>
+
+          <button class="btn btn-outline-primary" (click)="fetchMissingItems()">Spire Onhand - Not Counted</button>
+
+          <button class="btn btn-outline-primary" (click)="checkSpireStatus()">
+            Counted but not onhand in Spire
+          </button>
+
+          <button class="btn btn-outline-secondary" disabled>
+            Available SN Versus Spire Onhand Qty
+          </button>
+
+          <button class="btn btn-outline-secondary" disabled>
+            Fix Live Quantities
+          </button>
+
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- ACCESSORIES -->
+    <div class="col-md-6">
+      <div class="card p-3">
+
+        <!-- <label class="fw-bold mb-2">
+          <input type="radio" name="type"> Select Accessories
+        </label> -->
+        <label class="fw-bold mb-2">
+            Accessories
+        </label>
+
+        <label class="form-label fw-bold">
+          Select Backorders Excel File (.xlsx)
+        </label>
+         <input 
+          #backorderDropdown
+    type="file" 
+    class="form-control" 
+    (change)="onBackOrderFileSelected($event)" 
+    accept=".xlsx" 
+  />
+
+        <button class="btn btn-outline-primary"    (click)="importBackOrders()" >
+          <i class="fas fa-file-upload me-2"></i> Import Backorders
+        </button>
+
+        <div class="button-group">
+
+          <button class="btn btn-outline-primary"  (click)="onDeleteAllCounts(true)">Remove ACC Count</button>
+          <button class="btn btn-outline-primary " (click)="onDeleteByFile(true)">Remove ACC Count From Single File</button>
+          <button class="btn btn-outline-primary" (click)="onExportAccessorySheets()">Create Accessories Count Sheet</button>
+          <button class="btn btn-outline-primary" (click)="viewEditCounts()">View / Edit Counts</button>
+
+          <button class="btn btn-outline-primary" (click)="loadedStockStatus()">Loaded ACC Stock Status</button>
+          <button class="btn btn-outline-primary" (click)="onhandNotCounteds()">Onhand BV Not Counted</button>
+          <button class="btn btn-outline-primary" (click)="countedNotBV()">Counted Not In BV</button>
+
+          <button class="btn btn-outline-primary" (click)="getDiscrepancies(1)">Discrepancies</button>
+
+          <button class="btn btn-outline-primary" (click)="fixLiveQty()" disabled>
+            Fix Live ACC Quantities in CO
+          </button>
+
+          <button class="btn btn-outline-primary" disabled>
+            Undo ALL Fixes
+          </button>
+
+        </div>
+
+        <!-- LOAD SPIRE DATA -->
+        <div class="card mt-3 p-2">
+          <div class="row align-items-center">
+
+            <div class="col-md-5">
+              <label class="fw-bold">
+                Load Spire Sales and Receipts Data
+              </label>
+            </div>
+
+            <div class="col-md-3">
+              <select class="form-select form-select-sm" [(ngModel)]="selectedLoadType">
+                <option>Both</option>
+                <option>Sales</option>
+                <option>Receipts</option>
+              </select>
+            </div>
+
+            <div class="col-md-4">
+              <button class="btn btn-primary w-100" (click)="loadSpireData()">
+                Load Data
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+
+<div class="row" *ngIf="selectedSource == 'sales'">
+    <div class="col-md-6">
+  <div class="card p-3">
+
+    <h5 class="fw-bold mb-3">Date Range for Sales / Receipts</h5>
+
+    <div class="mb-3">
+      <label class="form-label">Start Date</label>
+      <input type="date" class="form-control" [(ngModel)]="startDate"  [max]="todayDate">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">End Date</label>
+      <input type="date" class="form-control" [(ngModel)]="endDate"  [max]="todayDate">
+    </div>
+
+    <div class="d-grid gap-2">
+
+      <button class="btn btn-outline-primary" (click)="loadAnalysis()">
+        Accessory Analysis
+      </button>
+
+      <button class="btn btn-outline-primary" (click)="getAccessorySalesByChannel()">
+        Accessory Sales By Channel
+      </button>
+
+      <button class="btn btn-outline-primary" (click)="showSales()">
+        Show Sales
+      </button>
+
+      <button class="btn btn-outline-primary" (click)="showReceipts()">
+        Show Receipts
+      </button>
+
+    </div>
+
+  </div>
+</div>
+
+  </div>
+
+</div>

@@ -1,13 +1,16 @@
-<h2><i class="fas fa-boxes"></i> Modify Inventory</h2>
+<!-- <h2><i class="fas fa-boxes"></i> Modify Inventory</h2> -->
 
 
 
-<div class="row mb-3">
-  <div class="col-md-8"></div>
+<div class="row mb-3 align-items-center">
+  <div class="col-md-4 text-end">
+    <label class="form-label fw-semibold">Search the Inventory Number:</label>
+  </div>
+
   <div class="col-md-4">
-<input type="text" class="form-control form-control-sm"
-       placeholder="Search Part No/Description..."
-       [(ngModel)]="searchTerm" 
+    <input type="text" class="form-control form-control-sm"
+       placeholder="Search Part Number"
+       [(ngModel)]="searchTerm"
        (keyup)="loadInventory(1)">
   </div>
 </div>
@@ -24,45 +27,46 @@
           <th>Current Cost</th>
           <th>Avg Cost</th>
           <th>Sell Price</th>
+          <th>Sales Acc</th>
           <th>Action</th>
         </tr>
       </thead>
-      <tbody>
-        <tr *ngFor="let item of inventoryItems">
-          <td>{{item.whse}}</td>
-          <td><strong>{{item.partNo}}</strong></td>
-          <td>{{item.description}}</td>
-          <td>{{item.productCode || '-'}}</td>
-          <td class="text-primary fw-bold">${{item.currentCost | number:'1.2-2'}}</td>
-          <td class="text-success fw-bold">${{item.averageCost | number:'1.2-2'}}</td>
-          <td class="text-danger fw-bold">
-            {{ item.sellPrice ? ('$' + (item.sellPrice | number:'1.2-2')) : 'N/A' }}
-          </td>
-          <td>
+     <tbody>
+    <!-- Data rows -->
+    <tr *ngFor="let item of inventoryItems">
+      <td>{{item.whse}}</td>
+      <td><strong>{{item.partNo}}</strong></td>
+      <td>{{item.description}}</td>
+      <td>{{item.productCode || '-'}}</td>
+      <td class="text-primary fw-bold">${{item.currentCost | number:'1.2-2'}}</td>
+      <td class="text-success fw-bold">${{item.averageCost | number:'1.2-2'}}</td>
+      <td class="text-danger fw-bold">
+        {{ item.sellPrice ? ('$' + (item.sellPrice | number:'1.2-2')) : 'N/A' }}
+      </td>
+      <td>{{ item.salesAcct || '-' }}</td>
+      <td>
         <button class="btn btn-sm btn-outline-primary"
-        (click)="fillModal(item.inventoryId, item.whse, item.partNo,
-                           item.currentCost, item.averageCost,
-                           item.sellPrice, item.uomId)">
-  <i class="fas fa-edit"></i> Edit
-</button>
-          </td>
-        </tr>
-      </tbody>
+                (click)="fillModal(item.inventoryId, item.whse, item.partNo,
+                                   item.currentCost, item.averageCost,
+                                   item.sellPrice, item.uomId,item.salesAcct)">
+          <i class="fas fa-edit"></i> Edit
+        </button>
+      </td>
+    </tr>
 
-        <!-- ✅ No Records Found Message -->
-        <tr *ngIf="inventoryItems.length === 0">
-          <td [attr.colspan]="8" class="text-center py-5 text-muted">
-            <div class="d-flex flex-column align-items-center">
-              <i class="fas fa-inbox fa-3x mb-3 opacity-50"></i>
-              <h5 class="mb-1">No Records Found</h5>
-              <p class="mb-0">{{ searchTerm ? 'No inventory items match "' + searchTerm + '"' : 'No inventory items available' }}</p>
-              <small *ngIf="searchTerm" class="text-muted">
-                Try adjusting your search terms
-              </small>
-            </div>
-          </td>
-        </tr>
-    </table>
+    <!-- No Records Found -->
+    <tr *ngIf="inventoryItems.length === 0">
+      <td [attr.colspan]="9" class="text-center py-5 text-muted">
+        <div class="d-flex flex-column align-items-center">
+          <i class="fas fa-inbox fa-3x mb-3 opacity-50"></i>
+          <h5 class="mb-1">No Records Found</h5>
+          <p class="mb-0">{{ searchTerm ? 'No inventory items match "' + searchTerm + '"' : 'No inventory items available' }}</p>
+          <small *ngIf="searchTerm" class="text-muted">Try adjusting your search terms</small>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
 
    <div class="d-flex justify-content-end mt-2" *ngIf="totalPages > 1">
   <ul class="pagination pagination-sm mb-0">
@@ -155,6 +159,27 @@
             <div id="modalSellPriceError" class="validation-message"></div>
           </div>
         </div>
+
+
+         <div class="row mb-3">
+          <div class="col-md-6">
+            <label class="form-label fw-bold">Sales Account</label>
+            <input type="number" class="form-control"
+       [(ngModel)]="modalSalesAcct" [disabled]="true"
+       (ngModelChange)="onSalesAcctChange()"
+       placeholder="Enter Sales Account">
+          </div>
+
+          <!-- Product Code (Auto-Updated) -->
+          <div class="col-md-6">
+            <label class="form-label fw-bold">Product Code</label>
+            <input class="form-control bg-light" 
+                  [disabled]="true"
+                   [(ngModel)]="modalProductCode"
+                   placeholder="Product Code">
+          </div>
+        </div>
+
 
       <div class="form-check mb-3" *ngIf="allWarehouses.length > 0">
   <input class="form-check-input"

@@ -191,7 +191,7 @@ buildTree(flatMenus: any[]): MenuItem[] {
 
 saveRolePermissions(roleId: number, selectedMenus: number[]): Observable<any> {
   const payload = {
-    roleId: roleId,       // Backend DTO key se match hona chahiye
+    roleId: roleId,     
     selectedMenus: selectedMenus
   };
   return this.http.post(`${this.ApiUrl}/SaveRolePermissions`, payload);

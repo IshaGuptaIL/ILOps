@@ -1,0 +1,95 @@
+.custom-dashboard-accordion {
+  max-width: 100%;
+  padding: 10px;
+}
+
+.accordion-item {
+  background: transparent;
+  border: none !important;
+  margin-bottom: 1.2rem;
+}
+
+.accordion-button {
+  background-color: #ffffff !important;
+  color: #495057 !important;
+  font-size: 1.05rem;
+  font-weight: 600;
+  border: 1px solid #e9ecef !important;
+  border-radius: 12px !important;
+  padding: 0.8rem 1.2rem !important;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  text-align: left;
+  box-shadow: none;
+}
+
+.accordion-button:not(.collapsed) {
+  background-color: #f8fbff !important;
+  color: #0d6efd !important;
+  border-color: #0d6efd !important;
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  box-shadow: none;
+}
+
+.header-icon-box {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.bg-primary-light { background-color: rgba(13, 110, 253, 0.08); color: #0d6efd; }
+.bg-dark-light { background-color: rgba(33, 37, 41, 0.06); color: #212529; }
+
+.accordion-body {
+  padding: 0 !important;
+  border: 1px solid #0d6efd !important;
+  border-top: none !important;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  background-color: #fff;
+}
+
+.inner-content-wrapper {
+  padding: 20px;
+}
+
+.collapse:not(.show) {
+  display: none;
+}
+
+.collapse.show {
+  display: block;
+}
+
+.accordion-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.05) !important;
+}
+
+.accordion-button::after {
+    margin-left: auto;
+    content: "";
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%236c757d'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-size: 1.1rem;
+    transition: transform 0.3s ease, background-image 0.3s ease; /* Smooth rotation and color change */
+    width: 1.25rem;
+    height: 1.25rem;
+    transform: rotate(0deg); /* Default position */
+}
+.accordion-button:not(.collapsed)::after {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%230d6efd'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+    transform: rotate(-180deg); 
+}
+
+.accordion-button:hover::after {
+    opacity: 0.8;
+}

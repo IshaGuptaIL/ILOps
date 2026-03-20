@@ -28,7 +28,6 @@ export class FindByImeiComponent {
       return;
     }
 
-    console.log('--- Starting Search for IMEI:', this.imei);
     this.isLoading = true;
     this.receipt = [];
     this.rogersList = [];
@@ -38,9 +37,7 @@ export class FindByImeiComponent {
         console.log('API Raw Response:', res);
 
         if (res && res.success && res.result) {
-          // If result is an object, wrap it in []. If already array, use it.
           this.receipt = Array.isArray(res.result) ? res.result : [res.result];
-          console.log('Receipt variable set to:', this.receipt);
 
           if (res.result.bvReceiptNo) {
             this.loadRogersInvoices(res.result.bvReceiptNo);
@@ -51,10 +48,9 @@ export class FindByImeiComponent {
           this.isLoading = false;
           Swal.fire('Not Found', 'IMEI not found', 'info');
         }
-        this.cdr.detectChanges(); // Force UI to wake up
+        this.cdr.detectChanges(); 
       },
       error: (err) => {
-        console.error('API Error:', err);
         this.isLoading = false;
         Swal.fire('Error', 'API connection failed', 'error');
         this.cdr.detectChanges();
@@ -63,7 +59,6 @@ export class FindByImeiComponent {
   }
 
   loadRogersInvoices(bvReceiptNo: string): void {
-    console.log('--- Fetching Invoices for:', bvReceiptNo);
     this.imeiService.getRogersInvoices(bvReceiptNo).subscribe({
       next: (res: any) => {
         console.log('Invoices Raw Response:', res);
@@ -72,14 +67,12 @@ export class FindByImeiComponent {
         this.cdr.detectChanges();
       },
       error: (err) => {
-        console.error('Invoice API Error:', err);
         this.isLoading = false;
         this.cdr.detectChanges();
       }
     });
   }
 
-  // CALCULATIONS
   get rogersTotal(): number {
     return this.rogersList.reduce((sum, x) => sum + ((Number(x.perUnitAmount) || 0) * (Number(x.qty) || 0)), 0);
   }

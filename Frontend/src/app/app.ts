@@ -14,13 +14,12 @@ styleUrls: ['./app.css']
 })
 export class App {
   protected readonly title = signal('LegacyApp');
-  showSidebar = false;  // initially false
+  showSidebar = false;  
 
   constructor(private router: Router) {
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe((event: NavigationEnd) => {
-      // Sidebar visible only on non-login routes
       const url = event.urlAfterRedirects;
       this.showSidebar = !(url === '/' || url === '/login');
     });

@@ -1,0 +1,47 @@
+<div class="accordion custom-dashboard-accordion" id="inventoryAccordion">
+
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button" 
+              [class.collapsed]="activePanel !== 'add'"
+              type="button" 
+              (click)="togglePanel('add')">
+        <div class="header-icon-box bg-primary-light me-3">
+          <i class="bi bi-plus-circle"></i>
+        </div>
+        Add New Inventory 
+      </button>
+    </h2>
+
+    <div class="accordion-collapse collapse" [class.show]="activePanel === 'add'">
+      <div class="accordion-body">
+        <div class="inner-content-wrapper">
+          <app-add-inventory></app-add-inventory>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button" 
+              [class.collapsed]="activePanel !== 'modify'"
+              type="button" 
+              (click)="togglePanel('modify')">
+        <div class="header-icon-box bg-dark-light me-3">
+          <i class="bi bi-list-ul"></i>
+        </div>
+         Modify Inventory
+      </button>
+    </h2>
+
+    <div class="accordion-collapse collapse" [class.show]="activePanel === 'modify'">
+      <div class="accordion-body">
+        <div class="inner-content-wrapper">
+          <app-modify-inventory-component></app-modify-inventory-component>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

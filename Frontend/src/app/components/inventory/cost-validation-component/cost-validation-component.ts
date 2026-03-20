@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style'; 
 import { saveAs } from 'file-saver';
 import { InventoryService } from '../add-inventory-component/inventory-service';
 import Swal from 'sweetalert2';
@@ -53,12 +53,12 @@ export class CostValidationComponent implements OnInit {
   totalPages = 0;
   pagedData: any[] = [];
   pagesArray: number[] = [];
+  activeSection: string = 'HPC'; 
 
   constructor(
     private svc: InventoryService,
     private zone: NgZone,
-    private cdr: ChangeDetectorRef,
-        private spinner:SpinnerService,
+   private cdr: ChangeDetectorRef,private spinner:SpinnerService
   ) {}
 
   ngOnInit(): void {
@@ -101,12 +101,14 @@ export class CostValidationComponent implements OnInit {
   }
 
   uploadfile() {
+    this.spinner.show();
     if (!this.selectedFile) {
       Swal.fire({
         icon: 'warning',
         title: 'No File Selected',
         text: 'Please select a file first.'
       });
+      this.spinner.hide();
       return;
     }
 
@@ -125,8 +127,9 @@ export class CostValidationComponent implements OnInit {
       })
     ).subscribe({
       next: (res: ApiResponse) => {
-        console.log('Upload Response:', res);
         this.handleUploadResponse(res);
+      this.spinner.hide();
+
       },
       error: (err) => {
        // this.spinner.hide()
@@ -136,6 +139,8 @@ export class CostValidationComponent implements OnInit {
           title: 'Upload Error',
           text: err.message || 'Server error occurred'
         });
+      this.spinner.hide();
+
       }
     });
   }
@@ -322,7 +327,13 @@ export class CostValidationComponent implements OnInit {
     }, 150);
   }
 
-
+formatHeader(key: string): string {
+  if (!key) return '';
+  return key
+    .replace(/([A-Z])/g, ' $1')          // Insert space before capitals (startDate -> start Date)
+    .replace(/^./, str => str.toUpperCase()) // Capitalize first letter (start Date -> Start Date)
+    .trim();                             // Remove extra spaces
+}
   bindGrid(data: any[]) {
     this.model = data || [];
     this.currentPage = 1;
@@ -346,15 +357,15 @@ export class CostValidationComponent implements OnInit {
     this.applyPagination();
   }
 
-  getValue(row: any, col: string): any {
-    return row?.[col] ?? '-';
-  }
+  // getValue(row: any, col: string): any {
+  //   return row?.[col] ?? '-';
+  // }
 
 
   loadHpcLatest() {
    // this.spinner.show()
     this.title = 'HPC Latest';
-    // ✅ Don't reset invalidRows here
+      this.activeSection = 'HPC';
     this.cdr.detectChanges();
 
     this.svc.HpcLatest().pipe(
@@ -375,7 +386,8 @@ export class CostValidationComponent implements OnInit {
   }
 
   loadHpcDiscrepancies() {
-   // this.spinner.show()
+      this.activeSection = 'Discrepancy';
+   this.spinner.show()
    debugger
     this.title = 'HPC Discrepancies';
     this.cdr.detectChanges();
@@ -385,37 +397,72 @@ export class CostValidationComponent implements OnInit {
       tap(() => setTimeout(() => this.cdr.detectChanges(), 0))
     ).subscribe({
       next: (res: any) => {
-       // this.spinner.hide()
+       this.spinner.hide()
         if (res.success) this.bindGrid(res.result || []);
         else Swal.fire('Error', res.message, 'error');
         this.cdr.detectChanges();
       },
-      error: (err) => this.handleReportError(err)
+      error: (err) => 
+        {
+          this.handleReportError(err)
+       this.spinner.hide()
+
+        }
     });
   }
 
   CostVarianceAcrossWarehousesMethod() {
-   // this.spinner.show()
+   this.spinner.show()
     this.title = 'Cost Variance Across Warehouses';
+     this.activeSection = 'CostVarianceAcrossWarehouses';
     this.cdr.detectChanges();
 
-    this.svc.CostVarianceAcrossWarehouses().pipe(
-      delay(0),
-      tap(() => setTimeout(() => this.cdr.detectChanges(), 0))
-    ).subscribe({
-      next: (res: any) => {
-       // this.spinner.hide()
-        if (res.success) this.bindGrid(res.result || []);
-        else Swal.fire('Error', res.message, 'error');
-        this.cdr.detectChanges();
-      },
-      error: (err) => this.handleReportError(err)
-    });
+  this.svc.CostVarianceAcrossWarehouses().pipe(
+  delay(0),
+  tap(() => setTimeout(() => this.cdr.detectChanges(), 0))
+).subscribe({
+  next: (res: any) => {
+    this.spinner.hide();
+    if (res.success) {
+      this.bindGrid(res.result || []);
+    } else {
+      Swal.fire('Error', res.message, 'error');
+    }
+    this.cdr.detectChanges();
+  },
+  error: (err: any) => {
+    this.spinner.hide();
+    this.handleReportError(err);
   }
+});
+  }
+
+ getValue(row: any, col: string): any {
+  const value = row?.[col];
+
+  if (!value) return '-';
+
+  if (value instanceof Date) {
+    return this.formatDate(value);
+  }
+
+  if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(value)) {
+    const d = new Date(value);
+    return this.formatDate(d);
+  }
+
+  return value;
+}
+
+// Helper to format date as YYYY-MM-DD
+private formatDate(d: Date): string {
+  return `${d.getFullYear()}-${('0' + (d.getMonth() + 1)).slice(-2)}-${('0' + d.getDate()).slice(-2)}`;
+}
 
   CostVarianceCurrentVsAvgMethod() {
    this.spinner.show()
     this.title = 'Compare Variance Current vs Avg Per Item';
+      this.activeSection = 'CostVarianceCurrentVsAvg';
     this.cdr.detectChanges();
 
     this.svc.CostVarianceCurrentVsAvg().pipe(
@@ -438,6 +485,7 @@ export class CostValidationComponent implements OnInit {
   RDMethod() {
    this.spinner.show()
     this.title = 'Compare RD Hardware Cost To Spire Current';
+     this.activeSection = 'RD';
     this.cdr.detectChanges();
 
     this.svc.RDHardwareVsSpire().pipe(
@@ -469,62 +517,129 @@ export class CostValidationComponent implements OnInit {
 
   // ========== EXPORT METHODS ==========
 
+  // downloadTemplate() {
+  //   this.spinner.show()
+  //   const headers = [['Whse', 'Part', 'StartDate', 'RogersCost', 'DelistDate']];
+  //   const ws = XLSX.utils.aoa_to_sheet(headers);
+  //   ws['!cols'] = [{ wch: 12 }, { wch: 25 }, { wch: 15 }, { wch: 15 }, { wch: 15 }];
+
+  //   const wb = XLSX.utils.book_new();
+  //   XLSX.utils.book_append_sheet(wb, ws, 'Template');
+  //   const buffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+  //   saveAs(new Blob([buffer]), 'HPC_Template.xlsx');
+  //   this.spinner.hide()
+  //   Swal.fire({ icon: 'success', title: 'Template Downloaded', timer: 2000, showConfirmButton: false });
+  // }
+
   downloadTemplate() {
-    this.spinner.show()
-    const headers = [['Whse', 'Part', 'StartDate', 'RogersCost', 'DelistDate']];
-    const ws = XLSX.utils.aoa_to_sheet(headers);
-    ws['!cols'] = [{ wch: 12 }, { wch: 25 }, { wch: 15 }, { wch: 15 }, { wch: 15 }];
+  this.spinner.show();
+  
+  const headers = [['Whse', 'Part', 'StartDate', 'RogersCost', 'DelistDate']];
+  const ws = XLSX.utils.aoa_to_sheet(headers);
 
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Template');
-    const buffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-    saveAs(new Blob([buffer]), 'HPC_Template.xlsx');
-    this.spinner.hide()
-    Swal.fire({ icon: 'success', title: 'Template Downloaded', timer: 2000, showConfirmButton: false });
+  // 1. Set Column Widths
+  ws['!cols'] = [{ wch: 12 }, { wch: 25 }, { wch: 15 }, { wch: 15 }, { wch: 15 }];
+
+  // 2. Apply Bold Style to the First Row (Header)
+  const range = XLSX.utils.decode_range(ws['!ref']!);
+  for (let col = range.s.c; col <= range.e.c; col++) {
+    const cellAddress = XLSX.utils.encode_cell({ r: 0, c: col }); // r: 0 is the first row
+    if (!ws[cellAddress]) continue;
+
+    ws[cellAddress].s = {
+      font: {
+        bold: true,
+        sz: 12 
+      },
+      alignment: { horizontal: "center" } 
+    };
   }
 
-  exportToExcel(name?: string) {
-    if (!this.model || this.model.length === 0) {
-      Swal.fire({ icon: 'info', title: 'No Data', text: 'No data available to export' });
-      return;
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Template');
+
+  // 3. Generate Buffer and Save
+  const buffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+  saveAs(new Blob([buffer]), 'HPC_Template.xlsx');
+
+  this.spinner.hide();
+  Swal.fire({ 
+    icon: 'success', 
+    title: 'Template Downloaded', 
+    timer: 2000, 
+    showConfirmButton: false 
+  });
+}
+
+exportToExcel(name?: string) {
+  if (!this.model || this.model.length === 0) {
+    Swal.fire({ icon: 'info', title: 'No Data', text: 'No data available to export' });
+    return;
+  }
+
+  const headerKeys = Object.keys(this.model[0]);
+  const formattedHeaders = headerKeys.map(key => 
+    key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()).trim()
+  );
+
+  const dataRows = this.model.map(row => headerKeys.map(k => row[k]));
+  const ws = XLSX.utils.aoa_to_sheet([formattedHeaders, ...dataRows]);
+
+  const range = XLSX.utils.decode_range(ws['!ref']!);
+  for (let col = range.s.c; col <= range.e.c; col++) {
+    const cell = ws[XLSX.utils.encode_cell({ r: 0, c: col })];
+    if (cell) {
+      cell.s = { font: { bold: true } };
     }
-
-    const filename = (name || 'Export').replace(/\s+/g, '_') + '.xlsx';
-    const ws = XLSX.utils.json_to_sheet(this.model);
-    ws['!cols'] = this.modelColumns.map(() => ({ wch: 20 }));
-
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    const buffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-    saveAs(new Blob([buffer]), filename);
-    Swal.fire({ icon: 'success', title: 'Exported', timer: 2000, showConfirmButton: false });
   }
 
-  exportInvalidRows() {
-    if (!this.invalidRows || this.invalidRows.length === 0) {
-      Swal.fire({ icon: 'info', title: 'No Invalid Records', text: 'No invalid records to export' });
-      return;
+  ws['!cols'] = headerKeys.map(() => ({ wch: 20 }));
+
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+  
+  const filename = (name || 'Export').replace(/\s+/g, '_') + '.xlsx';
+  const buffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+  saveAs(new Blob([buffer]), filename);
+  Swal.fire({ icon: 'success', title: 'Exported', timer: 2000, showConfirmButton: false });
+}
+
+exportInvalidRows() {
+  if (!this.invalidRows || this.invalidRows.length === 0) {
+    Swal.fire({ icon: 'info', title: 'No Invalid Records', text: 'No invalid records to export' });
+    return;
+  }
+
+  const wsData = [
+    ['Row Number', 'SKU', 'Invalid Column', 'Invalid Value', 'Reason'],
+    ...this.invalidRows.map((row: any) => [
+      row.RowNumber || '-',
+      row.SKU || '-',
+      row.Column || '-',
+      row.Value || '-',
+      row.Reason || '-'
+    ])
+  ];
+
+  const ws = XLSX.utils.aoa_to_sheet(wsData);
+
+  // Apply Bold Style to Header Row
+  const range = XLSX.utils.decode_range(ws['!ref']!);
+  for (let col = range.s.c; col <= range.e.c; col++) {
+    const cell = ws[XLSX.utils.encode_cell({ r: 0, c: col })];
+    if (cell) {
+      cell.s = { font: { bold: true } };
     }
-
-    const wsData = [
-      ['Row Number', 'SKU', 'Invalid Column', 'Invalid Value', 'Reason'],
-      ...this.invalidRows.map((row:any) => [
-        row.RowNumber || '-',
-        row.SKU || '-',
-        row.Column || '-',
-        row.Value || '-',
-        row.Reason || '-'
-      ])
-    ];
-
-    const ws = XLSX.utils.aoa_to_sheet(wsData);
-    ws['!cols'] = [{ wch: 12 }, { wch: 20 }, { wch: 20 }, { wch: 20 }, { wch: 50 }];
-
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Invalid Records');
-    const filename = `Invalid_Records_${new Date().toISOString().split('T')[0]}.xlsx`;
-    const buffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-    saveAs(new Blob([buffer]), filename);
-    Swal.fire({ icon: 'success', title: 'Exported', timer: 2000, showConfirmButton: false });
   }
+
+  ws['!cols'] = [{ wch: 12 }, { wch: 20 }, { wch: 20 }, { wch: 20 }, { wch: 50 }];
+
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Invalid Records');
+  
+  const filename = `Invalid_Records_${new Date().toISOString().split('T')[0]}.xlsx`;
+  const buffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+  saveAs(new Blob([buffer]), filename);
+  Swal.fire({ icon: 'success', title: 'Exported', timer: 2000, showConfirmButton: false });
+}
 }

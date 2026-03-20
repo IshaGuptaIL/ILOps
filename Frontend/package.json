@@ -37,14 +37,18 @@
     "express": "^5.1.0",
     "file-saver": "^2.0.5",
     "jquery": "^4.0.0",
+    "jspdf": "^4.2.1",
+    "jspdf-autotable": "^5.0.7",
     "ngx-cookie-service": "^21.1.0",
     "ngx-toastr": "^20.0.4",
     "rxjs": "~7.8.0",
     "sweetalert2": "^11.26.18",
     "tslib": "^2.3.0",
-    "xlsx": "^0.18.5"
+    "xlsx": "^0.18.5",
+    "xlsx-js-style": "^1.2.0"
   },
   "devDependencies": {
+    "@angular-devkit/build-angular": "^21.2.3",
     "@angular/build": "^21.1.2",
     "@angular/cli": "^21.1.2",
     "@angular/compiler-cli": "^21.1.0",

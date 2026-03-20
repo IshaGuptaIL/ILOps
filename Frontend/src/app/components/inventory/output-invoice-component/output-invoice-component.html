@@ -1,89 +1,5 @@
-<!-- <div class="container mt-4 position-relative">
-
-
-  <h2>Invoice Export Manager</h2>
-
-  <div class="row bg-light p-3 border rounded mb-3">
-    <div class="col-md-6">
-      <label class="fw-bold">Output Folder:</label>
-      <input type="text" [(ngModel)]="outputFolder" class="form-control" placeholder="C:\PDFInvoices">
-    </div>
-    <div class="col-md-6">
-      <label class="fw-bold">File Prefix:</label>
-      <input type="text" [(ngModel)]="filePrefix" class="form-control" placeholder="INV">
-    </div>
-  </div>
-
-  <div class="mb-3 d-flex justify-content-between">
-    <div>
-      <button class="btn btn-danger me-2" (click)="onClearData()">
-        <i class="fa fa-trash"></i> Clear Data
-      </button>
-      <button class="btn btn-info me-2 text-white" (click)="loadInvoices(1)">
-        <i class="fa fa-paste"></i> View / Paste Invoices
-      </button>
-      <button class="btn btn-success"  (click)="onOutputInvoices()">
-        <i class="fa fa-file-pdf" ></i> Output Invoices
-      </button>
-    </div>
-
- 
-
-  <div class="alert alert-secondary py-2" *ngIf="statusMessage">
-    <strong>Status:</strong> {{ statusMessage }}
-  </div>
-
-  <div class="table-responsive">
-    <table class="table table-hover table-bordered shadow-sm">
-      <thead class="table-dark">
-        <tr>
-          <th style="width: 70%;">Invoice No</th>
-          <th style="width: 30%;">Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let inv of invoices">
-          <td>{{ inv.invoiceNo }}</td>
-          <td>
-            <span class="badge" [ngClass]="inv.status === 'Complete' ? 'bg-success' : 'bg-warning text-dark'">
-              {{ inv.status || 'Pending' }}
-            </span>
-          </td>
-        </tr>
-        <tr *ngIf="invoices.length === 0 ">
-          <td colspan="2" class="text-center text-muted">No invoices found in the list.</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="d-flex justify-content-between align-items-center mt-2 border-top pt-3">
-    <div class="text-muted small">
-      Showing <b>{{ (currentPage - 1) * pageSize + 1 }}</b> to 
-      <b>{{ (currentPage * pageSize) > totalInvoices ? totalInvoices : (currentPage * pageSize) }}</b> 
-      of <b>{{ totalInvoices }}</b> entries
-    </div>
-
-    <nav aria-label="Page navigation">
-      <ul class="pagination pagination-sm mb-0">
-        <li class="page-item" [class.disabled]="currentPage === 1">
-          <button class="page-link" (click)="onPageChange(currentPage - 1)">Previous</button>
-        </li>
-
-        <li class="page-item active">
-          <span class="page-link">{{ currentPage }}</span>
-        </li>
-
-        <li class="page-item" [class.disabled]="(currentPage * pageSize) >= totalInvoices">
-          <button class="page-link" (click)="onPageChange(currentPage + 1)">Next</button>
-        </li>
-      </ul>
-    </nav>
-  </div>
-</div>
- -->
-<div class="container mt-5">
-  <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+<div class="container mt-0">
+  <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 border-bottom pb-3 gap-2">
     <h2 class="fw-bold text-primary m-0"><i class="fa fa-file-export me-2"></i>Invoice Export Manager</h2>
     <div class="alert alert-info py-1 px-3 m-0 shadow-sm" *ngIf="statusMessage" style="font-size: 0.9rem;">
       <i class="fa fa-info-circle me-1"></i> {{ statusMessage }}
@@ -91,89 +7,92 @@
   </div>
 
   <div class="card border-0 shadow-sm mb-4">
-    <div class="card-body bg-light rounded shadow-sm">
-      <div class="row g-3">
-        <div class="col-md-6">
-          <label class="form-label fw-semibold small text-muted text-uppercase">Output Folder</label>
-          <div class="input-group">
-            <span class="input-group-text bg-white border-end-0"><i class="fa fa-folder text-warning"></i></span>
-            <input type="text" [(ngModel)]="outputFolder" class="form-control border-start-0 ps-0" placeholder="C:\PDFInvoices">
-          </div>
+    <div class="card-header bg-white py-3 border-bottom">
+      <h5 class="m-0 fw-bold text-secondary"><i class="fas fa-tasks me-2"></i>Step 1: Get Data</h5>
+    </div>
+    <div class="card-body bg-light-subtle">
+      <div class="row align-items-end g-3">
+        <div class="col-md-4">
+          <label class="form-label fw-semibold small text-muted text-uppercase d-block text-center mb-2">1. Download</label>
+          <button class="btn btn-outline-primary w-100 py-2 shadow-sm" (click)="downloadTemplate()">
+            <i class="fa fa-download me-2"></i>Download Excel Template
+          </button>
         </div>
-        <div class="col-md-6">
-          <label class="form-label fw-semibold small text-muted text-uppercase">File Prefix</label>
-          <div class="input-group">
-            <span class="input-group-text bg-white border-end-0"><i class="fa fa-tag text-secondary"></i></span>
-            <input type="text" [(ngModel)]="filePrefix" class="form-control border-start-0 ps-0" placeholder="INV">
+
+        <div class="col-md-1 d-none d-md-flex justify-content-center align-items-center">
+           <div class="vr h-100"></div>
+        </div>
+
+        <div class="col-md-7">
+          <label class="form-label fw-semibold small text-muted text-uppercase mb-2">2. Upload Filled Template</label>
+          <div class="input-group shadow-sm">
+           <input 
+  id="fileInput" 
+  type="file" 
+  #fileInput
+  (change)="onFileUpload($event)" 
+  accept=".xlsx,.xls" 
+  class="form-control" 
+/>
+            <button 
+              type="button" 
+              class="btn btn-primary px-4" 
+              (click)="uploadfile()" 
+              [disabled]="!selectedFile">
+              <i class="fas fa-upload me-2"></i>Upload & Sync
+            </button>
           </div>
+          <small class="text-muted mt-1 d-block" *ngIf="selectedFile">Selected: {{ selectedFile.name }}</small>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="d-flex flex-wrap gap-2 mb-4 justify-content-between align-items-center">
-    <div class="btn-group shadow-sm">
-      <button class="btn btn-outline-danger px-4" (click)="onClearData()">
-        <i class="fa fa-trash-alt me-2"></i>Clear
-      </button>
-      <button class="btn btn-info text-white px-4" (click)="loadInvoices(1)">
-        <i class="fa fa-paste me-2"></i>View / Paste
-      </button>
-    </div>
-    <button class="btn btn-success btn-lg shadow px-5 fw-bold" (click)="onOutputInvoices()">
-      <i class="fa fa-file-pdf me-2"></i>Generate Invoices
-    </button>
+  <div class="card border-0 shadow-sm mb-4 overflow-hidden">
+  <div class="card-header bg-white py-3 border-bottom">
+    <h5 class="m-0 fw-bold text-secondary"><i class="fas fa-file-export me-2"></i>Step 2: Process & Download</h5>
   </div>
-
-  <div class="card border-0 shadow-sm overflow-hidden">
-    <div class="table-responsive">
-      <table class="table table-hover align-middle mb-0">
-        <thead class="bg-dark text-white">
-          <tr>
-            <th class="ps-4 py-3 border-0" style="width: 70%;">Invoice Number</th>
-            <th class="py-3 border-0 text-center" style="width: 30%;">Processing Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let inv of invoices" class="border-bottom">
-            <td class="ps-4 fw-medium text-dark">{{ inv.invoiceNo }}</td>
-            <td class="text-center">
-              <span class="badge rounded-pill px-3 py-2" 
-                    [ngClass]="inv.status === 'Complete' ? 'bg-success-subtle text-success border border-success' : 'bg-warning-subtle text-dark border border-warning'">
-                <i class="fa" [ngClass]="inv.status === 'Complete' ? 'fa-check-circle' : 'fa-clock'"></i>
-                {{ inv.status || 'Pending' }}
-              </span>
-            </td>
-          </tr>
-          <tr *ngIf="invoices.length === 0">
-            <td colspan="2" class="text-center py-5 text-muted">
-              <i class="fa fa-inbox fa-3x mb-3 d-block opacity-25"></i>
-              No invoices found in the list.
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="card-footer bg-white border-0 py-3 d-flex justify-content-between align-items-center">
-      <div class="text-muted small">
-        Showing <span class="fw-bold text-dark">{{ (currentPage - 1) * pageSize + 1 }}</span> to 
-        <span class="fw-bold text-dark">{{ (currentPage * pageSize) > totalInvoices ? totalInvoices : (currentPage * pageSize) }}</span> 
-        of <span class="fw-bold text-dark">{{ totalInvoices }}</span> entries
+  <div class="card-body bg-light-subtle">
+    <div class="row align-items-center g-3">
+      
+      <div class="col-md-7">
+        <label class="form-label fw-semibold small text-muted text-uppercase d-block mb-2">Bulk Actions</label>
+        <div class="d-flex flex-wrap gap-2">
+          <button class="btn btn-success px-4 py-2 shadow-sm d-flex align-items-center" (click)="onOutputInvoices()">
+            <i class="fas fa-file-archive me-2"></i> Generate & Download ZIP
+          </button>
+          
+          <button class="btn btn-outline-danger px-4 py-2 shadow-sm d-flex align-items-center" (click)="onClearData()">
+            <i class="fas fa-trash-alt me-2"></i> Clear List
+          </button>
+        </div>
       </div>
-      <nav>
-        <ul class="pagination pagination-sm m-0">
-          <li class="page-item" [class.disabled]="currentPage === 1">
-            <button class="page-link shadow-none border-0 px-3" (click)="onPageChange(currentPage - 1)">‹ Previous</button>
-          </li>
-          <li class="page-item active">
-            <span class="page-link shadow-sm">{{ currentPage }}</span>
-          </li>
-          <li class="page-item" [class.disabled]="(currentPage * pageSize) >= totalInvoices">
-            <button class="page-link shadow-none border-0 px-3" (click)="onPageChange(currentPage + 1)">Next ›</button>
-          </li>
-        </ul>
-      </nav>
+
+      <div class="col-md-5">
+        <label class="form-label fw-semibold small text-muted text-uppercase mb-2">File Naming Prefix</label>
+        <div class="input-group shadow-sm">
+          <span class="input-group-text bg-white text-primary border-end-0">
+            <i class="fa-solid fa-file"></i>
+          </span>
+          <input 
+            type="text"  
+              [disabled]="true"
+            class="form-control border-start-0 ps-1" 
+            placeholder="INV ">
+        </div>
+        <small class="text-muted mt-1 d-block">This will be added to the PDF filename.</small>
+      </div>
+
     </div>
   </div>
+</div>
+
+  </div>
+  <div *ngIf="invalidRows.length > 0" class="alert alert-danger mt-3">
+  <h6>The following records were not found:</h6>
+  <ul>
+    <li *ngFor="let item of invalidRows">
+      Line {{item.RowNumber}}: {{item.Value}} ({{item.Reason}})
+    </li>
+  </ul>
 </div>

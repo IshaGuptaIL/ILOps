@@ -1,4 +1,4 @@
-<div class="access-wrapper">
+<!-- <div class="access-wrapper">
 
   <div class="access-title">
     Inventory Counts - Spire
@@ -123,4 +123,218 @@
 
   </div>
 
+  </div> -->
+
+
+
+  <div class="container-fluid inventory-wrapper">
+
+  <div class="row g-4">
+
+    <!-- LEFT PANEL -->
+    <div class="col-lg-8">
+
+      <div class="card custom-card">
+        <div class="card-header">
+          <h5>Inventory Count Files</h5>
+        </div>
+
+        <div class="card-body">
+
+          <div class="row g-3">
+
+            <!-- HDW FILE -->
+            <div class="col-md-6">
+              <label>CountFile (HDW)</label>
+              <select class="form-control" [(ngModel)]="selectedHdwFile">
+                <option value="">--Select File--</option>
+                <option *ngFor="let file of hdwFilesList" [value]="file">
+                  {{file}}
+                </option>
+              </select>
+            </div>
+
+            <!-- ACC FILE -->
+            <div class="col-md-6">
+              <label>ACC Count File</label>
+              <select class="form-control" [(ngModel)]="selectedAccFile">
+                <option value="">--Select File--</option>
+                <option *ngFor="let file of accFilesList" [value]="file">
+                  {{file}}
+                </option>
+              </select>
+            </div>
+
+            <!-- STATUS -->
+            <div class="col-md-12">
+              <label>System Status</label>
+              <input type="text"
+                     class="form-control status-input"
+                     [value]="processStatus"
+                     readonly>
+            </div>
+
+          </div>
+
+          <!-- BUTTONS -->
+          <div class="action-buttons mt-4">
+
+            <button class="btn btn-primary"
+                    (click)="onExportHardwareSheets()">
+              Create Hardware Count Sheet
+            </button>
+
+            <button class="btn btn-success"
+                    (click)="onExportAccessorySheets()">
+              Create Accessory Count Sheets
+            </button>
+
+          </div>
+
+        </div>
+      </div>
+
+
+      <!-- FILE STATUS -->
+
+      <div class="card custom-card mt-4">
+
+        <div class="card-header">
+          <h5>Inventory Files Status</h5>
+        </div>
+
+        <div class="card-body">
+
+          <div class="row g-3">
+
+            <div class="col-md-6">
+              <label>Serial.btr</label>
+              <input type="text"
+                     class="form-control"
+                     [value]="currentSerialDate"
+                     [disabled]="true">
+            </div>
+
+            <div class="col-md-6">
+              <label>Invent.btr</label>
+              <input type="text"
+                     class="form-control"
+                     [value]="currentInventDate"
+                      [disabled]="true">
+            </div>
+
+          </div>
+
+          <hr>
+
+          <h6>Files prepared by LastNightInvIMEI</h6>
+
+          <div class="row g-3 mt-2">
+
+            <div class="col-md-6">
+              <label>Serial.btr</label>
+              <input type="text"
+                     class="form-control"
+                     [value]="lastNightSerialDate"
+                      [disabled]="true">
+            </div>
+
+            <div class="col-md-6">
+              <label>Invent.btr</label>
+              <input type="text"
+                     class="form-control"
+                     [value]="lastNightInventDate"
+                      [disabled]="true">
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- RIGHT PANEL -->
+
+    <div class="col-lg-4">
+
+      <div class="card custom-card">
+
+        <div class="card-header">
+          <h5>Actions</h5>
+        </div>
+
+        <div class="card-body d-grid gap-3">
+
+          <button class="btn btn-danger"
+                  (click)="onLoadLiveSnapshot()">
+            Load Snapshot of Live Spire
+          </button>
+
+          <div class="form-check">
+            <input class="form-check-input"
+                   type="checkbox"
+                   [(ngModel)]="isImeiLoadEnabled">
+
+            <label class="form-check-label">
+              Load Hardware (IMEI)
+            </label>
+          </div>
+
+          <div class="form-check">
+            <input class="form-check-input"
+                   type="checkbox"
+                   [(ngModel)]="isAccLoadEnabled">
+
+            <label class="form-check-label">
+              Load Accessories
+            </label>
+          </div>
+
+          <hr>
+
+          <button class="btn btn-outline-danger"
+                  (click)="onDeleteAllCounts(false)">
+            Remove ALL Counts
+          </button>
+
+          <button class="btn btn-outline-danger"
+                  (click)="onDeleteAllCounts(true)">
+            Remove ACC Counts
+          </button>
+
+          <button class="btn btn-outline-warning"
+                  (click)="onDeleteByFile(false)">
+            Delete Counts From Single File
+          </button>
+
+          <button class="btn btn-outline-warning"
+                  (click)="onDeleteByFile(true)">
+            Delete ACC Counts From Single File
+          </button>
+
+          <hr>
+
+          <button class="btn btn-secondary"
+                  (click)="refreshFileDates()"
+                  [disabled]="true">
+            Get Dates
+          </button>
+
+          <button class="btn btn-dark"
+                  (click)="onSyncLastNightFiles()"
+                  [disabled]="true">
+            Copy LastNightInvIMEI
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
   </div>
+
+</div>

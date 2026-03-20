@@ -10,7 +10,7 @@
           <input class="form-control form-control-sm" [(ngModel)]="imei" placeholder="Enter IMEI" (keyup.enter)="searchIMEI()" />
         </div>
         <div class="col-md-2">
-          <button class="btn btn-primary btn-sm w-100" [disabled]="isLoading" (keyup)="searchIMEI()">
+          <button class="btn btn-primary btn-sm w-100" [disabled]="isLoading" (click)="searchIMEI()">
             Search
           </button>
         </div>
@@ -21,8 +21,8 @@
         <table class="table table-bordered table-sm">
           <thead class="table-light">
             <tr>
-              <th>Vendor</th><th>BVReceiptNo</th><th>Date</th><th>CMO</th><th>PO</th>
-              <th>Part</th><th>Qty</th><th>Unit Cost</th><th>Rogers Total</th><th>Variance</th><th>Count</th>
+              <th>Vendor</th><th>BVReceiptNo</th><th>BVReceiptDate</th><th>CMO</th><th>PO</th>
+              <th>Part</th><th>Qty</th><th>Receipt Unit Cost</th><th>Rogers Total</th><th>Variance</th><th>Rogers Count</th>
             </tr>
           </thead>
           <tbody>
@@ -56,7 +56,7 @@
         <table class="table table-bordered table-sm">
           <thead class="table-light">
             <tr>
-              <th>Type</th><th>RefNo</th><th>Date</th><th>Amount</th><th>Qty</th><th>Remarks</th>
+              <th>Trans Type</th><th>RefNo</th><th>Trans Date</th><th>Per Unit Amount</th><th>Qty</th><th>Remarks</th>
             </tr>
           </thead>
           <tbody>

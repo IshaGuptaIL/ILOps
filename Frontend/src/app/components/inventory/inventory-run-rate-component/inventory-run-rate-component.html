@@ -1,0 +1,99 @@
+ <div class="container">
+    <!-- Header -->
+     <div class="row">
+
+         <div class="header">
+           <div class="title">Inventory Report</div>
+           <button class="close-btn">&times;</button>
+         </div>
+         <div class="input-group">
+             <label>Calendar Days to Consider:</label>
+             <input type="number" class="input-field" value="28">
+           </div>
+     </div>
+
+    <div>
+         <div class="input-group">
+        <label>Reprot Date:</label>
+        <input type="date" class="input-field" value="2026-03-20">
+      </div>
+    </div>
+    <!-- Top Row -->
+    <div class="top-row">
+      <div class="input-group">
+        <label>Start:</label>
+        <input type="date" class="input-field" value="2026-03-20">
+        <input type="text" class="input-field"  value="Friday" >
+
+      </div>
+      
+      <button class="btn btn-primary">Generate Data</button>
+      
+      <div class="input-group">
+        <label>End Date:</label>
+        <input type="date" class="input-field" value="2026-03-20">
+        <input type="text" class="input-field"  value="Friday" >
+
+      </div>
+      
+   
+    </div>
+    
+    <!-- Main Section -->
+    <div class="main-section">
+      <!-- Left Panel -->
+      <div class="left-panel">
+        <div class="date-section">
+          <div class="input-group">
+            <label>Working Days:</label>
+            <input type="number" class="input-field" value="0">
+          </div>
+          <div class="input-group">
+            <label>Min Days :</label>
+            <input type="number" class="input-field" value="0">
+          </div>
+          <div class="input-group">
+            <label>Max Days :</label>
+            <input type="number" class="input-field" value="0">
+          </div>
+        </div>
+        
+        <div class="working-days-section">
+          <div class="working-days-title">Working Days</div>
+          <div class="button-grid">
+            <button class="btn btn-secondary btn-small">View Accessories</button>
+            <button class="btn btn-secondary btn-small">View Hardware</button>
+          </div>
+          <div class="button-grid">
+            <button class="btn btn-secondary btn-small">Output Accessories</button>
+            <button class="btn btn-secondary btn-small">Output Hardware</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Right Panel -->
+      <div class="right-panel">
+        <div class="days-section">
+          <div class="section-title">Min Days PO:</div>
+          <div class="btn-grid">
+            <button class="btn btn-secondary btn-small">View Accessories with Last 2 PO info</button>
+          </div>
+        </div>
+        
+        <div class="days-section">
+          <div class="section-title">Max Days:</div>
+          <button class="btn btn-highlight btn-small">View Accessories with Last 2 PO info</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Bottom Section -->
+    <div class="bottom-section">
+      <div class="wf-section">
+       <button class="btn btn-highlight btn-small" (click)="fetchWFHInventory()">Output  WFH Onhand  </button>
+        <div class="wf-note">(does not use require criteria data generation above)</div>
+      </div>
+      
+     
+    </div>
+  </div>

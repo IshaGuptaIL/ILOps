@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RoleService } from '../../user-role-component/role-service';
 import { ToastrService } from 'ngx-toastr'; // ✅ Toastr Import
-import { finalize } from 'rxjs/operators';
+import { delay, finalize } from 'rxjs/operators';
 import { SpinnerService } from '../shared/spinner/spinner-service';
 
 @Component({
@@ -30,28 +30,30 @@ export class RolePermissionComponent implements OnInit {
     this.loadInitialData();
   }
 
-  loadInitialData() {
-    this.spinner.show(); // ✅ Show Spinner
-    
-    // Roles aur Menus dono ko load karein
-    this.roleService.getActiveRoles().subscribe({
-      next: (res) => {
-        if (res.success) this.roles = res.result;
-        this.cdr.detectChanges();
-      },
-      error: () => this.toastr.error("Failed to load roles")
-    });
+loadInitialData() {
+  this.spinner.show();
 
-    this.roleService.getMenus().pipe(
-      finalize(() => this.spinner.hide()) // ✅ Hide Spinner when done
-    ).subscribe({
-      next: (res) => {
-        if (res.success) this.menus = res.result;
-        this.cdr.detectChanges();
-      },
-      error: () => this.toastr.error("Failed to load menus")
-    });
-  }
+  this.roleService.getActiveRoles().pipe(
+    delay(0) 
+  ).subscribe({
+    next: (res) => {
+      if (res.success) this.roles = res.result;
+      this.cdr.detectChanges();
+    },
+    error: () => this.toastr.error("Failed to load roles")
+  });
+
+  this.roleService.getMenus().pipe(
+    delay(0),
+    finalize(() => this.spinner.hide()) 
+  ).subscribe({
+    next: (res) => {
+      if (res.success) this.menus = res.result;
+      this.cdr.detectChanges();
+    },
+    error: () => this.toastr.error("Failed to load menus")
+  });
+}
 
   onRoleChange() {
     if (this.selectedRoleId) {
