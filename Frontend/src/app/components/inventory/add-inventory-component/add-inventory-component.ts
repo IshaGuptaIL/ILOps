@@ -43,7 +43,7 @@ export class AddInventoryComponent implements OnInit {
       Type: ['', Validators.required],
     AccessoryGroup: ['', Validators.required],
       SalesDept: [''],
-   CostPrice: [0, [Validators.min(0)]], // Required hata diya, default 0 hai
+   CostPrice: [0, [Validators.min(0)]], 
   SellingPrice: [0, [Validators.min(0)]]
     });
   
@@ -52,14 +52,12 @@ export class AddInventoryComponent implements OnInit {
   ngOnInit(): void {
     this.UserRoleId = Number(this.cookies.get('UserRoleId')) || null;
 
-    // Part Number → always uppercase
     this.form.get('PartNo')?.valueChanges.subscribe((v: string) => {
       if (v && v !== v.toUpperCase()) {
         this.form.patchValue({ PartNo: v.toUpperCase() }, { emitEvent: false });
       }
     });
 
-    // Warehouses
     if (this.UserRoleId && this.UserRoleId > 0) {
     this.warehouses$ = this.inventoryService.getWarehouses(this.UserRoleId).pipe(
     tap((data: any[]) => {
@@ -110,12 +108,12 @@ onProductCode(): void {
 
   if (code === 'HCC') {
     this.form.patchValue({ Type: 'Hardware', SalesDept: '4' });
-    this.groupLabel = 'Manufacturer';   // 👈 Label change
+    this.groupLabel = 'Manufacturer';   
     this.filterManufacturers('HCC');
   } 
   else if (code === 'ACC') {
     this.form.patchValue({ Type: 'Accessory', SalesDept: '5' });
-    this.groupLabel = 'Accessory Group'; // 👈 Label change
+    this.groupLabel = 'Accessory Group'; 
     this.filterManufacturers('ACC');
   }
 }
@@ -126,13 +124,13 @@ onProductCode(): void {
 
   if (type === 'Hardware') {
     this.form.patchValue({ ProductCode: 'HCC', SalesDept: 4 });
-    this.groupLabel = 'Manufacturer';   // 👈 Label change
+    this.groupLabel = 'Manufacturer';   
     groupControl?.setValidators([Validators.required]);
     this.filterManufacturers('HCC');
   } 
   else if (type === 'Accessory') {
     this.form.patchValue({ ProductCode: 'ACC', SalesDept: 5 });
-    this.groupLabel = 'Accessory Group';  // 👈 Label change
+    this.groupLabel = 'Accessory Group';  
     groupControl?.clearValidators();
     this.filterManufacturers('ACC');
   }
@@ -149,19 +147,16 @@ onProductCode(): void {
 
   this.inventoryService.checkPartNo(partNo, whse).subscribe({
     next: (res: any) => {
-      // Backend fix ke baad ab res.result.exists (small e) kaam karega
       if (res?.success && res?.result?.exists === true) { 
         this.partNoError = `Already exists in ${whse}`;
         this.form.get('PartNo')?.setErrors({ duplicate: true });
       } else {
-        // FR check
         this.inventoryService.checkPartNo(partNo, 'FR').subscribe((frRes: any) => {
           if (frRes?.success && frRes?.result?.exists === true) {
             this.partNoError = 'Already exists in warehouse FR';
             this.form.get('PartNo')?.setErrors({ duplicate: true });
           } else {
             this.partNoError = '';
-            // Sirf duplicate error hataiye, baaki errors (required) rehne dijiye
             const currentErrors = this.form.get('PartNo')?.errors;
             if (currentErrors) {
               delete currentErrors['duplicate'];
@@ -234,7 +229,6 @@ submit(): void {
   const cost = this.form.get('CostPrice')?.value;
   const sell = this.form.get('SellingPrice')?.value;
 
-  // 2. Zero Price Check (Exact VBA logic: If Me.txtCostPrice = 0 Then...)
  if (cost === 0 || sell === 0 || cost === null || sell === null) {
   const zeroType = (cost === 0 || cost === null) ? 'Cost' : 'Selling';
     Swal.fire({
@@ -246,15 +240,14 @@ submit(): void {
       cancelButtonText: 'No'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.processFormSubmission(); // Proceed if user clicks Yes
+        this.processFormSubmission(); 
       }
     });
   } else {
-    this.processFormSubmission(); // Proceed directly if not zero
+    this.processFormSubmission(); 
   }
 }
 
-// Separate function for cleaner code
 private processFormSubmission(): void {
   debugger
   this.spinner.show();
@@ -275,7 +268,7 @@ private processFormSubmission(): void {
     Type: '', 
     CostPrice: 0, 
     SellingPrice: 0 
-  });// Reset dropdowns to default
+  });
       } else {
         Swal.fire('Error', res.message || 'Failed to add item', 'error');
       }
