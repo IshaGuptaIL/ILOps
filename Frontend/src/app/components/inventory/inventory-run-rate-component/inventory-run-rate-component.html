@@ -15,24 +15,24 @@
     <div>
          <div class="input-group">
         <label>Reprot Date:</label>
-        <input type="date" class="input-field" value="2026-03-20">
+       <input type="date" class="input-field" [(ngModel)]="reportDate" />
       </div>
     </div>
     <!-- Top Row -->
     <div class="top-row">
       <div class="input-group">
         <label>Start:</label>
-        <input type="date" class="input-field" value="2026-03-20">
-        <input type="text" class="input-field"  value="Friday" >
+        <input type="date" class="input-field" [(ngModel)]="startDate" />
+      <input type="text" class="input-field" [value]="startDay" disabled />
 
       </div>
       
-      <button class="btn btn-primary">Generate Data</button>
+  <button class="btn btn-primary" (click)="generateRunRateData()">Generate Data</button>
       
       <div class="input-group">
         <label>End Date:</label>
-        <input type="date" class="input-field" value="2026-03-20">
-        <input type="text" class="input-field"  value="Friday" >
+        <input type="date" class="input-field" [(ngModel)]="endDate" />
+      <input type="text" class="input-field" [value]="endDay" disabled />
 
       </div>
       
@@ -50,11 +50,11 @@
           </div>
           <div class="input-group">
             <label>Min Days :</label>
-            <input type="number" class="input-field" value="0">
+            <input type="number" [(ngModel)]="minDays" placeholder="Enter Min Days" class="input-small"/>
           </div>
           <div class="input-group">
             <label>Max Days :</label>
-            <input type="number" class="input-field" value="0">
+            <input type="number"[(ngModel)]="maxDays" placeholder="Enter Max Days" class="input-small"/>
           </div>
         </div>
         
@@ -62,11 +62,75 @@
           <div class="working-days-title">Working Days</div>
           <div class="button-grid">
             <button class="btn btn-secondary btn-small">View Accessories</button>
-            <button class="btn btn-secondary btn-small">View Hardware</button>
+            <button class="btn btn-secondary btn-small" (click)="loadHardwareView()">View Hardware</button>
           </div>
+<table class="table table-bordered" *ngIf="!loading && accessoriesList.length > 0">
+  <thead>
+    <tr>
+      <th>Group</th>
+      <th>PROD</th>
+      <th>CODE</th>
+      <th>Description</th>
+      <th>Cost</th>
+      <th>OnHand</th>
+      <th>TotalSales</th>
+      <th>AvgDailySales</th>
+      <th>WeeklyRunRate</th>
+      <th>WeeksAvailable</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of accessoriesList ">
+      <td>{{item.Group}}</td>
+      <td>{{item.PROD}}</td>
+      <td>{{item.CODE}}</td>
+      <td>{{item.Description}}</td>
+      <td>{{item.Cost}}</td>
+      <td>{{item.OnHand}}</td>
+      <td>{{item.TotalSales}}</td>
+      <td>{{item.AvgDailySales}}</td>
+      <td>{{item.WeeklyRunRate}}</td>
+      <td>{{item.WeeksAvailable}}</td>
+    </tr>
+  </tbody>
+</table>
+
+<div>
+  <table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Manufacturer</th>
+      <th>CODE</th>
+      <th>PROD</th>
+      <th>Description</th>
+      <th>Cost</th>
+      <th>OnHand</th>
+      <th>TotalSales</th>
+      <th>AvgDailySales</th>
+      <th>WeeklyRunRate</th>
+      <th>WeeksAvailable</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of hardwareList">
+      <td>{{item.manufacturer}}</td>
+      <td>{{item.code}}</td>
+      <td>{{item.prod}}</td>
+      <td>{{item.description}}</td>
+      <td>{{item.cost}}</td>
+      <td>{{item.onHand}}</td>
+      <td>{{item.totalSales}}</td>
+      <td>{{item.avgDailySales}}</td>
+      <td>{{item.weeklyRunRate}}</td>
+      <td>{{item.weeksAvailable}}</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
           <div class="button-grid">
-            <button class="btn btn-secondary btn-small">Output Accessories</button>
-            <button class="btn btn-secondary btn-small">Output Hardware</button>
+            <button class="btn btn-secondary btn-small" (click)="downloadAccessoriesExcel()">Output Accessories</button>
+            <button class="btn btn-secondary btn-small" (click)="downloadHardwareExcel()">Output Hardware</button>
           </div>
         </div>
       </div>
@@ -74,16 +138,13 @@
       <!-- Right Panel -->
       <div class="right-panel">
         <div class="days-section">
-          <div class="section-title">Min Days PO:</div>
+       
           <div class="btn-grid">
-            <button class="btn btn-secondary btn-small">View Accessories with Last 2 PO info</button>
+            <button class="btn btn-secondary btn-small"  (click)="fetchRunRate(minDays, maxDays)">View Accessories with Last 2 PO info</button>
           </div>
         </div>
         
-        <div class="days-section">
-          <div class="section-title">Max Days:</div>
-          <button class="btn btn-highlight btn-small">View Accessories with Last 2 PO info</button>
-        </div>
+   
       </div>
     </div>
     

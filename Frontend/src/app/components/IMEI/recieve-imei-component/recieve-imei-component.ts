@@ -4,12 +4,12 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ImeiService, RecieveIMEIBO } from '../imei-service';
 import { ApiResponse } from '../../inventory/add-inventory-component/inventory-service';
-
 import { Observable, of } from 'rxjs';
 import { delay, tap } from 'rxjs/operators';
 
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+import { ToastrService } from 'ngx-toastr';
 
 
 interface PO {
@@ -64,7 +64,8 @@ selectedPONumber: string = '';
 canPost = false;          // ✅ NEW
 isCheckingErrors = false; 
 
-  constructor(private http: HttpClient,private receiveService:ImeiService,private cdr:ChangeDetectorRef) {}
+  constructor(private http: HttpClient,  private toastr: ToastrService,
+    private receiveService:ImeiService,private cdr:ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.loadPOs();
@@ -73,14 +74,23 @@ isCheckingErrors = false;
 
   // Load Purchase Orders
  loadPOs() {
-  debugger
-  this.receiveService.getPurchaseOrders().subscribe(resp => {
-    if (resp.success && resp.result) {
-      this.poList = resp.result as PO[];
-    } else {
-      alert(resp.message || 'Failed to load POs');
+  debugger;
+  this.receiveService.getPurchaseOrders().subscribe(
+    resp => {
+      if (resp.success && resp.result) {
+        this.poList = resp.result as PO[];
+
+        this.cdr.markForCheck(); 
+      } else {
+        this.toastr.error(resp.message || 'Failed to load POs');
+      }
+    },
+    err => {
+      console.error(err);
+      this.toastr.error('Something went wrong while loading POs');
+      this.cdr.markForCheck();
     }
-  }, err => console.error(err));
+  );
 }
 
   // When PO selected
@@ -94,13 +104,11 @@ onPOChange(poNumber: string) {
     this.cmoNumber = '';
     this.resetErrorState();
     
-    // 🔥 NEW - Loading indicator
-    this.loadGrids();  // parameter remove kiya
+    this.loadGrids();  
   } else {
   }
 }
 
-  // Update HPC cost when Unit cost changes
   onUnitCostChange() {
     this.hpcCost = this.unitCost * 0.1;
   }
@@ -134,7 +142,7 @@ importScanList() {
       const items: RecieveIMEIBO[] = [];
 
       json.forEach((row, index) => {
-        if (row[0]) { // assuming IMEI is in first column
+        if (row[0]) {
           const imei = row[0].toString().trim().toUpperCase();
           items.push({
             PONumber: this.selectedPO.poNumber,
@@ -185,11 +193,11 @@ importScanList() {
     const items: RecieveIMEIBO[] = [];
 
     json.forEach((row, index) => {
-      if (row[0]) { // assuming IMEI is in first column
+      if (row[0]) { 
         const imei = row[0].toString().trim().toUpperCase();
         items.push({
           PONumber: this.selectedPO.poNumber,
-          RecNo: 0, // or this.selectedPO.poItemId if needed
+          RecNo: 0, 
           Whse: this.selectedPO.whse,
           PartNo: this.selectedPO.part,
           GUID: this.selectedPO.guid,
@@ -201,15 +209,14 @@ importScanList() {
       }
     });
 
-    // Send JSON to backend
     this.receiveService.importPackingSlip(items).subscribe({
       next: (resp: ApiResponse) => {
-        alert(resp.message);
+       this.toastr.success(resp.message);
         this.loadGrids();
       },
       error: (err) => {
         console.error(err);
-        alert('Failed to upload packing slip');
+        this.toastr.error('Failed to upload packing slip');
       }
     });
   };
@@ -262,19 +269,15 @@ checkErrors() {
     this.modeReversal
   ).subscribe({
     next: (resp: any) => {
-      // ✅ Update error info
       const result = resp?.result || {};
       this.errorCount = result.errorCount || 0;
       this.errors = result.errors || [];
 
-      // ✅ Determine if posting is allowed
       this.canPost = this.errorCount === 0;
 
-      // ✅ Update flags
       this.checkedOnce = true;
       this.isCheckingErrors = false;
 
-      // ✅ Force UI update once (extra detectChanges optional)
       this.cdr.detectChanges();
 
       console.log('Check Errors Response:', resp);
