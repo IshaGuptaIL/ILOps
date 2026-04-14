@@ -35,7 +35,12 @@ namespace DAL.Inventory.OutputInvoice
         public string ShipToCity { get; set; }
         public string CustNo { get; set; }
         public string InvoiceDate { get; set; }
+        public string ShipToAddress2 { get; set; }
         public string OrderNo { get; set; }
+        public decimal Shipping { get; set; }
+        public decimal GST_HST { get; set; }
+        public decimal PST_QST { get; set; }
+        public decimal RV_Value { get; set; }
         public List<InvoiceItemLine> Lines { get; set; } = new List<InvoiceItemLine>();
     }
 

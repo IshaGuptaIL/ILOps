@@ -1,0 +1,234 @@
+<div class="receive-container">
+
+  <!-- PO Selection & Details Header (maps to Combo3 + all bound text fields) -->
+  <div class="header-section card">
+    <div class="header-row">
+
+      <div class="field-group wide">
+        <label>Select PO:</label>
+        <select [(ngModel)]="selectedPoId" (change)="onPoChange()" class="po-select" [disabled]="isLoadingPos">
+          <option [ngValue]="null">{{ isLoadingPos ? 'Loading...' : '-- Select PO --' }}</option>
+          <option *ngFor="let po of purchaseOrders" [ngValue]="po.id">
+            {{ po.poNumber }} |{{ po.vendor }}|{{po.sequence}}|{{ po.whse }} | {{ po.partNo }}  | {{po.description}}| {{ po.guid }} |{{po.orderQty}} |{{po.receivedQty}} |{{po.unitCost}} | {{po.status}}
+          </option>
+        </select>
+      </div>
+
+      <!-- <div class="field-group">
+        <label>Vendor:</label>
+        <input [value]="selectedPo?.vendor || ''" readonly class="medium-input">
+      </div> -->
+
+      <div class="field-group">
+        <label>WH:</label>
+        <input [value]="selectedPo?.whse || ''" readonly class="small-input">
+      </div>
+
+      <div class="field-group">
+        <label>Part:</label>
+        <input [value]="selectedPo?.partNo || ''" readonly class="medium-input" [title]="selectedPo?.description || ''">
+      </div>
+
+      <!-- <div class="field-group">
+        <label>Location:</label>
+        <input [value]="selectedPo?.location || ''" readonly class="small-input">
+      </div> -->
+
+    </div>
+
+    <div class="header-row qty-row" *ngIf="selectedPo">
+      <div class="field-group">
+        <label>Ord Qty:</label>
+        <input [value]="selectedPo.orderQty" readonly class="tiny-input">
+      </div>
+      <div class="field-group">
+        <label>Rcvd Qty:</label>
+        <input [value]="selectedPo.receivedQty" readonly class="tiny-input">
+      </div>
+      <!-- <div class="field-group">
+        <label>Remaining:</label>
+        <input [value]="remainingQty" readonly class="tiny-input"
+               [class.warn-qty]="remainingQty <= 0">
+      </div> -->
+      <!-- <div class="field-group">
+        <label>Unit Cost:</label>
+        <input [value]="selectedPo.unitCost | number:'1.2-2'" readonly class="small-input">
+      </div> -->
+      <!-- <div class="field-group">
+        <label>GUID:</label>
+        <input [value]="selectedPo.guid || ''" readonly class="medium-input">
+      </div> -->
+    </div>
+  </div>
+
+  <!-- File Upload & Mode Section -->
+  <div class="upload-section card">
+    <div class="upload-row">
+
+      <div class="upload-box">
+        <label>Scan File (XLSX):</label>
+        <div class="file-input-wrapper">
+          <input type="file" (change)="onFileSelected($event, 'scan')"
+                 accept=".xlsx,.xls" id="scanFile">
+        </div>
+        <div class="file-badge" *ngIf="slCount > 0">{{ slCount }} IMEIs loaded</div>
+      </div>
+
+      <div class="upload-box">
+        <label>Packing Slip (XLSX):</label>
+        <div class="file-input-wrapper">
+          <input type="file" (change)="onFileSelected($event, 'packing')"
+                 accept=".xlsx,.xls" id="packFile">
+        </div>
+        <div class="file-badge" *ngIf="psCount > 0">{{ psCount }} IMEIs loaded</div>
+      </div>
+
+      <div class="mode-box">
+        <label>Mode:</label>
+        <div class="radio-group">
+          <label><input type="radio" [value]="false" [(ngModel)]="isReversal" (change)="resetVerification()"> Receipt</label>
+          <label><input type="radio" [value]="true"  [(ngModel)]="isReversal" (change)="resetVerification()"> Reversal</label>
+        </div>
+      </div>
+
+      <div class="action-box">
+        <button (click)="checkErrors()" class="btn btn-secondary"
+                [disabled]="!selectedPo || slCount === 0 || psCount === 0">
+          Check for Errors
+        </button>
+        <div class="status-panel"
+             [class.success]="isVerified"
+             [class.error]="!isVerified && verificationErrors.length > 0">
+          <span>{{ verificationStatus }}</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Multi-Grid Area (6 grids matching frmReceive sub-forms) -->
+  <div class="grids-container card">
+
+    <div class="grid-column">
+      <h3>Scan List</h3>
+      <div class="grid-table">
+        <div *ngFor="let imei of scanListImeis"
+             class="grid-row"
+             [class.invalid-row]="invalidScanImeis.includes(imei)">
+          {{ imei }}
+        </div>
+      </div>
+      <div class="grid-stats">
+        <span>Count: {{ slCount }}</span>
+        <span [class.has-issue]="slInvalid > 0">Invalid: {{ slInvalid }}</span>
+        <span [class.has-issue]="slDupes > 0">Dupes: {{ slDupes }}</span>
+      </div>
+    </div>
+
+    <div class="grid-column">
+      <h3>Packing Slip</h3>
+      <div class="grid-table">
+        <div *ngFor="let imei of packingSlipImeis"
+             class="grid-row"
+             [class.invalid-row]="invalidPackImeis.includes(imei)">
+          {{ imei }}
+        </div>
+      </div>
+      <div class="grid-stats">
+        <span>Count: {{ psCount }}</span>
+        <span [class.has-issue]="psInvalid > 0">Invalid: {{ psInvalid }}</span>
+        <span [class.has-issue]="psDupes > 0">Dupes: {{ psDupes }}</span>
+      </div>
+    </div>
+
+    <div class="grid-column">
+      <h3>Matches ✓</h3>
+      <div class="grid-table success-list">
+        <div *ngFor="let imei of matches" class="grid-row">{{ imei }}</div>
+      </div>
+      <div class="grid-stats">
+        <span>Count: {{ matches.length }}</span>
+      </div>
+    </div>
+
+    <div class="grid-column">
+      <h3>Scan — No Pack</h3>
+      <div class="grid-table error-list">
+        <div *ngFor="let imei of scanNoPack" class="grid-row">{{ imei }}</div>
+      </div>
+      <div class="grid-stats">
+        <span [class.has-issue]="scanNoPack.length > 0">Count: {{ scanNoPack.length }}</span>
+      </div>
+    </div>
+
+    <div class="grid-column">
+      <h3>Pack — No Scan</h3>
+      <div class="grid-table error-list">
+        <div *ngFor="let imei of packNoScan" class="grid-row">{{ imei }}</div>
+      </div>
+      <div class="grid-stats">
+        <span [class.has-issue]="packNoScan.length > 0">Count: {{ packNoScan.length }}</span>
+      </div>
+    </div>
+
+    <div class="grid-column">
+      <h3>{{ isReversal ? 'Not in Spire' : 'Already in Spire' }}</h3>
+      <div class="grid-table warning-list">
+        <div *ngFor="let imei of alreadyInInventory" class="grid-row">{{ imei }}</div>
+      </div>
+      <div class="grid-stats">
+        <span [class.has-issue]="alreadyInInventory.length > 0">Count: {{ alreadyInInventory.length }}</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer: CMO + Post -->
+  <div class="footer-section card">
+    <div class="footer-row">
+         <div class="col-3">
+      <label>Unit Cost</label>
+      <input class="form-control form-control-sm" type="number" [(ngModel)]="unitCost" (input)="onUnitCostChange()" />
+    </div>
+    <div class="col-3">
+      <label>HPC Cost</label>
+      <input class="form-control form-control-sm" [value]="hpcCost" readonly />
+    </div>
+
+      <div class="cmo-group">
+        <label>CMO Number: <span class="required">*</span></label>
+        <input [(ngModel)]="cmoNumber"
+               placeholder="Enter CMO number..."
+               [class.input-error]="isVerified && !cmoNumber.trim()">
+      </div>
+
+      <div class="post-group">
+        <div class="option-check">
+          <input type="checkbox" [(ngModel)]="postReceipt" id="postCheck">
+          <label for="postCheck">Post Receipt to Spire</label>
+        </div>
+        <button (click)="postReceipts()"
+                [disabled]="!isVerified  || !cmoNumber.trim()"
+                class="btn btn-primary">
+          {{ isProcessing ? 'Processing...' : (isReversal ? 'Post Reversal' : 'Post Receipts') }}
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Error Summary Panel (maps to lstErrors listbox) -->
+  <div *ngIf="verificationErrors.length > 0" class="error-summary card">
+    <h4>⚠ Verification Issues:</h4>
+    <ul>
+      <li *ngFor="let err of verificationErrors">{{ err }}</li>
+    </ul>
+  </div>
+
+  <!-- Success Panel -->
+  <div *ngIf="isVerified && verificationErrors.length === 0" class="success-summary card">
+    <h4>✓ No errors found — Ready to post</h4>
+  </div>
+
+</div>
+

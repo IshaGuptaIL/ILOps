@@ -8,12 +8,16 @@ using DAL.Inventory.CountAnalysis;
 using DAL.Inventory.CustomSearch;
 using DAL.Inventory.IMEI;
 using DAL.Inventory.IMEI.Credit;
+using DAL.Inventory.IMEI.HardwareIMEI;
 using DAL.Inventory.IMEI.RecieveIMEI;
 using DAL.Inventory.IMEI.Report;
 using DAL.Inventory.InventoryType;
 using DAL.Inventory.ModifyInventory;
 using DAL.Inventory.OutputInvoice;
+using DAL.Inventory.RogerAR;
 using DAL.Inventory.RunRate;
+using DAL.Inventory.SpareLight;
+using DAL.Inventory.SpareLight.DA;
 using DAL.Models;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
@@ -50,8 +54,9 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy.AllowAnyOrigin()
+        policy.SetIsOriginAllowed(origin =>true)
               .AllowAnyHeader()
+              .AllowCredentials()
               .AllowAnyMethod();
     });
 });
@@ -82,6 +87,32 @@ builder.Services.AddScoped<IInventoryType, InventoryTypeDA>();
 builder.Services.AddTransient<IOutputInvoice,OutputInvoiceDA>();
 builder.Services.AddTransient<ICustomSearch,CustomSearchDA>();
 builder.Services.AddTransient<IRunRate,RunRateDA>();
+builder.Services.AddTransient<ISpareLight, SpareLightDA>();
+builder.Services.AddTransient<IRoger, RogerDA>();
+
+builder.Services.AddHttpClient<ISpireClient, SpireClient>((sp, client) =>
+{
+    var config = sp.GetRequiredService<IConfiguration>();
+
+    var baseUrl = config["SpireApi:BaseUrl"];
+    if (string.IsNullOrWhiteSpace(baseUrl))
+        throw new InvalidOperationException("SpireApi:BaseUrl missing");
+
+    client.BaseAddress = new Uri(baseUrl);
+    client.Timeout = TimeSpan.FromSeconds(60);
+    client.DefaultRequestHeaders.Accept.Add(
+        new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+})
+.ConfigurePrimaryHttpMessageHandler(() =>
+{
+    return new HttpClientHandler
+    {
+        AllowAutoRedirect = false,
+        ServerCertificateCustomValidationCallback =
+            HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+    };
+});
+builder.Services.AddScoped<IHardwareService, HardwareService>();
 
 // =======================
 // Spire HttpClient (IMPORTANT)

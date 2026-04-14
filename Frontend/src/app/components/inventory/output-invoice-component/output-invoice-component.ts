@@ -16,7 +16,7 @@ import * as XLSX from 'xlsx-js-style';
   styleUrl: './output-invoice-component.css',
 })
 export class OutputInvoiceComponent {
-  @ViewChild('fileInput') fileInputVariable!: ElementRef;
+   @ViewChild('fileInput') fileInputVariable!: ElementRef;
 invoices: any[] = [];
 invalidRows: any[] = [];
   outputFolder: string = 'C:\\PDFsInvoices';

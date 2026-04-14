@@ -1,160 +1,217 @@
- <div class="container">
-    <!-- Header -->
-     <div class="row">
+<div class="inventory-container">
+  <!-- Header -->
+  <div class="app-header">
+    <h1 class="app-title">Inventory Run Rates</h1>
+  </div>
 
-         <div class="header">
-           <div class="title">Inventory Report</div>
-           <button class="close-btn">&times;</button>
-         </div>
-         <div class="input-group">
-             <label>Calendar Days to Consider:</label>
-             <input type="number" class="input-field" value="28">
-           </div>
-     </div>
-
-    <div>
-         <div class="input-group">
-        <label>Reprot Date:</label>
-       <input type="date" class="input-field" [(ngModel)]="reportDate" />
-      </div>
-    </div>
-    <!-- Top Row -->
-    <div class="top-row">
-      <div class="input-group">
-        <label>Start:</label>
-        <input type="date" class="input-field" [(ngModel)]="startDate" />
-      <input type="text" class="input-field" [value]="startDay" disabled />
-
-      </div>
-      
-  <button class="btn btn-primary" (click)="generateRunRateData()">Generate Data</button>
-      
-      <div class="input-group">
-        <label>End Date:</label>
-        <input type="date" class="input-field" [(ngModel)]="endDate" />
-      <input type="text" class="input-field" [value]="endDay" disabled />
-
-      </div>
-      
-   
-    </div>
+  <!-- Criteria Card -->
+  <div class="card criteria-card shadow-lg border-0">
     
-    <!-- Main Section -->
-    <div class="main-section">
-      <!-- Left Panel -->
-      <div class="left-panel">
-        <div class="date-section">
-          <div class="input-group">
-            <label>Working Days:</label>
-            <input type="number" class="input-field" value="0">
-          </div>
-          <div class="input-group">
-            <label>Min Days :</label>
-            <input type="number" [(ngModel)]="minDays" placeholder="Enter Min Days" class="input-small"/>
-          </div>
-          <div class="input-group">
-            <label>Max Days :</label>
-            <input type="number"[(ngModel)]="maxDays" placeholder="Enter Max Days" class="input-small"/>
-          </div>
-        </div>
-        
-        <div class="working-days-section">
-          <div class="working-days-title">Working Days</div>
-          <div class="button-grid">
-            <button class="btn btn-secondary btn-small">View Accessories</button>
-            <button class="btn btn-secondary btn-small" (click)="loadHardwareView()">View Hardware</button>
-          </div>
-<table class="table table-bordered" *ngIf="!loading && accessoriesList.length > 0">
-  <thead>
-    <tr>
-      <th>Group</th>
-      <th>PROD</th>
-      <th>CODE</th>
-      <th>Description</th>
-      <th>Cost</th>
-      <th>OnHand</th>
-      <th>TotalSales</th>
-      <th>AvgDailySales</th>
-      <th>WeeklyRunRate</th>
-      <th>WeeksAvailable</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let item of accessoriesList ">
-      <td>{{item.Group}}</td>
-      <td>{{item.PROD}}</td>
-      <td>{{item.CODE}}</td>
-      <td>{{item.Description}}</td>
-      <td>{{item.Cost}}</td>
-      <td>{{item.OnHand}}</td>
-      <td>{{item.TotalSales}}</td>
-      <td>{{item.AvgDailySales}}</td>
-      <td>{{item.WeeklyRunRate}}</td>
-      <td>{{item.WeeksAvailable}}</td>
-    </tr>
-  </tbody>
-</table>
+      
+    
 
-<div>
-  <table class="table table-bordered">
-  <thead>
-    <tr>
-      <th>Manufacturer</th>
-      <th>CODE</th>
-      <th>PROD</th>
-      <th>Description</th>
-      <th>Cost</th>
-      <th>OnHand</th>
-      <th>TotalSales</th>
-      <th>AvgDailySales</th>
-      <th>WeeklyRunRate</th>
-      <th>WeeksAvailable</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let item of hardwareList">
-      <td>{{item.manufacturer}}</td>
-      <td>{{item.code}}</td>
-      <td>{{item.prod}}</td>
-      <td>{{item.description}}</td>
-      <td>{{item.cost}}</td>
-      <td>{{item.onHand}}</td>
-      <td>{{item.totalSales}}</td>
-      <td>{{item.avgDailySales}}</td>
-      <td>{{item.weeklyRunRate}}</td>
-      <td>{{item.weeksAvailable}}</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-          <div class="button-grid">
-            <button class="btn btn-secondary btn-small" (click)="downloadAccessoriesExcel()">Output Accessories</button>
-            <button class="btn btn-secondary btn-small" (click)="downloadHardwareExcel()">Output Hardware</button>
-          </div>
+    <div class="criteria-grid mt-3">
+      <div class="form-group">
+        <label>Report Date</label>
+        <div class="input-with-icon">
+          <input type="date" class="form-control premium-input" [(ngModel)]="reportDate"  [max]="maxDate"(ngModelChange)="onReportDateChange()" />
         </div>
       </div>
-      
-      <!-- Right Panel -->
-      <div class="right-panel">
-        <div class="days-section">
-       
-          <div class="btn-grid">
-            <button class="btn btn-secondary btn-small"  (click)="fetchRunRate(minDays, maxDays)">View Accessories with Last 2 PO info</button>
-          </div>
-        </div>
-        
-   
+      <div class="form-group">
+        <label>Calendar Days</label>
+        <input type="number" class="form-control premium-input" [(ngModel)]="calendarDays" (ngModelChange)="onCalendarDaysChange()" />
+      </div>
+      <div class="form-group">
+        <label>Working Days Loaded</label>
+        <div class="stats-box">{{workingDaysLoaded}}</div>
       </div>
     </div>
-    
-    <!-- Bottom Section -->
-    <div class="bottom-section">
-      <div class="wf-section">
-       <button class="btn btn-highlight btn-small" (click)="fetchWFHInventory()">Output  WFH Onhand  </button>
-        <div class="wf-note">(does not use require criteria data generation above)</div>
+
+    <div class="date-summary mt-3">
+      <div class="summary-item">
+        <span class="summary-label">Start Period:</span>
+        <div class="summary-value">
+          <span class="date-text">{{startDate | date:'MMM dd, yyyy'}}</span>
+          <span class="day-badge">{{startDay}}</span>
+        </div>
       </div>
-      
-     
+      <div class="summary-item">
+        <span class="summary-label">End Period:</span>
+        <div class="summary-value">
+          <span class="date-text">{{endDate | date:'MMM dd, yyyy'}}</span>
+          <span class="day-badge">{{endDay}}</span>
+        </div>
+      </div>
+      <div class="action-btn-wrapper">
+        <button class="btn btn-primary" (click)="generateRunRateData()">
+          <i class="fas fa-sync-alt"></i> Generate Run Rate Data
+        </button>
+      </div>
     </div>
   </div>
+
+  <!-- Main Layout -->
+  <div class="main-layout mt-2">
+    <!-- Sidebar Actions -->
+    <div class="sidebar">
+      <div class="sidebar-card">
+        <h3 class="sidebar-title">View Reports</h3>
+        <div class="btn-stack">
+          <button class="btn btn-sidebar" (click)="loadAccessoriesView()" [class.active]="showAccessoriesTable">View Accessories</button>
+          <button class="btn btn-sidebar" (click)="loadHardwareView()" [class.active]="showHardwareTable">View Hardware</button>
+        </div>
+      </div>
+
+      <div class="sidebar-card mt-3">
+        <h3 class="sidebar-title">Export Data</h3>
+        <div class="btn-stack">
+          <button class="btn btn-sidebar-outline" (click)="downloadAccessoriesExcel()">Output Accessories</button>
+          <button class="btn btn-sidebar-outline" (click)="downloadHardwareExcel()">Output Hardware</button>
+          <button class="btn btn-sidebar-outline rogers-btn" (click)="downloadAccessoriesRogersExcel()" disabled>Output Accessories Rogers</button>
+        </div>
+      </div>
+
+      <div class="sidebar-card mt-3">
+        <h3 class="sidebar-title">PO Aging Analysis</h3>
+        <div class="po-filter-area">
+          <div class="form-group small">
+            <label>Min Days</label>
+            <input type="number" class="form-control mini-input" [(ngModel)]="minDays"  disabled/>
+          </div>
+          <div class="form-group small">
+            <label>Max Days</label>
+            <input type="number" class="form-control mini-input" [(ngModel)]="maxDays" disabled />
+          </div>
+          <button class="btn btn-po-view mt-2" (click)="fetchRunRate(minDays, maxDays)" disabled>
+            View with Last 2 POs
+          </button>
+        </div>
+      </div>
+
+      <div class="sidebar-card mt-3 wfh-special-card">
+        <button class="btn btn-wfh-premium" (click)="fetchWFHInventory()" disabled>
+          Output WFH Onhand
+        </button>
+        <div class="disclaimer">Independent of current filters</div>
+      </div>
+    </div>
+
+    <!-- Data Display Area -->
+    <div class="display-area card main-view-card">
+      <!-- Accessories Table -->
+      <div class="table-view" *ngIf="showAccessoriesTable">
+        <div class="view-header">
+          <div class="view-title">
+            <h2>Accessories Run Rate</h2>
+            <span class="badge badge-info">{{totalRecordsAccessories}} Records Total</span>
+          </div>
+          <div class="pagination-controls" *ngIf="totalRecordsAccessories > pageSize">
+            <button class="page-btn" (click)="onPageChangeAccessories(currentPageAccessories - 1)" [disabled]="currentPageAccessories === 1">Prev</button>
+            <span class="page-info">Page {{currentPageAccessories}}</span>
+            <button class="page-btn" (click)="onPageChangeAccessories(currentPageAccessories + 1)" [disabled]="currentPageAccessories * pageSize >= totalRecordsAccessories">Next</button>
+          </div>
+        </div>
+        <div class="table-wrapper">
+          <table class="premium-table">
+            <thead>
+              <tr>
+                <th>#</th><th>Group</th><th>PROD</th><th>CODE</th><th>inv_description</th><th>Qty</th>
+                <th>AvgDailySales</th><th>WeeklyRunRate</th><th>TotalSales</th><th>WeeksAvailable</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of accessoriesList; let i = index">
+                <td>{{(currentPageAccessories - 1) * pageSize + i + 1}}</td>
+                <td class="font-bold">{{item.group}}</td><td>{{item.prod}}</td><td>{{item.code}}</td>
+                <td class="text-left description-cell">{{item.description}}</td><td class="qty-cell">{{item.onHand}}</td>
+                <td>{{item.avgDailySales}}</td><td>{{item.weeklyRunRate}}</td>
+                <td>{{item.totalSales}}</td><td [class.critical]="item.weeksAvailable < 2 && item.weeksAvailable !== 'NA'">{{item.weeksAvailable}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Hardware Table -->
+      <div class="table-view" *ngIf="showHardwareTable">
+        <div class="view-header">
+          <div class="view-title">
+            <h2>Hardware Run Rate</h2>
+            <span class="badge badge-primary">{{totalRecordsHardware}} Records Total</span>
+          </div>
+          <div class="pagination-controls" *ngIf="totalRecordsHardware > pageSize">
+            <button class="page-btn" (click)="onPageChangeHardware(currentPageHardware - 1)" [disabled]="currentPageHardware === 1">Prev</button>
+            <span class="page-info">Page {{currentPageHardware}}</span>
+            <button class="page-btn" (click)="onPageChangeHardware(currentPageHardware + 1)" [disabled]="currentPageHardware * pageSize >= totalRecordsHardware">Next</button>
+          </div>
+        </div>
+        <div class="table-wrapper">
+          <table class="premium-table">
+            <thead>
+              <tr>
+                <th>#</th><th>Manufacturer</th><th>CODE</th><th>inv_description</th><th>Qty</th>
+                <th>AvgDailySales</th><th>WeeklyRunRate</th><th>TotalSales</th><th>WeeksAvailable</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of hardwareList; let i = index">
+                <td>{{(currentPageHardware - 1) * pageSize + i + 1}}</td>
+                <td class="font-bold">{{item.manufacturer}}</td><td>{{item.code}}</td>
+                <td class="text-left description-cell">{{item.description}}</td><td class="qty-cell">{{item.onHand}}</td>
+                <td>{{item.avgDailySales}}</td><td>{{item.weeklyRunRate}}</td>
+                <td>{{item.totalSales}}</td><td [class.critical]="item.weeksAvailable < 4 && item.weeksAvailable !== 'NA'">{{item.weeksAvailable}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- PO Info Table -->
+      <div class="table-view" *ngIf="showRunRateTable">
+        <div class="view-header">
+          <div class="view-title">
+            <h2>Accessories with PO Info</h2>
+            <span class="badge badge-warning">{{runRateList.length}} Records</span>
+          </div>
+          <div class="pagination-controls" *ngIf="runRateList.length > pageSize">
+            <button class="page-btn" (click)="currentPageRunRate = currentPageRunRate - 1" [disabled]="currentPageRunRate === 1">Prev</button>
+            <span class="page-info">Page {{currentPageRunRate}}</span>
+            <button class="page-btn" (click)="currentPageRunRate = currentPageRunRate + 1" [disabled]="currentPageRunRate * pageSize >= runRateList.length">Next</button>
+          </div>
+        </div>
+        <div class="table-wrapper">
+          <table class="premium-table compact">
+            <thead>
+              <tr class="header-group-row">
+                <th>#</th>
+                <th colspan="3">Item Information</th>
+                <th colspan="3" class="po1-group">Last PO</th>
+                <th colspan="3" class="po2-group">Previous PO</th>
+              </tr>
+              <tr class="sub-header">
+                <th></th><th>Group</th><th>CODE</th><th>Qty</th>
+                <th>PO#</th><th>Qty</th><th>Age</th>
+                <th>PO#</th><th>Qty</th><th>Age</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of runRateList | slice:(currentPageRunRate-1)*pageSize : currentPageRunRate*pageSize; let i = index">
+                <td>{{(currentPageRunRate - 1) * pageSize + i + 1}}</td>
+                <td>{{item.group}}</td><td>{{item.code}}</td><td class="qty-cell">{{item.onHand}}</td>
+                <td>{{item.poLast}}</td><td>{{item.qtyLast}}</td><td [class.critical]="item.ageLast > 180">{{item.ageLast}}</td>
+                <td>{{item.poLast2}}</td><td>{{item.qtyLast2}}</td><td>{{item.ageLast2}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Welcome / Empty State -->
+      <div class="welcome-screen" *ngIf="!showAccessoriesTable && !showHardwareTable && !showRunRateTable">
+     
+      </div>
+    </div>
+  </div>
+</div>
+
+

@@ -9,39 +9,45 @@ import { Observable } from 'rxjs';
 export class RunrateService {
   
 
+   
     private readonly RunRateUrl = environment.apiUrl + '/RunRate'; 
  constructor(private http: HttpClient) { }
 
   
-  getWFHInventory(): Observable<any> {
-    return this.http.get(`${this.RunRateUrl}/GetWfhInventory`);
+  getWFHInventory(userId: number): Observable<any> {
+    return this.http.get(`${this.RunRateUrl}/GetWfhInventory?userId=${userId}`, { withCredentials: true });
   }
 
-  getRunRate(minDays: number, maxDays: number): Observable<any> {
-    return this.http.get(`${this.RunRateUrl}/GetRunRate?minDays=${minDays}&maxDays=${maxDays}`);
+  getRunRate(minDays: number, maxDays: number, userId: number): Observable<any> {
+    return this.http.get(`${this.RunRateUrl}/GetRunRate?minDays=${minDays}&maxDays=${maxDays}&userId=${userId}`, { withCredentials: true });
   }
 
-   exportHardwareExcel(): Observable<Blob> {
-    return this.http.get(`${this.RunRateUrl}/export-hardware`, { responseType: 'blob' });
+   exportHardwareExcel(userId: number): Observable<Blob> {
+    return this.http.get(`${this.RunRateUrl}/export-hardware?userId=${userId}`, { responseType: 'blob', withCredentials: true });
   }
 
-  exportAccessoriesExcel(): Observable<Blob> {
-    return this.http.get(`${this.RunRateUrl}/export-accessories`, { responseType: 'blob' });
+  exportAccessoriesExcel(userId: number): Observable<Blob> {
+    return this.http.get(`${this.RunRateUrl}/export-accessories?userId=${userId}`, { responseType: 'blob', withCredentials: true });
   }
 
-  getHardwareView(): Observable<any> {
-    return this.http.get(`${this.RunRateUrl}/hardware-view`);
+  exportAccessoriesRogersExcel(userId: number): Observable<Blob> {
+    return this.http.get(`${this.RunRateUrl}/export-accessories-rogers?userId=${userId}`, { responseType: 'blob', withCredentials: true });
   }
 
-  getAccessoriesView() {
-  return this.http.get(`${this.RunRateUrl}/view-accessories`);
-}
+  getHardwareView(pageNumber: number, pageSize: number, userId: number): Observable<any> {
+    return this.http.get(`${this.RunRateUrl}/hardware-view?pageNumber=${pageNumber}&pageSize=${pageSize}&userId=${userId}`, { withCredentials: true });
+  }
+
+  getAccessoriesView(pageNumber: number, pageSize: number, userId: number): Observable<any> {
+    return this.http.get(`${this.RunRateUrl}/view-accessories?pageNumber=${pageNumber}&pageSize=${pageSize}&userId=${userId}`, { withCredentials: true });
+  }
 
 
-loadRunRate(startDate: string, endDate: string): Observable<any> {
+loadRunRate(startDate: string, endDate: string, userId: number): Observable<any> {
   return this.http.post<any>(
     `${this.RunRateUrl}/LoadRunRateData`,
-    { startDate, endDate }  // this matches your C# RunRateRequest DTO
+    { startDate, endDate, userId },
+    { withCredentials: true }
   );
 }
 

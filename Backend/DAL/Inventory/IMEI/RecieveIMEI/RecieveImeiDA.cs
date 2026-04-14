@@ -145,7 +145,7 @@ FROM purchase_orders po
 JOIN purchase_order_items poi ON poi.po_number = po.po_number
 WHERE po.status IN ('I','R','OPEN')
 ORDER BY po.po_number DESC, poi.id
-LIMIT 100", con);
+", con);
 
                 await using var rdr = await cmd.ExecuteReaderAsync();
                 while (await rdr.ReadAsync())

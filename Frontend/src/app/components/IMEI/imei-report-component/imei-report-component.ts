@@ -4,8 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { HardwareReceipt, IMEIReportService } from '../imeireport-service';
 import { SpinnerService } from '../../shared/spinner/spinner-service';
 import { hidden } from '@angular/forms/signals';
-import { DateFormatPipe } from '../../../shared/pipes/date-format-pipe';
 import Swal from 'sweetalert2';
+import { DateFormatPipe } from '../../shared/pipes/date-format-pipe';
 
 @Component({
   selector: 'app-imei-report-component',

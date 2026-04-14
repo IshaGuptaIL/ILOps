@@ -6,10 +6,11 @@ import { ImeiService, RecieveIMEIBO } from '../imei-service';
 import { ApiResponse } from '../../inventory/add-inventory-component/inventory-service';
 import { Observable, of } from 'rxjs';
 import { delay, tap } from 'rxjs/operators';
-
+import Swal from 'sweetalert2';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { ToastrService } from 'ngx-toastr';
+import { SpinnerService } from '../../shared/spinner/spinner-service';
 
 
 interface PO {
@@ -64,7 +65,7 @@ selectedPONumber: string = '';
 canPost = false;          // ✅ NEW
 isCheckingErrors = false; 
 
-  constructor(private http: HttpClient,  private toastr: ToastrService,
+  constructor(private http: HttpClient,  private toastr: ToastrService, private spinner:SpinnerService,
     private receiveService:ImeiService,private cdr:ChangeDetectorRef) {}
 
   ngOnInit(): void {
@@ -79,7 +80,7 @@ isCheckingErrors = false;
     resp => {
       if (resp.success && resp.result) {
         this.poList = resp.result as PO[];
-
+this.cdr.detectChanges();
         this.cdr.markForCheck(); 
       } else {
         this.toastr.error(resp.message || 'Failed to load POs');
@@ -88,6 +89,7 @@ isCheckingErrors = false;
     err => {
       console.error(err);
       this.toastr.error('Something went wrong while loading POs');
+      this.cdr.detectChanges();
       this.cdr.markForCheck();
     }
   );
@@ -107,6 +109,7 @@ onPOChange(poNumber: string) {
     this.loadGrids();  
   } else {
   }
+  this.cdr.detectChanges();
 }
 
   onUnitCostChange() {
@@ -126,11 +129,17 @@ onPOChange(poNumber: string) {
 
   // Upload Scan List
 importScanList() {
+  
     if (!this.scanFile || !this.selectedPO) {
-      alert('Select file and PO');
+      Swal.fire({
+    icon: 'warning',
+    title: 'Missing Information',
+    text: 'Please select file and PO',
+    confirmButtonText: 'OK'
+  });
       return;
     }
-
+this.spinner.show()
 
     const reader = new FileReader();
     reader.onload = (e: any) => {
@@ -160,11 +169,15 @@ importScanList() {
 
       this.receiveService.importScanList(items).subscribe({
         next: (resp: ApiResponse) => {
-          alert(resp.message);
+          this.loadGrids()
+          this.spinner.hide()
+         this.toastr.success(resp.message);
         },
         error: (err) => {
           console.error(err);
-          alert('Failed to upload scan list');
+          this.spinner.hide()
+
+          this.toastr.error('Failed to upload scan list');
         }
       });
     };
@@ -179,10 +192,15 @@ importScanList() {
   importPackingSlip() {
     debugger
   if (!this.packingSlipFile || !this.selectedPO) {
-    alert('Select file and PO');
+    Swal.fire({
+    icon: 'warning',
+    title: 'Missing Information',
+    text: 'Please select file and PO',
+    confirmButtonText: 'OK'
+  });
     return;
   }
-
+this.spinner.show()
   const reader = new FileReader();
   reader.onload = (e: any) => {
     const data = new Uint8Array(e.target.result);
@@ -213,9 +231,12 @@ importScanList() {
       next: (resp: ApiResponse) => {
        this.toastr.success(resp.message);
         this.loadGrids();
+        this.spinner.hide()
       },
       error: (err) => {
         console.error(err);
+        this.spinner.hide()
+
         this.toastr.error('Failed to upload packing slip');
       }
     });

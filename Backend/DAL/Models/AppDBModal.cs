@@ -13,7 +13,108 @@ namespace DAL.Models
     public class AppDBModal
     {
     }
+    public class tblTransferListACC
+    {
+        [Key]
+        public int ID { get; set; }
 
+        public string? WarehouseCodeTransferFrom { get; set; }
+
+        public string? WarehouseCodeTransferTo { get; set; }
+
+        public string? PartNo { get; set; }
+
+        public int? Quantity { get; set; }
+
+        public string? ValidationResult { get; set; }
+
+        public DateTime? TransferDateTime { get; set; }
+
+        public int? RowNumber { get; set; }
+
+        public bool? TransferCreated { get; set; }
+
+        public bool? TransferPosted { get; set; }
+    }
+    public class tblTransferList
+    {
+        [Key]
+        public int ID { get; set; }
+
+        public string? WarehouseCodeTransferFrom { get; set; }
+
+        public string? WarehouseCodeTransferTo { get; set; }
+
+        public string? PartNo { get; set; }
+
+        public string? IMEI { get; set; }
+
+        public string? SimPartNo { get; set; }
+
+        public string? SimNo { get; set; }
+
+        public string? Pin { get; set; }
+
+        public string? ValidationResult { get; set; }
+
+        public DateTime? TransferDateTime { get; set; }
+
+        public int? RowNumber { get; set; }
+
+        public bool? TransferCreated { get; set; }
+
+        public bool? TransferPosted { get; set; }
+    }
+
+    public class tblTransferLog
+    {
+        [Key]
+            public int Id { get; set; }
+
+            public string? ReferenceNo { get; set; }
+
+            public string? TransferType { get; set; }
+
+            public string? FromWhse { get; set; }
+
+            public string? ToWhse { get; set; }
+
+            public string? PartNo { get; set; }
+
+            public string? Serial { get; set; }
+
+            public string? SIMPartNo { get; set; }
+
+            public string? SIMNo { get; set; }
+
+            public string? Pin { get; set; }
+
+            public DateTime? TransferDate { get; set; }
+
+            public DateTime? ActualDateTime { get; set; }
+
+            public int? Quantity { get; set; }
+        }
+
+       
+    public class tbllastpoitem
+    {
+        [Key]
+        public int ID { get; set; }
+
+        public int? LastNumber { get; set; }
+
+        public string CODE { get; set; }
+
+        public string NUMBER { get; set; }
+
+        public int? RECNO { get; set; }
+
+        public int? POQty { get; set; }
+
+        public DateTime? PODate { get; set; }
+        public int? Created_by { get; set; }
+    }
 
     public class IMEIStatus
     {
@@ -265,7 +366,20 @@ namespace DAL.Models
 
         public DateTime? CreatedDate { get; set; }
     }
-    public class tblOpeningBalanceACC
+
+    public class tblOnhandIMEIs
+    {
+
+        [Key]
+        public int Id { get; set; }
+        public string? INV_NO { get; set; }
+        public string? WAREHOUSE { get; set; }
+        public string? PART_NO { get; set; }
+        public string? NUMBER { get; set; }
+        public int? Created_by { get; set; }
+    }
+
+        public class tblOpeningBalanceACC
     {
         [Key]
         public int ID { get; set; }
@@ -471,6 +585,7 @@ public class tbIACCBckOrders
         public DateTime InvoiceDate { get; set; }
         public string Territory { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
+        public int? Created_by { get; set; }
     }
     public class tblCounts
     {
@@ -1137,6 +1252,44 @@ public class hardwarereceived
         public string strGUID { get; set; } = string.Empty;
         public int? serialized_qty { get; set; }
     }
+
+    [Table("RogersAR")]
+    public class RogersAR
+    {
+        [Key]
+        public string Transaction { get; set; }
+        public string CustomerNo { get; set; }
+        public DateTime? Date { get; set; }
+        public string InvoiceNo { get; set; }
+        public decimal? DebitAmt { get; set; }
+        public decimal? Balance { get; set; }
+        public string CustomerName { get; set; }
+        public string Territory { get; set; }
+        public string CreatedBy { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public string ModifiedBy { get; set; }
+        public DateTime? ModifiedDate { get; set; }
+    }
+
+    [Table("RogersARData")]
+    public class RogersARData
+    {
+        [Key]
+        public string TransactionNo { get; set; }
+        public string Comments { get; set; }
+        public string Remarks { get; set; }
+        public DateTime? SentOn { get; set; }
+        public string Comments2 { get; set; }
+        public string Comments3 { get; set; }
+        public string PaymentCode { get; set; }
+        public DateTime? PaymentDate { get; set; }
+        public string CreatedBy { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public string ModifiedBy { get; set; }
+        public DateTime? ModifiedDate { get; set; }
+    }
+
+
 
 
 

@@ -20,6 +20,7 @@ namespace DAL.Inventory.CostValidation
         public decimal RogersCost { get; set; }
         public decimal? SpireCost { get; set; }
         public string ExistInSpire { get; set; }
+        public DateTime? DelistDate { get; set; }
         public decimal? OnhandQty { get; set; }
         public decimal? PurchaseQty { get; set; }
     }
@@ -30,8 +31,8 @@ namespace DAL.Inventory.CostValidation
         public string spirePartNumber { get; set; }
         public string model { get; set; }
         public string spireDescription { get; set; }
-        public decimal rDDealerCost { get; set; }
-        public decimal spireCurrentCost { get; set; }
+        public decimal? rDDealerCost { get; set; }
+        public decimal? spireCurrentCost { get; set; }
         public string productCode { get; set; }
         public DateTime? lastSaleDate { get; set; }
     }

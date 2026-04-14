@@ -193,32 +193,41 @@ namespace DAL.Inventory.CostValidation
         public async Task<List<HpcRecord>> GetHpcLatestAsync()
         {
             var dt = GetSqlServerData(@"
-                SELECT Whse, Part, MaxOfF3 AS StartDate, Cost AS RogersCost, DelistDate
-                FROM HPCExtractSummary
-                ORDER BY Whse, Part
-            ");
+        SELECT Whse, Part, MaxOfF3 AS StartDate, Cost, DelistDate
+        FROM HPCExtractSummary
+        ORDER BY Whse, Part
+    ");
 
-            var result = dt.AsEnumerable().Select(r => new HpcRecord
-            {
-                Whse = r["Whse"].ToString(),
-                Part = r["Part"].ToString(),
-                StartDate = (DateTime)r.Field<DateTime?>("StartDate"),
-                RogersCost = Convert.ToDecimal(r["RogersCost"]),
-                ExistInSpire = "Yes" // For Latest view, all exist
-            }).ToList();
+            var result = dt.AsEnumerable()
+                .Select(r => new HpcRecord
+                {
+                    Whse = r["Whse"]?.ToString(),
+                    Part = r["Part"]?.ToString(),
+                    StartDate = r.Field<DateTime?>("StartDate") ?? DateTime.MinValue,
+                    RogersCost = r.Field<decimal?>("Cost") ?? 0m,
+                    DelistDate = r.Field<DateTime?>("DelistDate")
+                })
+                .ToList();
 
             return await Task.FromResult(result);
         }
 
         public async Task<List<HpcRecord>> GetHpcDiscrepanciesAsync()
         {
-            DataTable dtSql = GetSqlServerData("SELECT Whse, Part, MaxOfF3, Cost FROM HPCExtractSummary");
+            // 1️⃣ Load HPC summary from SQL Server
+            DataTable dtSql = GetSqlServerData(@"
+        SELECT Whse, Part, MaxOfF3, Cost
+        FROM HPCExtractSummary
+    ");
 
+            // 2️⃣ Load inventory from Postgres
             DataTable dtPg = GetPostgresData(@"
         SELECT part_no, whse, description, product_code,
                current_cost, onhand_qty, purchase_qty
-        FROM inventory");
+        FROM inventory
+    ");
 
+            // 3️⃣ Create lookup dictionary for fast access
             var pgLookup = dtPg.AsEnumerable()
                 .ToDictionary(
                     r => $"{r["part_no"]}_{r["whse"]}",
@@ -229,8 +238,8 @@ namespace DAL.Inventory.CostValidation
 
             foreach (DataRow h in dtSql.Rows)
             {
-                string part = h["Part"]?.ToString();
-                string whse = h["Whse"]?.ToString();
+                string part = h["Part"]?.ToString() ?? "";
+                string whse = h["Whse"]?.ToString() ?? "";
 
                 pgLookup.TryGetValue($"{part}_{whse}", out DataRow pg);
 
@@ -243,8 +252,8 @@ namespace DAL.Inventory.CostValidation
                 {
                     Whse = whse,
                     Part = part,
-                    Description = pg?["description"]?.ToString(),
-                    StartDate = h.Field<DateTime?>("MaxOfF3")?.Date.Date ?? DateTime.MinValue.Date,
+                    Description = pg?["description"]?.ToString() ?? "",
+                    StartDate = h.Field<DateTime?>("MaxOfF3")?.Date ?? DateTime.MinValue,
                     SpireProdCode = productCode,
                     RogersCost = rogersCost,
                     SpireCost = spireCost,
@@ -253,11 +262,12 @@ namespace DAL.Inventory.CostValidation
                     PurchaseQty = pg?["purchase_qty"] as decimal?
                 };
 
+                // 4️⃣ Logic: include missing rows, cost mismatch, or product code mismatch
                 bool addRecord = false;
 
                 if (existInSpire == "No")
                 {
-                    addRecord = true; 
+                    addRecord = true;
                 }
                 else
                 {
@@ -400,37 +410,41 @@ namespace DAL.Inventory.CostValidation
 
         public async Task<List<HardwareVsSpire>> GetRDHardwareVsSpireAsync()
         {
+            // 1. SQL Server data
             DataTable dtHardware = GetSqlServerData(@"
-                SELECT hardwareID, bv_part_number, model, dealer_cost
-                FROM t_hardware
-                WHERE bv_part_number IS NOT NULL
-            ");
+            SELECT hardwareID, bv_part_number, model, dealer_cost
+            FROM t_hardware
+            WHERE bv_part_number IS NOT NULL
+        ");
 
+            // 2. PostgreSQL data
             DataTable dtInventory = GetPostgresData(@"
-                SELECT part_no, description, current_cost, product_code, last_sale_date
-                FROM inventory
-                WHERE whse = 'CO'
-            ");
+            SELECT part_no, description, current_cost, product_code, last_sale_date
+            FROM inventory
+            WHERE whse = 'CO'
+        ");
 
+            // 3. Exact SQL INNER JOIN logic (no trim, no uppercase)
             var joined = from h in dtHardware.AsEnumerable()
                          join i in dtInventory.AsEnumerable()
-                             on h.Field<string>("bv_part_number").Trim().ToUpper()
-                             equals i.Field<string>("part_no").Trim().ToUpper()
-                         orderby h.Field<string>("bv_part_number")
+                         on h.Field<string>("bv_part_number") equals i.Field<string>("part_no")
+                         into gj
+                         from subi in gj.DefaultIfEmpty() // null if no match
                          select new HardwareVsSpire
                          {
                              hardwareID = h.Field<int>("hardwareID"),
                              spirePartNumber = h.Field<string>("bv_part_number"),
                              model = h.Field<string>("model"),
-                             spireDescription = i.Field<string>("description"),
-                             rDDealerCost = h.Field<decimal?>("dealer_cost") ?? 0,
-                             spireCurrentCost = i.Field<decimal?>("current_cost") ?? 0,
-                             productCode = i.Field<string>("product_code"),
-                             lastSaleDate = i.Field<DateTime?>("last_sale_date")
+                             spireDescription = subi?.Field<string>("description"),
+                             rDDealerCost = h.Field<decimal?>("dealer_cost"),
+                             spireCurrentCost = subi?.Field<decimal?>("current_cost"),
+                             productCode = subi?.Field<string>("product_code"),
+                             lastSaleDate = subi?.Field<DateTime?>("last_sale_date")
                          };
 
             return await Task.FromResult(joined.ToList());
         }
+
 
         // ========================= HELPER FUNCTIONS =========================
         private DataTable GetSqlServerData(string sql)
@@ -438,6 +452,7 @@ namespace DAL.Inventory.CostValidation
             DataTable dt = new DataTable();
             using var con = new SqlConnection(_sqlConn);
             using var da = new SqlDataAdapter(sql, con);
+            da.SelectCommand.CommandTimeout = 600;
             da.Fill(dt);
             return dt;
         }
@@ -447,6 +462,7 @@ namespace DAL.Inventory.CostValidation
         {
             using var con = new SqlConnection(_sqlConn);
             using var cmd = new SqlCommand(sql, con);
+            cmd.CommandTimeout = 600;
             await con.OpenAsync();
             await cmd.ExecuteNonQueryAsync();
         }
@@ -455,6 +471,7 @@ namespace DAL.Inventory.CostValidation
             DataTable dt = new DataTable();
             using var con = new NpgsqlConnection(_pgConn);
             using var da = new NpgsqlDataAdapter(sql, con);
+            da.SelectCommand.CommandTimeout = 600;
             da.Fill(dt);
             return dt;
         }

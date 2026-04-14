@@ -1,0 +1,106 @@
+<div class="form-container">
+  <!-- Header Section -->
+  <label class="vba-label label-transfer-date">Transfer Date:</label>
+  <input type="date" class="vba-input input-transfer-date" [(ngModel)]="transferDate">
+
+  <div class="vba-line line-16"></div>
+
+  <!-- Hardware Section -->
+  <button class="vba-button btn-import-hw" (click)="hwFileInput.click()">
+    Import Hardware Transfer File
+  </button>
+  <input #hwFileInput type="file" (change)="onHardwareFileSelected($event)" hidden>
+
+  <button class="vba-button btn-template-hw" (click)="downloadHardwareTemplate()">
+    Download Template
+  </button>
+
+  <button class="vba-button btn-validate-hw" (click)="validateHardware()" [disabled]="hardwareItems.length === 0">
+    Validate
+  </button>
+
+  <button class="vba-button btn-view-errors-hw" (click)="showErrors('hardware')" [disabled]="hardwareErrors === 0">
+    View Errors
+  </button>
+
+  <button class="vba-button btn-do-transfer-hw" (click)="doHardwareTransfer()" [disabled]="!isHardwareValid">
+    Do Transfer
+  </button>
+
+  <!-- Vertical Divider -->
+  <div class="vba-line-v line-9"></div>
+
+  <!-- Accessory Section -->
+  <button class="vba-button btn-import-acc" (click)="accFileInput.click()">
+    Import Accessory Transfer File
+  </button>
+  <input #accFileInput type="file" (change)="onAccessoryFileSelected($event)" hidden>
+
+  <button class="vba-button btn-template-acc" (click)="downloadAccessoryTemplate()">
+    Download Template
+  </button>
+
+  <button class="vba-button btn-validate-acc" (click)="validateAccessory()" [disabled]="accessoryItems.length === 0">
+    Validate
+  </button>
+
+  <button class="vba-button btn-view-errors-acc" (click)="showErrors('accessory')" [disabled]="accessoryErrors === 0">
+    View Errors
+  </button>
+
+  <button class="vba-button btn-do-transfer-acc" (click)="doAccessoryTransfer()" [disabled]="!isAccessoryValid">
+    Do Transfer
+  </button>
+
+  <!-- Divider for Logs Section -->
+  <div class="vba-line line-17"></div>
+
+  <!-- Logs & Footer Section -->
+  <label class="vba-label label-start-date">Start Date:</label>
+  <input type="date" class="vba-input input-start-date" [(ngModel)]="startDate">
+
+  <label class="vba-label label-end-date">End Date:</label>
+  <input type="date" class="vba-input input-end-date" [(ngModel)]="endDate">
+
+  <button class="vba-button btn-view-log-hw" (click)="getHardwareLogs()">
+    View Hardware Transfer Log
+  </button>
+
+  <button class="vba-button btn-view-log-acc" (click)="getAccessoryLogs()">
+    View Accessory Transfer Log
+  </button>
+
+  <button class="vba-button btn-exit" (click)="exitApplication()">
+    Exit Application
+  </button>
+</div>
+
+<!-- Validation Errors Modal (Overlay) -->
+<div class="error-modal-overlay" *ngIf="isShowingErrors">
+  <div class="error-modal-content">
+    <div class="error-modal-header">
+      <span>Validation Errors</span>
+      <button (click)="isShowingErrors = false" style="cursor:pointer">X</button>
+    </div>
+    <div class="error-modal-body">
+         <table class="classic-table">
+          <thead>
+            <tr>
+              <th>Row</th>
+              <th>Part No</th>
+              <th>Ref</th>
+              <th>Error</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of errorItems">
+              <td>{{item.rowNumber}}</td>
+              <td>{{item.partNo}}</td>
+              <td>{{item.imei || item.quantity}}</td>
+              <td style="color:red" [innerHTML]="formatErrors(item.validationResult)"></td>
+            </tr>
+          </tbody>
+        </table>
+    </div>
+  </div>
+</div>

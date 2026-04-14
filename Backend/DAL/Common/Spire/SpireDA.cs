@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
+using System.Net.Http;
 
 namespace DAL.Common.Spire
 {
@@ -74,7 +75,7 @@ namespace DAL.Common.Spire
             {
                 await using var conn = new NpgsqlConnection(_pgConnString);
                 await using var cmd = new NpgsqlCommand(
-                    "SELECT 1 FROM public.inventory WHERE part_no = @partNo AND whse = @whse LIMIT 1",
+                    "SELECT 1 FROM inventory WHERE part_no = @partNo AND whse = @whse LIMIT 1",
                     conn);
 
                 cmd.Parameters.AddWithValue("@partNo", partNo.ToUpper());
@@ -88,6 +89,21 @@ namespace DAL.Common.Spire
                 _logger.LogError(ex, "PartExistsAsync failed for {PartNo}/{Whse}", partNo, whse);
                 throw;
             }
+        }
+        public string BaseUrl => _client.BaseAddress?.ToString() ?? "";
+
+        public async Task<HttpResponseMessage>ExecuteRequestAsync(HttpMethod method, string endpoint, string? jsonContent = null)
+        {
+            var request = new HttpRequestMessage(method,endpoint);
+            if(!string.IsNullOrEmpty(jsonContent))
+            {
+                request.Content = new StringContent(jsonContent,System.Text.Encoding.UTF8,"application/json");
+            }
+
+            var authBytes = System.Text.Encoding.UTF8.GetBytes($"{_user}:{_pass}");
+            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(authBytes));
+            request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+            return await _client.SendAsync(request);
         }
 
         // Expose PG connection string if needed

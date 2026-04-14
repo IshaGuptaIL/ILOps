@@ -25,7 +25,7 @@ namespace LegacyApp.Controllers.Inventory
         [HttpDelete("clear")]
         public async Task<IActionResult> ClearInvoices()
         {
-            var result = await _repo.ClearInvoiceList(); 
+            var result = await _repo.ClearInvoiceList();
             return Ok(result);
         }
 
@@ -34,12 +34,12 @@ namespace LegacyApp.Controllers.Inventory
         {
             if (request == null) return BadRequest("Invalid Request");
 
-            //var count = await _repo.ProcessAllInvoices(request.OutputFolder, request.FilePrefix, request.InvoiceType);
+            var count = await _repo.ProcessAllInvoices("", request.FilePrefix, request.InvoiceType);
 
             return Ok(new
             {
                 Message = "Output Process Complete",
-                //ProcessedCount = count
+                ProcessedCount = count
             });
         }
 
@@ -67,5 +67,5 @@ namespace LegacyApp.Controllers.Inventory
 
     }
 
-  
+
 }

@@ -86,6 +86,11 @@ export class CostValidationComponent implements OnInit {
     if (input) input.click();
   }
 
+  private formatNumber(value: any, decimals: number = 2): string {
+  if (value === null || value === undefined || isNaN(value)) return '-';
+  return Number(value).toFixed(decimals); 
+}
+
   onFileUpload(event: Event) {
     const input = event.target as HTMLInputElement;
     if (!input.files || input.files.length === 0) {
@@ -128,8 +133,10 @@ export class CostValidationComponent implements OnInit {
     ).subscribe({
       next: (res: ApiResponse) => {
         this.handleUploadResponse(res);
-      this.spinner.hide();
-
+        this.selectedFile = null;
+        const fileInput = document.getElementById('fileInput') as HTMLInputElement;
+        if (fileInput) fileInput.value = '';
+        this.spinner.hide();
       },
       error: (err) => {
        // this.spinner.hide()
@@ -140,7 +147,9 @@ export class CostValidationComponent implements OnInit {
           text: err.message || 'Server error occurred'
         });
       this.spinner.hide();
-
+ this.selectedFile = null;
+        const fileInput = document.getElementById('fileInput') as HTMLInputElement;
+        if (fileInput) fileInput.value = '';
       }
     });
   }
@@ -450,6 +459,9 @@ formatHeader(key: string): string {
     const d = new Date(value);
     return this.formatDate(d);
   }
+   if (typeof value === 'number') {
+    return this.formatNumber(value, 2); 
+  }
 
   return value;
 }
@@ -582,10 +594,19 @@ exportToExcel(name?: string) {
     key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()).trim()
   );
 
-  const dataRows = this.model.map(row => headerKeys.map(k => row[k]));
+  const dataRows = this.model.map(row =>
+  headerKeys.map(k => {
+    const val = row[k];
+    if (typeof val === 'number') {
+      return this.formatNumber(val, 2); 
+    }
+    return val;
+  })
+);
   const ws = XLSX.utils.aoa_to_sheet([formattedHeaders, ...dataRows]);
 
   const range = XLSX.utils.decode_range(ws['!ref']!);
+  ws['!autofilter'] = { ref: XLSX.utils.encode_range(range) };
   for (let col = range.s.c; col <= range.e.c; col++) {
     const cell = ws[XLSX.utils.encode_cell({ r: 0, c: col })];
     if (cell) {

@@ -1,0 +1,36 @@
+<div class="d-flex justify-content-end mt-2" *ngIf="totalPages > 1">
+  <ul class="pagination pagination-sm mb-0">
+    <!-- Previous -->
+    <li class="page-item" [class.disabled]="currentPage === 1">
+      <button class="page-link" (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">
+        « Previous
+      </button>
+    </li>
+
+    <!-- Page Numbers -->
+    <li class="page-item" *ngFor="let page of pages" 
+        [class.active]="currentPage === page && page > 0"
+        [class.disabled]="page === -1">
+      <button class="page-link" 
+              *ngIf="page > 0"
+              (click)="changePage(page)">
+        {{ page }}
+      </button>
+      <span class="page-link" *ngIf="page === -1">...</span>
+    </li>
+
+    <!-- Next -->
+    <li class="page-item" [class.disabled]="currentPage === totalPages">
+      <button class="page-link" (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">
+        Next »
+      </button>
+    </li>
+
+    <!-- Page Info -->
+    <li class="page-item disabled">
+      <span class="page-link ms-2 border-0 bg-transparent text-muted">
+        Page {{currentPage}} of {{totalPages}} ({{totalItems}} total)
+      </span>
+    </li>
+  </ul>
+</div>

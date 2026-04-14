@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DAL.Inventory.SpareLight;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -50,10 +51,20 @@ namespace DAL.Models
 
         public DbSet<tblSpireInvoice> tblSpireInvoice { get; set; }
 
+        public DbSet<tblOnhandIMEIs> tblOnhandIMEIs { get; set; }
+
+        public DbSet<tbllastpoitem> tbllastpoitem { get; set; }
 
 
 
 
+        public DbSet<tblTransferList> tblTransferList { get; set; }
+        public DbSet<tblTransferListACC> tblTransferListACC { get; set; }
+        public DbSet<tblTransferLog> tblTransferLog { get; set; }
+
+
+        public DbSet<RogersAR> RogersAR { get; set; }
+        public DbSet<RogersARData> RogersARData { get; set; }
 
 
 

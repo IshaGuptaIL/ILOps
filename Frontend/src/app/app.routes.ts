@@ -22,6 +22,9 @@ import { CountAnalysisComponent } from './components/inventory/count-analysis-co
 import { InventoryDashboardComponent } from './components/inventory/inventory-dashboard-component/inventory-dashboard-component';
 import { CustomSearchComponent } from './components/sales/custom-search-component/custom-search-component';
 import { InventoryRunRateComponent } from './components/inventory/inventory-run-rate-component/inventory-run-rate-component';
+import { ImeiReceiveComponent } from './components/IMEI/imei-receive-component/imei-receive-component';
+import { SpareLightComponent } from './components/inventory/spare-light-component/spare-light-component';
+import { RogersComponent } from './components/inventory/rogers-component/rogers-component';
 
 export const routes: Routes = [
   { path: '', component: Login },           // default login page
@@ -41,8 +44,8 @@ export const routes: Routes = [
   { path: 'inventoryDashbaord', component: InventoryDashboardComponent },
   { path: 'customSearch', component: CustomSearchComponent },
   { path: 'inventoryRunRate', component: InventoryRunRateComponent },
-  // { path: 'imei-reports', component: ImeiReportComponent },
-  // { path: 'invoice-credit', component: InvoiceCreditComponent },
+  { path: 'rogersAR', component: RogersComponent },
+  { path: 'spareLight', component: SpareLightComponent },
   { path: 'role-permissions', component: RolePermissionComponent },
   { path: 'inventoryType', component: InventoryTypeComponent },
       { path: 'outputInvoice', component: OutputInvoiceComponent },
@@ -52,7 +55,7 @@ export const routes: Routes = [
     path: 'imei', 
     component: ImeiComponents, 
     children: [
-      { path: 'receive', component: RecieveImeiComponent },
+      { path: 'receive', component: ImeiReceiveComponent },
       { path: 'credit', component: InvoiceCreditComponent },
       { path: 'find', component: FindByImeiComponent },
       { path: 'exception', component: ExceptionComponent },
