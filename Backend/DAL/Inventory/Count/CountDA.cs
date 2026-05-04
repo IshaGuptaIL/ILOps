@@ -173,16 +173,13 @@ namespace DAL.Inventory.Count
 
                 ws.Cells["A1"].Value = "SKU";
                 ws.Cells["B1"].Value = "Description";
-                //ws.Cells["C1"].Value = "Physical Count";
                 ws.Cells["A1:C1"].Style.Font.Bold = true;
 
                 int row = 2;
                 foreach (DataRow dr in dt.Rows)
                 {
                     ws.Cells[row, 1].Value = dr["SKU"];
-                    // Agar description abhi bhi khali hai toh "N/A" likh dein
                     ws.Cells[row, 2].Value = dr["Description"]?.ToString() ?? "No Description Found";
-                    //ws.Cells[row, 3].Value = dr["PhysicalCount"]; // Ab counts dikheng
 
                     row++;
                 }
@@ -228,10 +225,9 @@ namespace DAL.Inventory.Count
                     string sheetName = string.IsNullOrWhiteSpace(whse) ? "Main" : whse;
                     var ws = package.Workbook.Worksheets.Add(sheetName);
 
-                    // VBA style Headers
                     ws.Cells["A1"].Value = "PartNo";
                     ws.Cells["B1"].Value = "Description";
-                    ws.Cells["C1"].Value = "Qty"; // VBA calls it Qty
+                    ws.Cells["C1"].Value = "Qty"; 
                     ws.Cells["A1:C1"].Style.Font.Bold = true;
 
                     var whseRows = dt.AsEnumerable().Where(r => r.Field<string>("WHSE") == whse);
@@ -269,7 +265,6 @@ namespace DAL.Inventory.Count
                             bulkCopy.DestinationTableName = destinationTable;
                             bulkCopy.BulkCopyTimeout = 300; // 5 minutes timeout
 
-                            // Agar mapping null hai toh names exact hone chahiye
                             mapAction?.Invoke(bulkCopy.ColumnMappings);
 
                             await bulkCopy.WriteToServerAsync(reader);

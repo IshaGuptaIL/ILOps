@@ -12,7 +12,6 @@ namespace DAL.Inventory.Count
         Task<bool> DeleteAllCounts(bool isACC);
         Task<bool> LoadSnapshot(InventorySnapshotBO options);
         Task<object> GetFileStatus();
-        // Return byte array, not IActionResult
         Task<byte[]> ExportHardwareCounts();
         Task<string> TestFileAccess();
        Task<byte[]> ExportAccessoryCounts();

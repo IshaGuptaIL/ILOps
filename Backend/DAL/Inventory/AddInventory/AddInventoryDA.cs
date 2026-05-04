@@ -21,7 +21,7 @@ namespace DAL.Inventory.AddInventory
         {
             _dbContext = context;
             _spire = spire;
-            _pgConnString = spire.PgConnString; // Make sure PgConnString is public in SpireApiHelper
+            _pgConnString = spire.PgConnString; 
         }
 
 
@@ -39,7 +39,6 @@ namespace DAL.Inventory.AddInventory
 
             var list = new List<WarehouseBO>();
 
-            // ✅ RoleId 1 = Only CO warehouse
             string finalSql = userRoleId == 1
                 ? baseSql + " AND whse = 'CO' ORDER BY id"
                 : baseSql + " ORDER BY id";
@@ -47,7 +46,6 @@ namespace DAL.Inventory.AddInventory
             await using var con = new NpgsqlConnection(_pgConnString);
             await using var cmd = new NpgsqlCommand(finalSql, con);
 
-            // ✅ Pass RoleId to method
             if (userRoleId.HasValue)
                 cmd.Parameters.AddWithValue("userRoleId", userRoleId.Value);
 
@@ -210,7 +208,6 @@ namespace DAL.Inventory.AddInventory
                     };
                 }
 
-                // Build EN Spire item
                 var enItem = BuildSpireItemRequest(model.Whse!, model.Description!, model);
                 var enResp = await _spire.SendInventoryItemAsync(enItem, "inventory/items/");
 
@@ -222,7 +219,6 @@ namespace DAL.Inventory.AddInventory
                         Message = $"Spire EN failed: {enResp.HttpStatusText}"
                     };
 
-                // Build FR Spire item
                 var frItem = BuildSpireItemRequest("FR", model.FrDescription!, model);
                 var frResp = await _spire.SendInventoryItemAsync(frItem, "inventory/items/");
 
@@ -234,7 +230,6 @@ namespace DAL.Inventory.AddInventory
                         Message = $"Spire FR failed: {frResp.HttpStatusText}"
                     };
 
-                // Save to Postgres (salesDept removed)
                 var pgArray = new[]
                 {
                 new {

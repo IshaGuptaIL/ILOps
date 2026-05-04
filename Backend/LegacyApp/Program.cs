@@ -2,6 +2,7 @@
 using DAL.Common.Spire;
 using DAL.Common.User;
 using DAL.Inventory.AddInventory;
+using DAL.Inventory.AdvantageVoice;
 using DAL.Inventory.CostValidation;
 using DAL.Inventory.Count;
 using DAL.Inventory.CountAnalysis;
@@ -89,6 +90,7 @@ builder.Services.AddTransient<ICustomSearch,CustomSearchDA>();
 builder.Services.AddTransient<IRunRate,RunRateDA>();
 builder.Services.AddTransient<ISpareLight, SpareLightDA>();
 builder.Services.AddTransient<IRoger, RogerDA>();
+builder.Services.AddTransient<IAdvantageVoice,AdvantageVoiceDA>();
 
 builder.Services.AddHttpClient<ISpireClient, SpireClient>((sp, client) =>
 {

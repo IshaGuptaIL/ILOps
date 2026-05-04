@@ -701,6 +701,24 @@ public class tbIACCBckOrders
         public string? EditType { get; set; }
         public string? Reason { get; set; }
     }
+
+    [Table("tblSKU")]
+    public class tblSKU
+    {
+        [Key]
+        public int ID { get; set; }
+        public string SKU { get; set; }
+        public string Type { get; set; }
+    }
+
+ 
+    public class tblAdvantageSettings
+    {
+        [Key]
+        public int ID { get; set; }
+        public long NextOrderNo { get; set; }
+        public long NextTempOrderNo { get; set; }
+    }
     public class WWInventory
     {
         [Key]
@@ -1288,7 +1306,46 @@ public class hardwarereceived
         public string ModifiedBy { get; set; }
         public DateTime? ModifiedDate { get; set; }
     }
-
+    [Table("tblAdvantageVoiceImport")]
+    public class AdvantageVoiceImport
+    {
+        [Key]
+        public int ID { get; set; }
+        public string? CompanyName { get; set; }
+        public string? ShippingContact { get; set; }
+        public string? ContactNumber { get; set; }
+        public DateTime? OrderDate { get; set; }
+        public string? OrderType { get; set; }
+        public string? SpireOrder { get; set; }
+        public string? GOrderNumber { get; set; }
+        public string? TemporaryNumber { get; set; }
+        public string? MacAddress { get; set; }
+        public string? UserName { get; set; }
+        public string? BvPartNo { get; set; }
+        public string? ShippingAddress { get; set; }
+        public string? Address { get; set; }
+        public string? City { get; set; }
+        public string? Province { get; set; }
+        public string? PostalCode { get; set; }
+        public string? V21Ban { get; set; }
+        public string? ContactEmail { get; set; }
+        public string? RogersSpecialistEmail { get; set; }
+        public string? HardwareType { get; set; }
+        public string? PurolatorNumber { get; set; }
+        public string? ReturnPurolatorNumber { get; set; }
+        public string? DciInvoice { get; set; }
+        public string? Status { get; set; }
+        public DateTime? CompletedDate { get; set; }
+        public string? Note { get; set; }
+        public bool Validated { get; set; }
+        public string? Reason { get; set; }
+        public bool Imported { get; set; }
+        public int? CreatedBy { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public int? ModifiedBy { get; set; }
+        public DateTime? ModifiedDate { get; set; }
+        public int UserId { get; set; }
+    }
 
 
 

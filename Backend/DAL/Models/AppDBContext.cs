@@ -66,10 +66,13 @@ namespace DAL.Models
         public DbSet<RogersAR> RogersAR { get; set; }
         public DbSet<RogersARData> RogersARData { get; set; }
 
+        public DbSet<AdvantageVoiceImport> AdvantageVoiceImports { get; set; }
 
 
 
 
+        public DbSet<tblSKU> tblSKU { get; set; }
+        public DbSet<tblAdvantageSettings> tblAdvantageSettings { get; set; }
 
 
 

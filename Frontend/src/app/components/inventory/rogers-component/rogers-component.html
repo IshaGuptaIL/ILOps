@@ -1,0 +1,138 @@
+<div class="ar-container">
+  <!-- Header Section -->
+  <div class="header-section shadow-sm">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div class="title-wrapper">
+        <h1 class="main-title"><i class="fas fa-file-invoice-dollar me-2 text-danger"></i>Rogers AR </h1>
+      </div>
+      <div class="actions-wrapper d-flex gap-2">
+        <button class="btn btn-primary-premium" (click)="loadAR()">
+          <i class="fas fa-sync-alt me-1"></i> Load AR from Spire
+        </button>
+        <button class="btn btn-success-premium" (click)="exportExcel()">
+          <i class="fas fa-file-excel me-1"></i> Export to Excel
+        </button>
+      </div>
+    </div>
+
+    <!-- Search/Filters -->
+    <div class="search-bar">
+      <div class="input-group">
+        <span class="input-group-text bg-white border-end-0"><i class="fas fa-search text-muted"></i></span>
+        <input type="text" class="form-control border-start-0 ps-0" [(ngModel)]="searchTerm" (keyup.enter)="onSearch()"
+          placeholder="Search by customer name, number or invoice... (Press Enter)">
+        <button class="btn btn-outline-primary" (click)="onSearch()">Search</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content Section -->
+  <div class="content-section mt-4">
+    <div class="card table-card border-0 shadow-sm">
+      <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+        <h5 class="mb-0 fw-bold"><i class="fas fa-list me-2 text-primary"></i>AR Transaction List</h5>
+        <span class="badge bg-light text-dark">{{totalItems}} Records Found</span>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0 text-nowrap">
+          <thead class="table-light">
+            <tr>
+              <th>CustomerNo</th>
+              <th>Transaction</th>
+              <th>Date</th>
+              <th>InvoiceNo</th>
+              <th class="text-end">Debit Amt</th>
+              <th class="text-end">BALANCE</th>
+              <!-- Editable Columns -->
+              <th style="min-width: 200px;">Comments (S)</th>
+              <th style="min-width: 150px;">Remarks</th>
+              <th>Sent On</th>
+              <th style="min-width: 150px;">Comments 2</th>
+              <th style="min-width: 150px;">Comments 3</th>
+              <th>PaymentCode</th>
+              <th>PaymentDate</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of arData">
+              <!-- Read-only Columns -->
+              <td>
+                <!-- <div class="fw-bold">{{item.customerName}}</div> -->
+                <div class="small text-muted">{{item.customerNo}}</div>
+              </td>
+              <td>{{item.transaction}}</td>
+              <!-- <td>{{item.date | date:'MMM dd, y'}}</td> -->
+              <td>{{item.date | date:'MM-dd-yyyy'}}</td>
+
+              <td><span class="text-end">{{item.invoiceNo}}</span>
+              </td>
+              <td class="text-end">{{item.debitAmt | currency}}</td>
+              <td class="text-end fw-bold" [class.text-danger]="item.balance > 0">{{item.balance | currency}}</td>
+
+              <!-- Editable Columns (Direct NGModel with update on blur) -->
+              <td>
+                <input type="text" class="form-control form-control-sm border-0 bg-transparent edit-input"
+                  [(ngModel)]="item.comments" (blur)="updateItem(item)">
+              </td>
+              <td>
+                <input type="text" class="form-control form-control-sm border-0 bg-transparent edit-input"
+                  [(ngModel)]="item.remarks" (blur)="updateItem(item)">
+              </td>
+              <td>
+                <!-- <input type="date" class="form-control form-control-sm border-0 bg-transparent edit-input" 
+                       [ngModel]="item.sentOn | date:'MM-dd-yyyy'" (ngModelChange)="item.sentOn = $event" (blur)="updateItem(item)">
+             -->
+<td>
+  <input 
+    type="text"
+    class="form-control form-control-sm border-0 bg-transparent edit-input"
+    [ngModel]="item.sentOn | dateFormat:'MM-DD-YYYY'"
+    (ngModelChange)="item.sentOn = $event"
+    placeholder="MM-dd-yyyy"
+    (blur)="updateItem(item)">
+
+              </td>
+              <td>
+                <input type="text" class="form-control form-control-sm border-0 bg-transparent edit-input"
+                  [(ngModel)]="item.comments2" (blur)="updateItem(item)">
+              </td>
+              <td>
+                <input type="text" class="form-control form-control-sm border-0 bg-transparent edit-input"
+                  [(ngModel)]="item.comments3" (blur)="updateItem(item)">
+              </td>
+              <td>
+                <input type="text" class="form-control form-control-sm border-0 bg-transparent edit-input"
+                  [(ngModel)]="item.paymentCode" (blur)="updateItem(item)">
+              </td>
+              <td>
+                  <input 
+    type="text"
+    class="form-control form-control-sm border-0 bg-transparent edit-input"
+    [ngModel]="item.paymentDate | dateFormat:'MM-DD-YYYY'"
+    (ngModelChange)="item.paymentDate = $event"
+    placeholder="MM-dd-yyyy"
+    (blur)="updateItem(item)">
+
+              </td>
+            </tr>
+            <tr *ngIf="arData.length === 0">
+              <td colspan="14" class="text-center py-5">
+                <div class="empty-state">
+                  <i class="fas fa-folder-open fa-3x text-muted mb-3 d-block"></i>
+                  <p class="text-muted">No AR data found. Click "Load AR" to fetch from Spire.</p>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Shared Pagination Component -->
+      <div style="border:2px solid rgb(248, 244, 244)">
+        <app-pagination [currentPage]="currentPage" [totalPages]="totalPages" [totalItems]="totalItems"
+          [pageSize]="pageSize" (pageChanged)="fetchData($event)">
+        </app-pagination>
+      </div>
+    </div>
+  </div>
+</div>

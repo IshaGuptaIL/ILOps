@@ -1,0 +1,164 @@
+:host {
+  --vba-bg: #f0f0f0;
+  --vba-border-dark: #808080;
+  --vba-border-light: #ffffff;
+  --vba-btn-bg: #e1e1e1;
+  --vba-text: #000000;
+  --vba-blue-header: #000080;
+  
+  display: block;
+  background-color: var(--vba-bg);
+  min-height: 100vh;
+  padding: 0;
+  margin: 0;
+  font-family: 'Tahoma', sans-serif;
+  font-size: 11px;
+}
+
+.advantage-voice-page {
+  padding: 10px;
+}
+
+.vba-form-container {
+  width: 750px; /* Based on VBA width 7500 twips */
+  background-color: var(--vba-bg);
+  border: 1px solid #000;
+  padding-bottom: 20px;
+}
+
+.form-header {
+  background-color: var(--vba-blue-header);
+  color: #fff;
+  padding: 3px 10px;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.form-content {
+  position: relative;
+  height: 400px;
+  padding: 20px;
+}
+
+/* VBA Style Buttons */
+.vba-btn {
+  position: absolute;
+  width: 200px;
+  height: 35px;
+  background-color: var(--vba-btn-bg);
+  border: 1px solid #707070;
+  box-shadow: 1px 1px 0 #fff inset, -1px -1px 0 #808080 inset;
+  color: #000;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Tahoma', sans-serif;
+}
+
+.vba-btn:active {
+  box-shadow: 1px 1px 0 #808080 inset;
+}
+
+.vba-btn:disabled {
+  color: #808080;
+}
+
+/* Positioning based on VBA twips (roughly) */
+.btn-import { left: 20px; top: 20px; }
+.btn-validate { left: 20px; top: 70px; }
+.btn-preview { left: 20px; top: 120px; }
+.btn-submit { left: 20px; top: 170px; }
+.btn-template { left: 20px; top: 220px; border: 1px dashed #000; } /* The extra button */
+
+/* Labels and Inputs */
+.vba-label {
+  position: absolute;
+  font-size: 11px;
+  color: #000;
+}
+
+.vba-input {
+  position: absolute;
+  background: #fff;
+  border: 1px inset #808080;
+  padding: 2px 5px;
+  font-size: 11px;
+  height: 20px;
+}
+
+.lbl-import-file { left: 240px; top: 25px; }
+.txt-import-file { left: 350px; top: 23px; width: 350px; }
+
+.lbl-unvalidated { left: 240px; top: 75px; }
+.txt-unvalidated { left: 350px; top: 73px; width: 60px; text-align: right; font-weight: bold; }
+
+/* Grid Section - Like Access Datasheet */
+.data-view {
+  margin-top: 50px;
+  padding: 10px;
+  width: 1000px; /* Allow form to expand for the grid */
+}
+
+.table-container {
+  width: 100%;
+  height: 400px;
+  overflow: auto; /* Enable both horizontal and vertical scroll */
+  border: 1px inset #808080;
+  background: #fff;
+}
+
+.vba-grid {
+  width: max-content; /* Ensure table takes full width of its content for scrolling */
+  min-width: 100%;
+  border-collapse: collapse;
+}
+
+.vba-grid th {
+  background: #e1e1e1;
+  border: 1px solid #808080;
+  padding: 4px 8px;
+  text-align: left;
+  font-weight: normal;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  white-space: nowrap;
+}
+
+.vba-grid td {
+  border: 1px solid #dcdcdc;
+  padding: 3px 8px;
+  white-space: nowrap;
+}
+
+.reason-cell {
+  white-space: normal !important; /* Allow wrapping for reasons */
+  min-width: 250px;
+  max-width: 400px;
+}
+
+.vba-grid tr:nth-child(even) { background: #f9f9f9; }
+.vba-grid tr.row-error { background: #ffeaea; color: red; }
+
+.status-valid { color: green; font-weight: bold; }
+.status-invalid { color: red; font-weight: bold; }
+
+/* Loader */
+.vba-loader {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.1);
+  z-index: 999;
+  justify-content: center;
+  align-items: center;
+}
+
+.vba-loader.active { display: flex; }
+.loader-box {
+  background: #f0f0f0;
+  border: 1px solid #000;
+  padding: 20px;
+  box-shadow: 4px 4px 0 rgba(0,0,0,0.2);
+}

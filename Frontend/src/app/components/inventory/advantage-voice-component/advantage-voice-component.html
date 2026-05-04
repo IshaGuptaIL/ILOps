@@ -1,0 +1,113 @@
+<div class="advantage-voice-page">
+  <div class="vba-form-container">
+    <!-- Blue Header Bar -->
+    <div class="form-header">
+      Import - Advantage Voice
+    </div>
+
+    <div class="form-content">
+      <!-- Buttons -->
+      <button class="vba-btn btn-import" (click)="fileInput.click()">Import File</button>
+      <input type="file" #fileInput (change)="onFileChange($event)" hidden accept=".xlsx">
+
+      <button class="vba-btn btn-validate" (click)="validateBatch()" [disabled]="pendingOrders.length === 0">Validate</button>
+
+      <button class="vba-btn btn-preview" (click)="loadPendingOrders()">Preview Orders</button>
+
+      <button class="vba-btn btn-submit" (click)="submitOrders()" [disabled]="validatedOrders === 0">Submit Orders</button>
+
+      <button class="vba-btn btn-template" (click)="downloadTemplate()">Download Template</button>
+
+      <!-- Labels and Textboxes (VBA Parity) -->
+     
+
+      <label class="vba-label lbl-unvalidated">Unvalidated Orders:</label>
+      <input type="text" class="vba-input txt-unvalidated" readonly [value]="failedOrders + (totalOrders - validatedOrders - failedOrders)">
+    </div>
+
+    <!-- Data Grid (Datasheet View) -->
+    <div class="data-view">
+      <div class="table-container">
+        <table class="vba-grid">
+          <thead>
+            <tr>
+              <th class="status-col">Status</th>
+              <th>Order Date</th>
+              <th>V21 BAN</th>
+              <th>Order Type</th>
+              <th>Company Name</th>
+              <th>Shipping Contact</th>
+              <th>Contact Number</th>
+              <th>Contact Email</th>
+              <th>Rogers Specialist Email</th>
+              <th>G Order Number</th>
+              <th>First Name/Last Name</th>
+              <th>Temporary Number</th>
+              <th>Hardware Type</th>
+              <th>Hardware SKU</th>
+              <th>Address</th>
+              <th>City</th>
+              <th>Province</th>
+              <th>Postal Code</th>
+              <th>MAC ADDRESS</th>
+              <th>Purolator No</th>
+              <th>Return Purolator</th>
+              <th>DCI Invoice</th>
+              <th>Excel Status</th>
+              <th>Completed Date</th>
+              <th>Note</th>
+              <th class="reason-col">Reason</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of pendingOrders" [class.row-error]="!item.validated && item.reason">
+              <td class="status-cell">
+                <span class="status-icon" [class.valid]="item.validated" [class.invalid]="!item.validated && item.reason">
+                  {{ item.validated ? '✓' : (item.reason ? '✗' : '?') }}
+                </span>
+              </td>
+              <td>{{ item.orderDate | date:'MM/dd/yyyy' }}</td>
+              <td>{{ item.v21Ban }}</td>
+              <td>{{ item.orderType }}</td>
+              <td>{{ item.companyName }}</td>
+              <td>{{ item.shippingContact }}</td>
+              <td>{{ item.contactNumber }}</td>
+              <td>{{ item.contactEmail }}</td>
+              <td>{{ item.rogersSpecialistEmail }}</td>
+              <td>{{ item.gOrderNumber }}</td>
+              <td>{{ item.userName }}</td>
+              <td>{{ item.temporaryNumber }}</td>
+              <td>{{ item.hardwareType }}</td>
+              <td>{{ item.bvPartNo }}</td>
+              <td>{{ item.address }}</td>
+              <td>{{ item.city }}</td>
+              <td>{{ item.province }}</td>
+              <td>{{ item.postalCode }}</td>
+              <td>{{ item.macAddress }}</td>
+              <td>{{ item.purolatorNumber }}</td>
+              <td>{{ item.returnPurolatorNumber }}</td>
+              <td>{{ item.dciInvoice }}</td>
+              <td>{{ item.status }}</td>
+              <td>{{ item.completedDate | date:'MM/dd/yyyy' }}</td>
+              <td>{{ item.note }}</td>
+              <td class="reason-cell">
+                <span class="reason-text" [class.error-text]="item.reason">
+                  {{ item.reason || 'Pending validation...' }}
+                </span>
+              </td>
+            </tr>
+            <tr *ngIf="pendingOrders.length === 0">
+              <td colspan="26" style="text-align: center; padding: 20px; color: #666;">
+                No pending imports found. Please upload an Excel file.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- VBA Style Loader -->
+
+</div>
+

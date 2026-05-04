@@ -25,6 +25,7 @@ import { InventoryRunRateComponent } from './components/inventory/inventory-run-
 import { ImeiReceiveComponent } from './components/IMEI/imei-receive-component/imei-receive-component';
 import { SpareLightComponent } from './components/inventory/spare-light-component/spare-light-component';
 import { RogersComponent } from './components/inventory/rogers-component/rogers-component';
+import { AdvantageVoiceComponent } from './components/inventory/advantage-voice-component/advantage-voice-component';
 
 export const routes: Routes = [
   { path: '', component: Login },           // default login page
@@ -49,6 +50,8 @@ export const routes: Routes = [
   { path: 'role-permissions', component: RolePermissionComponent },
   { path: 'inventoryType', component: InventoryTypeComponent },
       { path: 'outputInvoice', component: OutputInvoiceComponent },
+      { path: 'advantagevoice', component: AdvantageVoiceComponent },
+
 
 
 { 

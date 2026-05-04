@@ -41,13 +41,11 @@ namespace DAL.Inventory.CostValidation
                 ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
                 DataTable raw = new DataTable();
 
-                // ================= READ EXCEL =================
                 using (var pkg = new ExcelPackage(excelStream))
                 {
                     var ws = pkg.Workbook.Worksheets[0];
                     if (ws.Dimension == null) throw new Exception("Excel sheet is empty");
 
-                    // Create columns based on Excel Headers
                     for (int c = 1; c <= ws.Dimension.End.Column; c++)
                     {
                         string header = ws.Cells[1, c].Text.Trim();
@@ -55,7 +53,6 @@ namespace DAL.Inventory.CostValidation
                             raw.Columns.Add(header);
                     }
 
-                    // Add rows data
                     for (int r = 2; r <= ws.Dimension.End.Row; r++)
                     {
                         var dr = raw.NewRow();
@@ -214,20 +211,17 @@ namespace DAL.Inventory.CostValidation
 
         public async Task<List<HpcRecord>> GetHpcDiscrepanciesAsync()
         {
-            // 1️⃣ Load HPC summary from SQL Server
             DataTable dtSql = GetSqlServerData(@"
         SELECT Whse, Part, MaxOfF3, Cost
         FROM HPCExtractSummary
     ");
 
-            // 2️⃣ Load inventory from Postgres
             DataTable dtPg = GetPostgresData(@"
         SELECT part_no, whse, description, product_code,
                current_cost, onhand_qty, purchase_qty
         FROM inventory
     ");
 
-            // 3️⃣ Create lookup dictionary for fast access
             var pgLookup = dtPg.AsEnumerable()
                 .ToDictionary(
                     r => $"{r["part_no"]}_{r["whse"]}",
@@ -262,7 +256,6 @@ namespace DAL.Inventory.CostValidation
                     PurchaseQty = pg?["purchase_qty"] as decimal?
                 };
 
-                // 4️⃣ Logic: include missing rows, cost mismatch, or product code mismatch
                 bool addRecord = false;
 
                 if (existInSpire == "No")
@@ -410,21 +403,18 @@ namespace DAL.Inventory.CostValidation
 
         public async Task<List<HardwareVsSpire>> GetRDHardwareVsSpireAsync()
         {
-            // 1. SQL Server data
             DataTable dtHardware = GetSqlServerData(@"
             SELECT hardwareID, bv_part_number, model, dealer_cost
             FROM t_hardware
             WHERE bv_part_number IS NOT NULL
         ");
 
-            // 2. PostgreSQL data
             DataTable dtInventory = GetPostgresData(@"
             SELECT part_no, description, current_cost, product_code, last_sale_date
             FROM inventory
             WHERE whse = 'CO'
         ");
 
-            // 3. Exact SQL INNER JOIN logic (no trim, no uppercase)
             var joined = from h in dtHardware.AsEnumerable()
                          join i in dtInventory.AsEnumerable()
                          on h.Field<string>("bv_part_number") equals i.Field<string>("part_no")
