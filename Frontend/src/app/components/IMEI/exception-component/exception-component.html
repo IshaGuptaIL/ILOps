@@ -1,11 +1,160 @@
-<div class="password-container">
-  <h3>Enter Password</h3>
+<div class="ms-access-container">
+  <!-- Password Screen -->
+  <div class="password-box" *ngIf="!isAuthenticated">
+    <div class="box-header">System Security - Enter Password</div>
+    <div class="box-content">
+      <label>Administrator Password:</label>
+      <div class="password-input-wrapper" style="position: relative; display: flex; align-items: center; width: 100%;">
+        <input 
+          [type]="showPassword ? 'text' : 'password'" 
+          [(ngModel)]="password" 
+          placeholder="Enter password..." 
+          (keyup.enter)="checkPassword()" 
+          style="width: 100%; padding-right: 35px; box-sizing: border-box;"
+        />
+        <button 
+          type="button" 
+          (click)="showPassword = !showPassword" 
+          style="position: absolute; right: 10px; background: none; border: none; cursor: pointer; color: #555; display: flex; align-items: center; justify-content: center; padding: 0;"
+          title="Toggle Password Visibility"
+        >
+          <!-- Eye Open Icon (Show) -->
+          <svg *ngIf="showPassword" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>
+          <!-- Eye Closed Icon (Hide) -->
+          <svg *ngIf="!showPassword" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+            <line x1="1" y1="1" x2="23" y2="23"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="button-row" style="margin-top: 15px;">
+        <button class="ms-btn" (click)="checkPassword()">Login</button>
+      </div>
+    </div>
+  </div>
 
-  <input 
-    type="password" 
-    [(ngModel)]="password" 
-    placeholder="Enter password"
-  />
+  <!-- Main Exception Management Screen -->
+  <div class="main-window" *ngIf="isAuthenticated">
+    <div class="window-header">
+      <span>IMEI Exception & Error Management</span>
+      <button class="ms-btn-small" (click)="isAuthenticated = false; password = ''">Logout</button>
+    </div>
 
-  <button (click)="checkPassword()">Submit</button>
+    <!-- Tabs -->
+    <div class="tab-bar">
+      <button class="tab-btn" [class.active]="activeTab === 'length'" (click)="activeTab = 'length'; loadLengthExceptions()">IMEI Length Exceptions</button>
+      <button class="tab-btn" [class.active]="activeTab === 'errors'" (click)="activeTab = 'errors'; loadSystemErrors()">System Errors Log</button>
+    </div>
+
+    <!-- Tab 1: IMEI Length Exceptions -->
+    <div class="tab-content" *ngIf="activeTab === 'length'">
+      <div class="section-title">Manage IMEI Length Exceptions (tblIMEILengthExceptions)</div>
+      
+      <!-- Add New Form -->
+      <div class="form-panel">
+        <div class="form-title">Add / Update Exception</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Exception Part:</label>
+            <input type="text" [(ngModel)]="newException.exceptionPart" placeholder="e.g. SIM, ACC..." />
+          </div>
+          <div class="form-group">
+            <label>Expected IMEI Length:</label>
+            <input type="number" [(ngModel)]="newException.imeiLength" min="1" max="50" />
+          </div>
+          <div class="form-group checkbox-group">
+            <label>
+              <input type="checkbox" [(ngModel)]="newException.allowAlpha" />
+              Allow Alphanumeric
+            </label>
+          </div>
+          <div class="form-group btn-group">
+            <button class="ms-btn" (click)="saveLengthException(newException)">Save Exception</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Existing Exceptions Table -->
+      <div class="table-container">
+        <table class="ms-table">
+          <thead>
+            <tr>
+              <th>Exception Part</th>
+              <th>IMEI Length</th>
+              <th>Allow Alpha</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of lengthExceptions">
+              <td>{{ item.exceptionPart }}</td>
+              <td>
+                <input type="number" [(ngModel)]="item.imeiLength" class="cell-input" />
+              </td>
+              <td>
+                <input type="checkbox" [(ngModel)]="item.allowAlpha" />
+              </td>
+              <td>
+                <button class="ms-btn-small" (click)="saveLengthException(item)">Update</button>
+                <button class="ms-btn-small btn-danger" (click)="deleteLengthException(item.exceptionPart)">Delete</button>
+              </td>
+            </tr>
+            <tr *ngIf="lengthExceptions.length === 0">
+              <td colspan="4" class="no-data">No IMEI length exceptions configured.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Tab 2: System Errors Log -->
+    <div class="tab-content" *ngIf="activeTab === 'errors'">
+      <div class="section-header-flex">
+        <div class="section-title">System Execution Errors (tblErrors)</div>
+        <button class="ms-btn btn-danger" (click)="clearAllErrors()">Clear All Errors</button>
+      </div>
+
+      <div class="table-container">
+        <table class="ms-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>VB Code</th>
+              <th>Description</th>
+              <th>PO Number</th>
+              <th>Error While</th>
+              <th>Row Count</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let err of systemErrors">
+              <td>{{ err.id }}</td>
+              <td>{{ err.vbCode }}</td>
+              <td>{{ err.vbDescription }}</td>
+              <td>{{ err.poNumber }}</td>
+              <td>{{ err.errorWhile }}</td>
+              <td>{{ err.rowCount }}</td>
+              <td>
+                <span class="status-badge" [class.resolved]="err.resolved">
+                  {{ err.resolved ? 'Resolved' : 'Unresolved' }}
+                </span>
+              </td>
+              <td>
+                <button class="ms-btn-small" *ngIf="!err.resolved" (click)="resolveError(err.id)">Resolve</button>
+                <span *ngIf="err.resolved">N/A</span>
+              </td>
+            </tr>
+            <tr *ngIf="systemErrors.length === 0">
+              <td colspan="8" class="no-data">No system errors logged.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>

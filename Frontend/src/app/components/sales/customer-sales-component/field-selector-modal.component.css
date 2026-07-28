@@ -1,0 +1,147 @@
+.access-modal {
+  border-radius: 0;
+  border: 1px solid #707070;
+  box-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+  font-family: 'Calibri', 'Segoe UI', sans-serif;
+  font-size: 11pt;
+}
+
+.access-header {
+  background: linear-gradient(to bottom, #ffffff 0%, #e1e1e1 100%);
+  border-bottom: 1px solid #adadad;
+  padding: 8px 15px;
+  border-radius: 0;
+}
+
+.access-header .modal-title {
+  font-size: 11pt;
+  font-weight: bold;
+  color: #333;
+}
+
+.access-body {
+  background-color: #f0f0f0;
+  padding: 15px;
+}
+
+.table-container {
+  background-color: white;
+  border: 1px solid #adadad;
+  height: 400px;
+  overflow-y: auto;
+  margin-bottom: 15px;
+}
+
+.access-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.access-table thead th {
+  position: sticky;
+  top: 0;
+  background: #e1e1e1;
+  border-right: 1px solid #adadad;
+  border-bottom: 1px solid #adadad;
+  padding: 5px 8px;
+  font-weight: normal;
+  color: #333;
+  z-index: 10;
+}
+
+.access-table tbody td {
+  border-right: 1px solid #e1e1e1;
+  border-bottom: 1px solid #e1e1e1;
+  padding: 3px 8px;
+  color: #333;
+}
+
+.access-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.access-table tr.selected {
+  background-color: #0078d7 !important;
+  color: white !important;
+}
+
+.access-table tr.selected td {
+  color: white !important;
+}
+
+.access-input {
+  width: 100%;
+  border: 1px solid transparent;
+  background: transparent;
+  padding: 2px 5px;
+  font-size: 11pt;
+}
+
+.access-table tr:hover .access-input {
+  border-color: #ccc;
+  background: white;
+}
+
+.access-table tr.selected .access-input {
+  color: white;
+  background: transparent;
+  border-color: transparent;
+}
+
+.access-select {
+  width: 100%;
+  border: 1px solid #ccc;
+  background: white;
+  font-size: 10pt;
+  padding: 1px;
+}
+
+.btn-access {
+  background: linear-gradient(to bottom, #f0f0f0 0%, #e1e1e1 100%);
+  border: 1px solid #adadad;
+  padding: 5px 15px;
+  min-width: 100px;
+  font-size: 11pt;
+  color: #333;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.btn-access:hover {
+  background: linear-gradient(to bottom, #e5f1fb 0%, #cce4f7 100%);
+  border-color: #005a9e;
+}
+
+.btn-access:active {
+  background: #b3d7ff;
+}
+
+.btn-access:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.primary-btn {
+  font-weight: bold;
+  border-color: #0078d7;
+}
+
+.footer-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.main-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.reorder-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.text-center {
+  text-align: center;
+}

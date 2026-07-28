@@ -1,0 +1,155 @@
+<div class="access-container">
+
+  <!-- Switchboard / Window Title -->
+  <div class="form-title-bar">
+    Rogers Overpayments Manager
+  </div>
+
+  <div class="form-body-wrapper">
+    <div class="access-form-main">
+
+      <div class="two-column-layout">
+
+        <!-- LEFT COLUMN: Import & Export -->
+        <div class="form-column">
+          <div class="column-title">Import & Export Operations</div>
+
+          <!-- Download template option -->
+          <div class="form-group-row">
+            <div class="form-label-cell">Download Template:</div>
+            <div class="form-input-cell">
+              <button class="access-glossy-btn" (click)="downloadTemplate()">
+                <i class="fas fa-file-excel"></i> Download Rogers Template
+              </button>
+            </div>
+          </div>
+
+          <!-- Custom File Upload Selector -->
+          <div class="form-group-row">
+            <div class="form-label-cell">Select Excel File:</div>
+            <div class="form-input-cell" style="display: flex; gap: 8px;">
+              <input 
+                type="text" 
+                class="form-input-control readonly" 
+                [value]="uploadedFileName || 'No file selected...'" 
+                readonly 
+              />
+              <div class="file-input-wrapper" style="width: auto;">
+                <button class="access-glossy-btn">Browse...</button>
+                <input 
+                  type="file" 
+                  class="file-input-hidden" 
+                  accept=".xlsx, .xls, .csv" 
+                  (change)="onFileSelected($event)" 
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Import Button -->
+          <div class="form-group-row justify-center-btn">
+            <button 
+              class="access-glossy-btn" 
+              (click)="importOverpayments()" 
+              [disabled]="!uploadedFile || isImporting"
+            >
+              Import Rogers Overpayments
+            </button>
+          </div>
+
+          <hr class="column-divider" />
+
+          <!-- Export All Overpayments -->
+          <div class="form-group-row">
+            <div class="form-label-cell">Output Data:</div>
+            <div class="form-input-cell">
+              <button class="access-glossy-btn" (click)="outputAllOverpayments()" [disabled]="isExporting">
+                Output all Rogers Overpayments
+              </button>
+            </div>
+          </div>
+
+          <!-- Loading Spinner -->
+          <div *ngIf="isImporting" class="progress-overlay">
+            <div class="spinner"></div>
+            <span>Importing records, please wait...</span>
+          </div>
+
+        </div>
+
+        <!-- VERTICAL DIVIDER -->
+        <div class="vertical-divider-line"></div>
+
+        <!-- RIGHT COLUMN: Maintain & Remove -->
+        <div class="form-column">
+          <div class="column-title">Remove Specific Imports</div>
+
+          <!-- File Selector Dropdown -->
+          <div class="form-group-row">
+            <div class="form-label-cell">Select File:</div>
+            <div class="form-input-cell">
+              <select 
+                class="form-select-control" 
+                [(ngModel)]="selectedFile" 
+                (change)="onSelectedFileChange()"
+                [disabled]="isDeleting"
+              >
+                <option value="">{{ importedFiles.length === 0 ? '-- No files imported --' : '-- Choose file to remove --' }}</option>
+                <option *ngFor="let file of importedFiles" [value]="file.filename">
+                  {{ file.filename }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Records count (Readonly indicator) -->
+          <div class="form-group-row">
+            <div class="form-label-cell">Total Records:</div>
+            <div class="form-input-cell">
+              <input 
+                type="text" 
+                class="form-input-control readonly" 
+                [value]="selectedFileRecordCount !== null ? selectedFileRecordCount : ''" 
+                readonly 
+              />
+            </div>
+          </div>
+
+          <!-- Import Date (Readonly indicator) -->
+          <div class="form-group-row">
+            <div class="form-label-cell">Import Date:</div>
+            <div class="form-input-cell">
+              <input 
+                type="text" 
+                class="form-input-control readonly" 
+                [value]="selectedFileImportDate ? (selectedFileImportDate | date:'MM/dd/yyyy HH:mm:ss') : ''" 
+                readonly 
+              />
+            </div>
+          </div>
+
+          <!-- Remove Records Button -->
+          <div class="form-group-row justify-center-btn">
+            <button 
+              class="access-glossy-btn" 
+              (click)="removeFileRecords()" 
+              [disabled]="!selectedFile || isDeleting"
+            >
+              Remove Records from Specific File
+            </button>
+          </div>
+
+          <!-- Deleting Spinner -->
+          <div *ngIf="isDeleting" class="progress-overlay">
+            <div class="spinner"></div>
+            <span>Removing records from database...</span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+</div>

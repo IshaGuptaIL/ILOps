@@ -1,0 +1,97 @@
+<div class="users-form-container">
+  <!-- Form Header -->
+  <div class="access-form-header">
+    <div class="header-icon">
+      <i class="fa fa-users"></i>
+    </div>
+    <div class="header-info">
+      <h2>Maintain Users</h2>
+    
+    </div>
+  </div>
+
+  <div class="users-datasheet-container card">
+    <div class="card-header">
+      <i class="fa fa-table"></i>
+      <h3>User Management Datasheet</h3>
+    </div>
+    
+    <div class="table-container">
+      <table class="access-grid-table">
+        <thead>
+          <tr>
+            <th class="row-selector-hdr"></th>
+            <th>Domain User</th>
+            <th>Initials</th>
+            <th style="min-width: 150px;">Default Channel</th>
+            <th class="col-actions">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of users">
+            <!-- Row selector indicator mimicking Access -->
+            <td class="row-selector-cell">▶</td>
+            <td>
+              <input type="text" [(ngModel)]="user.domainUser" (blur)="saveUserInline(user)" class="datasheet-input" placeholder="Enter Domain User">
+            </td>
+            <td>
+              <input type="text" [(ngModel)]="user.initials" (blur)="saveUserInline(user)" class="datasheet-input" placeholder="Initials">
+            </td>
+            <td>
+              <div class="select-wrapper no-arrow">
+                <select [(ngModel)]="user.defaultChannel" (change)="saveUserInline(user)" class="datasheet-select">
+                  <option [value]="0">-- Select Channel --</option>
+                  <option *ngFor="let ch of territoryGroups" [value]="ch.id">{{ ch.groupName }}</option>
+                </select>
+              </div>
+            </td>
+            <td class="col-actions">
+              <button class="action-btn btn-delete" (click)="deleteUser(user)" title="Delete User">
+                <i class="fa fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+          
+          <!-- New Record Row (Access Asterisk Line) -->
+          <tr class="new-row-datasheet">
+            <td class="row-selector-cell">*</td>
+            <td>
+              <input type="text" [(ngModel)]="newDomainUser" placeholder="Click here to add new..." class="datasheet-input new-input">
+            </td>
+            <td>
+              <input type="text" [(ngModel)]="newInitials" placeholder="Initials" class="datasheet-input new-input">
+            </td>
+            <td>
+              <div class="select-wrapper no-arrow">
+                <select [(ngModel)]="newDefaultChannel" class="datasheet-select new-input">
+                  <option [value]="0">-- Select Channel --</option>
+                  <option *ngFor="let ch of territoryGroups" [value]="ch.id">{{ ch.groupName }}</option>
+                </select>
+              </div>
+            </td>
+            <td class="col-actions">
+              <button class="action-btn btn-add" (click)="createUserInline()" title="Add New User">
+                <i class="fa fa-plus-circle"></i> Add
+              </button>
+            </td>
+          </tr>
+          
+          <tr *ngIf="users.length === 0 && !newDomainUser">
+            <td colspan="5" class="text-center empty-text">No user records found.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination Footer -->
+    <div class="pagination-footer-container">
+      <app-pagination 
+        [currentPage]="currentPage" 
+        [totalPages]="totalPages" 
+        [pageSize]="pageSize" 
+        [totalItems]="totalItems" 
+        (pageChanged)="onPageChange($event)">
+      </app-pagination>
+    </div>
+  </div>
+</div>

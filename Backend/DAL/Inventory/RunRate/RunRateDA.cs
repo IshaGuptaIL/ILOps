@@ -1,4 +1,4 @@
-﻿using DocumentFormat.OpenXml.Drawing;
+using DocumentFormat.OpenXml.Drawing;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
@@ -191,7 +191,7 @@ namespace DAL.Inventory.RunRate
                 dtSales.Columns.Add("BVUNITPRICE", typeof(decimal));
                 dtSales.Columns.Add("Created_by", typeof(int));
 
-                await using (var pgCmd = new NpgsqlCommand(pgSalesQuery, pgConn))
+                await using (var pgCmd = new NpgsqlCommand(pgSalesQuery, pgConn) { CommandTimeout = 600 })
                 {
                     pgCmd.Parameters.AddWithValue("@StartDate", startDate);
                     pgCmd.Parameters.AddWithValue("@EndDate", endDate);
@@ -244,7 +244,7 @@ namespace DAL.Inventory.RunRate
                 dtIMEI.Columns.Add("NUMBER", typeof(string));
                 dtIMEI.Columns.Add("Created_by", typeof(int));
 
-                await using (var pgCmd = new NpgsqlCommand(pgIMEIQuery, pgConn))
+                await using (var pgCmd = new NpgsqlCommand(pgIMEIQuery, pgConn) { CommandTimeout = 600 })
                 {
                     await using var reader = await pgCmd.ExecuteReaderAsync();
                     dtIMEI.Load(reader);
@@ -266,7 +266,7 @@ namespace DAL.Inventory.RunRate
 
                 // 4. Calculate Working Days (filtered by current user)
                 int workingDays = 0;
-                await using (var cmd = new SqlCommand("SELECT COUNT(DISTINCT IN_DATE) FROM WWSalesDetailTEMP WHERE Created_by = @UserId;", sqlConn))
+                await using (var cmd = new SqlCommand("SELECT COUNT(DISTINCT IN_DATE) FROM WWSalesDetailTEMP WHERE Created_by = @UserId;", sqlConn) { CommandTimeout = 600 })
                 {
                     cmd.Parameters.AddWithValue("@UserId", createdId);
                     var result = await cmd.ExecuteScalarAsync();
@@ -286,7 +286,7 @@ namespace DAL.Inventory.RunRate
                 dtLastPO.Columns.Add("NUMBER", typeof(string));
                 dtLastPO.Columns.Add("Created_by", typeof(int));
 
-                await using (var pgCmd = new NpgsqlCommand(pgLastPO1Query, pgConn))
+                await using (var pgCmd = new NpgsqlCommand(pgLastPO1Query, pgConn) { CommandTimeout = 600 })
                 {
                     await using var reader = await pgCmd.ExecuteReaderAsync();
                     dtLastPO.Load(reader);
@@ -317,7 +317,7 @@ namespace DAL.Inventory.RunRate
                     WHERE phi.po_number < m.max_po AND phi.product_code = 'ACC'
                     GROUP BY phi.part_no;";
 
-                await using (var pgCmd = new NpgsqlCommand(pgLastPO2Query, pgConn))
+                await using (var pgCmd = new NpgsqlCommand(pgLastPO2Query, pgConn) { CommandTimeout = 600 })
                 {
                     var dtNextPO = new DataTable();
                     dtNextPO.Columns.Add("CODE", typeof(string));
@@ -360,7 +360,7 @@ namespace DAL.Inventory.RunRate
                         INNER JOIN purchase_history ph ON phi.po_number = ph.po_number
                         WHERE phi.po_number = ANY(@POs);";
 
-                    await using (var pgCmd = new NpgsqlCommand(pgDetailQuery, pgConn))
+                    await using (var pgCmd = new NpgsqlCommand(pgDetailQuery, pgConn) { CommandTimeout = 600 })
                     {
                         pgCmd.Parameters.AddWithValue("@POs", foundPOs.ToArray());
                         await using var reader = await pgCmd.ExecuteReaderAsync();
@@ -450,7 +450,7 @@ namespace DAL.Inventory.RunRate
                 await using var conn = new NpgsqlConnection(_pgConn);
                 await conn.OpenAsync();
 
-                await using var cmd = new NpgsqlCommand(sql, conn);
+                await using var cmd = new NpgsqlCommand(sql, conn) { CommandTimeout = 600 };
                 cmd.Parameters.AddWithValue("@Whse", "CO");
                 cmd.Parameters.AddWithValue("@Misc1", "WORK FROM HOME");
 
@@ -493,7 +493,7 @@ namespace DAL.Inventory.RunRate
                 await sqlConn.OpenAsync();
 
                 // Working Days
-                await using (var cmdWD = new SqlCommand("SELECT COUNT(DISTINCT IN_DATE) FROM WWSalesDetailTEMP WHERE Created_by = @UserId;", sqlConn))
+                await using (var cmdWD = new SqlCommand("SELECT COUNT(DISTINCT IN_DATE) FROM WWSalesDetailTEMP WHERE Created_by = @UserId;", sqlConn) { CommandTimeout = 600 })
                 {
                     cmdWD.Parameters.AddWithValue("@UserId", createdId);
                     var wd = await cmdWD.ExecuteScalarAsync();
@@ -507,7 +507,7 @@ namespace DAL.Inventory.RunRate
                     WHERE WHSE NOT IN ('ZZ','FR') AND Created_by = @UserId
                     GROUP BY CODE;";
 
-                await using var cmdSales = new SqlCommand(sqlSales, sqlConn);
+                await using var cmdSales = new SqlCommand(sqlSales, sqlConn) { CommandTimeout = 600 };
                 cmdSales.Parameters.AddWithValue("@UserId", createdId);
                 await using var reader = await cmdSales.ExecuteReaderAsync();
                 while (await reader.ReadAsync())
@@ -644,7 +644,7 @@ namespace DAL.Inventory.RunRate
             await using (var sqlConn = new SqlConnection(_sqlConn))
             {
                 await sqlConn.OpenAsync();
-                await using (var cmdWD = new SqlCommand("SELECT COUNT(DISTINCT IN_DATE) FROM WWSalesDetailTEMP WHERE Created_by = @UserId;", sqlConn))
+                await using (var cmdWD = new SqlCommand("SELECT COUNT(DISTINCT IN_DATE) FROM WWSalesDetailTEMP WHERE Created_by = @UserId;", sqlConn) { CommandTimeout = 600 })
                 {
                     cmdWD.Parameters.AddWithValue("@UserId", createdId);
                     var wd = await cmdWD.ExecuteScalarAsync();
@@ -657,7 +657,7 @@ namespace DAL.Inventory.RunRate
                     WHERE WHSE NOT IN ('ZZ','FR') AND Created_by = @UserId
                     GROUP BY CODE;";
 
-                await using var cmdSales = new SqlCommand(sqlSales, sqlConn);
+                await using var cmdSales = new SqlCommand(sqlSales, sqlConn) { CommandTimeout = 600 };
                 cmdSales.Parameters.AddWithValue("@UserId", createdId);
                 await using var reader = await cmdSales.ExecuteReaderAsync();
                 while (await reader.ReadAsync())
@@ -825,7 +825,7 @@ namespace DAL.Inventory.RunRate
             await using (var sqlConn = new SqlConnection(_sqlConn))
             {
                 await sqlConn.OpenAsync();
-                await using (var cmdWD = new SqlCommand("SELECT COUNT(DISTINCT IN_DATE) FROM WWSalesDetailTEMP WHERE Created_by = @UserId;", sqlConn))
+                await using (var cmdWD = new SqlCommand("SELECT COUNT(DISTINCT IN_DATE) FROM WWSalesDetailTEMP WHERE Created_by = @UserId;", sqlConn) { CommandTimeout = 600 })
                 {
                     cmdWD.Parameters.AddWithValue("@UserId", createdId);
                     var wd = await cmdWD.ExecuteScalarAsync();
@@ -833,7 +833,7 @@ namespace DAL.Inventory.RunRate
                 }
 
                 var sqlSales = @"SELECT CODE, SUM(BVCMTDQTY) AS TotalUnitSales FROM WWSalesDetailTEMP WHERE WHSE NOT IN ('ZZ','FR') AND Created_by = @UserId GROUP BY CODE;";
-                await using var cmdSales = new SqlCommand(sqlSales, sqlConn);
+                await using var cmdSales = new SqlCommand(sqlSales, sqlConn) { CommandTimeout = 600 };
                 cmdSales.Parameters.AddWithValue("@UserId", createdId);
                 await using var reader = await cmdSales.ExecuteReaderAsync();
                 while (await reader.ReadAsync())
@@ -914,7 +914,7 @@ namespace DAL.Inventory.RunRate
             await using (var sqlConn = new SqlConnection(_sqlConn))
             {
                 await sqlConn.OpenAsync();
-                await using (var cmdWD = new SqlCommand("SELECT COUNT(DISTINCT IN_DATE) FROM WWSalesDetailTEMP WHERE Created_by = @UserId;", sqlConn))
+                await using (var cmdWD = new SqlCommand("SELECT COUNT(DISTINCT IN_DATE) FROM WWSalesDetailTEMP WHERE Created_by = @UserId;", sqlConn) { CommandTimeout = 600 })
                 {
                     cmdWD.Parameters.AddWithValue("@UserId", createdId);
                     var wd = await cmdWD.ExecuteScalarAsync();
@@ -922,7 +922,7 @@ namespace DAL.Inventory.RunRate
                 }
 
                 var sqlSales = @"SELECT CODE, SUM(BVCMTDQTY) AS TotalUnitSales FROM WWSalesDetailTEMP WHERE WHSE NOT IN ('ZZ','FR') AND Created_by = @UserId GROUP BY CODE;";
-                await using var cmdSales = new SqlCommand(sqlSales, sqlConn);
+                await using var cmdSales = new SqlCommand(sqlSales, sqlConn) { CommandTimeout = 600 };
                 cmdSales.Parameters.AddWithValue("@UserId", createdId);
                 await using var reader = await cmdSales.ExecuteReaderAsync();
                 while (await reader.ReadAsync())

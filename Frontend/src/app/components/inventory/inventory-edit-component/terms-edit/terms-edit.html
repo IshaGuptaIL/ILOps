@@ -1,0 +1,28 @@
+<div class="terms-container">
+    <!-- Row 1: Invoice Input and Find Button -->
+    <div class="vba-label lbl-invoice">Invoice:</div>
+    <input type="text" class="vba-input txt-invoice" [(ngModel)]="termsData.invoiceNo" (keyup.enter)="findInvoiceTerms()">
+    <button class="vba-btn btn-find" (click)="findInvoiceTerms()">Find Invoice</button>
+
+    <!-- Lower Section -->
+    <div class="vba-label lbl-total">Invoice Total:</div>
+    <input type="text" class="vba-input txt-total" [value]="termsData.invoiceTotal | currency" readonly>
+
+    <div class="vba-label lbl-existing">Existing Terms:</div>
+    <input type="text" class="vba-input txt-existing" [value]="termsData.existingTerms" readonly>
+
+    <div class="vba-label lbl-new">New Terms:</div>
+    <select class="vba-input sel-new" [(ngModel)]="termsData.newTerms">
+        <option value="">-- Select --</option>
+        <option value="NET 30 DAYS (Invoice)">NET 30 DAYS (Invoice)</option>
+        <option value="CREDIT CARD">CREDIT CARD</option>
+        <option value="V21 Account">V21 Account</option>
+        <option value="COD">COD</option>
+    </select>
+
+    <!-- Side Update Button, positioned next to Existing/New inputs -->
+    <button class="vba-btn btn-update" (click)="updateTerms()">Update Terms</button>
+</div>
+
+
+

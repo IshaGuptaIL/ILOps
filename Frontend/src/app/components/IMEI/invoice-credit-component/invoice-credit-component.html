@@ -1,223 +1,177 @@
-<div class="container-fluid mt-2 font-monospace" style="font-size: 0.85rem;">
-
-  <div class="card bg-light mb-2 shadow-sm border-0">
-    <div class="card-body p-2">
-      <div class="d-flex flex-wrap gap-3 align-items-end">
-        <div style="width: 150px;">
-          <label class="fw-bold mb-0 text-dark">PO Number:</label>
-          <input [(ngModel)]="poNumber" class="form-control form-control-sm border-primary" placeholder="Enter PO..." (keyup.enter)="findByPONumber()" />
-        </div>
-        <button class="btn btn-primary btn-sm shadow-sm" (click)="findByPONumber()">🔍 Find Missing</button>
-
-        <div class="vr mx-1"></div>
-
-        <div style="width: 150px;">
-          <label class="fw-bold mb-0 text-dark">BV Receipt No:</label>
-          <input [(ngModel)]="bvReceiptNo" class="form-control form-control-sm border-info" placeholder="0000..." (keyup)="findReceiptByBVNo()" />
-        </div>
-
-        <div style="width: 130px;">
-          <label class="fw-bold mb-0 text-dark">Item Type:</label>
-          <select [(ngModel)]="searchType" (change)="filterReceiptsByType()" class="form-select form-select-sm">
-            <option value="Hardware">Hardware</option>
-            <option value="ACC">Accessory</option>
-          </select>
-        </div>
-
-        <div class="ms-auto d-flex gap-2">
-          <button class="btn btn-warning btn-sm fw-bold shadow-sm" (click)="loadNewAccReceipts()">📥 Load ACC Receipts</button>
-          <button class="btn btn-outline-secondary btn-sm" (click)="loadAllReceipts()">🔄 Refresh All</button>
-        </div>
-      </div>
-    </div>
+<div class="ms-access-form">
+  <div class="form-titlebar">
+    <span>Enter Invoice / Credit</span>
+    <button class="win-btn win-close">×</button>
   </div>
 
-  <div class="row">
-    <div class="col-md-7">
-      <div class="table-responsive border rounded bg-white shadow-sm position-relative" style="min-height: 400px; max-height: 500px;">
-        
-        <div *ngIf="loading" class="position-absolute top-50 start-50 translate-middle text-center" style="z-index: 10;">
-          <div class="spinner-border text-primary" role="status"></div>
-          <div class="mt-2 fw-bold">Loading...</div>
-        </div>
-
-        <table class="table table-hover table-bordered table-sm mb-0" [style.opacity]="loading ? '0.5' : '1'">
-          <thead class="bg-dark text-white sticky-top">
-            <tr>
-              <th class="py-2 px-2">BV Receipt</th>
-              <th class="py-2 px-2">Date</th>
-              <th class="py-2 px-2">PO #</th>
-              <th class="py-2 px-2">Part No</th>
-              <th class="py-2 px-2 text-center">Qty</th>
-              <th class="py-2 px-2">Cost</th>
-              <th class="py-2 px-2">Type</th>
-            </tr>
-          </thead>
-          <tbody *ngIf="paginatedReceipts.length > 0">
-            <tr *ngFor="let r of paginatedReceipts" (click)="selectReceipt(r)" 
-                [class.selected-row]="selectedReceipt?.bvReceiptNo === r.bvReceiptNo" style="cursor: pointer;">
-              <td class="fw-bold text-primary">{{ r.bvReceiptNo }}</td>
-              <td>{{ r.receiptDate }}</td>
-              <td>{{ r.poNumber }}</td>
-              <td>{{ r.partNo }}</td>
-              <td class="text-center">{{ r.qtyReceived }}</td>
-              <td>{{ r.unitCost | currency }}</td>
-              <td>
-                <span [class]="r.type.includes('HDW') || r.type.includes('Hardware') ? 'badge bg-secondary' : 'badge bg-warning text-dark'">
-                  {{ r.type }}
-                </span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-
-        <div *ngIf="filteredReceipts.length === 0 && !loading" class="text-center py-5">
-          <h6 class="text-muted mt-2">No Receipts Found</h6>
-        </div>
+  <div class="form-body">
+    <!-- Top Filter / Search Bar -->
+    <div class="filter-box">
+      <div class="filter-group">
+        <label>PO Number:</label>
+        <input type="text" [(ngModel)]="poNumber" class="ms-input" placeholder="Enter PO..." (keyup.enter)="findByPONumber()" />
+        <button class="ms-btn" (click)="findByPONumber()">Find Missing</button>
       </div>
 
-      <div *ngIf="filteredReceipts.length > 0" class="pagination-container d-flex justify-content-between align-items-center mt-3 px-2">
-        <div class="pagination-info">
-          <span class="text-muted small">
-            Showing <strong>{{ (currentPage - 1) * itemsPerPage + 1 }}</strong> 
-            to <strong>{{ (currentPage * itemsPerPage > filteredReceipts.length) ? filteredReceipts.length : currentPage * itemsPerPage }}</strong> 
-            of <strong>{{ filteredReceipts.length }}</strong> items
-          </span>
-        </div>
+      <div class="vr-line"></div>
 
-        <nav>
-          <ul class="pagination pagination-sm mb-0 custom-pagination">
-            <li class="page-item" [class.disabled]="currentPage === 1">
-              <button class="page-link" (click)="setPage(currentPage - 1)" [disabled]="currentPage === 1">Prev</button>
-            </li>
-            <li class="page-item" *ngFor="let p of [].constructor(totalPages); let i = index" [class.active]="currentPage === i + 1">
-              <button class="page-link" (click)="setPage(i + 1)">{{ i + 1 }}</button>
-            </li>
-            <li class="page-item" [class.disabled]="currentPage === totalPages">
-              <button class="page-link" (click)="setPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next</button>
-            </li>
-          </ul>
-        </nav>
+      <div class="filter-group">
+        <label>BV Receipt No:</label>
+        <input type="text" [(ngModel)]="bvReceiptNo" class="ms-input-small" placeholder="0000..." (keyup)="findReceiptByBVNo()" />
+      </div>
+
+      <div class="filter-group">
+        <label>Item Type:</label>
+        <select [(ngModel)]="searchType" (change)="filterReceiptsByType()" class="ms-select">
+          <option value="Hardware">Hardware</option>
+          <option value="ACC">Accessory</option>
+        </select>
+      </div>
+
+      <div class="button-group-right">
+        <button class="ms-btn ms-btn-warn" (click)="loadNewAccReceipts()">Load ACC Receipts</button>
+        <button class="ms-btn" (click)="loadAllReceipts()">Refresh All</button>
       </div>
     </div>
 
-    <div class="col-md-5">
-      <div *ngIf="selectedReceipt" class="card shadow-sm border-primary mb-2">
-        <div class="card-header bg-primary text-white p-1 ps-2 d-flex justify-content-between align-items-center">
-          <span class="fw-bold">DETAILS: {{ selectedReceipt.bvReceiptNo }}</span>
-          <small class="badge bg-white text-primary me-2">{{ selectedReceipt.type }}</small>
-        </div>
-        <div class="card-body p-2 bg-light">
-          <div class="row g-1 mb-1">
-            <div class="col-6">
-              <label class="small fw-bold text-muted">Part Number:</label>
-              <input [value]="selectedReceipt.partNo" class="form-control form-control-sm bg-white" disabled />
-            </div>
-            <div class="col-6">
-              <label class="small fw-bold text-muted">Vendor:</label>
-              <input [value]="selectedReceipt.vendor" class="form-control form-control-sm bg-white" disabled />
-            </div>
-          </div>
-          <div class="row g-1 mb-1">
-            <div class="col-6">
-              <label class="small fw-bold text-muted">PO Number:</label>
-              <input [value]="selectedReceipt.poNumber" class="form-control form-control-sm bg-white" disabled />
-            </div>
-            <div class="col-6">
-              <label class="small fw-bold text-muted">Receipt Date:</label>
-              <input [value]="selectedReceipt.receiptDate" class="form-control form-control-sm bg-white" disabled />
-            </div>
-          </div>
-          <div class="row g-1">
-            <div class="col-4">
-              <label class="small fw-bold text-muted">Qty:</label>
-              <input [value]="selectedReceipt.qtyReceived" class="form-control form-control-sm bg-white text-center" disabled />
-            </div>
-            <div class="col-4">
-              <label class="small fw-bold text-muted">Cost:</label>
-              <input [value]="selectedReceipt.unitCost | currency" class="form-control form-control-sm bg-white" disabled />
-            </div>
-            <div class="col-4">
-              <label class="small fw-bold text-muted">CMO:</label>
-              <input [value]="selectedReceipt.cmo" class="form-control form-control-sm bg-white font-monospace" disabled />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div *ngIf="selectedReceipt" class="mt-3">
-        <div class="d-flex justify-content-between align-items-center mb-1 border-bottom pb-1">
-          <h6 class="mb-0 fw-bold text-danger">Rogers Invoices / Credits</h6>
-          <button class="btn btn-success btn-sm fw-bold px-3 shadow-sm" (click)="openInvoiceModal()">+ Add New</button>
-        </div>
-        
-        <div class="table-responsive border rounded bg-white mt-2" style="min-height: 150px;">
-          <table class="table table-sm table-striped mb-0" *ngIf="selectedReceipt.invoices.length > 0">
-            <thead class="table-secondary small fw-bold">
+    <!-- Main Content Split -->
+    <div class="split-container">
+      <!-- Left: Receipts Table -->
+      <div class="left-pane">
+        <div class="section-header">Received Inventory Receipts</div>
+        <div class="table-container" [style.opacity]="loading ? '0.5' : '1'">
+          <table class="ms-table">
+            <thead>
               <tr>
-                <th>Type</th>
-                <th>Ref No</th>
+                <th>BV Receipt</th>
                 <th>Date</th>
-                <th>Amount</th>
-                <th class="text-center">Action</th>
+                <th>PO #</th>
+                <th>Part No</th>
+                <th>Qty</th>
+                <th>Cost</th>
+                <th>Type</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let inv of selectedReceipt.invoices">
-                <td><span [class]="inv.transType === 'I' ? 'text-primary' : 'text-danger'">{{ inv.transType === 'I' ? 'INV' : 'CRD' }}</span></td>
-                <td>{{ inv.refNo }}</td>
-                <td>{{ inv.transDate }}</td>
-                <td class="fw-bold" [class.text-danger]="inv.transType === 'C'">{{ inv.perUnitAmount | currency }}</td>
-                <td class="text-center">
-                  <button class="btn btn-sm btn-outline-primary p-0 px-2" (click)="openInvoiceModal(inv)">Edit</button>
+              <tr *ngFor="let r of paginatedReceipts" (click)="selectReceipt(r)"
+                  [class.selected-row]="selectedReceipt?.bvReceiptNo === r.bvReceiptNo">
+                <td>{{ r.bvReceiptNo }}</td>
+                <td>{{ r.receiptDate }}</td>
+                <td>{{ r.poNumber }}</td>
+                <td>{{ r.partNo }}</td>
+                <td style="text-align: right;">{{ r.qtyReceived }}</td>
+                <td style="text-align: right;">{{ r.unitCost | currency }}</td>
+                <td>{{ r.type }}</td>
+              </tr>
+              <tr *ngIf="filteredReceipts.length === 0">
+                <td colspan="7" class="no-data">
+                  {{ loading ? 'Loading receipts...' : 'No receipts found.' }}
                 </td>
               </tr>
             </tbody>
           </table>
-          <div *ngIf="selectedReceipt.invoices.length === 0" class="text-center py-4 bg-light">
-            <p class="small text-muted mt-2">No invoices recorded.</p>
+        </div>
+
+        <!-- Pagination Bar -->
+        <div *ngIf="filteredReceipts.length > 0" class="pagination-bar">
+          <span class="page-info">
+            Showing {{ (currentPage - 1) * itemsPerPage + 1 }} to {{ (currentPage * itemsPerPage > filteredReceipts.length) ? filteredReceipts.length : currentPage * itemsPerPage }} of {{ filteredReceipts.length }}
+          </span>
+          <div class="page-buttons">
+            <button class="ms-btn-small" (click)="setPage(currentPage - 1)" [disabled]="currentPage === 1">Prev</button>
+            <button class="ms-btn-small" *ngFor="let p of [].constructor(totalPages); let i = index"
+                    [class.active]="currentPage === i + 1" (click)="setPage(i + 1)">
+              {{ i + 1 }}
+            </button>
+            <button class="ms-btn-small" (click)="setPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Details & Invoices -->
+      <div class="right-pane">
+        <div *ngIf="selectedReceipt" class="detail-box">
+          <div class="detail-header">
+            <span>Receipt Details: {{ selectedReceipt.bvReceiptNo }}</span>
+            <span>[{{ selectedReceipt.type }}]</span>
+          </div>
+          <div class="detail-grid">
+            <div class="field-item"><label>Part Number:</label><input type="text" [value]="selectedReceipt.partNo" readonly /></div>
+            <div class="field-item"><label>Vendor:</label><input type="text" [value]="selectedReceipt.vendor" readonly /></div>
+            <div class="field-item"><label>PO Number:</label><input type="text" [value]="selectedReceipt.poNumber" readonly /></div>
+            <div class="field-item"><label>Receipt Date:</label><input type="text" [value]="selectedReceipt.receiptDate" readonly /></div>
+            <div class="field-item"><label>Qty Received:</label><input type="text" [value]="selectedReceipt.qtyReceived" readonly /></div>
+            <div class="field-item"><label>Unit Cost:</label><input type="text" [value]="selectedReceipt.unitCost | currency" readonly /></div>
+            <div class="field-item"><label>CMO Number:</label><input type="text" [value]="selectedReceipt.cmo" readonly /></div>
+          </div>
+        </div>
+
+        <div *ngIf="selectedReceipt" class="invoices-section">
+          <div class="section-header-flex">
+            <span>Rogers Invoices / Credits</span>
+            <button class="ms-btn" (click)="openInvoiceModal()">+ Add New</button>
+          </div>
+
+          <div class="table-container" style="height: 180px;">
+            <table class="ms-table">
+              <thead>
+                <tr>
+                  <th>Type</th><th>Ref No</th><th>Date</th><th>Amount</th><th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let inv of selectedReceipt.invoices">
+                  <td>{{ inv.transType === 'I' ? 'INV' : 'CRD' }}</td>
+                  <td>{{ inv.refNo }}</td>
+                  <td>{{ inv.transDate }}</td>
+                  <td style="text-align: right;">{{ inv.perUnitAmount | currency }}</td>
+                  <td style="text-align: center;">
+                    <button class="ms-btn-small" (click)="openInvoiceModal(inv)">Edit</button>
+                  </td>
+                </tr>
+                <tr *ngIf="selectedReceipt.invoices.length === 0">
+                  <td colspan="5" class="no-data">No invoices recorded.</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="modal-overlay" *ngIf="invoiceModalVisible">
-    <div class="card shadow" style="width: 450px; border-radius: 8px;">
-      <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center p-2">
-        <h6 class="mb-0 fw-bold">{{ editingInvoice ? 'Edit' : 'Add New' }} Rogers Invoice</h6>
-        <button type="button" class="btn-close btn-close-white" (click)="closeInvoiceModal()"></button>
+  <!-- Modal Dialog for Invoice/Credit -->
+  <div class="ms-modal-overlay" *ngIf="invoiceModalVisible">
+    <div class="ms-modal-dialog">
+      <div class="modal-titlebar">
+        <span>{{ editingInvoice ? 'Edit' : 'Add New' }} Rogers Invoice / Credit</span>
+        <button class="win-btn win-close" (click)="closeInvoiceModal()">×</button>
       </div>
-      <div class="card-body p-3">
-        <div class="row g-2">
-          <div class="col-6">
-            <label class="small fw-bold">Type</label>
-            <select [(ngModel)]="invTransType" class="form-select form-select-sm">
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="field-item wide"><label>Transaction Type:</label>
+            <select [(ngModel)]="invTransType" class="ms-select">
               <option value="I">Invoice (INV)</option>
               <option value="C">Credit (CRD)</option>
             </select>
           </div>
-          <div class="col-6">
-            <label class="small fw-bold">Date</label>
-            <input type="date" [(ngModel)]="invDate" class="form-control form-control-sm" />
+          <div class="field-item wide"><label>Transaction Date:</label>
+            <input type="date" [(ngModel)]="invDate" class="ms-input" />
           </div>
-          <div class="col-12">
-            <label class="small fw-bold">Ref / Invoice No</label>
-            <input type="text" [(ngModel)]="invRefNo" class="form-control form-control-sm" />
+          <div class="field-item wide"><label>Ref / Invoice No:</label>
+            <input type="text" [(ngModel)]="invRefNo" class="ms-input" />
           </div>
-          <div class="col-12">
-            <label class="small fw-bold">Amount ($)</label>
-            <input type="number" [(ngModel)]="invAmount" class="form-control form-control-sm" />
+          <div class="field-item wide"><label>Amount ($):</label>
+            <input type="number" [(ngModel)]="invAmount" class="ms-input" />
           </div>
-          <div class="col-12">
-            <label class="small fw-bold">Remarks</label>
-            <textarea [(ngModel)]="invRemarks" class="form-control form-control-sm" rows="2"></textarea>
+          <div class="field-item wide"><label>Remarks:</label>
+            <textarea [(ngModel)]="invRemarks" class="ms-textarea" rows="2"></textarea>
           </div>
         </div>
       </div>
-      <div class="card-footer bg-light d-flex justify-content-end gap-2 p-2">
-        <button class="btn btn-secondary btn-sm" (click)="closeInvoiceModal()">Cancel</button>
-        <button class="btn btn-primary btn-sm px-4" (click)="saveInvoice()">Save</button>
+      <div class="modal-footer">
+        <button class="ms-btn" (click)="closeInvoiceModal()">Cancel</button>
+        <button class="ms-btn" (click)="saveInvoice()">Save</button>
       </div>
     </div>
   </div>

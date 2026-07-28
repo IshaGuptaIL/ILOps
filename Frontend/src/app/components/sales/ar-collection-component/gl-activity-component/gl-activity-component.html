@@ -1,0 +1,46 @@
+<div class="gl-activity-container">
+  <div class="form-card">
+    <div class="form-fields">
+      
+      <!-- Start Date Row -->
+      <div class="form-group">
+        <label for="txtStartDate">Start Date:</label>
+        <div class="input-wrapper">
+          <input type="date" id="txtStartDate" [(ngModel)]="startDate" class="form-control">
+        </div>
+      </div>
+
+      <!-- End Date Row -->
+      <div class="form-group">
+        <label for="txtEndDate">End Date:</label>
+        <div class="input-wrapper">
+          <input type="date" id="txtEndDate" [(ngModel)]="endDate" [max]="todayStr" class="form-control">
+        </div>
+      </div>
+
+      <!-- Account Row -->
+      <div class="form-group">
+        <label for="cmbAccount">account:</label>
+        <div class="select-wrapper">
+          <select id="cmbAccount" [(ngModel)]="selectedAccount" class="form-control">
+            <option value="">-- Select --</option>
+            <option *ngFor="let acc of allowedAccounts" [value]="acc.account">
+              {{ acc.account }} - {{ acc.name }}
+            </option>
+          </select>
+          <span class="select-arrow">▼</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Output Button Area -->
+    <div class="button-area">
+      <button class="output-btn" (click)="exportExcel()">
+        Output
+      </button>
+    </div>
+
+  </div>
+</div>
+

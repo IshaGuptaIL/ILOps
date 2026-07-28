@@ -1,21 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-// import {
-//   HardwareService,
-//   PurchaseOrderListItem,
-//   CheckErrorsResponse
-// } from '../../IMEI/imei-service.ts'
-
-import { PurchaseOrderListItem,CheckErrorsResponse } from '../imei-service';
-
+import { ToastrService } from 'ngx-toastr';
+import Swal from 'sweetalert2';
+import { SpinnerService } from '../../shared/spinner/spinner-service';
+import { PurchaseOrderListItem, CheckErrorsResponse } from '../imei-service';
 import { ImeiService } from '../imei-service';
 
 @Component({
   selector: 'app-imei-receive-component',
-  imports: [FormsModule,CommonModule],
+  standalone: true,
+  imports: [FormsModule, CommonModule],
   templateUrl: './imei-receive-component.html',
-  styleUrl: './imei-receive-component.css',
+  styleUrls: ['./imei-receive-component.css'],
 })
 export class ImeiReceiveComponent implements OnInit {
 
@@ -52,8 +49,8 @@ export class ImeiReceiveComponent implements OnInit {
   slInvalid: number = 0;
   psDupes: number = 0;
   slDupes: number = 0;
-  hpcCost:any;
-  unitCost:any;
+  hpcCost: any;
+  unitCost: any;
 
   // ── Verification State ────────────────────────────────────────────────
   verificationStatus: string = 'Not Checked';
@@ -61,119 +58,157 @@ export class ImeiReceiveComponent implements OnInit {
   isVerified: boolean = false;
   isProcessing: boolean = false;
   isLoadingPos: boolean = false;
-poDisplay = {
-  poNumber: '',
-  vendor: '',
-  whse: '',
-  partNo: '',
-  orderQty: 0,
-  receivedQty: 0
-};
 
+  selectedScanFile: File | null = null;
+  selectedPackingFile: File | null = null;
 
-  constructor(private hardwareService: ImeiService) {}
+  poDisplay = {
+    poNumber: '',
+    vendor: '',
+    whse: '',
+    partNo: '',
+    orderQty: 0,
+    receivedQty: 0
+  };
+
+  constructor(
+    private hardwareService: ImeiService,
+    private toastr: ToastrService,
+    private spinner: SpinnerService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit() {
     this.loadPurchaseOrders();
   }
 
   // ── Load POs — already filtered status I/R + part_no!='' by backend ──
-loadPurchaseOrders() {
-  this.isLoadingPos = true;
-  this.hardwareService.getPurchaseOrderss().subscribe({
-    next: (pos) => {
-      debugger
-      this.purchaseOrders = pos || [];
-      this.isLoadingPos = false;
-      console.log('Loaded POs:', this.purchaseOrders);  // confirm data here
-    },
-    error: (err) => {
-      alert('Failed to load Purchase Orders: ' + (err.error?.message || err.message));
-      this.isLoadingPos = false;
-    }
-  });
-}
+  loadPurchaseOrders() {
+    this.isLoadingPos = true;
+    this.spinner.show();
+    this.hardwareService.getPurchaseOrderss().subscribe({
+      next: (pos) => {
+        this.purchaseOrders = pos || [];
+        this.isLoadingPos = false;
+        this.spinner.hide();
+        console.log('Loaded POs:', this.purchaseOrders);
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.isLoadingPos = false;
+        this.spinner.hide();
+        this.toastr.error('Failed to load Purchase Orders: ' + (err.error?.message || err.message), 'Error');
+        this.cdr.detectChanges();
+      }
+    });
+  }
 
   // ── PO Selection (maps to Combo3_AfterUpdate) ─────────────────────────
-onPoChange(): void {
-  debugger
-  this.selectedPo = this.purchaseOrders.find(p => String(p.id) === String(this.selectedPoId)) ?? null;
+  onPoChange(): void {
+    this.selectedPo = this.purchaseOrders.find(p => String(p.id) === String(this.selectedPoId)) ?? null;
 
-  if (!this.selectedPo) {
-    this.resetVerification();
-    return;
-  }
-this.purchaseOrderId = Number(this.selectedPo.purchaseOrderId);           
-this.purchaseOrderLineId = String(this.selectedPo.id);
-
-  this.poDisplay = {
-    poNumber: this.selectedPo.poNumber,
-    vendor: this.selectedPo.vendor,
-    whse: this.selectedPo.whse,
-    partNo: this.selectedPo.partNo,
-    orderQty: this.selectedPo.orderQty,
-    receivedQty: this.selectedPo.receivedQty
-  };
-
-      this.unitCost = this.selectedPo.unitCost;
-    this.hpcCost = this.unitCost * 0.1;
-
-  this.resetVerification();
-}
- onUnitCostChange() {
-    this.hpcCost = this.unitCost * 0.1;
-  }
-  // ── Excel Upload (maps to cmdImportScanList_Click / cmdImportPackingSlip_Click) ──
-  onFileSelected(event: any, type: 'packing' | 'scan') {
-    const file: File = event.target.files[0];
-    if (!file) return;
-
-    // Guard: PO must be selected first (matches VBA: If IsNull(Me.Combo3) Then...)
     if (!this.selectedPo) {
-      alert(`You must select a purchase order before importing a ${type === 'packing' ? 'Packing Slip' : 'Scan List'}`);
-      event.target.value = '';
+      this.resetVerification();
+      this.cdr.detectChanges();
+      return;
+    }
+
+    this.purchaseOrderId = Number(this.selectedPo.purchaseOrderId);           
+    this.purchaseOrderLineId = String(this.selectedPo.id);
+
+    this.poDisplay = {
+      poNumber: this.selectedPo.poNumber || '',
+      vendor: this.selectedPo.vendor || '',
+      whse: this.selectedPo.whse || '',
+      partNo: this.selectedPo.partNo || '',
+      orderQty: this.selectedPo.orderQty,
+      receivedQty: this.selectedPo.receivedQty
+    };
+
+    this.unitCost = this.selectedPo.unitCost;
+    this.hpcCost = this.unitCost * 0.1;
+
+    this.resetVerification();
+    this.cdr.detectChanges();
+  }
+
+  onUnitCostChange() {
+    this.hpcCost = this.unitCost * 0.1;
+    this.cdr.detectChanges();
+  }
+
+  onFileChange(event: any, type: 'packing' | 'scan') {
+    const file = event.target.files?.[0] || null;
+    if (type === 'packing') {
+      this.selectedPackingFile = file;
+    } else {
+      this.selectedScanFile = file;
+    }
+    this.cdr.detectChanges();
+  }
+
+  importFile(type: 'packing' | 'scan') {
+    const file = type === 'packing' ? this.selectedPackingFile : this.selectedScanFile;
+    if (!file) {
+      this.toastr.warning(`Please select a ${type === 'packing' ? 'Packing Slip' : 'Scan List'} file first`, 'File Required');
+      return;
+    }
+
+    // Guard: PO must be selected first
+    if (!this.selectedPo) {
+      this.toastr.warning(`You must select a purchase order before importing a ${type === 'packing' ? 'Packing Slip' : 'Scan List'}`, 'Selection Required');
       return;
     }
 
     // Guard: Part number must exist
     if (!this.selectedPo.partNo) {
-      alert('There is no PO Part Number selected');
-      event.target.value = '';
+      this.toastr.warning('There is no PO Part Number selected', 'Invalid PO');
       return;
     }
 
+    this.spinner.show();
     this.hardwareService.uploadExcel(file).subscribe({
       next: imeis => {
+        this.spinner.hide();
         if (type === 'packing') {
           this.packingSlipImeis = imeis;
           this.psCount = imeis.length;
+          this.toastr.success(`Imported ${this.psCount} IMEIs into Packing Slip`, 'Success');
         } else {
           this.scanListImeis = imeis;
           this.slCount = imeis.length;
+          this.toastr.success(`Imported ${this.slCount} IMEIs into Scan List`, 'Success');
         }
         this.resetVerification();
+        this.cdr.detectChanges();
       },
-      error: err => alert('Upload failed: ' + (err.error?.message || err.message))
+      error: err => {
+        this.spinner.hide();
+        this.toastr.error('Upload failed: ' + (err.error?.message || err.message), 'Import Error');
+        this.cdr.detectChanges();
+      }
     });
   }
 
+
+
   // ── Check Errors (maps to CheckErrors() Sub) ──────────────────────────
   checkErrors() {
-    debugger
     // All guards match the VBA CheckErrors sub
     if (!this.selectedPo) {
-      alert('You must select an item from a PO');
+      this.toastr.warning('You must select an item from a PO', 'Selection Required');
       return;
     }
     if (this.packingSlipImeis.length === 0) {
-      alert('You must import packing slip data.');
+      this.toastr.warning('You must import packing slip data.', 'Packing Slip Empty');
       return;
     }
     if (this.scanListImeis.length === 0) {
-      alert('You must import scan list data.');
+      this.toastr.warning('You must import scan list data.', 'Scan List Empty');
       return;
     }
 
+    this.spinner.show();
     const request = {
       purchaseOrderId:     this.purchaseOrderId,
       purchaseOrderLineId: this.purchaseOrderLineId,
@@ -188,6 +223,7 @@ this.purchaseOrderLineId = String(this.selectedPo.id);
 
     this.hardwareService.checkErrorss(request).subscribe({
       next: res => {
+        this.spinner.hide();
         this.verificationErrors = res.errors;
         this.isVerified         = !res.hasErrors;
         this.verificationStatus = res.hasErrors ? 'Errors Found' : 'Verification Successful';
@@ -205,28 +241,56 @@ this.purchaseOrderLineId = String(this.selectedPo.id);
         this.psInvalid = res.invalidPackCount;
         this.slDupes   = res.scanDupeCount;
         this.psDupes   = res.packDupeCount;
+
+        if (res.hasErrors) {
+          this.toastr.error('Verification failed. Please review the errors list.', 'Errors Found');
+        } else {
+          this.toastr.success('Verification successful! No errors found.', 'Verified');
+        }
+        this.cdr.detectChanges();
       },
-      error: err => alert('Check Errors failed: ' + (err.error?.message || err.message))
+      error: err => {
+        this.spinner.hide();
+        this.toastr.error('Check Errors failed: ' + (err.error?.message || err.message), 'Error');
+        this.cdr.detectChanges();
+      }
     });
   }
 
   // ── Post Receipts (maps to cmdPostReceipts_Click → ReceivePOIMEI) ─────
- postReceipts() {
+  postReceipts() {
     if (!this.isVerified) {
-      alert('You must verify data first (no errors)');
+      this.toastr.warning('You must verify data first (no errors)', 'Verification Required');
       return;
     }
 
     if (!this.cmoNumber?.trim()) {
-      alert('You must enter a CMO number');
+      this.toastr.warning('You must enter a CMO number', 'CMO Required');
       return;
     }
 
-    if (this.isReversal && !confirm('You are processing a REVERSAL\n\nIs this correct?')) {
-      return;
+    if (this.isReversal) {
+      Swal.fire({
+        title: 'Confirm Reversal',
+        text: 'You are processing a REVERSAL. Is this correct?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, proceed!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.executePostReceipts();
+        }
+      });
+    } else {
+      this.executePostReceipts();
     }
+  }
 
+  private executePostReceipts() {
     this.isProcessing = true;
+    this.spinner.show();
     const request = {
       purchaseOrderId: this.purchaseOrderId,
       purchaseOrderLineId: this.purchaseOrderLineId,
@@ -239,16 +303,20 @@ this.purchaseOrderLineId = String(this.selectedPo.id);
     this.hardwareService.receiveImei(request).subscribe({
       next: res => {
         this.isProcessing = false;
+        this.spinner.hide();
         if (res.success) {
-          alert(`Processed ${this.scanListImeis.length} IMEIs successfully`);
+          Swal.fire('Success', `Processed ${this.scanListImeis.length} IMEIs successfully`, 'success');
           this.resetForm();
         } else {
-          alert('Error: ' + (res.message || 'Unknown error'));
+          this.toastr.error('Error: ' + (res.message || 'Unknown error'), 'Posting Failed');
         }
+        this.cdr.detectChanges();
       },
       error: err => {
         this.isProcessing = false;
-        alert('Post Receipts failed: ' + (err.error?.message || err.message));
+        this.spinner.hide();
+        this.toastr.error('Post Receipts failed: ' + (err.error?.message || err.message), 'Error');
+        this.cdr.detectChanges();
       }
     });
   }
@@ -280,7 +348,10 @@ this.purchaseOrderLineId = String(this.selectedPo.id);
     this.cmoNumber           = '';
     this.psCount             = 0;
     this.slCount             = 0;
+    this.selectedScanFile    = null;
+    this.selectedPackingFile = null;
     this.resetVerification();
+    this.cdr.detectChanges();
   }
 
   // Helper: remaining qty for display

@@ -1,0 +1,193 @@
+/* Rogers Overpayments - Exact Replica of Price Protection Style */
+
+.access-container {
+  background-color: #eaeaea;
+  font-family: Arial, "MS Sans Serif", sans-serif;
+  font-size: 11px;
+  color: #333333;
+  padding: 20px;
+  min-height: calc(100vh - 56px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.form-body-wrapper {
+  width: 980px;
+  margin: 0 auto;
+}
+
+.form-title-bar {
+  text-align: center;
+  font-family: Arial, sans-serif;
+  font-size: 20px;
+  color: #6d6d6d;
+  margin-bottom: 25px;
+  margin-top: 10px;
+  font-weight: normal;
+  letter-spacing: 0.5px;
+}
+
+.access-form-main {
+  background-color: #eaeaea;
+  border: none;
+  padding: 0;
+}
+
+.two-column-layout {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+}
+
+.form-column {
+  width: 465px;
+  display: flex;
+  flex-direction: column;
+}
+
+.column-title {
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  font-weight: bold;
+  color: #555555;
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+.vertical-divider-line {
+  width: 1px;
+  background-color: #9c9c9c;
+  margin: 0 15px;
+  align-self: stretch;
+}
+
+.form-group-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.form-label-cell {
+  width: 145px;
+  text-align: right;
+  padding-right: 8px;
+  color: #444444;
+  box-sizing: border-box;
+}
+
+.form-input-cell {
+  flex-grow: 1;
+}
+
+.form-input-control, .form-select-control {
+  width: 100%;
+  height: 22px;
+  border: 1px solid #7f9db9;
+  background-color: #ffffff;
+  padding: 2px 4px;
+  font-family: Arial, sans-serif;
+  font-size: 11px;
+  box-sizing: border-box;
+  color: #000000;
+  border-radius: 0;
+}
+
+.form-input-control:focus, .form-select-control:focus {
+  outline: none;
+  border-color: #3e5875;
+}
+
+.form-input-control.readonly {
+  background-color: #eaeaea;
+  color: #555555;
+}
+
+.justify-center-btn {
+  justify-content: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.column-divider {
+  border: 0;
+  border-top: 1px solid #9c9c9c;
+  margin: 15px 50px;
+}
+
+/* Access Blue Glossy Button */
+.access-glossy-btn {
+  background: linear-gradient(to bottom, #ffffff 0%, #f0f5fc 25%, #d6e5f7 50%, #b8d2f2 100%);
+  border: 1px solid #7a96df;
+  color: #1e395b;
+  font-family: Arial, sans-serif;
+  font-size: 11px;
+  font-weight: normal;
+  padding: 4px 15px;
+  cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.5), 0 1px 1px rgba(0,0,0,0.1);
+  outline: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-radius: 3px;
+  min-height: 24px;
+}
+
+.access-glossy-btn:hover:not(:disabled) {
+  background: linear-gradient(to bottom, #ffffff 0%, #f5f9fe 25%, #e1ecfa 50%, #c4ddf8 100%);
+  border-color: #5d7cca;
+}
+
+.access-glossy-btn:active:not(:disabled) {
+  background: linear-gradient(to bottom, #a0c4ec 0%, #bcd3f1 50%, #e2ecf9 100%);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.15);
+}
+
+.access-glossy-btn:disabled {
+  background: #e0e0e0;
+  border-color: #b5b5b5;
+  color: #888888;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.file-input-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.file-input-hidden {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  width: 100%;
+  height: 22px;
+  cursor: pointer;
+}
+
+.progress-overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 15px;
+  font-weight: bold;
+  color: #1e395b;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #ccc;
+  border-top-color: #1e395b;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

@@ -1,0 +1,275 @@
+<div class="dropdown-backdrop" *ngIf="activeDropdown" (click)="activeDropdown = null"></div>
+<div class="imei-search-container">
+  
+  <!-- Search Input Bar -->
+  <div class="search-header-panel">
+    <div class="search-title">
+      <i class="fas fa-search"></i> Price Protection IMEI Search
+    </div>
+    
+    <label class="search-label" for="imeiInput">IMEI to Search:</label>
+    <input 
+      id="imeiInput"
+      type="text" 
+      class="search-input" 
+      [(ngModel)]="searchImeiText" 
+      (keyup.enter)="onSearch()"
+      placeholder="Enter IMEI..." 
+    />
+    
+    <button class="search-button" (click)="onSearch()">
+      <i class="fas fa-search"></i> Search
+    </button>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-indicator">
+    <div class="spinner-ring"></div>
+    <span *ngIf="searchImeiText">Searching records for IMEI: {{searchImeiText}}...</span>
+    <span *ngIf="!searchImeiText">Loading all price protection records...</span>
+  </div>
+
+  <!-- Search Results Grids -->
+  <div *ngIf="!isLoading" class="grids-stack">
+    
+    <!-- 1. Claims Grid -->
+    <div class="grid-section">
+      <div class="grid-section-header">
+        <span><i class="fas fa-file-invoice"></i> Price Protection Claims</span>
+        <span class="grid-row-count">
+          Count: {{ filteredClaims.length }}<span *ngIf="filteredClaims.length !== claims.length"> (filtered from {{ claims.length }})</span>
+        </span>
+      </div>
+      <div class="grid-table-scroll">
+        <table class="access-grid-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>ReceiptNo</th>
+              <th>ReceiptDate</th>
+              <th>ReceiptCost</th>
+              <th>PriceDropDate</th>
+              
+              <!-- PriceBeforeDrop with Excel popover -->
+              <th class="filter-header">
+                <div class="header-container">
+                  <span>PriceBeforeDrop</span>
+                  <button class="filter-trigger-btn" [class.active]="claimsSortKey === 'priceBeforeDrop' || !isAllSelected('priceBeforeDrop')" (click)="$event.stopPropagation(); toggleDropdown('priceBeforeDrop')">
+                    <i class="fas fa-caret-down"></i>
+                  </button>
+                </div>
+                
+                <div class="excel-filter-popover" *ngIf="activeDropdown === 'priceBeforeDrop'" (click)="$event.stopPropagation()">
+                  <div class="popover-sort-section">
+                    <button class="sort-action-btn" (click)="sortClaims('priceBeforeDrop', 'asc'); activeDropdown = null">
+                      <i class="fas fa-sort-amount-down-alt"></i> Sort Smallest to Largest
+                    </button>
+                    <button class="sort-action-btn" (click)="sortClaims('priceBeforeDrop', 'desc'); activeDropdown = null">
+                      <i class="fas fa-sort-amount-down"></i> Sort Largest to Smallest
+                    </button>
+                  </div>
+                  <div class="popover-divider"></div>
+                  <div class="popover-checklist-container">
+                    <label class="checklist-item select-all">
+                      <input type="checkbox" [checked]="isAllSelected('priceBeforeDrop')" (change)="toggleSelectAll('priceBeforeDrop', $event)" />
+                      <span>(Select All)</span>
+                    </label>
+                    <div class="checklist-scroll">
+                      <label class="checklist-item" *ngFor="let item of priceBeforeDropFilters">
+                        <input type="checkbox" [(ngModel)]="item.checked" (change)="onFilterChange()" />
+                        <span>{{ item.value | currency }}</span>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="popover-footer">
+                    <button class="popover-btn primary" (click)="activeDropdown = null">OK</button>
+                    <button class="popover-btn secondary" (click)="resetFilter('priceBeforeDrop')">Reset</button>
+                  </div>
+                </div>
+              </th>
+
+              <!-- PriceAfterDrop with Excel popover -->
+              <th class="filter-header">
+                <div class="header-container">
+                  <span>PriceAfterDrop</span>
+                  <button class="filter-trigger-btn" [class.active]="claimsSortKey === 'priceAfterDrop' || !isAllSelected('priceAfterDrop')" (click)="$event.stopPropagation(); toggleDropdown('priceAfterDrop')">
+                    <i class="fas fa-caret-down"></i>
+                  </button>
+                </div>
+                
+                <div class="excel-filter-popover" *ngIf="activeDropdown === 'priceAfterDrop'" (click)="$event.stopPropagation()">
+                  <div class="popover-sort-section">
+                    <button class="sort-action-btn" (click)="sortClaims('priceAfterDrop', 'asc'); activeDropdown = null">
+                      <i class="fas fa-sort-amount-down-alt"></i> Sort Smallest to Largest
+                    </button>
+                    <button class="sort-action-btn" (click)="sortClaims('priceAfterDrop', 'desc'); activeDropdown = null">
+                      <i class="fas fa-sort-amount-down"></i> Sort Largest to Smallest
+                    </button>
+                  </div>
+                  <div class="popover-divider"></div>
+                  <div class="popover-checklist-container">
+                    <label class="checklist-item select-all">
+                      <input type="checkbox" [checked]="isAllSelected('priceAfterDrop')" (change)="toggleSelectAll('priceAfterDrop', $event)" />
+                      <span>(Select All)</span>
+                    </label>
+                    <div class="checklist-scroll">
+                      <label class="checklist-item" *ngFor="let item of priceAfterDropFilters">
+                        <input type="checkbox" [(ngModel)]="item.checked" (change)="onFilterChange()" />
+                        <span>{{ item.value | currency }}</span>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="popover-footer">
+                    <button class="popover-btn primary" (click)="activeDropdown = null">OK</button>
+                    <button class="popover-btn secondary" (click)="resetFilter('priceAfterDrop')">Reset</button>
+                  </div>
+                </div>
+              </th>
+
+              <th>SKU</th>
+              <th>Description</th>
+              <th>IMEI</th>
+              <th>ClaimDate</th>
+              <th>ClaimAmount</th>
+              <th>ClaimPaid</th>
+              <th>Flag</th>
+              <th>PreviousClaim</th>
+              <th>Memo</th>
+              <th>PONumber</th>
+              <th>UnitCredit</th>
+              <th>UnitDebit</th>
+              <th>NetUnitCost</th>
+              <th>LastInvoice</th>
+              <th>LastCredit</th>
+              <th>LastInvoiceDate</th>
+              <th>LastCreditDate</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="filteredClaims.length === 0">
+              <td colspan="24" class="no-records-cell">No matching claim records found.</td>
+            </tr>
+            <tr *ngFor="let row of filteredClaims">
+              <td class="font-bold text-center">{{ row.id }}</td>
+              <td class="font-code">{{ row.receiptNo }}</td>
+              <td>{{ row.receiptDate | date:'MM/dd/yyyy' }}</td>
+              <td class="text-right">{{ row.receiptCost | currency }}</td>
+              <td>{{ row.priceDropDate | date:'MM/dd/yyyy' }}</td>
+              <td class="text-right">{{ row.priceBeforeDrop | currency }}</td>
+              <td class="text-right">{{ row.priceAfterDrop | currency }}</td>
+              <td class="font-code">{{ row.sku }}</td>
+              <td>{{ row.description }}</td>
+              <td class="font-code text-muted">{{ row.imei }}</td>
+              <td>{{ row.claimDate | date:'MM/dd/yyyy' }}</td>
+              <td class="text-right font-bold text-blue">{{ row.claimAmount | currency }}</td>
+              <td class="text-center">
+                <input type="checkbox" [checked]="row.claimPaid" disabled />
+              </td>
+              <td class="text-center">
+                <input type="checkbox" [checked]="row.flag" disabled />
+              </td>
+              <td>{{ row.previousClaim }}</td>
+              <td>{{ row.memo }}</td>
+              <td class="font-code">{{ row.poNumber }}</td>
+              <td class="text-right">{{ row.unitCredit | currency }}</td>
+              <td class="text-right">{{ row.unitDebit | currency }}</td>
+              <td class="text-right">{{ row.netUnitCost | currency }}</td>
+              <td class="font-code">{{ row.lastInvoice }}</td>
+              <td class="font-code">{{ row.lastCredit }}</td>
+              <td>{{ row.lastInvoiceDate | date:'MM/dd/yyyy' }}</td>
+              <td>{{ row.lastCreditDate | date:'MM/dd/yyyy' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 2. Credits Grid -->
+    <div class="grid-section">
+      <div class="grid-section-header">
+        <span><i class="fas fa-file-invoice-dollar"></i> Credits</span>
+        <span class="grid-row-count">Count: {{ credits.length }}</span>
+      </div>
+      <div class="grid-table-scroll">
+        <table class="access-grid-table">
+          <thead>
+            <tr>
+              <th (click)="sortCredits('ppClaimID')">PPClaimID<span class="sort-indicator" *ngIf="creditsSortKey === 'ppClaimID'">{{ creditsSortAsc ? ' ▲' : ' ▼' }}</span></th>
+              <th (click)="sortCredits('receiptNo')">ReceiptNo<span class="sort-indicator" *ngIf="creditsSortKey === 'receiptNo'">{{ creditsSortAsc ? ' ▲' : ' ▼' }}</span></th>
+              <th (click)="sortCredits('sku')">SKU<span class="sort-indicator" *ngIf="creditsSortKey === 'sku'">{{ creditsSortAsc ? ' ▲' : ' ▼' }}</span></th>
+              <th (click)="sortCredits('imei')">IMEI<span class="sort-indicator" *ngIf="creditsSortKey === 'imei'">{{ creditsSortAsc ? ' ▲' : ' ▼' }}</span></th>
+              <th (click)="sortCredits('unitCreditAmount')">UnitCreditAmount<span class="sort-indicator" *ngIf="creditsSortKey === 'unitCreditAmount'">{{ creditsSortAsc ? ' ▲' : ' ▼' }}</span></th>
+              <th (click)="sortCredits('creditNoteNumber')">CreditNoteNumber<span class="sort-indicator" *ngIf="creditsSortKey === 'creditNoteNumber'">{{ creditsSortAsc ? ' ▲' : ' ▼' }}</span></th>
+              <th (click)="sortCredits('creditNoteDate')">CreditNoteDate<span class="sort-indicator" *ngIf="creditsSortKey === 'creditNoteDate'">{{ creditsSortAsc ? ' ▲' : ' ▼' }}</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="credits.length === 0">
+              <td colspan="7" class="no-records-cell">No matching credit records found.</td>
+            </tr>
+            <tr *ngFor="let row of credits">
+              <td class="text-center font-bold">{{ row.ppClaimID }}</td>
+              <td class="font-code">{{ row.receiptNo }}</td>
+              <td class="font-code">{{ row.sku }}</td>
+              <td class="font-code text-muted">{{ row.imei }}</td>
+              <td class="text-right font-bold text-green">{{ row.unitCreditAmount | currency }}</td>
+              <td class="font-code">{{ row.creditNoteNumber }}</td>
+              <td>{{ row.creditNoteDate | date:'MM/dd/yyyy' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 3. Overpayments Grid -->
+    <div class="grid-section">
+      <div class="grid-section-header">
+        <span><i class="fas fa-hand-holding-usd"></i> Overpayments</span>
+        <span class="grid-row-count">Count: {{ overpayments.length }}</span>
+      </div>
+      <div class="grid-table-scroll">
+        <table class="access-grid-table">
+          <thead>
+            <tr>
+              <th (click)="sortOverpayments('dealer')">DEALER<span class="sort-indicator" *ngIf="overpaymentsSortKey === 'dealer'">{{ overpaymentsSortAsc ? ' ▲' : ' ▼' }}</span></th>
+              <th (click)="sortOverpayments('ordeR_NUMBER')">ORDER_NUMBER<span class="sort-indicator" *ngIf="overpaymentsSortKey === 'ordeR_NUMBER'">{{ overpaymentsSortAsc ? ' ▲' : ' ▼' }}</span></th>
+              <th (click)="sortOverpayments('invoicE_NUMBER')">INVOICE_NUMBER<span class="sort-indicator" *ngIf="overpaymentsSortKey === 'invoicE_NUMBER'">{{ overpaymentsSortAsc ? ' ▲' : ' ▼' }}</span></th>
+              <th (click)="sortOverpayments('imei')">IMEI<span class="sort-indicator" *ngIf="overpaymentsSortKey === 'imei'">{{ overpaymentsSortAsc ? ' ▲' : ' ▼' }}</span></th>
+              <th (click)="sortOverpayments('sku')">SKU<span class="sort-indicator" *ngIf="overpaymentsSortKey === 'sku'">{{ overpaymentsSortAsc ? ' ▲' : ' ▼' }}</span></th>
+              <th (click)="sortOverpayments('skU_DESCRIPTION')">SKU_DESCRIPTION<span class="sort-indicator" *ngIf="overpaymentsSortKey === 'skU_DESCRIPTION'">{{ overpaymentsSortAsc ? ' ▲' : ' ▼' }}</span></th>
+              <th (click)="sortOverpayments('neW_PRICE')">NEW_PRICE<span class="sort-indicator" *ngIf="overpaymentsSortKey === 'neW_PRICE'">{{ overpaymentsSortAsc ? ' ▲' : ' ▼' }}</span></th>
+              <th (click)="sortOverpayments('dealeR_COST')">DEALER_COST<span class="sort-indicator" *ngIf="overpaymentsSortKey === 'dealeR_COST'">{{ overpaymentsSortAsc ? ' ▲' : ' ▼' }}</span></th>
+              <th (click)="sortOverpayments('pP_AMOUNT')">PP_AMOUNT<span class="sort-indicator" *ngIf="overpaymentsSortKey === 'pP_AMOUNT'">{{ overpaymentsSortAsc ? ' ▲' : ' ▼' }}</span></th>
+              <th (click)="sortOverpayments('cM_No')">CM_No<span class="sort-indicator" *ngIf="overpaymentsSortKey === 'cM_No'">{{ overpaymentsSortAsc ? ' ▲' : ' ▼' }}</span></th>
+              <th (click)="sortOverpayments('cM_Date')">CM_Date<span class="sort-indicator" *ngIf="overpaymentsSortKey === 'cM_Date'">{{ overpaymentsSortAsc ? ' ▲' : ' ▼' }}</span></th>
+              <th (click)="sortOverpayments('dateImported')">DateImported<span class="sort-indicator" *ngIf="overpaymentsSortKey === 'dateImported'">{{ overpaymentsSortAsc ? ' ▲' : ' ▼' }}</span></th>
+              <th (click)="sortOverpayments('filename')">Filename<span class="sort-indicator" *ngIf="overpaymentsSortKey === 'filename'">{{ overpaymentsSortAsc ? ' ▲' : ' ▼' }}</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="overpayments.length === 0">
+              <td colspan="13" class="no-records-cell">No matching overpayment records found.</td>
+            </tr>
+            <tr *ngFor="let row of overpayments">
+              <td>{{ row.dealer }}</td>
+              <td class="font-code">{{ row.ordeR_NUMBER }}</td>
+              <td class="font-code">{{ row.invoicE_NUMBER }}</td>
+              <td class="font-code text-muted">{{ row.imei }}</td>
+              <td class="font-code">{{ row.sku }}</td>
+              <td>{{ row.skU_DESCRIPTION }}</td>
+              <td class="text-right">{{ row.neW_PRICE | currency }}</td>
+              <td class="text-right">{{ row.dealeR_COST | currency }}</td>
+              <td class="text-right font-bold text-red">{{ row.pP_AMOUNT | currency }}</td>
+              <td class="font-code">{{ row.cM_No }}</td>
+              <td>{{ row.cM_Date | date:'MM/dd/yyyy' }}</td>
+              <td>{{ row.dateImported | date:'MM/dd/yyyy HH:mm:ss' }}</td>
+              <td>{{ row.filename }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+</div>

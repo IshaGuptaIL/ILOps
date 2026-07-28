@@ -1,4 +1,4 @@
-﻿using DAL.Common.Login;
+using DAL.Common.Login;
 using System;
 using System.Collections.Generic;
 using System.Data;

@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2';
+import { SpinnerService } from '../../shared/spinner/spinner-service';
 import { ImeiService } from '../imei-service';
 
 @Component({
@@ -13,22 +15,25 @@ import { ImeiService } from '../imei-service';
 })
 export class FindByImeiComponent {
   imei: string = '';
-  receipt: any;
+  receipt: any[] = [];
   rogersList: any[] = [];
   isLoading: boolean = false;
 
   constructor(
     private imeiService: ImeiService,
+    private toastr: ToastrService,
+    private spinner: SpinnerService,
     private cdr: ChangeDetectorRef 
   ) {}
 
   searchIMEI(): void {
     if (!this.imei.trim()) {
-      Swal.fire('Error', 'Please enter IMEI', 'warning');
+      this.toastr.warning('Please enter an IMEI number', 'Input Required');
       return;
     }
 
     this.isLoading = true;
+    this.spinner.show();
     this.receipt = [];
     this.rogersList = [];
 
@@ -43,16 +48,19 @@ export class FindByImeiComponent {
             this.loadRogersInvoices(res.result.bvReceiptNo);
           } else {
             this.isLoading = false;
+            this.spinner.hide();
           }
         } else {
           this.isLoading = false;
-          Swal.fire('Not Found', 'IMEI not found', 'info');
+          this.spinner.hide();
+          this.toastr.info('IMEI not found', 'Not Found');
         }
         this.cdr.detectChanges(); 
       },
       error: (err) => {
         this.isLoading = false;
-        Swal.fire('Error', 'API connection failed', 'error');
+        this.spinner.hide();
+        this.toastr.error('API connection failed', 'Error');
         this.cdr.detectChanges();
       }
     });
@@ -64,10 +72,12 @@ export class FindByImeiComponent {
         console.log('Invoices Raw Response:', res);
         this.rogersList = res?.result ?? [];
         this.isLoading = false;
+        this.spinner.hide();
         this.cdr.detectChanges();
       },
       error: (err) => {
         this.isLoading = false;
+        this.spinner.hide();
         this.cdr.detectChanges();
       }
     });

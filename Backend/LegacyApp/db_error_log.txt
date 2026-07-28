@@ -142,3 +142,183 @@ Error Number:208,State:1,Class:16
    at DAL.Inventory.OutputInvoice.OutputInvoiceDA.GetInvoiceDataFromDb(String invoiceNo, Boolean isSpire) in C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Commited Code\ILOps\Backend\DAL\Inventory\OutputInvoice\OutputInvoiceDA.cs:line 376
 ClientConnectionId:1af14fd5-538f-4878-b4d4-1b0d3b7e30aa
 Error Number:208,State:1,Class:16
+07-04-2026 22:13:51: Npgsql.PostgresException (0x80004005): 42703: column "ship_to_name" does not exist
+
+POSITION: 103
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at DAL.Inventory.OutputInvoice.OutputInvoiceDA.GetInvoiceDataFromDb(String invoiceNo, Boolean isSpire) in C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\ILOps\Backend\DAL\Inventory\OutputInvoice\OutputInvoiceDA.cs:line 199
+  Exception data:
+    Severity: ERROR
+    SqlState: 42703
+    MessageText: column "ship_to_name" does not exist
+    Position: 103
+    File: parse_relation.c
+    Line: 3643
+    Routine: errorMissingColumn
+07-04-2026 22:15:22: Npgsql.PostgresException (0x80004005): 42703: column "ship_to_name" does not exist
+
+POSITION: 103
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at DAL.Inventory.OutputInvoice.OutputInvoiceDA.GetInvoiceDataFromDb(String invoiceNo, Boolean isSpire) in C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\ILOps\Backend\DAL\Inventory\OutputInvoice\OutputInvoiceDA.cs:line 199
+  Exception data:
+    Severity: ERROR
+    SqlState: 42703
+    MessageText: column "ship_to_name" does not exist
+    Position: 103
+    File: parse_relation.c
+    Line: 3643
+    Routine: errorMissingColumn
+07-04-2026 22:15:50: Npgsql.PostgresException (0x80004005): 42703: column "ship_to_name" does not exist
+
+POSITION: 103
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at DAL.Inventory.OutputInvoice.OutputInvoiceDA.GetInvoiceDataFromDb(String invoiceNo, Boolean isSpire) in C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\ILOps\Backend\DAL\Inventory\OutputInvoice\OutputInvoiceDA.cs:line 199
+  Exception data:
+    Severity: ERROR
+    SqlState: 42703
+    MessageText: column "ship_to_name" does not exist
+    Position: 103
+    File: parse_relation.c
+    Line: 3643
+    Routine: errorMissingColumn
+07-04-2026 22:15:51: Npgsql.PostgresException (0x80004005): 42703: column "ship_to_name" does not exist
+
+POSITION: 103
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at DAL.Inventory.OutputInvoice.OutputInvoiceDA.GetInvoiceDataFromDb(String invoiceNo, Boolean isSpire) in C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\ILOps\Backend\DAL\Inventory\OutputInvoice\OutputInvoiceDA.cs:line 199
+  Exception data:
+    Severity: ERROR
+    SqlState: 42703
+    MessageText: column "ship_to_name" does not exist
+    Position: 103
+    File: parse_relation.c
+    Line: 3643
+    Routine: errorMissingColumn
+07-04-2026 22:16:40: Npgsql.PostgresException (0x80004005): 42703: column "ship_to_name" does not exist
+
+POSITION: 103
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at DAL.Inventory.OutputInvoice.OutputInvoiceDA.GetInvoiceDataFromDb(String invoiceNo, Boolean isSpire) in C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\ILOps\Backend\DAL\Inventory\OutputInvoice\OutputInvoiceDA.cs:line 199
+  Exception data:
+    Severity: ERROR
+    SqlState: 42703
+    MessageText: column "ship_to_name" does not exist
+    Position: 103
+    File: parse_relation.c
+    Line: 3643
+    Routine: errorMissingColumn
+07-04-2026 22:16:41: Npgsql.PostgresException (0x80004005): 42703: column "ship_to_name" does not exist
+
+POSITION: 103
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at DAL.Inventory.OutputInvoice.OutputInvoiceDA.GetInvoiceDataFromDb(String invoiceNo, Boolean isSpire) in C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\ILOps\Backend\DAL\Inventory\OutputInvoice\OutputInvoiceDA.cs:line 199
+  Exception data:
+    Severity: ERROR
+    SqlState: 42703
+    MessageText: column "ship_to_name" does not exist
+    Position: 103
+    File: parse_relation.c
+    Line: 3643
+    Routine: errorMissingColumn
+07-04-2026 22:16:42: Npgsql.PostgresException (0x80004005): 42703: column "ship_to_name" does not exist
+
+POSITION: 103
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at DAL.Inventory.OutputInvoice.OutputInvoiceDA.GetInvoiceDataFromDb(String invoiceNo, Boolean isSpire) in C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\ILOps\Backend\DAL\Inventory\OutputInvoice\OutputInvoiceDA.cs:line 199
+  Exception data:
+    Severity: ERROR
+    SqlState: 42703
+    MessageText: column "ship_to_name" does not exist
+    Position: 103
+    File: parse_relation.c
+    Line: 3643
+    Routine: errorMissingColumn
+07-04-2026 22:22:16: Npgsql.PostgresException (0x80004005): 42703: column "ship_to_name" does not exist
+
+POSITION: 103
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at DAL.Inventory.OutputInvoice.OutputInvoiceDA.GetInvoiceDataFromDb(String invoiceNo, Boolean isSpire) in C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\ILOps\Backend\DAL\Inventory\OutputInvoice\OutputInvoiceDA.cs:line 199
+  Exception data:
+    Severity: ERROR
+    SqlState: 42703
+    MessageText: column "ship_to_name" does not exist
+    Position: 103
+    File: parse_relation.c
+    Line: 3643
+    Routine: errorMissingColumn
+07-04-2026 22:22:45: Npgsql.PostgresException (0x80004005): 42703: column "ship_to_name" does not exist
+
+POSITION: 103
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at DAL.Inventory.OutputInvoice.OutputInvoiceDA.GetInvoiceDataFromDb(String invoiceNo, Boolean isSpire) in C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\ILOps\Backend\DAL\Inventory\OutputInvoice\OutputInvoiceDA.cs:line 199
+  Exception data:
+    Severity: ERROR
+    SqlState: 42703
+    MessageText: column "ship_to_name" does not exist
+    Position: 103
+    File: parse_relation.c
+    Line: 3643
+    Routine: errorMissingColumn
+07-04-2026 22:22:45: Npgsql.PostgresException (0x80004005): 42703: column "ship_to_name" does not exist
+
+POSITION: 103
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at DAL.Inventory.OutputInvoice.OutputInvoiceDA.GetInvoiceDataFromDb(String invoiceNo, Boolean isSpire) in C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\ILOps\Backend\DAL\Inventory\OutputInvoice\OutputInvoiceDA.cs:line 199
+  Exception data:
+    Severity: ERROR
+    SqlState: 42703
+    MessageText: column "ship_to_name" does not exist
+    Position: 103
+    File: parse_relation.c
+    Line: 3643
+    Routine: errorMissingColumn

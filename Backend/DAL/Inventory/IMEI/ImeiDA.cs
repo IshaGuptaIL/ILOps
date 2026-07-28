@@ -1,4 +1,4 @@
-﻿using DAL.Common.Login;
+using DAL.Common.Login;
 using DAL.Inventory.IMEI;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
@@ -32,6 +32,7 @@ public class ImeiDA : Iiemi
 
         using var conn = new SqlConnection(_sqlConn);
         using var cmd = new SqlCommand(sql, conn);
+        cmd.CommandTimeout = 600;
         cmd.Parameters.AddWithValue("@IMEI", imei);
 
         await conn.OpenAsync();
@@ -78,6 +79,7 @@ public class ImeiDA : Iiemi
 
         using var conn = new SqlConnection(_sqlConn);
         using var cmd = new SqlCommand(sql, conn);
+        cmd.CommandTimeout = 600;
         cmd.Parameters.AddWithValue("@BVReceiptNo", bvReceiptNo);
 
         await conn.OpenAsync();

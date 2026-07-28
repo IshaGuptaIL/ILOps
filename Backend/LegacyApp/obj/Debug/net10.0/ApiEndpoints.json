@@ -103,6 +103,1625 @@
     ]
   },
   {
+    "ContainingType": "LegacyApp.Controllers.Inventory.AdvantageVoiceController",
+    "Method": "DownloadTemplate",
+    "RelativePath": "api/AdvantageVoice/DownloadTemplate",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.AdvantageVoiceController",
+    "Method": "GetPendingImports",
+    "RelativePath": "api/AdvantageVoice/GetPendingImports",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[DAL.Inventory.AdvantageVoice.AdvantageImportVM, DAL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.AdvantageVoiceController",
+    "Method": "ImportExcel",
+    "RelativePath": "api/AdvantageVoice/ImportExcel",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "file",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.AdvantageVoiceController",
+    "Method": "SubmitOrders",
+    "RelativePath": "api/AdvantageVoice/SubmitOrders",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.AdvantageVoiceController",
+    "Method": "ValidateData",
+    "RelativePath": "api/AdvantageVoice/ValidateData",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[DAL.Inventory.AdvantageVoice.AdvantageImportVM, DAL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.ApplyCreditReviewClaimsController",
+    "Method": "ApplyCredit",
+    "RelativePath": "api/ApplyCreditReviewClaims/apply-credit",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "DAL.Inventory.PriceProtection.ApplyCredit_ReviewClaims.ApplyCreditRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DAL.Common.Login.ApiResposne",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.ApplyCreditReviewClaimsController",
+    "Method": "GetClaimsSummary",
+    "RelativePath": "api/ApplyCreditReviewClaims/claims-summary",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "DAL.Common.Login.ApiResposne",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.ApplyCreditReviewClaimsController",
+    "Method": "GetCreditDetail",
+    "RelativePath": "api/ApplyCreditReviewClaims/credit-detail/{claimId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "claimId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DAL.Common.Login.ApiResposne",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.ApplyCreditReviewClaimsController",
+    "Method": "GetCreditSummary",
+    "RelativePath": "api/ApplyCreditReviewClaims/credit-summary/{batchId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "batchId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DAL.Common.Login.ApiResposne",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.ApplyCreditReviewClaimsController",
+    "Method": "ExportClaimsSummary",
+    "RelativePath": "api/ApplyCreditReviewClaims/export-claims-summary",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.ApplyCreditReviewClaimsController",
+    "Method": "ModifyCreditNoteNumber",
+    "RelativePath": "api/ApplyCreditReviewClaims/modify-credit-number",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "DAL.Inventory.PriceProtection.ApplyCredit_ReviewClaims.ModifyCreditNumberRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DAL.Common.Login.ApiResposne",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.ApplyCreditReviewClaimsController",
+    "Method": "GetUnpaidClaimsDetail",
+    "RelativePath": "api/ApplyCreditReviewClaims/unpaid-claims-detail",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "batchId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "creditNoteNumber",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DAL.Common.Login.ApiResposne",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "AddBulkCustomer",
+    "RelativePath": "api/ARCollections/AddBulkCustomer",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "custNo",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "AddComment",
+    "RelativePath": "api/ARCollections/AddComment",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "DAL.Sales.ARCollections.AddCommentRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Int32",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "AddCustomerToGroup",
+    "RelativePath": "api/ARCollections/AddCustomerToGroup",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "LegacyApp.Controllers.Sales.AddCustomerToGroupRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "GetBatchNoticeDetail",
+    "RelativePath": "api/ARCollections/batch-notice/detail",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "groupCriteria",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "startDays",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "endDays",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "noticeType",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[DAL.Sales.ARCollections.BatchNoticeDetailRow, DAL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "GenerateBatchNoticeData",
+    "RelativePath": "api/ARCollections/batch-notice/generate",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "agingDate",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "OutputBatchNotices",
+    "RelativePath": "api/ARCollections/batch-notice/output",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "LegacyApp.Controllers.Sales.OutputBatchNoticeRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "GetBatchNoticeSummary",
+    "RelativePath": "api/ARCollections/batch-notice/summary",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "groupCriteria",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "startDays",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "endDays",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "noticeType",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[DAL.Sales.ARCollections.BatchNoticeSummaryRow, DAL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "GetBulkCustomers",
+    "RelativePath": "api/ARCollections/BulkCustomers",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "GetBulkCustomersWithName",
+    "RelativePath": "api/ARCollections/BulkCustomersWithName",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[DAL.Sales.ARCollections.BulkCustomerRow, DAL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "CheckOpenPayments",
+    "RelativePath": "api/ARCollections/CheckOpenPayments",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "custNo",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "GetCommentReviewSummary",
+    "RelativePath": "api/ARCollections/CommentReviewSummary",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "minDays",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "groupCriteria",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[DAL.Sales.ARCollections.CommentReviewSummaryRow, DAL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "CreateBulkCustomer",
+    "RelativePath": "api/ARCollections/CreateBulkCustomer",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "bulk",
+        "Type": "DAL.Models.TblBulkCustomers",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "CreateCustomerGroup",
+    "RelativePath": "api/ARCollections/CreateCustomerGroup",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "group",
+        "Type": "DAL.Models.TblCustomerGroups",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "CreateUser",
+    "RelativePath": "api/ARCollections/CreateUser",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "user",
+        "Type": "DAL.Sales.ARCollections.ARCollectionUser",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "GetCustomerGroups",
+    "RelativePath": "api/ARCollections/CustomerGroups",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "LoadOpenCustomers",
+    "RelativePath": "api/ARCollections/Customers",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "selectBy",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "groupCriteria",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "agingDate",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[DAL.Sales.ARCollections.ARCustomerRow, DAL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "DeleteBulkCustomer",
+    "RelativePath": "api/ARCollections/DeleteBulkCustomer/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "DeleteComment",
+    "RelativePath": "api/ARCollections/DeleteComment/{commentId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "commentId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "DeleteCustomerGroup",
+    "RelativePath": "api/ARCollections/DeleteCustomerGroup/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "DeleteUser",
+    "RelativePath": "api/ARCollections/DeleteUser/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "EditComment",
+    "RelativePath": "api/ARCollections/EditComment/{commentId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "commentId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "text",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "GetEvents",
+    "RelativePath": "api/ARCollections/Events",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "custNo",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "selectBy",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[DAL.Sales.ARCollections.ARCommentEvent, DAL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "ExportAgedSummary",
+    "RelativePath": "api/ARCollections/ExportAgedSummary",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "ExportARMaster",
+    "RelativePath": "api/ARCollections/ExportARMaster",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "ExportARMasterAll",
+    "RelativePath": "api/ARCollections/ExportARMasterAll",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "ExportARMasterSummary",
+    "RelativePath": "api/ARCollections/ExportARMasterSummary",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "ExportGLActivity",
+    "RelativePath": "api/ARCollections/ExportGLActivity",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "accountNo",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "startDate",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      },
+      {
+        "Name": "endDate",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "ExportPaymentDetails",
+    "RelativePath": "api/ARCollections/ExportPaymentDetails",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "ExportSummaryComments",
+    "RelativePath": "api/ARCollections/ExportSummaryComments",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "minDays",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "groupCriteria",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "GenerateAgingData",
+    "RelativePath": "api/ARCollections/GenerateAgingData",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "LegacyApp.Controllers.Sales.GenerateAgingDataRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "GenerateARMasterData",
+    "RelativePath": "api/ARCollections/GenerateARMasterData",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "agingDate",
+        "Type": "System.DateTime",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "GenerateCommentReviewData",
+    "RelativePath": "api/ARCollections/GenerateCommentReviewData",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "agingDate",
+        "Type": "System.DateTime",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "GenerateOverdueNotice",
+    "RelativePath": "api/ARCollections/GenerateOverdueNotice",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "DAL.Sales.ARCollections.CreateNoticeRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "GetAgedSummaryData",
+    "RelativePath": "api/ARCollections/GetAgedSummaryData",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[System.Object, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "GetARMasterData",
+    "RelativePath": "api/ARCollections/GetARMasterData",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[System.Object, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "GetPaymentDetailsData",
+    "RelativePath": "api/ARCollections/GetPaymentDetailsData",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[System.Object, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "GetGLActivity",
+    "RelativePath": "api/ARCollections/GLActivity",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "accountNo",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "startDate",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      },
+      {
+        "Name": "endDate",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[DAL.Sales.ARCollections.GLActivityRow, DAL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "GetGLAllowedAccounts",
+    "RelativePath": "api/ARCollections/GLAllowedAccounts",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[DAL.Sales.ARCollections.GLAllowedAccountDto, DAL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "GetGroupCustomers",
+    "RelativePath": "api/ARCollections/GroupCustomers",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "groupType",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "custGroup",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[DAL.Sales.ARCollections.GroupCustomerRow, DAL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "GetGroupsSummary",
+    "RelativePath": "api/ARCollections/GroupsSummary",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "groupType",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[DAL.Sales.ARCollections.CustomerGroupSummary, DAL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "LookupCustomerName",
+    "RelativePath": "api/ARCollections/LookupCustomerName",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "custNo",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "ModifyGroupName",
+    "RelativePath": "api/ARCollections/ModifyGroupName",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "LegacyApp.Controllers.Sales.ModifyGroupNameRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "OutputCheckedDocuments",
+    "RelativePath": "api/ARCollections/OutputCheckedDocuments",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "LegacyApp.Controllers.Sales.OutputCheckedDocumentsRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "OutputInvoicePdf",
+    "RelativePath": "api/ARCollections/OutputInvoicePdf",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "DAL.Sales.ARCollections.ExportInvoiceRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "OutputPaymentAdvicePdf",
+    "RelativePath": "api/ARCollections/OutputPaymentAdvicePdf",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "transNo",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "RefreshARGrid",
+    "RelativePath": "api/ARCollections/RefreshARGrid",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "custNo",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "selectBy",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "groupCriteria",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "agingDate",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[DAL.Sales.ARCollections.ARTransactionRow, DAL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "RemoveBulkCustomer",
+    "RelativePath": "api/ARCollections/RemoveBulkCustomer/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "RemoveCommentFromTrans",
+    "RelativePath": "api/ARCollections/RemoveCommentFromTrans/{eventTransId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "eventTransId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "RemoveCustomerFromGroup",
+    "RelativePath": "api/ARCollections/RemoveCustomerFromGroup",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "LegacyApp.Controllers.Sales.RemoveCustomerFromGroupRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "GetSummaryComment",
+    "RelativePath": "api/ARCollections/SummaryComment",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "custNo",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DAL.Sales.ARCollections.ARCommentEvent",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "SaveSummaryComment",
+    "RelativePath": "api/ARCollections/SummaryComment",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "LegacyApp.Controllers.Sales.SaveSummaryCommentRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "GetTerritoryGroups",
+    "RelativePath": "api/ARCollections/TerritoryGroups",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[DAL.Sales.ARCollections.TerritoryGroup, DAL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "UpdateARDetailRow",
+    "RelativePath": "api/ARCollections/UpdateARDetailRow",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "DAL.Sales.ARCollections.UpdateARDetailRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "UpdateCustomerGroup",
+    "RelativePath": "api/ARCollections/UpdateCustomerGroup",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "group",
+        "Type": "DAL.Models.TblCustomerGroups",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "UpdateUser",
+    "RelativePath": "api/ARCollections/UpdateUser",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "user",
+        "Type": "DAL.Sales.ARCollections.ARCollectionUser",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.ARCollectionsController",
+    "Method": "GetUsers",
+    "RelativePath": "api/ARCollections/Users",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "LegacyApp.Controllers.Inventory.CostValidationController",
     "Method": "GetCostVarianceAcrossWarehouses",
     "RelativePath": "api/cost-validation/CostVarianceAcrossWarehouses",
@@ -827,6 +2446,494 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "LegacyApp.Controllers.Sales.CustomerSalesController",
+    "Method": "AddCustomerToGroup",
+    "RelativePath": "api/CustomerSales/AddCustomerToGroup/{groupCode}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "groupCode",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "customer",
+        "Type": "DAL.Sales.CustomerSales.BVCustomerBO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.CustomerSalesController",
+    "Method": "AddFDDealerGroup",
+    "RelativePath": "api/CustomerSales/AddFDDealerGroup",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.CustomerSalesController",
+    "Method": "CreateGroup",
+    "RelativePath": "api/CustomerSales/CreateGroup",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "DAL.Sales.CustomerSales.CreateGroupRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.CustomerSalesController",
+    "Method": "DeleteGroup",
+    "RelativePath": "api/CustomerSales/DeleteGroup/{groupName}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "groupName",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.CustomerSalesController",
+    "Method": "ExportCsv",
+    "RelativePath": "api/CustomerSales/ExportCsv",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "DAL.Sales.CustomerSales.CustomerSalesRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.CustomerSalesController",
+    "Method": "ExportExcel",
+    "RelativePath": "api/CustomerSales/ExportExcel",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "DAL.Sales.CustomerSales.CustomerSalesRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.CustomerSalesController",
+    "Method": "ExportPerCustomer",
+    "RelativePath": "api/CustomerSales/ExportPerCustomer",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "DAL.Sales.CustomerSales.CustomerSalesRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.CustomerSalesController",
+    "Method": "ExportSplitPayment",
+    "RelativePath": "api/CustomerSales/ExportSplitPayment/{format}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "format",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "DAL.Sales.CustomerSales.CustomerSalesRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.CustomerSalesController",
+    "Method": "ExportSunLife",
+    "RelativePath": "api/CustomerSales/ExportSunLife",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "DAL.Sales.CustomerSales.CustomerSalesRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.CustomerSalesController",
+    "Method": "GenerateByMSD",
+    "RelativePath": "api/CustomerSales/GenerateByMSD",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "DAL.Sales.CustomerSales.CustomerSalesRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.CustomerSalesController",
+    "Method": "GenerateByTerritory",
+    "RelativePath": "api/CustomerSales/GenerateByTerritory",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "DAL.Sales.CustomerSales.CustomerSalesRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.CustomerSalesController",
+    "Method": "GenerateData",
+    "RelativePath": "api/CustomerSales/GenerateData",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "DAL.Sales.CustomerSales.CustomerSalesRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.CustomerSalesController",
+    "Method": "GetCustomerGroups",
+    "RelativePath": "api/CustomerSales/GetCustomerGroups",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[DAL.Sales.CustomerSales.CustomerGroupBO, DAL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.CustomerSalesController",
+    "Method": "GetCustomersInGroup",
+    "RelativePath": "api/CustomerSales/GetCustomersInGroup/{groupName}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "groupName",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[DAL.Sales.CustomerSales.BVCustomerBO, DAL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.CustomerSalesController",
+    "Method": "GetFields",
+    "RelativePath": "api/CustomerSales/GetFields/{groupName}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "groupName",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[DAL.Sales.CustomerSales.CustomerFieldBO, DAL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.CustomerSalesController",
+    "Method": "GetGeneratedData",
+    "RelativePath": "api/CustomerSales/GetGeneratedData/{groupName}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "groupName",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[DAL.Sales.CustomerSales.CustomerSalesRow, DAL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.CustomerSalesController",
+    "Method": "RemoveCustomerFromGroup",
+    "RelativePath": "api/CustomerSales/RemoveCustomerFromGroup/{groupCode}/{custNo}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "groupCode",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "custNo",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.CustomerSalesController",
+    "Method": "UpdateCustomerInGroup",
+    "RelativePath": "api/CustomerSales/UpdateCustomerInGroup/{groupCode}/{oldCustNo}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "groupCode",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "oldCustNo",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "customer",
+        "Type": "DAL.Sales.CustomerSales.BVCustomerBO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.CustomerSalesController",
+    "Method": "UpdateFields",
+    "RelativePath": "api/CustomerSales/UpdateFields/{groupName}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "groupName",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "fields",
+        "Type": "System.Collections.Generic.List\u00601[[DAL.Sales.CustomerSales.CustomerFieldBO, DAL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.CustomerSalesController",
+    "Method": "UpdateGeneratedData",
+    "RelativePath": "api/CustomerSales/UpdateGeneratedData",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "data",
+        "Type": "System.Collections.Generic.List\u00601[[DAL.Sales.CustomerSales.CustomerSalesRow, DAL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "LegacyApp.Controllers.Inventory.CustomSearchController",
     "Method": "GetDetails",
     "RelativePath": "api/CustomSearch/details",
@@ -941,6 +3048,234 @@
     ]
   },
   {
+    "ContainingType": "LegacyApp.Controllers.IEMI.ExceptionController",
+    "Method": "ClearAllExceptions",
+    "RelativePath": "api/Exception/ClearAllExceptions",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "DAL.Common.Login.ApiResposne",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.IEMI.ExceptionController",
+    "Method": "DeleteException",
+    "RelativePath": "api/Exception/DeleteException/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DAL.Common.Login.ApiResposne",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.IEMI.ExceptionController",
+    "Method": "DeleteIMEILengthException",
+    "RelativePath": "api/Exception/DeleteIMEILengthException/{part}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "part",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DAL.Common.Login.ApiResposne",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.IEMI.ExceptionController",
+    "Method": "GetExceptions",
+    "RelativePath": "api/Exception/GetExceptions",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "poNumber",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DAL.Common.Login.ApiResposne",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.IEMI.ExceptionController",
+    "Method": "GetIMEILengthExceptions",
+    "RelativePath": "api/Exception/GetIMEILengthExceptions",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "DAL.Common.Login.ApiResposne",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.IEMI.ExceptionController",
+    "Method": "ResolveException",
+    "RelativePath": "api/Exception/ResolveException",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "LegacyApp.Controllers.IEMI.ResolveRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DAL.Common.Login.ApiResposne",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.IEMI.ExceptionController",
+    "Method": "SaveIMEILengthException",
+    "RelativePath": "api/Exception/SaveIMEILengthException",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "DAL.Models.tblIMEILengthExceptions",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DAL.Common.Login.ApiResposne",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.IEMI.HardwareController",
+    "Method": "CheckErrors",
+    "RelativePath": "api/Hardware/check-errors",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "DAL.Inventory.IMEI.HardwareIMEI.CheckErrorsRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.IEMI.HardwareController",
+    "Method": "GetPurchaseOrders",
+    "RelativePath": "api/Hardware/purchase-orders",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.IEMI.HardwareController",
+    "Method": "ReceiveImei",
+    "RelativePath": "api/Hardware/receive",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "DAL.Inventory.IMEI.HardwareIMEI.ReceiveImeiRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.IEMI.HardwareController",
+    "Method": "UploadExcel",
+    "RelativePath": "api/Hardware/upload-excel",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "file",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "ImeiController",
     "Method": "FindByImei",
     "RelativePath": "api/Imei/find",
@@ -983,6 +3318,276 @@
     "ReturnTypes": [
       {
         "Type": "DAL.Common.Login.ApiResposne",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.ImeiSearchController",
+    "Method": "SearchImei",
+    "RelativePath": "api/ImeiSearch/search",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "DAL.Common.Login.ApiResposne",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.ImeiSearchController",
+    "Method": "SearchImei",
+    "RelativePath": "api/ImeiSearch/search/{imei}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "imei",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DAL.Common.Login.ApiResposne",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.InventoryEditController",
+    "Method": "GetBulkIdCount",
+    "RelativePath": "api/InventoryEdit/GetBulkIdCount",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "bulkId",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.InventoryEditController",
+    "Method": "GetInvoiceAddress",
+    "RelativePath": "api/InventoryEdit/GetInvoiceAddress",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "invoiceNo",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DAL.Inventory.InventoryEdit.InvoiceAddressEditModel",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.InventoryEditController",
+    "Method": "GetInvoiceTerms",
+    "RelativePath": "api/InventoryEdit/GetInvoiceTerms",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "invoiceNo",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DAL.Inventory.InventoryEdit.sales_history",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.InventoryEditController",
+    "Method": "GetSingleInvoiceBulkId",
+    "RelativePath": "api/InventoryEdit/GetSingleInvoiceBulkId",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "invoiceNo",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DAL.Inventory.InventoryEdit.sales_history",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.InventoryEditController",
+    "Method": "UpdateBulkId",
+    "RelativePath": "api/InventoryEdit/UpdateBulkId",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "DAL.Inventory.InventoryEdit.UpdateBulkIdRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.InventoryEditController",
+    "Method": "UpdateInvoiceAddress",
+    "RelativePath": "api/InventoryEdit/UpdateInvoiceAddress",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "DAL.Inventory.InventoryEdit.UpdateAddressRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.InventoryEditController",
+    "Method": "UpdateInvoiceTerms",
+    "RelativePath": "api/InventoryEdit/UpdateInvoiceTerms",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "DAL.Inventory.InventoryEdit.UpdateTermsRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.InventoryEditController",
+    "Method": "UpdateMultipleBulkIds",
+    "RelativePath": "api/InventoryEdit/UpdateMultipleBulkIds",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "DAL.Inventory.InventoryEdit.UpdateMultipleBulkIdsRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.InventoryEditController",
+    "Method": "UpdateSingleInvoiceBulkId",
+    "RelativePath": "api/InventoryEdit/UpdateSingleInvoiceBulkId",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "DAL.Inventory.InventoryEdit.UpdateSingleInvoiceBulkIdRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1370,6 +3975,341 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "LegacyApp.Controllers.Inventory.OutputToExcelController",
+    "Method": "GetClaimsToCreditsData",
+    "RelativePath": "api/OutputToExcel/claims-to-credits-data",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.OutputToExcelController",
+    "Method": "ExportBatch",
+    "RelativePath": "api/OutputToExcel/export-batch/{batchId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "batchId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.OutputToExcelController",
+    "Method": "ExportClaimsToCredits",
+    "RelativePath": "api/OutputToExcel/export-claims-to-credits",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.OutputToExcelController",
+    "Method": "ExportRogersOverpayments",
+    "RelativePath": "api/OutputToExcel/export-rogers-overpayments",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.PriceProtectionController",
+    "Method": "AppendClaim",
+    "RelativePath": "api/PriceProtection/append-claim",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "LegacyApp.Controllers.Inventory.AppendClaimRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DAL.Common.Login.ApiResposne",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.PriceProtectionController",
+    "Method": "GetBatchData",
+    "RelativePath": "api/PriceProtection/batch-data",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "DAL.Common.Login.ApiResposne",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.PriceProtectionController",
+    "Method": "ExportRawData",
+    "RelativePath": "api/PriceProtection/export-raw-data",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "start",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      },
+      {
+        "Name": "end",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.PriceProtectionController",
+    "Method": "FindReceipt",
+    "RelativePath": "api/PriceProtection/find-receipt",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "receiptNo",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DAL.Common.Login.ApiResposne",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.PriceProtectionController",
+    "Method": "LoadClaimData",
+    "RelativePath": "api/PriceProtection/load-claim-data",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "LegacyApp.Controllers.Inventory.LoadOnhandClaimRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DAL.Common.Login.ApiResposne",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.PriceProtectionController",
+    "Method": "ManualAddImei",
+    "RelativePath": "api/PriceProtection/manual-add-imei",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "LegacyApp.Controllers.Inventory.ManualAddImeiRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DAL.Common.Login.ApiResposne",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.PriceProtectionController",
+    "Method": "ManualRemoveImei",
+    "RelativePath": "api/PriceProtection/manual-remove-imei",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "imei",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DAL.Common.Login.ApiResposne",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.PriceProtectionController",
+    "Method": "GetNextBatchID",
+    "RelativePath": "api/PriceProtection/next-batch-id",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "DAL.Common.Login.ApiResposne",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.PriceProtectionController",
+    "Method": "GetPostedSummary",
+    "RelativePath": "api/PriceProtection/posted-summary",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "DAL.Common.Login.ApiResposne",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.PriceProtectionController",
+    "Method": "ProcessOnhandClaim",
+    "RelativePath": "api/PriceProtection/process-onhand-claim",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "LegacyApp.Controllers.Inventory.ProcessOnhandClaimRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DAL.Common.Login.ApiResposne",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.PriceProtectionController",
+    "Method": "ProcessReceiptClaim",
+    "RelativePath": "api/PriceProtection/process-receipt-claim",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "LegacyApp.Controllers.Inventory.ProcessReceiptClaimRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DAL.Common.Login.ApiResposne",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.PriceProtectionController",
+    "Method": "RemoveBatch",
+    "RelativePath": "api/PriceProtection/remove-batch/{batchNo}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "batchNo",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DAL.Common.Login.ApiResposne",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "LegacyApp.Controllers.IEMI.RecieveImeiController",
     "Method": "CheckErrorsAsync",
     "RelativePath": "api/RecieveImei/CheckErrorsAsync",
@@ -1404,6 +4344,16 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.IEMI.RecieveImeiController",
+    "Method": "GenerateSampleExcels",
+    "RelativePath": "api/RecieveImei/GenerateSampleExcels",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "LegacyApp.Controllers.IEMI.RecieveImeiController",
@@ -1649,6 +4599,255 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "LegacyApp.Controllers.Inventory.RogerController",
+    "Method": "ExportToExcel",
+    "RelativePath": "api/Roger/export",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.RogerController",
+    "Method": "GetARData",
+    "RelativePath": "api/Roger/list",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "searchTerm",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageNumber",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.RogerController",
+    "Method": "LoadARData",
+    "RelativePath": "api/Roger/load",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "pageNumber",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.RogerController",
+    "Method": "UpdateARData",
+    "RelativePath": "api/Roger/update",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "item",
+        "Type": "DAL.Inventory.RogerAR.RogerarBO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.RogerOverPaymentsController",
+    "Method": "ExportAllOverpayments",
+    "RelativePath": "api/RogerOverPayments/export",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.RogerOverPaymentsController",
+    "Method": "ImportRogersOverpayments",
+    "RelativePath": "api/RogerOverPayments/import",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "file",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DAL.Common.Login.ApiResposne",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.RogerOverPaymentsController",
+    "Method": "GetImportedFilesSummary",
+    "RelativePath": "api/RogerOverPayments/imported-files",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "DAL.Common.Login.ApiResposne",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.RogerOverPaymentsController",
+    "Method": "RemoveRecordsByFile",
+    "RelativePath": "api/RogerOverPayments/remove-file",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "filename",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DAL.Common.Login.ApiResposne",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.RogerOverPaymentsController",
+    "Method": "DownloadTemplate",
+    "RelativePath": "api/RogerOverPayments/template",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.RunRateController",
+    "Method": "ExportAccessoriesExcel",
+    "RelativePath": "api/RunRate/export-accessories",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.RunRateController",
+    "Method": "ExportAccessoriesRogersExcel",
+    "RelativePath": "api/RunRate/export-accessories-rogers",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.RunRateController",
+    "Method": "ExportHardwareExcel",
+    "RelativePath": "api/RunRate/export-hardware",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.RunRateController",
+    "Method": "GetRunRate",
+    "RelativePath": "api/RunRate/GetRunRate",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "minDays",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "maxDays",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[DAL.Inventory.RunRate.RunRateItemBO, DAL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "LegacyApp.Controllers.Inventory.RunRateController",
     "Method": "GetWFHInventory",
     "RelativePath": "api/RunRate/GetWfhInventory",
@@ -1659,6 +4858,1032 @@
     "ReturnTypes": [
       {
         "Type": "System.Collections.Generic.List\u00601[[DAL.Inventory.RunRate.RunRateItem, DAL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.RunRateController",
+    "Method": "GetHardwareView",
+    "RelativePath": "api/RunRate/hardware-view",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageNumber",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.RunRateController",
+    "Method": "LoadRunRateDataAsync",
+    "RelativePath": "api/RunRate/LoadRunRateData",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "DAL.Inventory.RunRate.RunRateRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Int32",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.RunRateController",
+    "Method": "GetAccessoriesAsyncView",
+    "RelativePath": "api/RunRate/view-accessories",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageNumber",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.HydroController",
+    "Method": "GenerateMemo",
+    "RelativePath": "api/Sales/Hydro/GenerateMemo",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "DAL.Sales.HydroSales.GenerateMemoRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DAL.Sales.HydroSales.GenerateMemoResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.HydroController",
+    "Method": "PostPayment",
+    "RelativePath": "api/Sales/Hydro/PostPayment",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "DAL.Sales.HydroSales.PostPaymentRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DAL.Sales.HydroSales.PostPaymentResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.RMAReportingImportController",
+    "Method": "GenerateCmSummary",
+    "RelativePath": "api/sales/rmareporting/import/cmsummary",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.RMAReportingImportController",
+    "Method": "DeleteBatch",
+    "RelativePath": "api/sales/rmareporting/import/deletebatch",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "cmFile",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "rmFile",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "manualFile",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.RMAReportingImportController",
+    "Method": "ProcessManualImport",
+    "RelativePath": "api/sales/rmareporting/import/manualimport",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.RMAReportingImportController",
+    "Method": "DownloadTemplate",
+    "RelativePath": "api/sales/rmareporting/import/template/{fileType}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "fileType",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.RMAReportingImportController",
+    "Method": "UploadFile",
+    "RelativePath": "api/sales/rmareporting/import/upload/{fileType}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "fileType",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "file",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.RogersInvoiceSpireController",
+    "Method": "GetCostVerificationReport",
+    "RelativePath": "api/Sales/RogersInvoiceSpire/CostVerificationReport",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "startDate",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "endDate",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[DAL.Sales.RogersInvoiceSpire.CostVerificationRow, DAL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.RogersInvoiceSpireController",
+    "Method": "GetDailySalesSummary",
+    "RelativePath": "api/Sales/RogersInvoiceSpire/DailySalesSummary",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "startDate",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "endDate",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[DAL.Sales.RogersInvoiceSpire.DailySalesRow, DAL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.RogersInvoiceSpireController",
+    "Method": "DownloadRogersEstimate",
+    "RelativePath": "api/Sales/RogersInvoiceSpire/DownloadRogersEstimate",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.RogersInvoiceSpireController",
+    "Method": "HdwFeeCheck",
+    "RelativePath": "api/Sales/RogersInvoiceSpire/HdwFeeCheck",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[DAL.Sales.RogersInvoiceSpire.CostVerificationRow, DAL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.RogersInvoiceSpireController",
+    "Method": "ProcessData",
+    "RelativePath": "api/Sales/RogersInvoiceSpire/ProcessData",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "DAL.Sales.RogersInvoiceSpire.ProcessDataRequest",
+        "IsRequired": true
+      },
+      {
+        "Name": "userId",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DAL.Sales.RogersInvoiceSpire.ProcessDataResult",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.RogersInvoiceSpireController",
+    "Method": "GetReturnsVerificationReport",
+    "RelativePath": "api/Sales/RogersInvoiceSpire/ReturnsVerificationReport",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "startDate",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "endDate",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "returnsStart",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "returnsEnd",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "userId",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[DAL.Sales.RogersInvoiceSpire.ReturnsVerificationRow, DAL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.RogerSalesReportingController",
+    "Method": "ExecuteAction",
+    "RelativePath": "api/sales/rogerssalesreporting/{endpoint}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "endpoint",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "startDate",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "endDate",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "criteria",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "territory",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.RogerSalesReportingController",
+    "Method": "ExecuteOutputAction",
+    "RelativePath": "api/sales/rogerssalesreporting/{endpoint}/output",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "endpoint",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "startDate",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "endDate",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "criteria",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "territory",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.RogerSalesReportingController",
+    "Method": "ExecuteViewAction",
+    "RelativePath": "api/sales/rogerssalesreporting/{endpoint}/view",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "endpoint",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "startDate",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "endDate",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "criteria",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "territory",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.RogerSalesReportingController",
+    "Method": "ExportFilteredData",
+    "RelativePath": "api/sales/rogerssalesreporting/export-filtered",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "LegacyApp.Controllers.Sales.FilteredDataRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.RogerSalesReportingController",
+    "Method": "UpdateSalesActivationRow",
+    "RelativePath": "api/sales/rogerssalesreporting/update",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "jsonRow",
+        "Type": "System.Text.Json.JsonElement",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.SalesTaxReportController",
+    "Method": "DeleteTaxCodeHistory",
+    "RelativePath": "api/SalesTaxReport/DeleteTaxCodeHistory/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.SalesTaxReportController",
+    "Method": "ExportExcel",
+    "RelativePath": "api/SalesTaxReport/ExportExcel",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "DAL.Sales.TaxSalesReport.SalesTaxReportRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.SalesTaxReportController",
+    "Method": "ExportGLDataExcel",
+    "RelativePath": "api/SalesTaxReport/ExportGLDataExcel",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "DAL.Sales.TaxSalesReport.SalesTaxReportRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.SalesTaxReportController",
+    "Method": "ExportGLITCExcel",
+    "RelativePath": "api/SalesTaxReport/ExportGLITCExcel",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "DAL.Sales.TaxSalesReport.SalesTaxReportRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.SalesTaxReportController",
+    "Method": "ExportVendorActivity",
+    "RelativePath": "api/SalesTaxReport/ExportVendorActivity",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "DAL.Sales.TaxSalesReport.VendorActivityRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.SalesTaxReportController",
+    "Method": "GetReport",
+    "RelativePath": "api/SalesTaxReport/GetReport",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "DAL.Sales.TaxSalesReport.SalesTaxReportRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DAL.Sales.TaxSalesReport.SalesTaxReportResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.SalesTaxReportController",
+    "Method": "GetTaxCodeHistory",
+    "RelativePath": "api/SalesTaxReport/GetTaxCodeHistory",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[DAL.Models.TaxCodeHistory, DAL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.SalesTaxReportController",
+    "Method": "GetVendors",
+    "RelativePath": "api/SalesTaxReport/GetVendors",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[DAL.Sales.TaxSalesReport.VendorBO, DAL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.SalesTaxReportController",
+    "Method": "LoadGLData",
+    "RelativePath": "api/SalesTaxReport/LoadGLData",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "DAL.Sales.TaxSalesReport.SalesTaxReportRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.SalesTaxReportController",
+    "Method": "LoadSalesHistory",
+    "RelativePath": "api/SalesTaxReport/LoadSalesHistory",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "DAL.Sales.TaxSalesReport.SalesTaxReportRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.SalesTaxReportController",
+    "Method": "SaveTaxCodeHistory",
+    "RelativePath": "api/SalesTaxReport/SaveTaxCodeHistory",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "history",
+        "Type": "DAL.Models.TaxCodeHistory",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.SkuController",
+    "Method": "GetSkus",
+    "RelativePath": "api/Sku",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[DAL.Models.tblSKU, DAL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.SkuController",
+    "Method": "AddSku",
+    "RelativePath": "api/Sku",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "sku",
+        "Type": "DAL.Models.tblSKU",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.SkuController",
+    "Method": "UpdateSku",
+    "RelativePath": "api/Sku",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "sku",
+        "Type": "DAL.Models.tblSKU",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.SkuController",
+    "Method": "DeleteSku",
+    "RelativePath": "api/Sku/{skuName}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "skuName",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.SpareLightController",
+    "Method": "DoAccessoryTransfer",
+    "RelativePath": "api/SpareLight/DoAccessoryTransfer",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "transferDate",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DAL.Common.Login.ApiResposne",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.SpareLightController",
+    "Method": "DoHardwareTransfer",
+    "RelativePath": "api/SpareLight/DoHardwareTransfer",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "transferDate",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DAL.Common.Login.ApiResposne",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.SpareLightController",
+    "Method": "GetTransferLogAsync",
+    "RelativePath": "api/SpareLight/Log",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "startDate",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "endDate",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "type",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DAL.Common.Login.ApiResposne",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.SpareLightController",
+    "Method": "UploadAccessory",
+    "RelativePath": "api/SpareLight/UploadAccessory",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "file",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.SpareLightController",
+    "Method": "UploadHardware",
+    "RelativePath": "api/SpareLight/UploadHardware",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "file",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.SpareLightController",
+    "Method": "ValidateAccessory",
+    "RelativePath": "api/SpareLight/ValidateAccessory",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "DAL.Common.Login.ApiResposne",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Inventory.SpareLightController",
+    "Method": "ValidateHardware",
+    "RelativePath": "api/SpareLight/ValidateHardware",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "DAL.Common.Login.ApiResposne",
         "MediaTypes": [
           "text/plain",
           "application/json",

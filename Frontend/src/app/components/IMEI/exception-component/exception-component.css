@@ -1,16 +1,280 @@
-.password-container {
-  width: 300px;
-  margin: 100px auto;
-  text-align: center;
+/* Classic MS Access Theme */
+.ms-access-container {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 13px;
+  color: #333;
+  padding: 20px;
+  background-color: #d4d4d4; /* Classic grey desktop background */
+  min-height: 80vh;
 }
 
-input {
+/* Password Box */
+.password-box {
+  width: 350px;
+  margin: 100px auto;
+  background-color: #f0f0f0;
+  border: 2px solid #fff;
+  border-bottom-color: #888;
+  border-right-color: #888;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+}
+
+.box-header {
+  background: linear-gradient(to right, #000080, #1084d0);
+  color: white;
+  padding: 5px 10px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.box-content {
+  padding: 20px;
+}
+
+.box-content label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.box-content input {
   width: 100%;
-  padding: 8px;
+  padding: 5px;
+  margin-bottom: 15px;
+  border: 1px solid #888;
+  box-sizing: border-box;
+}
+
+.button-row {
+  text-align: right;
+}
+
+/* Buttons */
+.ms-btn {
+  background-color: #e1e1e1;
+  border: 2px solid #fff;
+  border-bottom-color: #888;
+  border-right-color: #888;
+  padding: 5px 15px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #000;
+}
+
+.ms-btn:active {
+  border-color: #888;
+  border-bottom-color: #fff;
+  border-right-color: #fff;
+}
+
+.ms-btn-small {
+  background-color: #e1e1e1;
+  border: 1px solid #fff;
+  border-bottom-color: #888;
+  border-right-color: #888;
+  padding: 3px 8px;
+  cursor: pointer;
+  font-size: 12px;
+  margin-right: 5px;
+}
+
+.ms-btn-small:active {
+  border-color: #888;
+  border-bottom-color: #fff;
+  border-right-color: #fff;
+}
+
+.btn-danger {
+  color: #900;
+}
+
+/* Main Window */
+.main-window {
+  background-color: #f0f0f0;
+  border: 2px solid #fff;
+  border-bottom-color: #888;
+  border-right-color: #888;
+  box-shadow: 3px 3px 10px rgba(0,0,0,0.3);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.window-header {
+  background: linear-gradient(to right, #000080, #1084d0);
+  color: white;
+  padding: 6px 12px;
+  font-weight: bold;
+  font-size: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Tab Bar */
+.tab-bar {
+  background-color: #e1e1e1;
+  border-bottom: 1px solid #888;
+  display: flex;
+  padding: 5px 10px 0 10px;
+}
+
+.tab-btn {
+  background-color: #d4d4d4;
+  border: 1px solid #888;
+  border-bottom: none;
+  padding: 6px 15px;
+  margin-right: 5px;
+  cursor: pointer;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  font-weight: normal;
+}
+
+.tab-btn.active {
+  background-color: #f0f0f0;
+  font-weight: bold;
+  border-top: 2px solid #000080;
+  padding-bottom: 7px;
+  margin-bottom: -1px;
+}
+
+/* Tab Content */
+.tab-content {
+  padding: 20px;
+}
+
+.section-title {
+  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: 15px;
+  color: #000080;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 5px;
+}
+
+.section-header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 5px;
+}
+
+.section-header-flex .section-title {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+/* Form Panel */
+.form-panel {
+  background-color: #e8e8e8;
+  border: 1px solid #aaa;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+.form-title {
+  font-weight: bold;
   margin-bottom: 10px;
 }
 
-button {
-  padding: 8px 15px;
-  cursor: pointer;
+.form-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  align-items: flex-end;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-bottom: 4px;
+  font-weight: bold;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"] {
+  padding: 5px;
+  border: 1px solid #888;
+  width: 180px;
+}
+
+.checkbox-group {
+  flex-direction: row;
+  align-items: center;
+  height: 30px;
+}
+
+.checkbox-group label {
+  font-weight: normal;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Table */
+.table-container {
+  max-height: 400px;
+  overflow-y: auto;
+  border: 1px solid #888;
+  background-color: #fff;
+}
+
+.ms-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.ms-table th {
+  background-color: #e1e1e1;
+  border: 1px solid #888;
+  padding: 6px 10px;
+  text-align: left;
+  font-weight: bold;
+  position: sticky;
+  top: 0;
+}
+
+.ms-table td {
+  border: 1px solid #ccc;
+  padding: 6px 10px;
+}
+
+.ms-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.ms-table tr:hover {
+  background-color: #ececfb;
+}
+
+.cell-input {
+  width: 60px;
+  padding: 2px 5px;
+  border: 1px solid #aaa;
+}
+
+.no-data {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+  font-style: italic;
+}
+
+.status-badge {
+  padding: 2px 6px;
+  background-color: #fbd2d2;
+  color: #900;
+  border-radius: 3px;
+  font-weight: bold;
+}
+
+.status-badge.resolved {
+  background-color: #d2fbd2;
+  color: #090;
 }

@@ -1,0 +1,32 @@
+<div class="ms-access-mdi">
+  <!-- MDI Toolbar / Switchboard Buttons -->
+  <div class="mdi-toolbar">
+    <div class="toolbar-group">
+      <button class="ms-btn" [class.active]="currentRoute === 'claims'" (click)="navigate('claims')">
+        <i class="fa fa-shield-alt"></i> Create Price Protection Claims
+      </button>
+      <button class="ms-btn" [class.active]="currentRoute === 'apply-credits'" (click)="navigate('apply-credits')">
+        <i class="fa fa-file-invoice-dollar"></i> Apply Credits / Review Claims
+      </button>
+      <button class="ms-btn" [class.active]="currentRoute === 'imei-search'" (click)="navigate('imei-search')">
+        <i class="fa fa-search"></i> IMEI Search
+      </button>
+      <button class="ms-btn" [class.active]="currentRoute === 'output-to-excel'" (click)="navigate('output-to-excel')">
+        <i class="fa fa-file-excel"></i> Output to Excel
+      </button>
+      <button class="ms-btn" [class.active]="currentRoute === 'roger-overpayments'" (click)="navigate('roger-overpayments')">
+        <i class="fa fa-money-bill-wave"></i> Rogers Overpayments
+      </button>
+    </div>
+    <div class="toolbar-group">
+      <button class="ms-btn ms-exit" (click)="exit()">
+        <i class="fa fa-sign-out"></i> Exit System
+      </button>
+    </div>
+  </div>
+
+  <!-- MDI Workspace Area -->
+  <div class="mdi-workspace">
+    <router-outlet></router-outlet>
+  </div>
+</div>

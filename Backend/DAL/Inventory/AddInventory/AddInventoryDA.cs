@@ -1,4 +1,4 @@
-﻿using DAL.Common.Login;
+using DAL.Common.Login;
 using DAL.Common.Spire;
 using DAL.Models;
 using Microsoft.Data.SqlClient;
@@ -239,7 +239,7 @@ namespace DAL.Inventory.AddInventory
                     currentCost = model.CostPrice,
                     averageCost = model.CostPrice,
                     serialized = (model.Type == "Hardware"),
-                    //userDef1 = model.AccessoryGroup,
+                    userDef1 = model.AccessoryGroup,
                     allowBackorders = false
                 },
                 new {
@@ -249,7 +249,7 @@ namespace DAL.Inventory.AddInventory
                     currentCost = model.CostPrice,
                     averageCost = model.CostPrice,
                     serialized = (model.Type == "Hardware"),
-                    //userDef1 = model.AccessoryGroup,
+                    userDef1 = model.AccessoryGroup,
                     allowBackorders = false
                 }
             };
@@ -308,16 +308,17 @@ namespace DAL.Inventory.AddInventory
 
                     using var cmd = new NpgsqlCommand(@"
 INSERT INTO public.inventory
-(whse, part_no, description, current_cost, average_cost, serialized, allow_back_orders)
+(whse, part_no, description, current_cost, average_cost, serialized, allow_back_orders, user_def_1)
 VALUES
-(@whse, @part_no, @description, @current_cost, @average_cost, @serialized, @allow_back_orders)
+(@whse, @part_no, @description, @current_cost, @average_cost, @serialized, @allow_back_orders, @user_def_1)
 ON CONFLICT (whse, part_no)
 DO UPDATE SET
     description = EXCLUDED.description,
     current_cost = EXCLUDED.current_cost,
     average_cost = EXCLUDED.average_cost,
     serialized = EXCLUDED.serialized,
-    allow_back_orders = EXCLUDED.allow_back_orders;
+    allow_back_orders = EXCLUDED.allow_back_orders,
+    user_def_1 = EXCLUDED.user_def_1;
 ", conn);
 
                     // --- PARAMETER MAPPING ---
@@ -334,6 +335,8 @@ DO UPDATE SET
                         el.TryGetProperty("serialized", out var ser) ? ser.GetBoolean() : false);
                     cmd.Parameters.AddWithValue("@allow_back_orders",
                         el.TryGetProperty("allowBackorders", out var abo) ? abo.GetBoolean() : false);
+                    cmd.Parameters.AddWithValue("@user_def_1",
+                        el.TryGetProperty("userDef1", out var udf1) ? udf1.GetString() ?? (object)DBNull.Value : DBNull.Value);
 
                     await cmd.ExecuteNonQueryAsync();
                 }

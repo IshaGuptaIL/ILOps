@@ -1,0 +1,72 @@
+<div class="import-container">
+  
+  <div class="top-row">
+    <div class="left-buttons">
+      <button class="access-btn" (click)="onButtonClick('Show Files')">Show Files</button>
+      <button class="access-btn" (click)="onButtonClick('Import Files')">Import Files</button>
+      <button class="access-btn" (click)="onButtonClick('CM Summary')">CM Summary</button>
+    </div>
+    
+    <div class="file-paths">
+      <div class="file-row">
+        <label>RM File:</label>
+        <input type="text" value="V:\RMAReporting-Spire\RogersReports\RMA" readonly class="path-input"/>
+        <button class="small-btn" (click)="onDownloadTemplate('RM')">Download Template</button>
+        <button class="small-btn" (click)="onTriggerUploadClick('rmUpload')">Upload File</button>
+        <input type="file" id="rmUpload" style="display:none" (change)="onFileUpload($event, 'RM')" />
+      </div>
+      <div class="file-row">
+        <label>CM File:</label>
+        <input type="text" value="V:\RMAReporting-Spire\RogersReports\CM" readonly class="path-input"/>
+        <button class="small-btn" (click)="onDownloadTemplate('CM')">Download Template</button>
+        <button class="small-btn" (click)="onTriggerUploadClick('cmUpload')">Upload File</button>
+        <input type="file" id="cmUpload" style="display:none" (change)="onFileUpload($event, 'CM')" />
+      </div>
+      <div class="file-row">
+        <label>Manual:</label>
+        <input type="text" value="V:\RMAReporting-Spire\RogersReports\RMA-Manual" readonly class="path-input"/>
+        <button class="small-btn" (click)="onDownloadTemplate('Manual')">Download Template</button>
+        <button class="small-btn" (click)="onTriggerUploadClick('manualUpload')">Upload File</button>
+        <input type="file" id="manualUpload" style="display:none" (change)="onFileUpload($event, 'Manual')" />
+      </div>
+
+      <div class="info-text">
+        <p>Summarizes each CM import file by type and matches to RMA's approved where possible.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="middle-row">
+    <div class="left-buttons">
+      <button class="access-btn large-btn" (click)="onButtonClick('Manual RMA Import')">Manual RMA Import</button>
+      <button class="access-btn large-btn" (click)="onButtonClick('Import RM and CM files')">Import RM and<br/>CM files</button>
+    </div>
+    <div class="center-buttons">
+      <button class="access-btn" (click)="onButtonClick('Import Manual')">Import Manual</button>
+    </div>
+    
+    <div class="delete-section">
+      <label class="section-label">Delete Batch of Imported Files</label>
+      <div class="delete-row">
+        <label>CM File:</label>
+        <select class="dropdown"><option></option></select>
+      </div>
+      <div class="delete-row">
+        <label>RM File:</label>
+        <select class="dropdown"><option></option></select>
+      </div>
+      <div class="delete-row">
+        <label>Manual File:</label>
+        <select class="dropdown"><option></option></select>
+      </div>
+      <button class="access-btn right-btn" (click)="onButtonClick('Delete Files')">Delete Files</button>
+    </div>
+  </div>
+
+  <div class="bottom-row">
+    <div class="right-buttons">
+      <button class="access-btn large-btn" (click)="onButtonClick('Command28')">Command28</button>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,183 @@
+<div class="groups-form-container">
+  <!-- Access style Header -->
+  <div class="access-form-header">
+    <div class="header-icon">
+      <i class="fa fa-sitemap"></i>
+    </div>
+    <div class="header-info">
+      <h2>Maintain Customer Groups / Bulk Customers</h2>
+    </div>
+  </div>
+
+  <!-- Group Type Selector Bar -->
+  <div class="group-type-bar">
+    <div class="selector-container">
+      <label for="groupTypeSelect" class="selector-label">Group Type:</label>
+      <select id="groupTypeSelect" [(ngModel)]="groupType" (change)="onGroupTypeChange()" class="access-dropdown">
+        <option value="Collections Groups">Collections Groups</option>
+        <option value="Rogers Reporting Groups">Rogers Reporting Groups</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- 3-Pane Datasheet Container -->
+  <div class="panes-container">
+    <!-- Left Pane: Groups -->
+    <div class="pane left-pane">
+      <div class="pane-header">Groups:</div>
+      <div class="pane-table-wrapper">
+        <table class="access-grid-table">
+          <thead>
+            <tr>
+              <th class="row-selector-hdr"></th>
+              <th style="width: 30%;">CustGroup</th>
+              <th style="width: 50%;">Name</th>
+              <th style="width: 20%;">Count</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let g of groupsSummary" (click)="selectGroup(g)" [class.selected-row]="g.custGroup === selectedCustGroup">
+              <td class="row-selector-cell">
+                <span *ngIf="g.custGroup === selectedCustGroup">▶</span>
+              </td>
+              <td>{{ g.custGroup }}</td>
+              <td>{{ g.maxOfGroupName }}</td>
+              <td class="text-right">{{ g.countOfCustGroup }}</td>
+            </tr>
+            <tr *ngIf="groupsSummary.length === 0">
+              <td colspan="4" class="empty-text">No groups found.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Center Pane: Customers in Group -->
+    <div class="pane center-pane">
+      <div class="pane-header">Customers:</div>
+      <div class="pane-table-wrapper">
+        <table class="access-grid-table">
+          <thead>
+            <tr>
+              <th class="row-selector-hdr"></th>
+              <th style="width: 25%;">Group ID</th>
+              <th style="width: 30%;">BVCustNo</th>
+              <th style="width: 45%;">BV Name</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let c of groupCustomers" (click)="selectCustomer(c)" [class.selected-row]="selectedCustomer && c.id === selectedCustomer.id">
+              <td class="row-selector-cell">
+                <span *ngIf="selectedCustomer && c.id === selectedCustomer.id">▶</span>
+              </td>
+              <td>{{ c.custGroup }}</td>
+              <td>{{ c.bvCustNo }}</td>
+              <td>{{ c.bvName }}</td>
+            </tr>
+            <tr *ngIf="groupCustomers.length === 0">
+              <td colspan="4" class="empty-text">No customers in selected group.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Right Pane: Bulk Customers -->
+    <div class="pane right-pane">
+      <div class="pane-header">Bulk Customers:</div>
+      <div class="pane-table-wrapper">
+        <table class="access-grid-table">
+          <thead>
+            <tr>
+              <th class="row-selector-hdr"></th>
+              <th style="width: 35%;">CustNo</th>
+              <th style="width: 50%;">Name</th>
+              <th style="width: 15%;" class="text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let b of bulkCustomers" (click)="selectBulkCustomer(b)" [class.selected-row]="selectedBulkCustomer && b.id === selectedBulkCustomer.id">
+              <td class="row-selector-cell">
+                <span *ngIf="selectedBulkCustomer && b.id === selectedBulkCustomer.id">▶</span>
+              </td>
+              <td>{{ b.custNo }}</td>
+              <td>{{ b.name }}</td>
+              <td class="text-center">
+                <button class="remove-action-btn" (click)="onRemoveBulkCustomer(b); $event.stopPropagation()" title="Delete Bulk Customer">
+                  <i class="fa fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="bulkCustomers.length === 0">
+              <td colspan="4" class="empty-text">No bulk customers listed.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Actions Row -->
+  <div class="bottom-actions-container">
+    <!-- Left Actions (Adding and Renaming Groups) -->
+    <div class="action-column left-actions">
+      <div class="action-box">
+        <div class="form-row">
+          <button class="access-action-btn primary-action" (click)="onAddCustomer()">
+            {{ isNewGroup ? 'Add Customer to New Group' : 'Add Customer to Selected Group' }}
+          </button>
+          
+          <div class="field-item">
+            <label for="spireCustNo">Spire Cust No:</label>
+            <input type="text" id="spireCustNo" [(ngModel)]="spireCustNo" class="access-text-input">
+          </div>
+        </div>
+
+        <div class="checkbox-row">
+          <input type="checkbox" id="chkNewGroup" [(ngModel)]="isNewGroup" (change)="chkNewGroupChange()" class="access-checkbox">
+          <label for="chkNewGroup">New Group</label>
+        </div>
+
+        <div class="form-row-full mt-2">
+          <label for="newGroupName">New Group Name:</label>
+          <input type="text" id="newGroupName" [(ngModel)]="newGroupName" [disabled]="!newGroupNameEnabled" class="access-text-input full-width">
+        </div>
+      </div>
+
+      <div class="action-box mt-3">
+        <button class="access-action-btn secondary-action" (click)="onModifyGroupName()">
+          Modify Name of Selected Group
+        </button>
+      </div>
+    </div>
+
+    <!-- Center Actions (Removing Customer) -->
+    <div class="action-column center-actions">
+      <div class="action-box flex-center">
+        <button class="access-action-btn danger-action" (click)="onRemoveCustomer()">
+          Remove Selected Customer from Group
+        </button>
+      </div>
+    </div>
+
+    <!-- Right Actions (Adding Bulk Customers & Info) -->
+    <div class="action-column right-actions">
+      <div class="action-box">
+        <div class="form-row">
+          <button class="access-action-btn primary-action" (click)="onAddBulkCustomer()">
+            Add Bulk Customer
+          </button>
+          
+          <div class="field-item">
+            <label for="addBulkCustNo">Cust No:</label>
+            <input type="text" id="addBulkCustNo" [(ngModel)]="addBulkCustNo" class="access-text-input">
+          </div>
+        </div>
+      </div>
+
+      <div class="description-label">
+        <strong>Bulk customers</strong> are those that will receive a bulk invoice as part of their collection notice package. If any single BV invoice within the bulk invoice range is not to be included (eg paid), then a bulk invoice will not be printed and individual invoices will be included in the package instead.
+      </div>
+    </div>
+  </div>
+</div>

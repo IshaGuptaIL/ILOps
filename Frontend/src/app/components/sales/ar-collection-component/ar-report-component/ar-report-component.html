@@ -1,0 +1,99 @@
+<div class="ar-report-container">
+  <div class="report-section">
+    <h3 class="section-title">Aging Of Payments Collected</h3>
+    <form [formGroup]="reportForm" class="form-container">
+      <div class="form-row">
+        <label class="form-label text-right">Last Report Date:</label>
+        <input type="date" id="lastReportDate" class="form-control" formControlName="lastReportDate" />
+        <div class="note-text">
+          Note: Last Report Date is normally the first day of the current month.
+        </div>
+      </div>
+      <div class="form-row">
+        <label class="form-label text-right">Start Date:</label>
+        <input type="date" id="startDate" class="form-control" formControlName="startDate" [max]="maxDateString" />
+      </div>
+      <div class="form-row">
+        <label class="form-label text-right">End Date:</label>
+        <input type="date" id="endDate" class="form-control" formControlName="endDate" [max]="maxDateString" />
+      </div>
+      <div class="button-row">
+        <button type="button" class="btn-vba generate-btn" (click)="generateAgingData()">Generate Data</button>
+        <div class="btn-column">
+          <button type="button" class="btn-vba" (click)="viewAgedSummary()">View Aged Summary</button>
+          <button type="button" class="btn-vba" (click)="outputAgedSummaryXlsx()">Output Aged Summary XLSX</button>
+        </div>
+        <button type="button" class="btn-vba" (click)="viewPaymentDetails()">View Payment Details</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="report-section mt-5">
+    <h3 class="section-title">AR Master</h3>
+    <form [formGroup]="arMasterForm" class="form-container">
+      <div class="form-row">
+        <label class="form-label text-right">Aging Date:</label>
+        <input type="date" id="agingDate" class="form-control" formControlName="agingDate" [max]="maxDateString" />
+      </div>
+      <div class="button-row align-top">
+        <button type="button" class="btn-vba generate-btn" (click)="generateARMasterData()">Generate Data</button>
+        <div class="btn-column">
+          <button type="button" class="btn-vba" (click)="viewARMaster()">View AR Master</button>
+          <button type="button" class="btn-vba" (click)="outputARMasterXlsx()">Output AR Master XLSX</button>
+          <button type="button" class="btn-vba" (click)="outputARMasterAllXlsx()">Output AR Master XLSX - ALL</button>
+          <button type="button" class="btn-vba" (click)="outputARMasterSummaryXlsx()">Output AR Master XLSX - SUMMARY</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Custom Data Grid Modal -->
+<div class="modal-overlay" *ngIf="isModalOpen" (click)="closeModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3 class="modal-title">{{ modalTitle }}</h3>
+      <button class="close-btn" (click)="closeModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped table-hover">
+          <thead class="table-dark">
+            <tr>
+              <th *ngFor="let col of modalColumns">{{ col }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of paginatedModalData">
+              <td *ngFor="let col of modalColumns">{{ row[col] }}</td>
+            </tr>
+            <tr *ngIf="paginatedModalData.length === 0">
+              <td [attr.colspan]="modalColumns.length" class="text-center py-4">No data available.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination Controls -->
+      <div class="d-flex justify-content-between align-items-center mt-3" *ngIf="modalData.length > 0">
+        <div class="text-muted" style="font-size: 0.9rem;">
+          Showing {{ startIndex }} to {{ endIndex }} of {{ modalData.length }} entries
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-outline-secondary btn-sm" (click)="prevPage()" [disabled]="currentPage === 1">
+            Previous
+          </button>
+          <button class="btn btn-secondary btn-sm" disabled>
+            Page {{ currentPage }} of {{ totalPages }}
+          </button>
+          <button class="btn btn-outline-secondary btn-sm" (click)="nextPage()" [disabled]="currentPage === totalPages">
+            Next
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="closeModal()">Close</button>
+    </div>
+  </div>
+</div>

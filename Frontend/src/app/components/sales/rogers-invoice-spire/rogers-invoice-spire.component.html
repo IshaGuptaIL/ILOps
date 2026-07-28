@@ -1,0 +1,300 @@
+<div class="access-window">
+  <!-- MS Access Style Tab Bar (3 Permanent Tabs) -->
+  <div class="access-tab-bar">
+    <div class="access-tab" [class.active]="activeTab === 'preprocess'" (click)="selectTab('preprocess')">
+      <span class="tab-icon">📋</span> Process Data For Invoice 2010
+    </div>
+
+    <div class="access-tab" [class.active]="activeTab === 'cost'" (click)="selectTab('cost')">
+      <span class="tab-icon">📊</span> Cost Verification Report
+    </div>
+
+    <div class="access-tab" [class.active]="activeTab === 'sales'" (click)="selectTab('sales')">
+      <span class="tab-icon">💰</span> Sales Summary By Payment Method
+    </div>
+  </div>
+
+  <!-- Active Tab Content Area -->
+  <div class="tab-content-area">
+
+    <!-- 2. DATA PREPARATION TAB (IMAGE 3) -->
+    <div *ngIf="activeTab === 'preprocess'" class="access-form">
+      <div class="form-title-bar">
+        <span>Process Data For Invoice 2010</span>
+      </div>
+      
+      <div class="form-body">
+        <!-- Claim Period Section -->
+        <h5 class="section-title">Claim Period (Monthly):</h5>
+        
+        <div class="form-row">
+          <div class="form-inputs-group">
+            <div class="input-with-label">
+              <label>Start Date mm/dd/yy:</label>
+              <div class="date-input-container">
+                <input type="date" [(ngModel)]="preprocessStartDate" class="classic-input" />
+              </div>
+            </div>
+            
+            <div class="input-with-label mt-2">
+              <label>End Date mm/dd/yy:</label>
+              <div class="date-input-container">
+                <input type="date" [(ngModel)]="preprocessEndDate" class="classic-input" />
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-actions-group">
+            <button class="classic-btn btn-blue" (click)="processData()">Process Data for Rogers Invoice</button>
+            <button class="classic-btn btn-gray" (click)="selectTab('preprocess')">Exit</button>
+          </div>
+        </div>
+
+        <!-- Disabled Option Buttons -->
+        <div class="disabled-buttons-grid mt-4">
+          <button class="classic-btn btn-disabled" disabled>View / Edit Acc TopUps<br>NOT NEEDED</button>
+          <button class="classic-btn" (click)="downloadRogersEstimate()">Output Rogers Estimate<br>CSV File</button>
+          <button class="classic-btn btn-disabled" disabled>Generate Adjustments<br>Verification Sheet NOT NEEDED</button>
+          <button class="classic-btn btn-disabled" disabled>Output Adjustments<br>Verification Sheet NOT NEEDED</button>
+        </div>
+
+        <div class="mt-3">
+          <button class="classic-btn btn-white" (click)="runHdwFeeCheck()">HDW, fee not $1 or $5</button>
+        </div>
+
+        <hr class="form-separator mt-4" />
+
+        <!-- Returns Review Section -->
+        <h5 class="section-title mt-3">Review Returns during this period within the Claim Period:</h5>
+        
+        <div class="form-row">
+          <div class="form-inputs-group">
+            <div class="input-with-label">
+              <label>Start Date mm/dd/yy:</label>
+              <div class="date-input-container">
+                <input type="date" [(ngModel)]="returnsStart" class="classic-input" />
+              </div>
+            </div>
+            
+            <div class="input-with-label mt-2">
+              <label>End Date mm/dd/yy:</label>
+              <div class="date-input-container">
+                <input type="date" [(ngModel)]="returnsEnd" class="classic-input" />
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-actions-group align-bottom">
+            <button class="classic-btn btn-white" (click)="fetchReturnsVerification()">Output Returns Verification Sheet</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Table results grid preview -->
+      <div *ngIf="returnsReportData.length > 0" class="results-preview-section mt-4">
+        <div class="preview-header">
+          <h6>Returns Validation Preview ({{ returnsReportData.length }} records)</h6>
+          <button class="classic-btn btn-blue btn-sm" (click)="exportReturnsCsv()">Export to Excel</button>
+        </div>
+        <div class="table-scroll">
+          <table class="classic-table text-nowrap">
+            <thead>
+              <tr>
+                <th colspan="8" class="text-center bg-red-light">Returns</th>
+                <th colspan="8" class="text-center bg-green-light">Matched Sale</th>
+              </tr>
+              <tr>
+                <th>Invoice</th><th>Date</th><th>Part</th><th>Qty</th><th>Cost</th><th>Sell</th><th>TopUp</th><th>AR</th>
+                <th>Orig Invoice</th><th>Date</th><th>Part</th><th>Qty</th><th>Cost</th><th>Sell</th><th>TopUp</th><th>AR</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let r of paginatedData">
+                <td class="text-red font-bold">{{ r.invoice }}</td>
+                <td>{{ r.invoiceDate | date:'yyyy-MM-dd' }}</td>
+                <td>{{ r.partNumber }}</td>
+                <td>{{ r.qty }}</td>
+                <td>{{ r.costPrice | currency }}</td>
+                <td>{{ r.sellPrice | currency }}</td>
+                <td>{{ r.topUpOwing | currency }}</td>
+                <td>{{ r.arAmount | currency }}</td>
+                
+                <td class="text-green font-bold">{{ r.invoice2 || 'No Match' }}</td>
+                <td>{{ r.invoiceDate2 | date:'yyyy-MM-dd' }}</td>
+                <td>{{ r.partNumber2 }}</td>
+                <td>{{ r.qty2 }}</td>
+                <td>{{ r.costPrice2 | currency }}</td>
+                <td>{{ r.sellPrice2 | currency }}</td>
+                <td>{{ r.topUpOwing2 | currency }}</td>
+                <td>{{ r.arAmount2 | currency }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="pagination-area mt-2" *ngIf="totalPages > 1">
+          <app-pagination 
+            [currentPage]="currentPage" 
+            [totalPages]="totalPages" 
+            [pageSize]="pageSize" 
+            [totalItems]="filteredReturnsData.length"
+            (pageChanged)="onPageChanged($event)">
+          </app-pagination>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. COST VERIFICATION TAB (IMAGE 4) -->
+    <div *ngIf="activeTab === 'cost'" class="access-form">
+      <div class="form-title-bar">
+        <span>Cost Verification Report</span>
+      </div>
+      
+      <div class="form-body">
+        <div class="form-row">
+          <div class="form-inputs-group">
+            <div class="input-with-label">
+              <label>Start Date:</label>
+              <div class="date-input-container">
+                <input type="date" [(ngModel)]="costStartDate" class="classic-input" />
+              </div>
+            </div>
+            
+            <div class="input-with-label mt-2">
+              <label>End Date:</label>
+              <div class="date-input-container">
+                <input type="date" [(ngModel)]="costEndDate" class="classic-input" />
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-actions-group">
+            <button class="classic-btn btn-blue" (click)="fetchCostVerification()">Output Report</button>
+            <button class="classic-btn btn-gray" (click)="selectTab('preprocess')">Exit</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cost Table results grid preview -->
+      <div *ngIf="costReportData.length > 0" class="results-preview-section mt-4">
+        <div class="preview-header">
+          <h6>Cost Verification Preview ({{ costReportData.length }} records)</h6>
+          <button class="classic-btn btn-blue btn-sm" (click)="exportCostCsv()">Export to Excel</button>
+        </div>
+        <div class="table-scroll">
+          <table class="classic-table text-nowrap">
+            <thead>
+              <tr>
+                <th>TransactionNo</th><th>Invoice</th><th>InvoiceDate</th><th>CustName</th><th>CustTerritory</th><th>Whse</th><th>PartNumber</th><th>FreeAccessory</th><th>Qty</th><th>IMEIESN</th><th>CostPrice</th><th>SellPrice</th><th>TopUpOwing</th><th>BVReceiptCost</th><th>NetIMEI ReceiveCost</th><th>NetPriceProtection</th><th>PONumber</th><th>BVReceipt</th><th>MISC_1</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let r of paginatedData">
+                <td>{{ r.transactionNo }}</td>
+                <td>{{ r.invoice }}</td>
+                <td>{{ r.invoiceDate | date:'yyyy-MM-dd' }}</td>
+                <td>{{ r.custName }}</td>
+                <td>{{ r.custTerritory }}</td>
+                <td>{{ r.whse }}</td>
+                <td>{{ r.partNumber }}</td>
+                <td>{{ r.freeAccessory }}</td>
+                <td>{{ r.qty }}</td>
+                <td>{{ r.imeiesn }}</td>
+                <td>{{ r.costPrice | currency }}</td>
+                <td>{{ r.sellPrice | currency }}</td>
+                <td>{{ r.topUpOwing | currency }}</td>
+                <td>{{ r.bvReceiptCost | currency }}</td>
+                <td>{{ r.netIMEIReceiveCost | currency }}</td>
+                <td>{{ r.netPriceProtection | currency }}</td>
+                <td>{{ r.poNumber }}</td>
+                <td>{{ r.bvReceipt }}</td>
+                <td>{{ r.misC_1 }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="pagination-area mt-2" *ngIf="totalPages > 1">
+          <app-pagination 
+            [currentPage]="currentPage" 
+            [totalPages]="totalPages" 
+            [pageSize]="pageSize" 
+            [totalItems]="filteredCostData.length"
+            (pageChanged)="onPageChanged($event)">
+          </app-pagination>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. SALES SUMMARY TAB (IMAGE 2) -->
+    <div *ngIf="activeTab === 'sales'" class="access-form">
+      <div class="form-title-bar">
+        <span>Sales Summary By Payment Method</span>
+      </div>
+      
+      <div class="form-body">
+        <div class="form-row">
+          <div class="form-inputs-group">
+            <div class="input-with-label">
+              <label>Start Date:</label>
+              <div class="date-input-container">
+                <input type="date" [(ngModel)]="salesStartDate" class="classic-input" />
+              </div>
+            </div>
+            
+            <div class="input-with-label mt-2">
+              <label>End Date:</label>
+              <div class="date-input-container">
+                <input type="date" [(ngModel)]="salesEndDate" class="classic-input" />
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-actions-group">
+            <button class="classic-btn btn-blue" (click)="fetchDailySalesSummary()">Output Report</button>
+            <button class="classic-btn btn-gray" (click)="selectTab('preprocess')">Exit</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sales Table results grid preview -->
+      <div *ngIf="salesReportData.length > 0" class="results-preview-section mt-4">
+        <div class="preview-header">
+          <h6>Sales Summary Preview ({{ salesReportData.length }} records)</h6>
+          <button class="classic-btn btn-blue btn-sm" (click)="exportSalesCsv()">Export to Excel</button>
+        </div>
+        <div class="table-scroll">
+          <table class="classic-table text-nowrap">
+            <thead>
+              <tr>
+                <th>Invoice No</th><th>Web Order ID</th><th>Invoice Date</th><th>Payment Method</th><th>Trans No</th><th>Cust No</th><th>Customer Name</th><th>Total Amount</th><th>Inv Terr</th><th>Cust Terr</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let r of paginatedData">
+                <td>{{ r.invoiceNo }}</td>
+                <td>{{ r.webOrderID }}</td>
+                <td>{{ r.date | date:'yyyy-MM-dd' }}</td>
+                <td>{{ r.paymentMethod }}</td>
+                <td>{{ r.transNo }}</td>
+                <td>{{ r.custNo }}</td>
+                <td>{{ r.custName }}</td>
+                <td>{{ r.total | currency }}</td>
+                <td>{{ r.invTerr }}</td>
+                <td>{{ r.custTerr }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="pagination-area mt-2" *ngIf="totalPages > 1">
+          <app-pagination 
+            [currentPage]="currentPage" 
+            [totalPages]="totalPages" 
+            [pageSize]="pageSize" 
+            [totalItems]="filteredSalesData.length"
+            (pageChanged)="onPageChanged($event)">
+          </app-pagination>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

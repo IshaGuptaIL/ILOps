@@ -1,21 +1,24 @@
-﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace DAL.Inventory.IMEI.HardwareIMEI
 {
-    public class SpireClient: ISpireClient
+    public class SpireClient : ISpireClient
     {
         private readonly HttpClient _httpClient;
         private readonly ILogger<SpireClient> _logger;
         private readonly string _baseUrl;
         private readonly string _user;
         private readonly string _pass;
+        private readonly string _sqlConn;
 
         public SpireClient(
             HttpClient client,
@@ -24,6 +27,7 @@ namespace DAL.Inventory.IMEI.HardwareIMEI
         {
             _httpClient = client;
             _logger = logger;
+            _sqlConn = config.GetConnectionString("bvactivation_Connection");
 
             var section = config.GetSection("SpireApi");
 
@@ -38,88 +42,39 @@ namespace DAL.Inventory.IMEI.HardwareIMEI
                 throw new InvalidOperationException("SpireApi username/password missing.");
         }
 
-        public async Task<string> GetPurchaseOrdersAsync()
+        private async Task LogApiCallAsync(string callType, string endpoint, string sendString, string responseString, int httpStatus, string httpStatusText, long responseTime)
         {
-            var endpoint = $"{_baseUrl}purchasing/orders/?limit=10";
-
-            using var request = new HttpRequestMessage(HttpMethod.Get, endpoint);
-
-            var authBytes = Encoding.UTF8.GetBytes($"{_user}:{_pass}");
-            request.Headers.Authorization =
-                new AuthenticationHeaderValue("Basic", Convert.ToBase64String(authBytes));
-
-            request.Headers.Accept.Clear();
-            request.Headers.Accept.Add(
-                new MediaTypeWithQualityHeaderValue("application/json"));
-
-            var sw = System.Diagnostics.Stopwatch.StartNew();
-            var response = await _httpClient.SendAsync(request);
-            sw.Stop();
-
-            var respText = await response.Content.ReadAsStringAsync();
-
-            _logger.LogInformation("Spire PO API → {Url} returned {StatusCode} in {Time}ms",
-                endpoint, (int)response.StatusCode, sw.ElapsedMilliseconds);
-
-            if (!response.IsSuccessStatusCode)
+            try
             {
-                _logger.LogError("Spire PO API failed. Status: {Status}, Reason: {Reason}, Body: {Body}",
-                    (int)response.StatusCode, response.ReasonPhrase, respText);
+                await using var conn = new SqlConnection(_sqlConn);
+                await conn.OpenAsync();
 
-                throw new HttpRequestException(
-                    $"Spire PO API failed. Status={(int)response.StatusCode} {response.ReasonPhrase}. Body={respText}");
+                await using var checkCmd = new SqlCommand("SELECT TOP 1 ISNULL(LoggingEnabled, 0) FROM tblSettingsApi", conn);
+                checkCmd.CommandTimeout = 600;
+                var enabled = Convert.ToBoolean(await checkCmd.ExecuteScalarAsync());
+                if (!enabled) return;
+
+                await using var cmd = new SqlCommand(@"
+                    INSERT INTO tblAPILog (CallType, Endpoint, SendString, ResponseString, HTTPStatus, HTTPStatusText, ResponseTime, LogDateTime)
+                    VALUES (@CallType, @Endpoint, @SendString, @ResponseString, @HTTPStatus, @HTTPStatusText, @ResponseTime, @LogDateTime)", conn);
+                cmd.CommandTimeout = 600;
+                cmd.Parameters.AddWithValue("@CallType", callType ?? "");
+                cmd.Parameters.AddWithValue("@Endpoint", endpoint ?? "");
+                cmd.Parameters.AddWithValue("@SendString", sendString ?? "");
+                cmd.Parameters.AddWithValue("@ResponseString", responseString ?? "");
+                cmd.Parameters.AddWithValue("@HTTPStatus", httpStatus);
+                cmd.Parameters.AddWithValue("@HTTPStatusText", httpStatusText ?? "");
+                cmd.Parameters.AddWithValue("@ResponseTime", responseTime);
+                cmd.Parameters.AddWithValue("@LogDateTime", DateTime.Now);
+
+                await cmd.ExecuteNonQueryAsync();
             }
-
-            return respText;
+            catch (Exception ex)
+            {
+                _logger.LogError("Error logging API call to tblAPILog: {Msg}", ex.Message);
+            }
         }
 
-
-
-
-        /// <summary>
-        /// GET single PO by ID — used before PUT/receive to load serials
-        /// Matches: ret = CallSpire(0, 0, "GET", "purchasing/orders", lngPOID, ...)
-        /// </summary>
-        public async Task<string> GetPurchaseOrderAsync(long id)
-        {
-            var endpoint = $"{_baseUrl}purchasing/orders/{id}";
-
-            using var request = new HttpRequestMessage(HttpMethod.Get, endpoint);
-
-            var authBytes = Encoding.UTF8.GetBytes($"{_user}:{_pass}");
-            request.Headers.Authorization =
-                new AuthenticationHeaderValue("Basic", Convert.ToBase64String(authBytes));
-
-            request.Headers.Accept.Clear();
-            request.Headers.Accept.Add(
-                new MediaTypeWithQualityHeaderValue("application/json"));
-
-            var sw = System.Diagnostics.Stopwatch.StartNew();
-            var response = await _httpClient.SendAsync(request);
-            sw.Stop();
-
-            var respText = await response.Content.ReadAsStringAsync();
-
-            _logger.LogInformation("Spire PO Detail API → {Url} returned {StatusCode} in {Time}ms",
-                endpoint, (int)response.StatusCode, sw.ElapsedMilliseconds);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                _logger.LogError("Spire PO Detail API failed. Status: {Status}, Reason: {Reason}, Body: {Body}",
-                    (int)response.StatusCode, response.ReasonPhrase, respText);
-
-                throw new HttpRequestException(
-                    $"Spire PO Detail API failed. Status={(int)response.StatusCode} {response.ReasonPhrase}. Body={respText}");
-            }
-
-            return respText;
-        }
-
-        /// <summary>
-        /// PUT PO — update serials and receiveQty on the line item
-        /// Matches: ret = CallSpire(0, 0, "PUT", "purchasing/orders", lngPOID, SendString, ...)
-        /// </summary>
-        /// 
         private HttpRequestMessage CreateRequest(HttpMethod method, string url, HttpContent? content = null)
         {
             var request = new HttpRequestMessage(method, url);
@@ -137,14 +92,75 @@ namespace DAL.Inventory.IMEI.HardwareIMEI
             return request;
         }
 
+        public async Task<string> GetPurchaseOrdersAsync()
+        {
+            var endpoint = $"{_baseUrl}purchasing/orders/?limit=10";
+            using var request = CreateRequest(HttpMethod.Get, endpoint);
+
+            var sw = System.Diagnostics.Stopwatch.StartNew();
+            var response = await _httpClient.SendAsync(request);
+            sw.Stop();
+
+            var respText = await response.Content.ReadAsStringAsync();
+
+            await LogApiCallAsync("GET", endpoint, "", respText, (int)response.StatusCode, response.ReasonPhrase, sw.ElapsedMilliseconds);
+
+            _logger.LogInformation("Spire PO API → {Url} returned {StatusCode} in {Time}ms",
+                endpoint, (int)response.StatusCode, sw.ElapsedMilliseconds);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                _logger.LogError("Spire PO API failed. Status: {Status}, Reason: {Reason}, Body: {Body}",
+                    (int)response.StatusCode, response.ReasonPhrase, respText);
+
+                throw new HttpRequestException(
+                    $"Spire PO API failed. Status={(int)response.StatusCode} {response.ReasonPhrase}. Body={respText}");
+            }
+
+            return respText;
+        }
+
+        public async Task<string> GetPurchaseOrderAsync(long id)
+        {
+            var endpoint = $"{_baseUrl}purchasing/orders/{id}";
+            using var request = CreateRequest(HttpMethod.Get, endpoint);
+
+            var sw = System.Diagnostics.Stopwatch.StartNew();
+            var response = await _httpClient.SendAsync(request);
+            sw.Stop();
+
+            var respText = await response.Content.ReadAsStringAsync();
+
+            await LogApiCallAsync("GET", endpoint, "", respText, (int)response.StatusCode, response.ReasonPhrase, sw.ElapsedMilliseconds);
+
+            _logger.LogInformation("Spire PO Detail API → {Url} returned {StatusCode} in {Time}ms",
+                endpoint, (int)response.StatusCode, sw.ElapsedMilliseconds);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                _logger.LogError("Spire PO Detail API failed. Status: {Status}, Reason: {Reason}, Body: {Body}",
+                    (int)response.StatusCode, response.ReasonPhrase, respText);
+
+                throw new HttpRequestException(
+                    $"Spire PO Detail API failed. Status={(int)response.StatusCode} {response.ReasonPhrase}. Body={respText}");
+            }
+
+            return respText;
+        }
+
         public async Task<bool> UpdatePurchaseOrderAsync(long id, string json)
         {
             var url = $"{_baseUrl}purchasing/orders/{id}";
             using var content = new StringContent(json, Encoding.UTF8, "application/json");
             using var request = CreateRequest(HttpMethod.Put, url, content);
 
+            var sw = System.Diagnostics.Stopwatch.StartNew();
             var response = await _httpClient.SendAsync(request);
+            sw.Stop();
+
             var body = await response.Content.ReadAsStringAsync();
+
+            await LogApiCallAsync("PUT", url, json, body, (int)response.StatusCode, response.ReasonPhrase, sw.ElapsedMilliseconds);
 
             _logger.LogInformation("Spire PUT {Url} returned {StatusCode}", url, (int)response.StatusCode);
 
@@ -157,10 +173,6 @@ namespace DAL.Inventory.IMEI.HardwareIMEI
             return response.IsSuccessStatusCode;
         }
 
-        /// <summary>
-        /// POST receive — finalises the receipt in Spire
-        /// Matches: ret = CallSpire(0, 0, "POST", "purchasing/orders/{id}/receive", ...)
-        /// </summary>
         public async Task<string> PostReceiptAsync(long id, string sendJson = "")
         {
             var url = $"{_baseUrl}purchasing/orders/{id}/receive";
@@ -170,12 +182,18 @@ namespace DAL.Inventory.IMEI.HardwareIMEI
                 content = new StringContent(sendJson, Encoding.UTF8, "application/json");
 
             using var request = CreateRequest(HttpMethod.Post, url, content);
+
+            var sw = System.Diagnostics.Stopwatch.StartNew();
             var response = await _httpClient.SendAsync(request);
+            sw.Stop();
+
+            var body = await response.Content.ReadAsStringAsync();
+
+            await LogApiCallAsync("POST", url, sendJson, body, (int)response.StatusCode, response.ReasonPhrase, sw.ElapsedMilliseconds);
 
             if (!response.IsSuccessStatusCode)
                 return null;
 
-            var body = await response.Content.ReadAsStringAsync();
             if (string.IsNullOrWhiteSpace(body))
                 return null;
 
@@ -189,41 +207,32 @@ namespace DAL.Inventory.IMEI.HardwareIMEI
             }
             catch (JsonException)
             {
-                // handle parse error if needed
             }
 
             return null;
         }
 
-        /// <summary>
-        /// GET receipt after posting — matches the post-receive query on public_purchase_receipts
-        /// </summary>
         public Task<string> GetLastReceiptIdAsync(long orderId, string guid)
         {
-            // In live mode the receipt ID comes from Spire's Location header
-            // after POST /receive. Keeping as placeholder for correlation logging.
             return Task.FromResult("LIVE-SYNC");
         }
 
-        // ─────────────────────────────────────────────────────────────────
-        // Inventory Serial Numbers
-        // ─────────────────────────────────────────────────────────────────
-
-        /// <summary>
-        /// GET serial numbers for a specific whse + partNo.
-        /// Maps to: INSERT INTO wwserialtemp FROM public_inventory_serial_numbers
-        /// WHERE whse='CO' AND part_no='...'
-        /// Used to check if scanned IMEIs already exist (AlreadyInInventory logic).
-        /// </summary>
         public async Task<string> GetSerialNumbersAsync(string whse, string partNo)
         {
-            // Spire filter format: ?filter={"whse":{"eq":"CO"},"partNo":{"eq":"IPHONE16"}}
             var filter = Uri.EscapeDataString($"{{\"whse\":{{\"eq\":\"{whse}\"}},\"partNo\":{{\"eq\":\"{partNo}\"}}}}");
             var url = $"{_baseUrl}inventory/serials?filter={filter}&limit=5000";
-            var response = await _httpClient.GetAsync(url);
+            using var request = CreateRequest(HttpMethod.Get, url);
+
+            var sw = System.Diagnostics.Stopwatch.StartNew();
+            var response = await _httpClient.SendAsync(request);
+            sw.Stop();
+
+            var body = await response.Content.ReadAsStringAsync();
+
+            await LogApiCallAsync("GET", url, "", body, (int)response.StatusCode, response.ReasonPhrase, sw.ElapsedMilliseconds);
+
             if (!response.IsSuccessStatusCode) return "[]";
-            return await response.Content.ReadAsStringAsync();
+            return body;
         }
     }
 }
-

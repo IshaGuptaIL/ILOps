@@ -1,0 +1,422 @@
+<div class="ar-collection-container">
+  <!-- Page Header -->
+  <header class="page-header">
+    <div class="header-title">
+      <h1>A/R Collections Manager</h1>
+      <p class="subtitle">Spire Accounts Receivable Tracking & Collections Management</p>
+    </div>
+  </header>
+
+  <!-- Filter Toolbar Card -->
+  <section class="filters-card">
+    <div class="filters-grid">
+      <!-- Territory / Group Dropdown -->
+      <div class="filter-group">
+        <label for="territoryGroup">Territory Group</label>
+        <div class="select-wrapper">
+          <select id="territoryGroup" [(ngModel)]="selectedGroup" (change)="onFiltersChange()">
+            <option *ngFor="let group of territoryGroups" [ngValue]="group">
+              {{ group.groupName }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Selection Mode Radios -->
+      <div class="filter-group">
+        <label>Selection Mode</label>
+        <div class="radio-group">
+          <label class="radio-label">
+            <input type="radio" name="selectBy" [value]="1" [(ngModel)]="selectBy" (change)="onFiltersChange()">
+            <span class="custom-radio"></span>
+            Single Customer
+          </label>
+          <label class="radio-label">
+            <input type="radio" name="selectBy" [value]="2" [(ngModel)]="selectBy" (change)="onFiltersChange()">
+            <span class="custom-radio"></span>
+            Group Billing (RR)
+          </label>
+        </div>
+      </div>
+
+      <!-- Aging Date Picker -->
+      <div class="filter-group">
+        <label for="agingDate">Aging Calculation Date</label>
+        <input type="date" id="agingDate" [(ngModel)]="agingDate" (change)="onFiltersChange()" class="date-input">
+      </div>
+
+      <!-- Customer Select List -->
+      <div class="filter-group customer-select-group">
+        <label for="customerSelect">Customer Account</label>
+        <div class="select-wrapper">
+          <select id="customerSelect" [(ngModel)]="selectedCustomerCode" (change)="onCustomerSelect()">
+            <option value="">-- Choose an Account --</option>
+            <option *ngFor="let cust of customers" [value]="selectBy === 1 ? cust.cust : cust.custGroup">
+              {{ selectBy === 1 ? (cust.cust + ' - ' + cust.custName) : (cust.custGroup + ' - ' + cust.custName) }}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Workspace Grid (Only shown when a customer is selected) -->
+  <div class="workspace-layout" *ngIf="selectedCustomer; else selectPrompt">
+    
+    <!-- Top Row: Customer Overview and Transaction Details Grid -->
+    <div class="top-row-grid">
+      <!-- Customer Info Card -->
+      <div class="info-card">
+        <div class="card-header">
+          <i class="fa fa-user-circle"></i>
+          <h2>Customer Profile</h2>
+          <span class="badge" [class.badge-bulk]="selectedCustomer.sendBulk">
+            {{ selectedCustomer.sendBulk ? 'Bulk Billing' : 'Regular' }}
+          </span>
+        </div>
+        
+        <div class="profile-summary">
+          <div class="profile-row main-desc">
+            <span class="label">Account Name:</span>
+            <span class="valueHighlight">{{ selectedCustomer.custName }}</span>
+          </div>
+          <div class="profile-grid">
+            <div class="profile-row">
+              <span class="label">Cust Code:</span>
+              <span class="value">{{ selectedCustomer.cust }}</span>
+            </div>
+            <div class="profile-row" *ngIf="selectedCustomer.custGroup">
+              <span class="label">Group Ref:</span>
+              <span class="value">{{ selectedCustomer.custGroup }}</span>
+            </div>
+            <div class="profile-row">
+              <span class="label">Postal Code:</span>
+              <span class="value">{{ selectedCustomer.postalCode }}</span>
+            </div>
+            <div class="profile-row">
+              <span class="label">Language:</span>
+              <span class="value font-semibold">{{ selectedCustomer.language }}</span>
+            </div>
+          </div>
+        </div>
+
+        <hr class="divider">
+
+        <div class="contacts-tabs">
+          <h3>Customer Contacts</h3>
+          
+          <div class="contacts-accordion">
+            <!-- Contact 1 -->
+            <div class="contact-box" *ngIf="selectedCustomer.bvcocontact1name || selectedCustomer.bvaddrtelno1">
+              <span class="contact-title">Primary Contact (Sales)</span>
+              <div class="contact-detail">
+                <span class="contact-name">{{ selectedCustomer.bvcocontact1name || 'No Name Provided' }}</span>
+                <span class="contact-link" *ngIf="selectedCustomer.bvaddrtelno1"><i class="fa fa-phone"></i> {{ selectedCustomer.bvaddrtelno1 }}</span>
+                <span class="contact-link" *ngIf="selectedCustomer.bvaddremail"><i class="fa fa-envelope"></i> {{ selectedCustomer.bvaddremail }}</span>
+              </div>
+            </div>
+
+            <!-- Contact 2 -->
+            <div class="contact-box secondary" *ngIf="selectedCustomer.bvcocontact2name || selectedCustomer.bvcocontact2tel1">
+              <span class="contact-title">Billing / AP Contact</span>
+              <div class="contact-detail">
+                <span class="contact-name">{{ selectedCustomer.bvcocontact2name || 'No Name' }}</span>
+                <span class="contact-link" *ngIf="selectedCustomer.bvcocontact2tel1"><i class="fa fa-phone"></i> {{ selectedCustomer.bvcocontact2tel1 }}</span>
+                <span class="contact-link" *ngIf="selectedCustomer.bvcocontact2email"><i class="fa fa-envelope"></i> {{ selectedCustomer.bvcocontact2email }}</span>
+              </div>
+            </div>
+
+            <!-- Contact 3 -->
+            <div class="contact-box secondary" *ngIf="selectedCustomer.bvcocontact3name || selectedCustomer.bvcocontact3tel1">
+              <span class="contact-title">Escalation Contact</span>
+              <div class="contact-detail">
+                <span class="contact-name">{{ selectedCustomer.bvcocontact3name || 'No Name' }}</span>
+                <span class="contact-link" *ngIf="selectedCustomer.bvcocontact3tel1"><i class="fa fa-phone"></i> {{ selectedCustomer.bvcocontact3tel1 }}</span>
+                <span class="contact-link" *ngIf="selectedCustomer.bvcocontact3email"><i class="fa fa-envelope"></i> {{ selectedCustomer.bvcocontact3email }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Transaction Edit Panel -->
+      <div class="detail-edit-card" [class.disabled-panel]="!selectedTransaction">
+        <div class="card-header">
+          <i class="fa fa-edit"></i>
+          <h2>Update Transaction Detail</h2>
+          <span class="selected-tran-badge" *ngIf="selectedTransaction">
+            Trans #: {{ selectedTransaction.tranS_NO }}
+          </span>
+        </div>
+
+        <div class="edit-form-content" *ngIf="selectedTransaction; else selectRowPrompt">
+          <div class="form-row-2col">
+            <div class="form-group">
+              <label for="banNo">BAN Number</label>
+              <input type="text" id="banNo" [(ngModel)]="banInput" placeholder="Enter BAN">
+            </div>
+            
+            <div class="form-group">
+              <label for="billToCust">Bill To Customer</label>
+              <input type="text" id="billToCust" [(ngModel)]="billToCustInput" placeholder="Alternate Customer">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="rootCause">Root Cause Dispute Reason</label>
+            <div class="select-wrapper">
+              <select id="rootCause" [(ngModel)]="rootCauseIdInput">
+                <option [value]="0">-- Select Dispute Cause --</option>
+                <option *ngFor="let rc of rootCauses" [value]="rc.code">{{ rc.name }}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-checkbox-group">
+            <label class="checkbox-label toggle-switch">
+              <input type="checkbox" [(ngModel)]="opcResolvedInput">
+              <span class="slider"></span>
+              OPC Resolved
+            </label>
+            
+            <label class="checkbox-label toggle-switch">
+              <input type="checkbox" [(ngModel)]="ignoreGroupInput">
+              <span class="slider"></span>
+              Ignore Group Exclusion
+            </label>
+          </div>
+
+          <div class="form-group">
+            <label for="opcDescription">OPC Description (Required if OPC Resolved is checked)</label>
+            <textarea id="opcDescription" [(ngModel)]="opcDescriptionInput" rows="2" placeholder="Describe the resolution..."></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn btn-save" (click)="saveARDetail()">
+              <i class="fa fa-save"></i> Save Changes
+            </button>
+          </div>
+        </div>
+        
+        <ng-template #selectRowPrompt>
+          <div class="empty-panel-prompt">
+            <i class="fa fa-info-circle"></i>
+            <p>Click a transaction row in the grid below to view and edit its details.</p>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+
+    <!-- Main Grid Section -->
+    <div class="grid-section card">
+      <div class="grid-header">
+        <div class="grid-header-title">
+          <i class="fa fa-table"></i>
+          <h2>Open Transactions</h2>
+        </div>
+        <div class="grid-actions">
+          <button class="btn btn-outline btn-sm" (click)="toggleSelectAll()">
+            <i class="fa fa-check-square-o"></i> Toggle Select All
+          </button>
+          <button class="btn btn-outline btn-sm" (click)="refreshARGrid()">
+            <i class="fa fa-refresh"></i> Refresh
+          </button>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table class="ar-grid-table">
+          <thead>
+            <tr>
+              <th class="col-check"></th>
+              <th class="col-cust">Cust No</th>
+              <th class="col-trans">Trans No</th>
+              <th class="col-ref">Ref No</th>
+              <th class="col-type">Type</th>
+              <th class="col-date">Date</th>
+              <th class="col-amount text-right">Original Amt</th>
+              <th class="col-balance text-right font-bold">Balance</th>
+              <th class="col-aging text-right">Current</th>
+              <th class="col-aging text-right">30 Days</th>
+              <th class="col-aging text-right">60 Days</th>
+              <th class="col-aging text-right">90 Days</th>
+              <th class="col-aging text-right">120+ Days</th>
+              <th class="col-ban">BAN</th>
+              <th class="col-cause">Dispute Reason</th>
+              <th class="col-opc-resolved">OPC Res</th>
+              <th class="col-notice">1st Notice</th>
+              <th class="col-notice">2nd Notice</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of transactions" 
+                [class.row-selected]="selectedTransaction?.tranS_NO === row.tranS_NO" 
+                (click)="selectTransactionRow(row)">
+              <td class="col-check" (click)="$event.stopPropagation()">
+                <label class="custom-checkbox">
+                  <input type="checkbox" [(ngModel)]="row.checked">
+                  <span class="checkmark"></span>
+                </label>
+              </td>
+              <td class="col-cust">{{ row.cust }}</td>
+              <td class="col-trans">{{ row.tranS_NO }}</td>
+              <td class="col-ref">{{ row.reF_NO }}</td>
+              <td class="col-type text-center"><span class="badge-type" [class]="'type-' + row.type">{{ row.type }}</span></td>
+              <td class="col-date">{{ row.tranDate | date:'yyyy-MM-dd' }}</td>
+              <td class="col-amount text-right">{{ row.amount | number:'1.2-2' }}</td>
+              <td class="col-balance text-right font-bold" [class.negative-balance]="row.balance < 0">
+                {{ row.balance | number:'1.2-2' }}
+              </td>
+              <td class="col-aging text-right">{{ row.current === 0 ? '-' : (row.current | number:'1.2-2') }}</td>
+              <td class="col-aging text-right">{{ row.thirtyDays === 0 ? '-' : (row.thirtyDays | number:'1.2-2') }}</td>
+              <td class="col-aging text-right">{{ row.sixtyDays === 0 ? '-' : (row.sixtyDays | number:'1.2-2') }}</td>
+              <td class="col-aging text-right">{{ row.ninetyDays === 0 ? '-' : (row.ninetyDays | number:'1.2-2') }}</td>
+              <td class="col-aging text-right">{{ row.oneTwentyPlusDays === 0 ? '-' : (row.oneTwentyPlusDays | number:'1.2-2') }}</td>
+              <td class="col-ban">{{ row.ban || '-' }}</td>
+              <td class="col-cause"><span class="text-truncate">{{ row.rootCauseDescription || '-' }}</span></td>
+              <td class="col-opc-resolved text-center">
+                <i class="fa" [class.fa-check-circle]="row.opcResolved" [class.text-success]="row.opcResolved" [class.fa-times-circle]="!row.opcResolved" [class.text-muted]="!row.opcResolved"></i>
+              </td>
+              <td class="col-notice">{{ (row.firstNoticeDate | date:'yyyy-MM-dd') || '-' }}</td>
+              <td class="col-notice">{{ (row.secondNoticeDate | date:'yyyy-MM-dd') || '-' }}</td>
+            </tr>
+            <tr *ngIf="transactions.length === 0">
+              <td colspan="18" class="text-center empty-grid-text">No transactions found for the selected options.</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr class="grid-totals-row">
+              <td colspan="6" class="text-right font-bold">Total Accounts Receivable:</td>
+              <td class="text-right font-bold">-</td>
+              <td class="text-right font-bold total-highlight" [class.negative-balance]="sumOutstanding < 0">
+                {{ sumOutstanding | number:'1.2-2' }}
+              </td>
+              <td class="text-right font-bold">{{ sumCurrent | number:'1.2-2' }}</td>
+              <td class="text-right font-bold">{{ sum30Days | number:'1.2-2' }}</td>
+              <td class="text-right font-bold">{{ sum60Days | number:'1.2-2' }}</td>
+              <td class="text-right font-bold">{{ sum90Days | number:'1.2-2' }}</td>
+              <td class="text-right font-bold">{{ sum120Days | number:'1.2-2' }}</td>
+              <td colspan="5"></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
+    <!-- History / Comments Pane -->
+    <div class="comments-section card">
+      <div class="card-header">
+        <i class="fa fa-comments"></i>
+        <h2>A/R Collections Activity & Comments Log</h2>
+        <button class="btn btn-primary btn-sm btn-add-comment" (click)="toggleAddComment()">
+          <i class="fa" [class.fa-plus]="!isAddingComment" [class.fa-close]="isAddingComment"></i>
+          {{ isAddingComment ? 'Cancel' : 'Add Note' }}
+        </button>
+      </div>
+
+      <!-- Add New Comment Section -->
+      <div class="add-comment-panel" *ngIf="isAddingComment">
+        <h3>Add Collections Event / Note</h3>
+        <p class="comment-info-text">
+          <i class="fa fa-info-circle"></i>
+          Comments are stored against the customer file. Checking transactions in the grid above links this comment specifically to those transaction numbers (Selected: {{ checkedTransNos.length }} trans).
+        </p>
+        <textarea [(ngModel)]="commentTextInput" placeholder="Enter collection comments, call notes, or follow-up actions..." rows="3"></textarea>
+        <div class="add-comment-actions">
+          <button class="btn btn-save" [disabled]="!commentTextInput.trim()" (click)="submitComment()">
+            <i class="fa fa-check"></i> Post Note
+          </button>
+        </div>
+      </div>
+
+      <!-- Events List -->
+      <div class="events-log-container">
+        <div class="event-item" *ngFor="let ev of events" [class.event-system]="ev.eventType !== 1">
+          <div class="event-meta">
+            <span class="event-type-badge" [class.badge-comment]="ev.eventType === 1" [class.badge-system]="ev.eventType !== 1">
+              {{ ev.eventDescription || 'Activity' }}
+            </span>
+            <span class="event-author"><i class="fa fa-user"></i> {{ ev.addUser }}</span>
+            <span class="event-time"><i class="fa fa-clock-o"></i> {{ ev.addDate | date:'yyyy-MM-dd HH:mm' }}</span>
+            
+            <div class="event-actions" *ngIf="ev.eventType === 1">
+              <button class="btn-link-action" (click)="startEditComment(ev)" *ngIf="editingCommentId !== ev.id">
+                <i class="fa fa-pencil"></i> Edit
+              </button>
+              <button class="btn-link-action text-danger" (click)="deleteComment(ev.id)" *ngIf="editingCommentId !== ev.id">
+                <i class="fa fa-trash"></i> Delete
+              </button>
+            </div>
+          </div>
+
+          <div class="event-content">
+            <!-- Edit Mode -->
+            <div *ngIf="editingCommentId === ev.id" class="comment-edit-box">
+              <textarea [(ngModel)]="editingCommentText" rows="3"></textarea>
+              <div class="comment-edit-actions">
+                <button class="btn btn-save btn-xs" (click)="saveCommentEdit()">Save</button>
+                <button class="btn btn-outline btn-xs" (click)="cancelEditComment()">Cancel</button>
+              </div>
+            </div>
+            
+            <!-- Read Mode -->
+            <div *ngIf="editingCommentId !== ev.id">
+              <p class="comment-text-display">{{ ev.eventText }}</p>
+              <div class="event-extras">
+                <span class="extra-item" *ngIf="ev.eventAmount">
+                  <strong>Notice Amount:</strong> {{ ev.eventAmount | number:'1.2-2' }}
+                </span>
+                <span class="extra-item" *ngIf="ev.transNo">
+                  <strong>Linked Trans:</strong> {{ ev.transNo }}
+                  <button class="btn-unlink-small" (click)="removeCommentFromTrans(ev.eventTransID!)" *ngIf="ev.eventTransID">
+                    <i class="fa fa-chain-broken"></i> Unlink
+                  </button>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="no-events-prompt" *ngIf="events.length === 0">
+          <i class="fa fa-calendar-o"></i>
+          <p>No collections activities or notes have been logged for this customer.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Actions Bar -->
+    <footer class="bottom-actions-bar">
+      <div class="actions-group-left">
+        <button class="btn btn-action" (click)="exportInvoice()" [disabled]="!selectedTransaction">
+          <i class="fa fa-file-pdf-o text-red"></i> Export Invoice PDF
+        </button>
+        <button class="btn btn-action" (click)="outputPaymentAdvice()" 
+                [disabled]="!selectedTransaction || (selectedTransaction.type !== 'P' && selectedTransaction.type !== 'C')">
+          <i class="fa fa-file-pdf-o text-green"></i> Output Payment Advice
+        </button>
+        <button class="btn btn-action" (click)="exploreCustomerFolder()">
+          <i class="fa fa-folder-open-o text-amber"></i> Explore Customer Folder
+        </button>
+      </div>
+
+      <div class="actions-group-right">
+        <button class="btn btn-action btn-notice" (click)="outputNotice(1)">
+          <i class="fa fa-envelope-o text-sky"></i> Output 1st Notice
+        </button>
+        <button class="btn btn-action btn-notice" (click)="outputNotice(2)">
+          <i class="fa fa-envelope-o text-purple"></i> Output 2nd Notice
+        </button>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Selection Prompt when no customer has been chosen -->
+  <ng-template #selectPrompt>
+    <div class="select-prompt-card">
+      <i class="fa fa-users"></i>
+      <h2>No Customer Selected</h2>
+      <p>Please select a territory group, set your aging calculation date, and choose a customer account from the top filters bar to begin managing A/R collections.</p>
+    </div>
+  </ng-template>
+</div>

@@ -1,0 +1,701 @@
+:host {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.comment-review-container {
+  padding: 10px;
+  background-color: #f0f0f0;
+  min-height: 85vh;
+  box-sizing: border-box;
+}
+
+/* Access Form Window Frame */
+.access-window {
+  background-color: #d4d0c8; /* Classic MS Access Grey Background */
+  border: 3px solid #eee;
+  border-bottom-color: #404040;
+  border-right-color: #404040;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #000;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Classic Access Window Titlebar */
+.access-titlebar {
+  background: linear-gradient(90deg, #000080 0%, #1084d0 100%); /* Active Access Titlebar Gradient */
+  color: #fff;
+  font-weight: bold;
+  padding: 6px 10px;
+  font-size: 13px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #d4d0c8;
+}
+
+.title-text i {
+  margin-right: 6px;
+}
+
+.window-actions {
+  display: flex;
+  gap: 2px;
+}
+
+.win-btn {
+  background-color: #d4d0c8;
+  color: #000;
+  border: 1px solid #fff;
+  border-bottom-color: #404040;
+  border-right-color: #404040;
+  font-size: 9px;
+  width: 18px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.win-btn:active {
+  border-color: #404040;
+  border-bottom-color: #fff;
+  border-right-color: #fff;
+}
+
+.win-close:hover {
+  background-color: #e81123;
+  color: #fff;
+}
+
+/* Access Form Body */
+.access-body {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Bevel Styles */
+.beveled-out {
+  border: 2px solid #fff;
+  border-bottom-color: #808080;
+  border-right-color: #808080;
+  background-color: #d4d0c8;
+  padding: 10px;
+}
+
+.beveled-in {
+  border: 2px solid #808080;
+  border-bottom-color: #fff;
+  border-right-color: #fff;
+  background-color: #d4d0c8;
+  padding: 10px;
+}
+
+.beveled-in-thin {
+  border: 1px solid #808080;
+  border-bottom-color: #fff;
+  border-right-color: #fff;
+  background-color: #fff;
+}
+
+/* Top Filters Panel */
+.filter-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.filter-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 15px;
+  align-items: center;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.filter-label {
+  font-size: 11px;
+  font-weight: bold;
+  color: #000;
+  text-shadow: 1px 1px 0px #fff;
+  white-space: nowrap;
+}
+
+.filter-unit {
+  font-size: 11px;
+  font-weight: bold;
+  color: #000;
+}
+
+/* Form inputs & controls */
+.access-input {
+  background-color: #fff;
+  color: #000;
+  border: 2px solid #808080;
+  border-bottom-color: #fff;
+  border-right-color: #fff;
+  padding: 3px 6px;
+  font-size: 12px;
+  height: 25px;
+  box-sizing: border-box;
+  outline: none;
+  font-family: inherit;
+}
+
+.access-input:focus {
+  border-color: #000080;
+}
+
+.readonly-input {
+  background-color: #e1e1d8;
+  color: #404040;
+  cursor: not-allowed;
+  border-color: #808080;
+}
+
+.date-input {
+  width: 140px;
+}
+
+.days-input {
+  width: 70px;
+  text-align: right;
+}
+
+.criteria-group {
+  flex-grow: 1;
+  min-width: 200px;
+}
+
+.criteria-input {
+  width: 100%;
+}
+
+/* Select wrapper */
+.select-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.access-select {
+  background-color: #fff;
+  color: #000;
+  border: 2px solid #808080;
+  border-bottom-color: #fff;
+  border-right-color: #fff;
+  padding: 3px 22px 3px 6px;
+  font-size: 12px;
+  height: 25px;
+  box-sizing: border-box;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  min-width: 160px;
+  font-family: inherit;
+}
+
+.select-arrow {
+  position: absolute;
+  right: 2px;
+  top: 2px;
+  bottom: 2px;
+  background-color: #d4d0c8;
+  border-left: 1px solid #808080;
+  font-size: 8px;
+  width: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  color: #000;
+}
+
+/* Buttons Area */
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.access-btn {
+  background-color: #d4d0c8;
+  color: #000;
+  border: 2px solid #fff;
+  border-bottom-color: #404040;
+  border-right-color: #404040;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 25px;
+  box-sizing: border-box;
+  font-family: inherit;
+  white-space: nowrap;
+}
+
+.access-btn:active {
+  border-color: #404040;
+  border-bottom-color: #fff;
+  border-right-color: #fff;
+  padding: 5px 11px 3px 13px; /* visual push down */
+}
+
+.access-btn:disabled {
+  color: #808080;
+  cursor: not-allowed;
+  border-color: #e0e0e0;
+  border-bottom-color: #a0a0a0;
+  border-right-color: #a0a0a0;
+}
+
+.btn-generate {
+  background-color: #cdd9e8;
+  border-bottom-color: #43648f;
+  border-right-color: #43648f;
+}
+
+.btn-show {
+  background-color: #d4d4d4;
+  min-width: 80px;
+}
+
+.btn-xlsx {
+  background-color: #d4ecd5;
+  border-bottom-color: #3b8740;
+  border-right-color: #3b8740;
+  height: auto;
+  padding: 2px 10px;
+  text-align: center;
+  font-size: 11px;
+}
+
+/* Divider Line */
+.form-divider {
+  height: 2px;
+  background-color: #808080;
+  border-bottom: 1px solid #fff;
+  margin: 2px 0;
+}
+
+/* Main Form panel */
+.main-form-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Form Record Fields (Side-by-Side) */
+.form-record-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  padding: 10px 5px;
+  align-items: start;
+}
+
+.customer-details-pane, .summary-comment-pane {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.detail-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.detail-label {
+  font-size: 11px;
+  font-weight: bold;
+  color: #000;
+  width: 70px;
+  white-space: nowrap;
+  text-align: right;
+  text-shadow: 1px 1px 0px #fff;
+}
+
+.id-input {
+  width: 90px;
+  font-weight: bold;
+  color: #000080;
+  background-color: #fff !important;
+  border: 1px solid #808080;
+}
+
+.name-input {
+  width: 250px;
+  font-weight: bold;
+  background-color: #fff !important;
+  border: 1px solid #808080;
+}
+
+.type-input {
+  width: 90px;
+  text-align: center;
+  font-weight: bold;
+  background-color: #fff !important;
+  border: 1px solid #808080;
+}
+
+.spacing-top {
+  margin-top: 4px;
+}
+
+/* Navigation buttons (VBA Arrow style next to ARType) */
+.arrow-buttons-group {
+  display: inline-flex;
+  gap: 4px;
+  margin-left: 12px;
+  vertical-align: middle;
+}
+
+.arrow-btn {
+  background: linear-gradient(180deg, #3b82f6 0%, #1d4ed8 100%);
+  color: #fff;
+  border: 1px solid #1e3a8a;
+  border-radius: 3px;
+  width: 35px;
+  height: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.3);
+}
+
+.arrow-btn:active:not(:disabled) {
+  background: #1d4ed8;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.arrow-btn:disabled {
+  background: #93c5fd;
+  border-color: #93c5fd;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Right side Summary Comment */
+.comment-textarea-row {
+  display: flex;
+  align-items: start;
+  gap: 8px;
+}
+
+.comment-label {
+  padding-top: 5px;
+}
+
+.access-textarea {
+  flex-grow: 1;
+  height: 70px;
+  background-color: #fff;
+  color: #000;
+  border: 2px solid #808080;
+  border-bottom-color: #fff;
+  border-right-color: #fff;
+  padding: 4px 6px;
+  font-size: 12px;
+  resize: none;
+  box-sizing: border-box;
+  outline: none;
+  font-family: inherit;
+}
+
+.comment-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 78px; /* Alignment shift */
+}
+
+.date-label {
+  width: auto;
+}
+
+.comment-date-input {
+  width: 100px;
+  text-align: center;
+}
+
+.btn-update {
+  background-color: #cdd9e8;
+  border-bottom-color: #43648f;
+  border-right-color: #43648f;
+  margin-left: 8px;
+}
+
+/* History Log Subform panel */
+.history-log-subform {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  margin-top: 5px;
+  background-color: #d4d0c8;
+}
+
+.subform-title-bar {
+  background-color: #c0c0c0;
+  color: #000;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 4px 8px;
+  border-bottom: 1px solid #808080;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sub-title {
+  font-weight: bold;
+  color: #000080;
+  text-shadow: 1px 1px 0px #fff;
+}
+
+.subform-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.subform-filter-bar span {
+  font-size: 10px;
+  font-weight: bold;
+}
+
+.access-input-small {
+  height: 20px;
+  font-size: 11px;
+  border: 1px solid #808080;
+  padding: 1px 3px;
+  background-color: #fff;
+  font-family: inherit;
+  width: 110px;
+}
+
+.access-btn-small {
+  background-color: #d4d0c8;
+  border: 1px solid #fff;
+  border-bottom-color: #808080;
+  border-right-color: #808080;
+  font-size: 10px;
+  padding: 1px 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-family: inherit;
+  height: 20px;
+  box-sizing: border-box;
+}
+
+.access-btn-small:active {
+  border-color: #808080;
+  border-bottom-color: #fff;
+  border-right-color: #fff;
+}
+
+/* History Table Grid (frmCommentReviewDetail Datasheet emulation) */
+.history-table-wrapper {
+  overflow-y: auto;
+  max-height: 500px;
+  background-color: #fff;
+}
+
+.history-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+
+.history-table th {
+  background-color: #d4d0c8;
+  color: #000;
+  font-weight: bold;
+  padding: 4px 6px;
+  border: 1px solid #808080;
+  border-top: 1px solid #fff;
+  border-left: 1px solid #fff;
+  text-align: left;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  user-select: none;
+}
+
+.history-table td {
+  padding: 4px 6px;
+  border: 1px solid #e0e0e0;
+  color: #333;
+}
+
+.history-table tbody tr:nth-child(even) {
+  background-color: #f7f5f0;
+}
+
+.history-table tbody tr:hover {
+  background-color: #eae6db;
+}
+
+.center-align {
+  text-align: center;
+}
+
+.comment-text-cell {
+  white-space: normal;
+  word-break: break-word;
+}
+
+.no-records-cell {
+  text-align: center;
+  padding: 20px;
+  color: #777;
+  font-style: italic;
+}
+
+/* Bottom MS Access Status Navigation Bar */
+.access-navigation-bar {
+  background-color: #d4d0c8;
+  border: 2px solid #808080;
+  border-top-color: #fff;
+  border-left-color: #fff;
+  padding: 3px 10px;
+  display: flex;
+  align-items: center;
+  font-size: 11px;
+  gap: 5px;
+  margin-top: 5px;
+}
+
+.nav-label {
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.nav-bar-btn {
+  background: #d4d0c8;
+  border: 1px solid #fff;
+  border-bottom-color: #808080;
+  border-right-color: #808080;
+  width: 22px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 9px;
+  font-weight: bold;
+}
+
+.nav-bar-btn:active:not(:disabled) {
+  border-color: #808080;
+  border-bottom-color: #fff;
+  border-right-color: #fff;
+}
+
+.nav-bar-btn:disabled {
+  color: #808080;
+  cursor: not-allowed;
+}
+
+.nav-bar-input {
+  width: 35px;
+  height: 18px;
+  border: 1px solid #808080;
+  text-align: center;
+  background: #fff;
+  color: #000;
+  font-size: 10px;
+  padding: 0;
+}
+
+.nav-of {
+  margin-right: 10px;
+}
+
+.nav-separator {
+  color: #808080;
+  margin: 0 5px;
+}
+
+.nav-filter {
+  font-weight: normal;
+  color: #000;
+}
+
+.nav-search-label {
+  font-weight: normal;
+  margin-left: 5px;
+}
+
+.nav-search-input {
+  width: 120px;
+  height: 18px;
+  border: 1px solid #808080;
+  padding: 0 4px;
+  font-size: 10px;
+  background: #e1e1d8;
+  color: #808080;
+  cursor: not-allowed;
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 1024px) {
+  .filter-panel {
+    padding: 8px;
+  }
+  
+  .filter-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  
+  .action-buttons {
+    margin-left: 0;
+    justify-content: flex-start;
+  }
+  
+  .criteria-group {
+    min-width: 100%;
+  }
+
+  .form-record-fields {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .comment-actions-row {
+    margin-left: 78px;
+    justify-content: space-between;
+  }
+
+  .subform-title-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .subform-filter-bar {
+    justify-content: space-between;
+  }
+}

@@ -1,0 +1,241 @@
+<div class="container mt-4">
+  <div class="card roger-sales-card">
+    <div class="card-header bg-light">
+      <h5 class="card-title mb-0 text-center">View / Edit Data</h5>
+    </div>
+    <div class="card-body">
+      <!-- Top Filters -->
+      <div class="row border-bottom pb-3 mb-3">
+        <div class="col-md-4">
+          <div class="form-group row mb-2">
+            <label class="col-sm-4 col-form-label">Start Date:</label>
+            <div class="col-sm-8">
+              <input type="date" class="form-control" [(ngModel)]="startDate" (change)="onFilterChange()">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-sm-4 col-form-label">End Date:</label>
+            <div class="col-sm-8">
+              <input type="date" class="form-control" [(ngModel)]="endDate" (change)="onFilterChange()">
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group row mb-2">
+            <label class="col-sm-4 col-form-label">Criteria:</label>
+            <div class="col-sm-8">
+              <select class="form-select" [(ngModel)]="criteria" (change)="onCriteriaChange()">
+                <option value="Begins with D">Begins with D</option>
+                <option value="Begins with C">Begins with C</option>
+                <option value="All Territories">All Territories</option>
+                <option value="Specific Territory">Specific Territory</option>
+                <option value="Missing or Invalid Territory">Missing or Invalid Territory</option>
+                <option value="BCC-BSS-RDL-RDC-NIS-RIL">BCC-BSS-RDL-RDC-NIS-RIL</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group row" *ngIf="criteria === 'Specific Territory'">
+            <label class="col-sm-4 col-form-label">Territory:</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" [(ngModel)]="territory" (change)="onFilterChange()">
+            </div>
+          </div>
+        </div>
+        
+        <!-- FFF & DCI Sections -->
+        <div class="col-md-4">
+          <div class="d-flex h-100">
+            <div class="flex-grow-1 border-end border-dark px-3 text-center">
+              <h6 class="fw-bold mb-3">For FFF</h6>
+              <button class="btn btn-light border mb-2 w-100 btn-action" (click)="anyTerritoryEdit()">Any Territory - Edit</button>
+              <button class="btn btn-light border w-100 btn-action" (click)="allExceptCorporateEdit()">All Except Corporate EDIT</button>
+            </div>
+            <div class="flex-grow-1 px-3 text-center">
+              <h6 class="fw-bold mb-3">For DCI</h6>
+              <button class="btn btn-light border w-100 btn-action" (click)="dumpAllInDateRangeToExcel()">Dump All in Date Range to<br>Excel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Action Area -->
+      <div class="row">
+        <!-- Left Sidebar Actions -->
+        <div class="col-md-3">
+          <div class="d-flex gap-2 mb-3">
+            <button class="btn btn-light border btn-action flex-fill py-3" (click)="invoicesMissingSummary()">Invoices<br>Missing<br>Summary</button>
+            <button class="btn btn-light border btn-action flex-fill py-3" (click)="invoicesMissingDetails()">Invoice<br>Missing<br>Details</button>
+          </div>
+          <button class="btn btn-light border w-100 mb-3 btn-action" (click)="exceptionReport()">Exception Report</button>
+          <button class="btn btn-light border w-100 mb-4 btn-action" (click)="fffLossOnHardware()">FFF Loss on Hardware</button>
+
+          <!-- Legend -->
+          <div class="legend-text small">
+            <p class="mb-1">"Rogers" = All Territories beginning with C</p>
+            <p class="mb-2">"Corporate" = All Territories beginning with D<br>Part number contains COAM<br>or Product code begins with H</p>
+            
+            <p class="mb-2">"Acquisition" = Have Type = "Data", "Voice" "Voice and Data", "Bundled"<br>and WebOrderID not starting with H</p>
+            <p class="mb-2">"HUP & MISC" = Everything except Type of "Data", "Voice" "Voice and Data", "Bundled"<br>or WebOrderID starting with H</p>
+            
+            <p class="mb-1">"Edit / View" = Shows all transactions</p>
+            <p class="mb-0">"OUTPUT" = Excludes transactions with no Fee or Suppress=True<br>Corporate Output includes items with no Fee</p>
+          </div>
+        </div>
+
+        <!-- Center Actions -->
+        <div class="col-md-9 px-5 text-center action-center-area">
+          <div class="d-flex justify-content-center gap-3 mb-2">
+            <button class="btn btn-light border btn-action" (click)="rogersEditAll()">Rogers - Edit All</button>
+            <button class="btn btn-light border btn-action" (click)="rogersWithProvince()">Rogers With Province</button>
+          </div>
+          
+          <div class="d-flex justify-content-center gap-3 mb-4">
+            <button class="btn btn-light border btn-action" (click)="outputRogersHupsMisc()">OUTPUT Rogers<br>HUPS & Misc</button>
+            <button class="btn btn-light border btn-action" (click)="outputRogersAcquisitions()">OUTPUT Rogers<br>Acquisitions</button>
+            <button class="btn btn-light border btn-action" (click)="outputRogersReturns()">OUTPUT Rogers<br>Returns</button>
+          </div>
+
+          <button class="btn btn-light border btn-action w-75 mb-2" (click)="editViewAllGbmNdsEdit()">Edit / View ALL GBM NDS Edit</button>
+          
+          <div class="d-flex justify-content-center gap-3 mb-2">
+            <button class="btn btn-light border btn-action w-50" (click)="editAllGbm()">Edit ALL GBM</button>
+            <button class="btn btn-light border btn-action w-50" (click)="editAllNds()">Edit ALL NDS</button>
+          </div>
+
+          <button class="btn btn-light border btn-action w-75 mb-4" (click)="outputGbmAndNds()">OUTPUT GBM and NDS</button>
+
+          <div class="d-flex justify-content-center gap-3 mb-2">
+            <button class="btn btn-light border btn-action w-50" (click)="gbmOutput()">GBM Output</button>
+            <button class="btn btn-light border btn-action w-50" (click)="ndsOutput()">NDS Output</button>
+          </div>
+
+          <button class="btn btn-light border btn-action w-50 mb-4" (click)="anyTerritoryOutput()">Any Territory - Output</button>
+
+          <div class="d-flex justify-content-center gap-3 mb-4">
+            <button class="btn btn-light border btn-action w-50" (click)="editAllRdl()">Edit ALL RDL</button>
+            <button class="btn btn-light border btn-action w-50" (click)="rdlOutput()">RDL Output</button>
+          </div>
+
+          <button class="btn btn-light border btn-action w-50 mb-4" (click)="outputCorporate()">OUTPUT Corporate</button>
+
+          <button class="btn btn-light border btn-action w-25" (click)="close()">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Data Table Modal (VBA-style) -->
+<div class="modal fade show" id="dataTableModal" tabindex="-1" aria-labelledby="dataTableModalLabel" aria-hidden="true" *ngIf="showDataTable" style="display: block; background: rgba(0,0,0,0.5);">
+  <div class="modal-dialog modal-fullscreen">
+    <div class="modal-content">
+      <div class="modal-header bg-light">
+        <h5 class="modal-title" id="dataTableModalLabel">{{ currentTableTitle }}</h5>
+        <button type="button" class="btn-close" (click)="closeDataTable()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-0">
+        <!-- Top action row -->
+        <div class="row bg-light border-bottom p-2" *ngIf="tableData.length > 0">
+          <div class="col-md-12 text-end">
+            <button class="btn btn-sm btn-secondary" (click)="clearFilters()">Clear Filters</button>
+            <button class="btn btn-sm btn-success ms-2" (click)="exportToExcel()">Export to Excel</button>
+          </div>
+        </div>
+        
+        <!-- Data Table -->
+        <div class="table-responsive" style="height: calc(100vh - 160px); overflow-y: auto;">
+          <table class="table table-sm table-bordered table-hover mb-0" *ngIf="filteredData.length > 0">
+            <thead class="table-dark sticky-top">
+              <tr>
+                <th *ngFor="let col of columns" class="position-relative">
+                  <div class="d-flex align-items-center justify-content-between gap-2 px-1">
+                    <span class="column-title">{{ col.label }}</span>
+                    <button class="btn btn-xs p-0 border-0 filter-btn" [class.has-filter]="columnFilters[col.field]" (click)="toggleFilterDropdown(col.field, $event)">
+                      <span class="filter-caret" [class.active]="columnFilters[col.field]">▼</span>
+                    </button>
+                  </div>
+                  
+                  <!-- Access-Style Dropdown Menu -->
+                  <div class="filter-dropdown shadow border p-2 bg-white rounded text-dark" *ngIf="activeFilterColumn === col.field" (click)="$event.stopPropagation()">
+                    <div class="mb-2">
+                      <input type="text" class="form-control form-control-sm" [(ngModel)]="columnFilters[col.field]" (input)="applyFilters()" placeholder="Search...">
+                    </div>
+                    <div class="d-flex gap-1 justify-content-between">
+                      <button class="btn btn-xs btn-outline-secondary py-0 px-2 small-btn" (click)="sortColumn(col.field, 'asc')">Sort A-Z</button>
+                      <button class="btn btn-xs btn-outline-secondary py-0 px-2 small-btn" (click)="sortColumn(col.field, 'desc')">Sort Z-A</button>
+                      <button class="btn btn-xs btn-outline-danger py-0 px-2 small-btn" (click)="clearColumnFilter(col.field)">Clear</button>
+                    </div>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of paginatedData; trackBy: trackByInvoice">
+                <td *ngFor="let col of columns" [ngClass]="{'text-end': col.type === 'currency' || col.type === 'number', 'text-center': col.type === 'edit-checkbox'}">
+                  <!-- Readonly text -->
+                  <ng-container *ngIf="col.type === 'text'">
+                    {{ row[col.field] }}
+                  </ng-container>
+
+                  <!-- Date -->
+                  <ng-container *ngIf="col.type === 'date'">
+                    {{ row[col.field] | date:'MM/dd/yyyy' }}
+                  </ng-container>
+
+                  <!-- Currency -->
+                  <ng-container *ngIf="col.type === 'currency'">
+                    {{ row[col.field] | currency:'USD':'symbol':'1.2-2' }}
+                  </ng-container>
+
+                  <!-- Number -->
+                  <ng-container *ngIf="col.type === 'number'">
+                    {{ row[col.field] }}
+                  </ng-container>
+
+                  <!-- Editable Text -->
+                  <ng-container *ngIf="col.type === 'edit-text'">
+                    <input type="text" class="form-control form-control-sm border border-primary-subtle" [(ngModel)]="row[col.field]" (blur)="updateRow(row)">
+                  </ng-container>
+
+                  <!-- Editable Number -->
+                  <ng-container *ngIf="col.type === 'edit-number'">
+                    <input type="number" class="form-control form-control-sm border border-primary-subtle text-end" [(ngModel)]="row[col.field]" (blur)="updateRow(row)">
+                  </ng-container>
+
+                  <!-- Editable Checkbox -->
+                  <ng-container *ngIf="col.type === 'edit-checkbox'">
+                    <input type="checkbox" [(ngModel)]="row[col.field]" (change)="updateRow(row)">
+                  </ng-container>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          
+          <div class="d-flex justify-content-between align-items-center p-2 bg-light border-top" *ngIf="filteredData.length > 0">
+            <div class="text-muted small">
+              Showing {{ (currentPage - 1) * pageSize + 1 }} to {{ minShowing }} of {{ filteredData.length }} entries
+            </div>
+            <div>
+              <button class="btn btn-sm btn-outline-secondary me-2" [disabled]="currentPage === 1" (click)="prevPage()">Previous</button>
+              <span class="small mx-2">Page {{ currentPage }} of {{ totalPages }}</span>
+              <button class="btn btn-sm btn-outline-secondary ms-2" [disabled]="currentPage === totalPages" (click)="nextPage()">Next</button>
+            </div>
+          </div>
+          
+          <div class="text-center p-4" *ngIf="filteredData.length === 0 && tableData.length > 0">
+            <p class="text-muted">No records match the current filters.</p>
+          </div>
+          
+          <div class="text-center p-4" *ngIf="tableData.length === 0">
+            <p class="text-muted">No data available.</p>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer bg-light">
+        <span class="me-auto text-muted">Total Records: {{ filteredData.length }} of {{ tableData.length }}</span>
+        <button type="button" class="btn btn-secondary" (click)="closeDataTable()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+

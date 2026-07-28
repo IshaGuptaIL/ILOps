@@ -1,0 +1,415 @@
+:host {
+  --bg-primary: #f0f0f0;      /* Access background */
+  --bg-secondary: #e8e8e8;    /* Access panel */
+  --bg-tertiary: #eaeaea;     /* Access table header */
+  --border-color: #aaa;
+  --text-primary: #000;       /* Black text */
+  --text-secondary: #333;
+  --text-muted: #555;
+  --accent-cyan: #000080;     /* Navy blue for highlights */
+  --accent-blue: #004d99;
+  
+  display: block;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.users-form-container {
+  position: relative;
+}
+
+/* Form Header styled like Access Titlebar */
+.access-form-header {
+  background-color: #000080; /* Flat Navy Blue */
+  color: white;
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.header-icon {
+  background-color: transparent;
+  color: white;
+  width: auto;
+  height: auto;
+  border-radius: 0px;
+  display: inline;
+  font-size: 14px;
+  box-shadow: none;
+}
+
+.header-info h2 {
+  margin: 0;
+  font-size: 14px;
+  color: white;
+  font-weight: bold;
+}
+
+.header-info .subtitle {
+  font-size: 11px;
+  color: #dfdfdf;
+  margin: 0;
+}
+
+/* Card Container */
+.card {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 0px;
+  box-shadow: none;
+  overflow: hidden;
+}
+
+.card-header {
+  background-color: #dfdfdf;
+  border-bottom: 1px solid var(--border-color);
+  padding: 6px 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.card-header h3 {
+  margin: 0;
+  font-size: 12px;
+  font-weight: bold;
+  color: #000080;
+  text-transform: uppercase;
+}
+
+.card-header i {
+  color: #000080;
+  font-size: 12px;
+}
+
+/* Table styling mimicking Microsoft Access datasheet */
+.table-container {
+  max-height: 480px;
+  overflow-y: auto;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--border-color);
+  background-color: white;
+}
+
+.access-grid-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+}
+
+.access-grid-table th {
+  background-color: var(--bg-tertiary);
+  border-right: 1px solid #ccc;
+  border-bottom: 2px solid #aaa;
+  padding: 4px 8px;
+  text-align: left;
+  font-weight: bold;
+  font-size: 12px;
+  color: #000;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.access-grid-table td {
+  padding: 0; /* Padding is handled by inner inputs to allow full-cell click and type */
+  border-right: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  font-size: 12px;
+  color: #000;
+  vertical-align: middle;
+}
+
+.access-grid-table tbody tr:hover {
+  background-color: #f2f7ff;
+}
+
+/* Row selector indicator mimicking Access */
+.row-selector-hdr {
+  background-color: #dfdfdf !important;
+  border-right: 1px solid #bbb !important;
+  width: 25px;
+  padding: 4px 2px !important;
+  text-align: center !important;
+}
+
+.row-selector-cell {
+  background-color: #dfdfdf;
+  border-right: 1px solid #bbb;
+  color: #555;
+  font-size: 10px;
+  text-align: center;
+  width: 25px;
+  font-weight: bold;
+  user-select: none;
+}
+
+/* Inputs and Selects inside the datasheet cells */
+.datasheet-input {
+  width: 100%;
+  border: 1px solid transparent;
+  background: transparent;
+  font-size: 12px;
+  font-family: inherit;
+  padding: 6px 8px;
+  box-sizing: border-box;
+  color: #000;
+}
+
+.datasheet-input:focus {
+  border: 1px solid #000080;
+  background-color: #fff;
+  outline: none;
+}
+
+.datasheet-select {
+  width: 100%;
+  border: 1px solid transparent;
+  background: transparent;
+  font-size: 12px;
+  font-family: inherit;
+  padding: 5px 8px;
+  box-sizing: border-box;
+  color: #000;
+  cursor: pointer;
+}
+
+.datasheet-select:focus {
+  border: 1px solid #000080;
+  background-color: #fff;
+  outline: none;
+}
+
+.select-wrapper.no-arrow::after {
+  display: none !important; /* Hide custom arrow in datasheet cells for clean spacing */
+}
+
+/* Class for new row styling */
+.new-row-datasheet {
+  background-color: #ffffdd; /* Light yellow background for new record row, standard Access visual hint */
+}
+
+.new-input {
+  font-style: italic;
+  color: #555;
+}
+
+.new-input:focus {
+  font-style: normal;
+  color: #000;
+}
+
+.read-only-cell {
+  font-size: 11.5px;
+  color: #444;
+  padding: 6px 8px;
+  display: inline-block;
+  user-select: text;
+}
+
+.col-actions {
+  width: 70px;
+  text-align: center !important;
+  padding: 4px !important;
+}
+
+.action-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px 4px;
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.btn-delete {
+  color: #cc0000;
+}
+
+.btn-delete:hover {
+  color: #ff0000;
+}
+
+.btn-add {
+  color: #008000;
+  font-weight: bold;
+}
+
+.btn-add:hover {
+  color: #00b300;
+}
+
+.empty-text {
+  padding: 20px !important;
+  color: #666;
+  font-style: italic;
+}
+
+/* Pagination Footer */
+.pagination-footer-container {
+  background-color: #eaeaea;
+  border-top: 1px solid var(--border-color);
+  padding: 4px 10px;
+}
+
+/* Forms layout */
+.card-body {
+  padding: 15px;
+  background-color: var(--bg-secondary);
+}
+
+.form-group {
+  margin-bottom: 12px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: bold;
+  font-size: 12px;
+  margin-bottom: 4px;
+  color: #000;
+}
+
+.form-group label .required {
+  color: #cc0000;
+}
+
+.form-group input[type="text"] {
+  width: 100%;
+  padding: 4px 8px;
+  border: 2px inset #ddd;
+  border-radius: 0px;
+  font-size: 13px;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.form-group input[type="text"]:focus {
+  border-color: #000080;
+  outline: none;
+}
+
+/* Custom Select Dropdown */
+.select-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.select-wrapper select {
+  width: 100%;
+  padding: 4px 8px;
+  border: 2px inset #ddd;
+  border-radius: 0px;
+  font-size: 13px;
+  background-color: white;
+  appearance: none;
+  font-family: inherit;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.select-wrapper select:focus {
+  border-color: #000080;
+  outline: none;
+}
+
+.select-wrapper::after {
+  content: '\f107';
+  font-family: 'FontAwesome';
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+  pointer-events: none;
+  font-size: 14px;
+}
+
+/* Audit Metadata Box */
+.audit-info-box {
+  margin-top: 15px;
+  border: 1px dashed #aaa;
+  border-radius: 0px;
+  background-color: #f7f7f7;
+  padding: 10px;
+}
+
+.audit-info-box h4 {
+  margin: 0 0 6px 0;
+  font-size: 11px;
+  text-transform: uppercase;
+  color: #800000;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 2px;
+  font-weight: bold;
+}
+
+.audit-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.audit-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.audit-field .label {
+  font-size: 11px;
+  color: #666;
+  font-weight: bold;
+}
+
+.audit-field .value {
+  font-size: 11.5px;
+  font-weight: bold;
+  color: #000;
+}
+
+/* Actions */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 20px;
+  border-top: 1px solid #ccc;
+  padding-top: 12px;
+}
+
+.btn {
+  padding: 5px 15px;
+  font-size: 13px;
+  font-weight: bold;
+  border-radius: 0px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background-color: #e1e1e1; 
+  border: 2px solid #fff; 
+  border-bottom-color: #888; 
+  border-right-color: #888; 
+  color: #000;
+}
+
+.btn:active {
+  border-color: #888; 
+  border-bottom-color: #fff; 
+  border-right-color: #fff; 
+}
+
+.btn-secondary {
+  color: #000;
+}
+
+.btn-primary {
+  color: #000080;
+}

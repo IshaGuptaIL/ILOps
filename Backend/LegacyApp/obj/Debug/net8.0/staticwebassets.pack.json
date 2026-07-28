@@ -1,0 +1,45 @@
+{
+  "Files": [
+    {
+      "Id": "D:\\LAPP\\Backend\\LegacyApp\\wwwroot\\Templates\\1er Avis.docx",
+      "PackagePath": "staticwebassets\\Templates\\1er Avis.docx"
+    },
+    {
+      "Id": "D:\\LAPP\\Backend\\LegacyApp\\wwwroot\\Templates\\1st Notice.docx",
+      "PackagePath": "staticwebassets\\Templates\\1st Notice.docx"
+    },
+    {
+      "Id": "D:\\LAPP\\Backend\\LegacyApp\\wwwroot\\Templates\\2ieme Avis.docx",
+      "PackagePath": "staticwebassets\\Templates\\2ieme Avis.docx"
+    },
+    {
+      "Id": "D:\\LAPP\\Backend\\LegacyApp\\wwwroot\\Templates\\2nd Notice.docx",
+      "PackagePath": "staticwebassets\\Templates\\2nd Notice.docx"
+    },
+    {
+      "Id": "D:\\LAPP\\Backend\\LegacyApp\\wwwroot\\Templates\\Stock Status-Template-Accessories.xlsx",
+      "PackagePath": "staticwebassets\\Templates\\Stock Status-Template-Accessories.xlsx"
+    },
+    {
+      "Id": "D:\\LAPP\\Backend\\LegacyApp\\wwwroot\\Templates\\Stock Status-Template.xlsx",
+      "PackagePath": "staticwebassets\\Templates\\Stock Status-Template.xlsx"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.LegacyApp.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.LegacyApp.props",
+      "PackagePath": "build\\LegacyApp.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.LegacyApp.props",
+      "PackagePath": "buildMultiTargeting\\LegacyApp.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.LegacyApp.props",
+      "PackagePath": "buildTransitive\\LegacyApp.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

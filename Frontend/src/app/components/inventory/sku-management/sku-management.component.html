@@ -1,0 +1,84 @@
+<div class="sku-management-container">
+
+  <!-- Spinner overlay -->
+  <app-spinner></app-spinner>
+
+  <div class="vba-form-container">
+    <div class="form-header">
+      Add / Edit SKU - Advantage Voice
+    </div>
+
+    <div class="form-content">
+
+      <!-- Add SKU form -->
+      <div class="add-sku-form">
+        <div class="vba-row">
+          <label class="vba-label">Type:</label>
+          <select class="vba-input" [(ngModel)]="newSku.type" id="new-sku-type">
+            <option *ngFor="let t of types" [value]="t">{{t}}</option>
+          </select>
+        </div>
+        <div class="vba-row">
+          <label class="vba-label">SKU:</label>
+          <input type="text" class="vba-input" [(ngModel)]="newSku.sku"
+                 placeholder="Enter SKU" id="new-sku-value">
+        </div>
+        <button class="vba-btn btn-add" (click)="addSku()" id="btn-add-sku">Add SKU</button>
+      </div>
+
+      <!-- Summary row -->
+      <div class="summary-row" *ngIf="totalItems > 0">
+        <span>Total: <strong>{{totalItems}}</strong> SKUs</span>
+        <span style="margin-left: 12px;">Showing page <strong>{{currentPage}}</strong> of <strong>{{totalPages}}</strong></span>
+      </div>
+
+    </div>
+
+    <!-- Grid -->
+    <div class="data-view">
+      <div class="table-container">
+        <table class="vba-grid">
+          <thead>
+            <tr>
+              <th style="width: 50px;">ID</th>
+              <th>SKU</th>
+              <th>Type</th>
+              <th style="width: 150px;">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of pagedSkus; let i = index">
+              <td>{{item.id}}</td>
+              <td>
+                <input type="text" class="grid-input" [(ngModel)]="item.sku"
+                       (blur)="updateSku(item)" [id]="'sku-input-' + i">
+              </td>
+              <td>
+                <select class="grid-input" [(ngModel)]="item.type"
+                        (change)="updateSku(item)" [id]="'sku-type-' + i">
+                  <option *ngFor="let t of types" [value]="t">{{t}}</option>
+                </select>
+              </td>
+              <td class="actions-cell">
+                <button class="btn-delete" (click)="deleteSku(item.sku)"
+                        title="Delete SKU" [id]="'btn-del-' + i">Delete</button>
+              </td>
+            </tr>
+            <tr *ngIf="pagedSkus.length === 0">
+              <td colspan="4" class="no-data">No SKUs found.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <app-pagination
+        [currentPage]="currentPage"
+        [totalPages]="totalPages"
+        [pageSize]="pageSize"
+        [totalItems]="totalItems"
+        (pageChanged)="onPageChanged($event)">
+      </app-pagination>
+    </div>
+  </div>
+</div>

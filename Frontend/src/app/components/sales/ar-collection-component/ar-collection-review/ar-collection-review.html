@@ -1,0 +1,447 @@
+<div class="access-form-window">
+  <!-- Access Form Window Title Bar (MS Access Style) -->
+  <div class="access-title-bar">
+    <div class="title-text">
+      <span class="access-icon">🔑</span>
+      Form: ARMain (Review AR Details)
+    </div>
+    <div class="window-controls">
+      <span class="win-btn">_</span>
+      <span class="win-btn">[]</span>
+      <span class="win-btn close-btn">X</span>
+    </div>
+  </div>
+
+  <!-- Main Form Body: 2-Column Responsive Layout -->
+  <div class="access-form-body access-main-grid">
+    
+    <!-- LEFT PANEL: Filters, Aging Balances, Transactions Grid, Linked Events, Edit Panel -->
+    <div class="left-panel-workspace">
+      
+      <!-- Top Header Row: Side-by-Side Filters and Aging Balances -->
+      <div class="left-header-row">
+        
+        <!-- Left: Filters Panel (fieldset) -->
+        <fieldset class="access-section filters-fieldset">
+          <legend>Form Header / Filters</legend>
+          <div class="filters-flex-container">
+            
+            <!-- Select By Frame (Frame67 Option Group) -->
+            <div class="frame-select-by">
+              <span class="frame-label">Select By...</span>
+              <div class="radio-options">
+                <label class="access-radio">
+                  <input type="radio" name="selectBy" [value]="1" [(ngModel)]="selectBy" (change)="onFiltersChange()">
+                  Customer
+                </label>
+                <label class="access-radio">
+                  <input type="radio" name="selectBy" [value]="2" [(ngModel)]="selectBy" (change)="onFiltersChange()">
+                  Group
+                </label>
+              </div>
+            </div>
+
+            <!-- Filter Inputs Grid -->
+            <div class="filters-fields-container">
+              
+              <!-- Row 1: Channel Name & Group Criteria -->
+              <div class="filter-row">
+                <div class="filter-col flex-1">
+                  <label for="combo5">Channel Name:</label>
+                  <select id="combo5" [(ngModel)]="selectedGroup" (change)="onFiltersChange()" class="access-select">
+                    <option *ngFor="let group of territoryGroups" [ngValue]="group">
+                      {{ group.groupName }}
+                    </option>
+                  </select>
+                </div>
+                <div class="filter-col flex-2">
+                  <label for="txtGroupCriteria">Group Criteria:</label>
+                  <input type="text" id="txtGroupCriteria" readonly [value]="selectedGroup?.groupCriteria || ''" disabled class="disabled-input flex-grow-input">
+                </div>
+              </div>
+
+              <!-- Row 2: Cust Code, Select By, Output Bulk, Language -->
+              <div class="filter-row">
+                <div class="filter-col" style="width: 140px;">
+                  <label for="txtCustNo">Cust Code:</label>
+                  <input type="text" id="txtCustNo" readonly [(ngModel)]="txtCustNo" disabled class="disabled-input width-80">
+                </div>
+                <div class="filter-col" style="width: 140px;">
+                  <label for="txtSelectBy">Select By:</label>
+                  <input type="text" id="txtSelectBy" readonly [value]="selectBy === 1 ? 'Single' : 'Group'" disabled class="disabled-input width-80">
+                </div>
+                <div class="filter-col" style="width: 100px;">
+                  <label class="access-checkbox">
+                    <input type="checkbox" id="chkSendBulk" [(ngModel)]="chkSendBulk">
+                    Output Bulk
+                  </label>
+                </div>
+                <div class="filter-col flex-grow">
+                  <label for="txtLanguage">Language:</label>
+                  <input type="text" id="txtLanguage" readonly [(ngModel)]="txtLanguage" disabled class="disabled-input width-80">
+                </div>
+              </div>
+
+              <!-- Row 3: Customer Select Dropdown (spans full width of input area) -->
+              <div class="filter-row">
+                <div class="filter-col width-full">
+                  <label for="txtCustomer">{{ selectBy === 1 ? 'Customer:' : 'Cust Group:' }}</label>
+                  <select id="txtCustomer" [(ngModel)]="selectedCustomerCode" (change)="onCustomerSelect()" class="access-select flex-grow-input">
+                    <option value="">-- Select Account --</option>
+                    <option *ngFor="let cust of customers" [value]="selectBy === 1 ? cust.cust : cust.custGroup">
+                      {{ selectBy === 1 ? (cust.cust + ' - ' + cust.custName) : (cust.custGroup + ' - ' + cust.custName) }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Row 4: Contact & Phone -->
+              <div class="filter-row">
+                <div class="filter-col flex-2">
+                  <label for="txtContact">Contact:</label>
+                  <input type="text" id="txtContact" readonly [(ngModel)]="txtContact" disabled class="disabled-input flex-grow-input">
+                </div>
+                <div class="filter-col flex-1">
+                  <input type="text" id="txtPhone" readonly [(ngModel)]="txtPhone" disabled class="disabled-input flex-grow-input" placeholder="Phone Number">
+                </div>
+              </div>
+
+              <!-- Row 5: Email (spans full width) -->
+              <div class="filter-row">
+                <div class="filter-col width-full">
+                  <label for="txtEmail">Email:</label>
+                  <input type="text" id="txtEmail" readonly [(ngModel)]="txtEmail" disabled class="disabled-input flex-grow-input">
+                </div>
+              </div>
+
+              <!-- Row 6: Ageing Filters & Buttons -->
+              <div class="filter-row spacing-top">
+                <div class="filter-col" style="width: 120px;">
+                  <label for="cmbAgeing">Days ></label>
+                  <select id="cmbAgeing" [(ngModel)]="cmbAgeing" (change)="onAgeingFilterChange()" class="access-select width-60">
+                    <option value="All">All</option>
+                    <option value="60">60</option>
+                    <option value="90">90</option>
+                  </select>
+                </div>
+
+                <div class="filter-col" style="width: 180px;">
+                  <label for="txtAgingDate">Aging Date:</label>
+                  <input type="date" id="txtAgingDate" [(ngModel)]="agingDate" (change)="onFiltersChange()" class="access-input-date">
+                </div>
+
+                <div class="filter-col" style="width: 160px;">
+                  <label for="txtGroupTotal" style="min-width: 80px;">Channel Total:</label>
+                  <input type="text" id="txtGroupTotal" readonly value="n/a" disabled class="disabled-input width-80">
+                </div>
+              </div>
+
+              <!-- Row 7: Buttons row -->
+              <div class="filter-row spacing-top-small">
+                <div class="button-group-filters">
+                  <button class="access-btn" (click)="selectAll()">Select All</button>
+                  <button class="access-btn" (click)="selectNone()">Select None</button>
+                  <button class="access-btn" (click)="clearFilters()">Clear All Filters</button>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </fieldset>
+
+        <!-- Right: Aging Balances Panel (fieldset) -->
+        <fieldset class="access-section aging-balances-fieldset">
+          <legend>Aging Balances</legend>
+          <div class="aging-balances-container">
+            <button class="access-btn explore-folder-btn" (click)="exploreCustomerFolder()" [disabled]="!selectedCustomer">
+              📁 Explore Customer's Folder
+            </button>
+            <div class="aging-readouts-grid">
+              <div class="readout-row">
+                <label>Current:</label>
+                <input type="text" readonly disabled [value]="sumCurrent | currency:'USD':'symbol':'1.2-2'" class="readonly-box">
+              </div>
+              <div class="readout-row">
+                <label>30 Days:</label>
+                <input type="text" readonly disabled [value]="sum30Days | currency:'USD':'symbol':'1.2-2'" class="readonly-box">
+              </div>
+              <div class="readout-row">
+                <label>60 Days:</label>
+                <input type="text" readonly disabled [value]="sum60Days | currency:'USD':'symbol':'1.2-2'" class="readonly-box">
+              </div>
+              <div class="readout-row">
+                <label>90 Days:</label>
+                <input type="text" readonly disabled [value]="sum90Days | currency:'USD':'symbol':'1.2-2'" class="readonly-box">
+              </div>
+              <div class="readout-row">
+                <label>120 Days:</label>
+                <input type="text" readonly disabled [value]="sum120Days | currency:'USD':'symbol':'1.2-2'" class="readonly-box">
+              </div>
+              <div class="readout-row total-row">
+                <label>Total:</label>
+                <input type="text" readonly disabled [value]="sumOutstanding | currency:'USD':'symbol':'1.2-2'" class="readonly-box font-bold">
+              </div>
+            </div>
+          </div>
+        </fieldset>
+
+      </div>
+
+      <!-- Open Transactions Grid subform (frmARFullView) -->
+      <fieldset class="access-section subform-container">
+        <legend>Subform: frmARFullView (Open Transactions Grid)</legend>
+        <div class="datasheet-scroll-wrapper">
+          <table class="access-datasheet">
+            <thead>
+              <tr>
+                <th class="col-check"></th>
+                <th class="col-cust">Cust No</th>
+                <th class="col-trans">Trans No</th>
+                <th class="col-ref">Ref No</th>
+                <th class="col-type">Type</th>
+                <th class="col-date">Date</th>
+                <th class="col-amount text-right">Original Amt</th>
+                <th class="col-balance text-right font-bold">Balance</th>
+                <th class="col-aging text-right">Current</th>
+                <th class="col-aging text-right">30 Days</th>
+                <th class="col-aging text-right">60 Days</th>
+                <th class="col-aging text-right">90 Days</th>
+                <th class="col-aging text-right">120+ Days</th>
+                <th class="col-ban">BAN</th>
+                <th class="col-cause">Dispute Reason</th>
+                <th class="col-opc-resolved">OPC Res</th>
+                <th class="col-notice">1st Notice</th>
+                <th class="col-notice">2nd Notice</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of transactions" 
+                  [class.active-row]="selectedTransaction?.tranS_NO === row.tranS_NO" 
+                  (click)="selectTransactionRow(row)">
+                <td class="col-check text-center" (click)="$event.stopPropagation()">
+                  <input type="checkbox" [(ngModel)]="row.checked">
+                </td>
+                <td class="col-cust">{{ row.cust }}</td>
+                <td class="col-trans">{{ row.tranS_NO }}</td>
+                <td class="col-ref">{{ row.reF_NO }}</td>
+                <td class="col-type text-center"><span class="badge-type" [class]="'type-' + row.type">{{ row.type }}</span></td>
+                <td class="col-date">{{ row.tranDate | date:'yyyy-MM-dd' }}</td>
+                <td class="col-amount text-right">{{ row.amount | number:'1.2-2' }}</td>
+                <td class="col-balance text-right font-bold" [class.negative-balance]="row.balance < 0">
+                  {{ row.balance | number:'1.2-2' }}
+                </td>
+                <td class="col-aging text-right">{{ row.current === 0 ? '-' : (row.current | number:'1.2-2') }}</td>
+                <td class="col-aging text-right">{{ row.thirtyDays === 0 ? '-' : (row.thirtyDays | number:'1.2-2') }}</td>
+                <td class="col-aging text-right">{{ row.sixtyDays === 0 ? '-' : (row.sixtyDays | number:'1.2-2') }}</td>
+                <td class="col-aging text-right">{{ row.ninetyDays === 0 ? '-' : (row.ninetyDays | number:'1.2-2') }}</td>
+                <td class="col-aging text-right">{{ row.oneTwentyPlusDays === 0 ? '-' : (row.oneTwentyPlusDays | number:'1.2-2') }}</td>
+                <td class="col-ban">{{ row.ban || '-' }}</td>
+                <td class="col-cause"><span class="text-truncate">{{ row.rootCauseDescription || '-' }}</span></td>
+                <td class="col-opc-resolved text-center">
+                  <span *ngIf="row.opcResolved" class="text-success">✔</span>
+                  <span *ngIf="!row.opcResolved" class="text-muted">✘</span>
+                </td>
+                <td class="col-notice">{{ (row.firstNoticeDate | date:'yyyy-MM-dd') || '-' }}</td>
+                <td class="col-notice">{{ (row.secondNoticeDate | date:'yyyy-MM-dd') || '-' }}</td>
+              </tr>
+              <tr *ngIf="transactions.length === 0">
+                <td colspan="18" class="text-center empty-row">No transactions loaded. Select an account above to load records.</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr class="datasheet-totals">
+                <td colspan="6" class="text-right font-bold">Total Accounts Receivable:</td>
+                <td class="text-right">-</td>
+                <td class="text-right total-cell" [class.negative-balance]="sumOutstanding < 0">
+                  {{ sumOutstanding | number:'1.2-2' }}
+                </td>
+                <td class="text-right">{{ sumCurrent | number:'1.2-2' }}</td>
+                <td class="text-right">{{ sum30Days | number:'1.2-2' }}</td>
+                <td class="text-right">{{ sum60Days | number:'1.2-2' }}</td>
+                <td class="text-right">{{ sum90Days | number:'1.2-2' }}</td>
+                <td class="text-right">{{ sum120Days | number:'1.2-2' }}</td>
+                <td colspan="5"></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </fieldset>
+
+      <!-- Subform Separator Row (VBA Text and Remove Button) -->
+      <div class="subform-toolbar-row">
+        <span class="subform-title-text">Events for single selected transaction:</span>
+        <button class="access-btn btn-danger btn-xs" 
+                (click)="selectedTransaction ? removeCommentFromTrans(selectedTransaction.id) : null" 
+                [disabled]="!selectedTransaction">
+          Remove Comment from just this transaction
+        </button>
+      </div>
+
+      <!-- Events for single transaction subform (frmCommentEvents) -->
+      <fieldset class="access-section subform-container comment-events-subform">
+        <div class="datasheet-scroll-wrapper min-height-120">
+          <table class="access-datasheet small-datasheet">
+            <thead>
+              <tr>
+                <th class="col-date">Date</th>
+                <th class="col-author">Logged By</th>
+                <th class="col-type">Type</th>
+                <th class="col-comment">Event Details / Notes</th>
+                <th class="col-ref">Linked Trans</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let ev of events">
+                <tr *ngIf="selectedTransaction && ev.transNo === selectedTransaction.tranS_NO">
+                  <td class="col-date">{{ ev.addDate | date:'yyyy-MM-dd HH:mm' }}</td>
+                  <td class="col-author">{{ ev.addUser }}</td>
+                  <td class="col-type">{{ ev.eventDescription }}</td>
+                  <td class="col-comment">{{ ev.eventText }}</td>
+                  <td class="col-ref">{{ ev.transNo }}</td>
+                </tr>
+              </ng-container>
+              <tr *ngIf="!selectedTransaction || !events.length">
+                <td colspan="5" class="text-center empty-row text-muted">Select a transaction row above to display its linked events.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </fieldset>
+      
+      <!-- Edit details panel for selected transaction -->
+      <fieldset class="access-section transaction-edit-panel" [class.disabled-panel]="!selectedTransaction">
+        <legend>Update Transaction Detail (Selected: {{ selectedTransaction?.tranS_NO || 'None' }})</legend>
+        <div class="edit-inputs-grid">
+          <div class="edit-row">
+            <div class="edit-group" style="width: 160px;">
+              <label for="editBan">BAN Number:</label>
+              <input type="text" id="editBan" [(ngModel)]="banInput" [disabled]="!selectedTransaction">
+            </div>
+            <div class="edit-group" style="width: 200px;">
+              <label for="editBillTo">Bill To Customer:</label>
+              <input type="text" id="editBillTo" [(ngModel)]="billToCustInput" [disabled]="!selectedTransaction">
+            </div>
+            <div class="edit-group flex-grow">
+              <label for="editRootCause">Dispute Root Cause:</label>
+              <select id="editRootCause" [(ngModel)]="rootCauseIdInput" [disabled]="!selectedTransaction" class="access-select">
+                <option [value]="0">-- Select Cause --</option>
+                <option *ngFor="let rc of rootCauses" [value]="rc.code">{{ rc.name }}</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="edit-row">
+            <div class="edit-group checkbox-group-inline">
+              <label class="access-checkbox">
+                <input type="checkbox" [(ngModel)]="opcResolvedInput" [disabled]="!selectedTransaction">
+                OPC Resolved
+              </label>
+              <label class="access-checkbox">
+                <input type="checkbox" [(ngModel)]="ignoreGroupInput" [disabled]="!selectedTransaction">
+                Ignore Group Exclusion
+              </label>
+            </div>
+            <div class="edit-group flex-grow">
+              <label for="editOpcDesc">OPC Description:</label>
+              <input type="text" id="editOpcDesc" [(ngModel)]="opcDescriptionInput" [disabled]="!selectedTransaction" placeholder="Required for OPC Resolved" class="flex-grow-input">
+            </div>
+            <div class="edit-actions">
+              <button class="access-btn btn-save" (click)="saveARDetail()" [disabled]="!selectedTransaction">Save Details</button>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+
+    </div>
+
+    <!-- RIGHT PANEL: Notice Actions, Comment Logger, All Customer Events Grid -->
+    <div class="right-panel-workspace">
+      
+      <!-- 1. Overdue Notice Actions Panel -->
+      <fieldset class="access-section notice-actions-frame">
+        <legend>Overdue Notice Actions & Logs</legend>
+        <div class="notice-buttons-grid">
+          <button class="access-btn full-width" (click)="outputCheckedDocuments()" [disabled]="!selectedCustomer">
+            ✉ Output Invoices\Pmt Notice for All Selected
+          </button>
+          <div class="row-2col">
+            <button class="access-btn" (click)="outputNotice(1)" [disabled]="!selectedCustomer">Output First Notice</button>
+            <button class="access-btn" (click)="outputNotice(2)" [disabled]="!selectedCustomer">Output Second Notice</button>
+          </div>
+          <div class="row-2col">
+            <button class="access-btn" (click)="exportInvoice()" [disabled]="!selectedTransaction">Export Invoice PDF</button>
+            <button class="access-btn" (click)="outputPaymentAdvice()" [disabled]="!selectedTransaction || (selectedTransaction.type !== 'P' && selectedTransaction.type !== 'C')">Payment Advice PDF</button>
+          </div>
+
+          <!-- Logger Buttons Grid -->
+          <div class="logger-buttons-label">Log Call Activities:</div>
+          <div class="logger-grid-buttons">
+            <button class="access-btn log-call-btn" (click)="logCallOut()" [disabled]="!selectedCustomer">📞 Call Out</button>
+            <button class="access-btn log-call-btn" (click)="logCallIn()" [disabled]="!selectedCustomer">📞 Call In</button>
+            <button class="access-btn log-call-btn" (click)="logEmail()" [disabled]="!selectedCustomer">✉ Email</button>
+            <button class="access-btn log-call-btn" (click)="logFax()" [disabled]="!selectedCustomer">📠 Fax</button>
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- 2. Comment Log Box -->
+      <fieldset class="access-section comment-logger-frame">
+        <legend>Log Activity & Comments</legend>
+        <div class="logger-box">
+          <label for="txtComment">Comment / Note Details:</label>
+          <textarea id="txtComment" rows="4" [(ngModel)]="commentTextInput" [disabled]="!selectedCustomer" placeholder="Enter notes here to add to checked transactions..."></textarea>
+          <button class="access-btn btn-primary full-width" (click)="submitComment()" [disabled]="!selectedCustomer || !commentTextInput.trim()">
+            Add Comment to All Selected
+          </button>
+        </div>
+      </fieldset>
+
+      <!-- 3. All Customer Events subform (frmEvents) -->
+      <fieldset class="access-section subform-container customer-events-subform">
+        <div class="subform-header">
+          <span class="subform-title">All Customer's Events:</span>
+          <div class="events-actions-toolbar">
+            <button class="access-btn btn-xs" (click)="events.length > 0 ? startEditComment(events[0]) : null" [disabled]="!selectedCustomer || events.length === 0">Edit Comment</button>
+            <button class="access-btn btn-xs btn-danger" (click)="events.length > 0 ? deleteComment(events[0].id) : null" [disabled]="!selectedCustomer || events.length === 0">Delete Comment</button>
+          </div>
+        </div>
+
+        <div class="datasheet-scroll-wrapper min-height-200">
+          <table class="access-datasheet small-datasheet">
+            <thead>
+              <tr>
+                <th class="col-date">Date</th>
+                <th class="col-author">User</th>
+                <th class="col-type">Type</th>
+                <th class="col-comment">Event Description / Comment Text</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let ev of events" [class.editing-row]="editingCommentId === ev.id">
+                <td class="col-date">{{ ev.addDate | date:'yyyy-MM-dd HH:mm' }}</td>
+                <td class="col-author">{{ ev.addUser }}</td>
+                <td class="col-type"><span class="badge-event" [class]="'event-type-' + ev.eventType">{{ ev.eventDescription }}</span></td>
+                <td class="col-comment">
+                  <div *ngIf="editingCommentId !== ev.id">
+                    {{ ev.eventText }}
+                  </div>
+                  <div *ngIf="editingCommentId === ev.id" class="inline-comment-edit">
+                    <input type="text" [(ngModel)]="editingCommentText" class="inline-edit-input">
+                    <button class="access-btn btn-xs btn-save" (click)="saveCommentEdit()">Save</button>
+                    <button class="access-btn btn-xs" (click)="cancelEditComment()">Cancel</button>
+                  </div>
+                </td>
+              </tr>
+              <tr *ngIf="!selectedCustomer || events.length === 0">
+                <td colspan="4" class="text-center empty-row">No events logged for this account.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </fieldset>
+
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,41 @@
+<div class="ms-access-mdi">
+  <!-- MDI Title Bar -->
+  
+
+  <!-- MDI Toolbar / Switchboard Buttons -->
+  <div class="mdi-toolbar">
+    <div class="toolbar-group">
+      <button class="ms-btn" [class.active]="isActive('review')" (click)="navigate('review')">
+        <i class="fa fa-table"></i> Review AR Details
+      </button>
+      <button class="ms-btn" [class.active]="isActive('batchNotice')" (click)="navigate('batchNotice')">
+        <i class="fa fa-print"></i> Batch Notices
+      </button>
+      <button class="ms-btn" [class.active]="isActive('users')" (click)="navigate('users')">
+        <i class="fa fa-users"></i> Maintain Users
+      </button>
+      <button class="ms-btn" [class.active]="isActive('groups')" (click)="navigate('groups')">
+        <i class="fa fa-sitemap"></i> Customer Groups
+      </button>
+      <button class="ms-btn" [class.active]="isActive('commentReview')" (click)="navigate('commentReview')">
+        <i class="fa fa-comments-o"></i> Comment Review
+      </button>
+      <button class="ms-btn" [class.active]="isActive('report')" (click)="navigate('report')">
+        <i class="fa fa-file-text-o"></i> Reporting
+      </button>
+      <button class="ms-btn" [class.active]="isActive('glActivity')" (click)="navigate('glActivity')">
+        <i class="fa fa-bar-chart"></i> GL Activity
+      </button>
+    </div>
+    <div class="toolbar-group">
+      <button class="ms-btn ms-exit" (click)="navigate('exit')">
+        <i class="fa fa-sign-out"></i> Exit System
+      </button>
+    </div>
+  </div>
+
+  <!-- MDI Workspace Area -->
+  <div class="mdi-workspace">
+    <router-outlet></router-outlet>
+  </div>
+</div>

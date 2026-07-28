@@ -8,16 +8,19 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { SkuManagementComponent } from '../sku-management/sku-management.component';
 
 @Component({
   selector: 'app-advantage-voice-component',
-  imports: [CommonModule, HttpClientModule, FormsModule],
+  standalone: true,
+  imports: [CommonModule, HttpClientModule, FormsModule, SkuManagementComponent],
   templateUrl: './advantage-voice-component.html',
   styleUrl: './advantage-voice-component.css',
 })
 export class AdvantageVoiceComponent implements OnInit {
   pendingOrders: AdvantageImportVM[] = [];
   isLoading = false;
+  currentView: 'import' | 'sku' = 'import';
 
   // Stats
   totalOrders = 0;
@@ -31,7 +34,7 @@ export class AdvantageVoiceComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // this.loadPendingOrders();
+    this.loadPendingOrders();
   }
 
   loadPendingOrders(): void {

@@ -1,0 +1,61 @@
+<div class="modal-backdrop fade show"></div>
+<div class="modal fade show d-block" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content access-modal">
+      <div class="modal-header access-header">
+        <h5 class="modal-title">Customer Field List - {{ customerGroup }}</h5>
+        <button type="button" class="btn-close" (click)="close()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body access-body">
+        <div class="table-container">
+          <table class="access-table">
+            <thead>
+              <tr>
+                <th style="width: 50px;">Seq</th>
+                <th style="width: 80px; text-align: center;">Include</th>
+                <th>Field Name</th>
+                <th>Label</th>
+                <th style="width: 120px;">Summary Type</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let field of fields; let i = index" 
+                  [class.selected]="selectedIndex === i" 
+                  (click)="selectRow(i)">
+                <td>{{ field.sequence }}</td>
+                <td class="text-center">
+                  <input type="checkbox" [(ngModel)]="field.include" (click)="$event.stopPropagation()">
+                </td>
+                <td>{{ field.fieldName }}</td>
+                <td>
+                  <input type="text" [(ngModel)]="field.label" class="access-input" (click)="$event.stopPropagation()">
+                </td>
+                <td>
+                  <select [(ngModel)]="field.summaryType" class="access-select" (click)="$event.stopPropagation()">
+                    <option value="None">None</option>
+                    <option value="Total">Total</option>
+                  </select>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        
+        <div class="footer-actions">
+          <div class="reorder-buttons">
+            <button class="btn-access" (click)="moveUp()" [disabled]="selectedIndex <= 0">
+              <i class="bi bi-arrow-up"></i> Move Up
+            </button>
+            <button class="btn-access" (click)="moveDown()" [disabled]="selectedIndex === -1 || selectedIndex >= fields.length - 1">
+              <i class="bi bi-arrow-down"></i> Move Down
+            </button>
+          </div>
+          <div class="main-actions">
+            <button class="btn-access primary-btn" (click)="save()">Save Changes</button>
+            <button class="btn-access" (click)="close()">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,230 +1,93 @@
-<!-- <div class="report-container">
-
-  <div class="card">
-    <h2 class="title">IMEI Report</h2>
-
-
-     <div class="card">
-    <button class="btn-primary" (click)="spireStockStatus()">
-      Spire Stock Status
-    </button>
+<div class="ms-access-form">
+  <div class="form-titlebar">
+    <span>IMEI Reports & Spire Stock Status</span>
+    <button class="win-btn win-close">×</button>
   </div>
-<hr>
-<hr>
 
-<div class="field-inline">
-  <label>Start Date:</label>
-  <input type="date" [(ngModel)]="receiptStartDate" [max]="today">
-
-
-  <label>End Date:</label>
-<input type="date" [(ngModel)]="receiptEndDate" [max]="today">
-
-  <button class="btn-primary" (click)="generateReceiptsReport()">
-    Spire Receipts
-  </button>
-</div>
-
-<hr>
-<hr>
-
-    <div class="grid">
-
-      <div class="field">
-        <label>Item Type</label>
-        <select [(ngModel)]="combo8" (change)="combo8Changed()">
-          <option value="">Select Type</option>
-          <option value="Hardware">Hardware</option>
-        </select>
-      </div>
-
-      <div class="field checkbox">
-          <label>Vendor</label>
-       <select [(ngModel)]="vendor">
-    <option value="">All Vendors</option>
-    <option *ngFor="let v of vendors" [value]="v.id">
-      {{ v.name }}
-    </option>
-  </select>
-      </div>
-
- <div class="field">
-  <label>Part</label>
-  <select [(ngModel)]="part">
-    <option [ngValue]="null">All Parts</option>
-    <option *ngFor="let p of parts" [ngValue]="p">
-      {{ p }}
-    </option>
-  </select>
-</div>
-
-      <div class="field">
-        <label>Start Date</label>
-        <input type="date" [(ngModel)]="imeiStartDate">
-      </div>
-      
-      <div class="field">
-        <label>End Date</label>
-        <input type="date" [(ngModel)]="imeiEndDate">                           
-      </div>
-
+  <div class="form-body">
+    <!-- Header Controls -->
+    <div class="action-panel">
+      <span class="panel-desc">Manage and track IMEI stock & generate inventory reports</span>
+      <button class="ms-btn ms-btn-primary" (click)="spireStockStatus()">Spire Stock Status</button>
     </div>
-
-  
-  </div>
-
-  <div class="card" *ngIf="!chkExcel && reportData.length">
-    <table>
-      <thead>
-        <tr>
-          <th>Vendor</th>
-          <th>Receipt No</th>
-          <th>IMEI</th>
-          <th>Unit Cost</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let r of reportData">
-          <td>{{r.vendor}}</td>
-          <td>{{r.receiptNo}}</td>
-          <td>{{r.imei}}</td>
-          <td>{{r.cost | currency}}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
- 
-
-  <div class="actions">
-  <button class="btn-primary" (click)="spireReceivedReport()">
-    Download Received Report
-  </button>
-</div>
-
-</div>
-
-
-
-
-
-
-<hr>
-<hr>
-
-    <label for="receiptNo">Receipt Number:</label>
-    <input id="receiptNo" [(ngModel)]="receiptNo" class="form-control" placeholder="Enter Receipt No">
-
-
-  
-    <label for="poNumber">PO Number:</label>
-    <input id="poNumber" [(ngModel)]="poNumber" class="form-control" placeholder="Enter PO Number">
-  
-  <button (click)="searchReceipts()" class="btn btn-primary mt-2">Search</button> -->
-
-
-
-  <div class="report-container">
-
-
-
-  <!-- IMEI Report Header -->
-<div class="report-header">
-  <div class="header-left">
-    <h2 class="title">IMEI Report</h2>
-    <p class="subtitle">Manage and track IMEI stock & reports</p>
-  </div>
-
-  <div class="header-right">
-    <button class="btn-primary" (click)="spireStockStatus()">
-      📦 Spire Stock Status
-    </button>
-  </div>
-</div>
-   
 
     <!-- Spire Receipts Filter -->
-   <div class="field-inline">
-  <div class="field-inline-item">
-    <label>Start Date:</label>
-    <input type="date" [(ngModel)]="receiptStartDate" [max]="today">
-  </div>
-
-  <div class="field-inline-item">
-    <label>End Date:</label>
-    <input type="date" [(ngModel)]="receiptEndDate" [max]="today">
-  </div>
-
-  <div class="field-inline-item">
-    
-    <button class="btn-primary" (click)="generateReceiptsReport()">Spire Receipts</button>
-  </div>
-</div>
-     
-    <hr>
+    <div class="filter-box">
+      <div class="box-title">Spire Receipts Filter</div>
+      <div class="filter-row">
+        <div class="filter-group">
+          <label>Start Date:</label>
+          <input type="date" [(ngModel)]="receiptStartDate" [max]="today" class="ms-input" />
+        </div>
+        <div class="filter-group">
+          <label>End Date:</label>
+          <input type="date" [(ngModel)]="receiptEndDate" [max]="today" class="ms-input" />
+        </div>
+        <div class="filter-group-btn">
+          <button class="ms-btn" (click)="generateReceiptsReport()">Generate Spire Receipts</button>
+        </div>
+      </div>
+    </div>
 
     <!-- IMEI Filters Grid -->
-    <div class="grid">
-      <div class="field">
-        <label>Item Type</label>
-        <select [(ngModel)]="combo8" (change)="combo8Changed()">
-          <option value="">Select Type</option>
-          <option value="Hardware">Hardware</option>
-        </select>
-      </div>
+    <div class="filter-box">
+      <div class="box-title">IMEI Inventory Filters</div>
+      <div class="filter-grid">
+        <div class="filter-group">
+          <label>Item Type:</label>
+          <select [(ngModel)]="combo8" (change)="combo8Changed()" class="ms-select">
+            <option value="">Select Type</option>
+            <option value="Hardware">Hardware</option>
+          </select>
+        </div>
 
-      <div class="field">
-        <label>Vendor</label>
-        <select [(ngModel)]="vendor">
-          <option value="">All Vendors</option>
-          <option *ngFor="let v of vendors" [value]="v.id">{{ v.name }}</option>
-        </select>
-      </div>
+        <div class="filter-group">
+          <label>Vendor:</label>
+          <select [(ngModel)]="vendor" class="ms-select">
+            <option value="">All Vendors</option>
+            <option *ngFor="let v of vendors" [value]="v.id">{{ v.name }}</option>
+          </select>
+        </div>
 
-      <div class="field">
-        <label>Part</label>
-        <select [(ngModel)]="part">
-          <option [ngValue]="null">All Parts</option>
-          <option *ngFor="let p of parts" [ngValue]="p">{{ p }}</option>
-        </select>
-      </div>
+        <div class="filter-group">
+          <label>Part Number:</label>
+          <select [(ngModel)]="part" class="ms-select">
+            <option [ngValue]="null">All Parts</option>
+            <option *ngFor="let p of parts" [ngValue]="p">{{ p }}</option>
+          </select>
+        </div>
 
-      <div class="field">
-        <label>Start Date</label>
-        <input type="date" [(ngModel)]="imeiStartDate" [max]="today">
-      </div>
+        <div class="filter-group">
+          <label>Start Date:</label>
+          <input type="date" [(ngModel)]="imeiStartDate" [max]="today" class="ms-input" />
+        </div>
 
-      <div class="field">
-        <label>End Date</label>
-        <input type="date" [(ngModel)]="imeiEndDate" [max]="today">
+        <div class="filter-group">
+          <label>End Date:</label>
+          <input type="date" [(ngModel)]="imeiEndDate" [max]="today" class="ms-input" />
+        </div>
+      </div>
+      <div class="button-row-right">
+        <button class="ms-btn ms-btn-primary" (click)="spireReceivedReport()">Download Received Report</button>
       </div>
     </div>
- <div class="actions">
-    <button class="btn-primary" (click)="spireReceivedReport()">
-      Download Received Report
-    </button>
+
+    <!-- Receipt & PO Search -->
+    <div class="filter-box">
+      <div class="box-title">Direct Receipt / PO Lookup</div>
+      <div class="filter-row">
+        <div class="filter-group">
+          <label>Receipt Number:</label>
+          <input id="receiptNo" [(ngModel)]="receiptNo" class="ms-input" placeholder="Enter Receipt No..." />
+        </div>
+        <div class="filter-group">
+          <label>PO Number:</label>
+          <input id="poNumber" [(ngModel)]="poNumber" class="ms-input" placeholder="Enter PO Number..." />
+        </div>
+        <div class="filter-group-btn">
+          <button class="ms-btn" (click)="searchReceipts()">Search</button>
+        </div>
+      </div>
+    </div>
   </div>
-  <hr>
-
-  <!-- Receipt & PO Search -->
-  <div class="grid grid-2">
-    <div class="field">
-      <label for="receiptNo">Receipt Number:</label>
-      <input id="receiptNo" [(ngModel)]="receiptNo" class="form-control" placeholder="Enter Receipt No">
-    </div>
-
-    <div class="field">
-      <label for="poNumber">PO Number:</label>
-      <input id="poNumber" [(ngModel)]="poNumber" class="form-control" placeholder="Enter PO Number">
-    </div>
-
-    <div class="field-full">
-      <button (click)="searchReceipts()" class="btn btn-primary mt-2">Search</button>
-    </div>
-  </div>
-  </div>
-
- 
- 
-
-
+</div>

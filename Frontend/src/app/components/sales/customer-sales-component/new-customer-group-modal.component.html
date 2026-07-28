@@ -1,0 +1,36 @@
+<div class="modal-backdrop fade show"></div>
+<div class="modal fade show d-block" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content access-modal">
+      <div class="modal-header access-header">
+        <h5 class="modal-title">New Customer Group</h5>
+        <button type="button" class="btn-close" (click)="close()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body access-body">
+        <div class="form-grid">
+          <div class="form-row">
+            <label class="access-label">Customer Group Code:</label>
+            <input type="text" [(ngModel)]="groupCode" class="access-input" maxlength="20">
+          </div>
+          <div class="form-row">
+            <label class="access-label">Customer Group Name:</label>
+            <input type="text" [(ngModel)]="groupName" class="access-input" maxlength="100">
+          </div>
+          <div class="form-row">
+            <label class="access-label">First BV Customer No:</label>
+            <input type="text" [(ngModel)]="firstBVCustNo" class="access-input" maxlength="20">
+          </div>
+        </div>
+
+        <div class="button-container">
+          <button class="btn-access" (click)="createGroup()">
+            Create Group
+          </button>
+          <button class="btn-access" (click)="close()">
+            Exit
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

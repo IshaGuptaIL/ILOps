@@ -66,6 +66,20 @@ export class Login {
           this.cookieService.set('Name', res.result.name, 1);
           this.cookieService.set('Email', res.result.email, 1);
 
+          // Compute user initials from name (e.g. "Super Admin" -> "SA")
+          let initials = 'SA';
+          if (res.result.name) {
+            const parts = res.result.name.trim().split(/\s+/);
+            if (parts.length >= 2) {
+              initials = (parts[0][0] + parts[1][0]).toUpperCase();
+            } else if (parts.length === 1 && parts[0].length >= 2) {
+              initials = parts[0].substring(0, 2).toUpperCase();
+            } else if (parts.length === 1 && parts[0].length === 1) {
+              initials = parts[0].toUpperCase() + 'A';
+            }
+          }
+          this.cookieService.set('userInitials', initials, 1);
+
           this.toastr.success('Login successful', 'Success');
           this.router.navigate(['/dashboard']);
         } else {

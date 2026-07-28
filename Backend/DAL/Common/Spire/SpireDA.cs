@@ -1,8 +1,10 @@
-﻿using Npgsql;
+using Npgsql;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 using System.Net.Http;
+using DAL.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Common.Spire
 {
@@ -13,14 +15,16 @@ namespace DAL.Common.Spire
         private readonly string _user;
         private readonly string _pass;
         private readonly string _pgConnString; // Add PG connection string here
+        private readonly AppDBContext _dbContext;
 
-        public SpireDA(HttpClient client, ILogger<SpireDA> logger, string user, string pass, string pgConnString)
+        public SpireDA(HttpClient client, ILogger<SpireDA> logger, string user, string pass, string pgConnString, AppDBContext dbContext)
         {
             _client = client;
             _logger = logger;
             _user = user;
             _pass = pass;
             _pgConnString = pgConnString;
+            _dbContext = dbContext;
         }
 
         // === API call to Spire ===
@@ -62,6 +66,48 @@ namespace DAL.Common.Spire
             }
 
             _logger.LogInformation("Spire API call → {Url} returned {Status} ({Time}ms)", endpoint, spireResp.HttpStatus, spireResp.ResponseTime);
+
+            try
+            {
+                var settings = await _dbContext.tblSettings.FirstOrDefaultAsync();
+                bool loggingEnabled = settings?.LoggingEnabled ?? true;
+
+                if (loggingEnabled)
+                {
+                    int maxLen = settings?.LogResponseMaxSize ?? 4000;
+                    bool logResp = settings?.LogResponseData ?? true;
+                    string respString = logResp ? (respText.Length > maxLen ? "Truncated:" + respText[..maxLen] : respText) : "";
+
+                    var apiLog = new tblAPILog
+                    {
+                        ServerID = 1,
+                        CompanyID = 1,
+                        CallType = "POST",
+                        Endpoint = endpoint,
+                        KeyValue = spireResp.HeaderKey.HasValue ? (int)spireResp.HeaderKey.Value : 0,
+                        SendString = json,
+                        Parameters = "",
+                        ResponseString = respString,
+                        FullURLPassed = endpoint,
+                        FullURLUsed = _client.BaseAddress?.ToString() + endpoint,
+                        HTTPStatus = spireResp.HttpStatus,
+                        HTTPStatusText = spireResp.HttpStatusText,
+                        HeaderResponse = spireResp.HeaderResponse?.Length > 255 ? spireResp.HeaderResponse[..255] : spireResp.HeaderResponse,
+                        HeaderResponseKey = spireResp.HeaderKey?.ToString(),
+                        HeaderResponseLocation = spireResp.HeaderLocation,
+                        ResponseTime = spireResp.ResponseTime,
+                        LogDateTime = DateTime.Now
+                    };
+
+                    _dbContext.tblAPILog.Add(apiLog);
+                    await _dbContext.SaveChangesAsync();
+                }
+            }
+            catch (Exception logEx)
+            {
+                _logger.LogWarning(logEx, "Failed to log API call to tblAPILog");
+            }
+
             return spireResp;
         }
 

@@ -229,6 +229,26 @@ namespace DAL.Inventory.SpareLight.DA
                 }
             }
 
+            var duplicateSims = items.GroupBy(i => i.SimNo).Where(g => !string.IsNullOrEmpty(g.Key) && g.Count() > 1).Select(g => g.Key);
+            foreach (var sim in duplicateSims)
+            {
+                foreach (var di in items.Where(i => i.SimNo == sim))
+                {
+                    di.ValidationResult = (string.IsNullOrEmpty(di.ValidationResult) ? "" : di.ValidationResult + "; ") + "SimNo is duplicated.";
+                    errorCount++;
+                }
+            }
+
+            var duplicatePins = items.GroupBy(i => i.Pin).Where(g => !string.IsNullOrEmpty(g.Key) && g.Count() > 1).Select(g => g.Key);
+            foreach (var pin in duplicatePins)
+            {
+                foreach (var di in items.Where(i => i.Pin == pin))
+                {
+                    di.ValidationResult = (string.IsNullOrEmpty(di.ValidationResult) ? "" : di.ValidationResult + "; ") + "Pin is duplicated.";
+                    errorCount++;
+                }
+            }
+
             await _dbContext.SaveChangesAsync();
             return new ApiResposne { Success = true, Result = items, Count = errorCount };
         }
@@ -278,6 +298,7 @@ namespace DAL.Inventory.SpareLight.DA
                 LIMIT 1";
 
             await using var cmd = new NpgsqlCommand(sql, conn);
+            cmd.CommandTimeout = 600;
             cmd.Parameters.AddWithValue("@whse", whse.ToUpper());
             cmd.Parameters.AddWithValue("@partNo", partNo.ToUpper());
             cmd.Parameters.AddWithValue("@serial", serial);
@@ -379,6 +400,24 @@ namespace DAL.Inventory.SpareLight.DA
                 {
                     item.TransferCreated = true;
                     item.TransferPosted = true;
+
+                    // Log to database (tblTransferLog)
+                    var logEntry = new tblTransferLog
+                    {
+                        ReferenceNo = refNo,
+                        TransferType = "Hardware",
+                        FromWhse = item.WarehouseCodeTransferFrom,
+                        ToWhse = item.WarehouseCodeTransferTo,
+                        PartNo = item.PartNo,
+                        Serial = item.IMEI,
+                        SIMPartNo = item.SimPartNo,
+                        SIMNo = item.SimNo,
+                        Pin = item.Pin,
+                        TransferDate = transferDate,
+                        ActualDateTime = DateTime.Now,
+                        Quantity = 1
+                    };
+                    _dbContext.tblTransferLog.Add(logEntry);
                 }
             }
 
@@ -467,6 +506,20 @@ namespace DAL.Inventory.SpareLight.DA
                 {
                     item.TransferCreated = true;
                     item.TransferPosted = true;
+
+                    // Log to database (tblTransferLog)
+                    var logEntry = new tblTransferLog
+                    {
+                        ReferenceNo = refNo,
+                        TransferType = "Accessory",
+                        FromWhse = item.WarehouseCodeTransferFrom,
+                        ToWhse = item.WarehouseCodeTransferTo,
+                        PartNo = item.PartNo,
+                        Quantity = item.Quantity,
+                        TransferDate = transferDate,
+                        ActualDateTime = DateTime.Now
+                    };
+                    _dbContext.tblTransferLog.Add(logEntry);
                 }
 
                 transferCount++;
@@ -515,6 +568,7 @@ namespace DAL.Inventory.SpareLight.DA
             await using var conn = new NpgsqlConnection(_spire.PgConnString);
             string sql = "SELECT 1 FROM inventory_warehouses WHERE whse = @whse LIMIT 1";
             await using var cmd = new NpgsqlCommand(sql, conn);
+            cmd.CommandTimeout = 600;
             cmd.Parameters.AddWithValue("@whse", whse.ToUpper());
             await conn.OpenAsync();
             return await cmd.ExecuteScalarAsync() != null;
@@ -575,3 +629,5 @@ namespace DAL.Inventory.SpareLight.DA
         }
     }
 }
+
+

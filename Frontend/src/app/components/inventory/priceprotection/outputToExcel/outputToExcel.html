@@ -1,0 +1,71 @@
+<div class="access-container">
+
+  <!-- Switchboard Title -->
+  <div class="form-title-bar">
+    PP Claims to Credits
+  </div>
+
+  <div class="form-body-wrapper">
+    <div class="access-form-main">
+
+      <!-- TOP TOOLBAR -->
+      <div class="toolbar-top-panel">
+        <span class="toolbar-info-text">
+          <i class="fas fa-info-circle text-blue"></i> View and export matching Claims vs Credits in the system.
+        </span>
+        <button class="access-glossy-btn" (click)="outputFilteredRecords()" [disabled]="isExporting">
+          <i class="fas fa-file-excel text-green"></i> Output Filtered Records
+        </button>
+      </div>
+
+      <!-- MAIN DATA SUBFORM GRID -->
+      <div class="grid-section">
+        <div class="grid-section-header">
+          <span><i class="fas fa-table"></i> frmPPClaimsToCreditsDetail</span>
+          <span class="grid-row-count">Count: {{ claimsToCredits.length }}</span>
+        </div>
+        <div class="grid-table-scroll">
+          <table class="access-grid-table">
+            <thead>
+              <tr>
+                <th (click)="sortBy('sku')">SKU</th>
+                <th (click)="sortBy('description')">Description</th>
+                <th (click)="sortBy('imei')">IMEI</th>
+                <th (click)="sortBy('claimBatchID')">ClaimBatchID</th>
+                <th (click)="sortBy('claimDate')">ClaimDate</th>
+                <th (click)="sortBy('claimAmount')">ClaimAmount</th>
+                <th (click)="sortBy('unitCreditAmount')">UnitCreditAmount</th>
+                <th (click)="sortBy('creditNoteNumber')">CreditNoteNumber</th>
+                <th (click)="sortBy('creditNoteDate')">CreditNoteDate</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngIf="claimsToCredits.length === 0">
+                <td colspan="9" class="no-records-cell">No matching claims to credits records found in database.</td>
+              </tr>
+              <tr *ngFor="let row of claimsToCredits">
+                <td class="font-code">{{ row.sku }}</td>
+                <td>{{ row.description }}</td>
+                <td class="font-code text-muted">{{ row.imei }}</td>
+                <td class="text-center">{{ row.claimBatchID }}</td>
+                <td>{{ row.claimDate | date:'MM/dd/yyyy' }}</td>
+                <td class="text-right text-blue">{{ row.claimAmount | currency }}</td>
+                <td class="text-right text-green font-bold">{{ row.unitCreditAmount | currency }}</td>
+                <td class="font-code">{{ row.creditNoteNumber }}</td>
+                <td>{{ row.creditNoteDate | date:'MM/dd/yyyy' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Export Spinner -->
+      <div *ngIf="isExporting" class="progress-overlay">
+        <div class="spinner"></div>
+        <span>Generating Excel spreadsheet document...</span>
+      </div>
+
+    </div>
+  </div>
+
+</div>

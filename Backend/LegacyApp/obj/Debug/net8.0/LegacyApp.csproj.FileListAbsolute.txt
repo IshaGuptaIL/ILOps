@@ -1,0 +1,314 @@
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\appsettings.Development.json
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\appsettings.json
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\LegacyApp.staticwebassets.runtime.json
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\LegacyApp.exe
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\LegacyApp.deps.json
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\LegacyApp.runtimeconfig.json
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\LegacyApp.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\LegacyApp.pdb
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\Azure.Core.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\Azure.Identity.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\ClosedXML.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\ClosedXML.Parser.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\DocumentFormat.OpenXml.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\DocumentFormat.OpenXml.Framework.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\EPPlus.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\EPPlus.Interfaces.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\EPPlus.System.Drawing.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\ExcelNumberFormat.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\Humanizer.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.AspNetCore.OpenApi.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.Bcl.AsyncInterfaces.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.CodeAnalysis.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.CodeAnalysis.CSharp.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.CodeAnalysis.CSharp.Workspaces.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.CodeAnalysis.Workspaces.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.Data.SqlClient.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Abstractions.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Design.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Relational.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.SqlServer.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.Extensions.DependencyModel.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.Identity.Client.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.Identity.Client.Extensions.Msal.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.IdentityModel.Abstractions.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.IdentityModel.JsonWebTokens.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.IdentityModel.Logging.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.IO.RecyclableMemoryStream.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.OpenApi.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.SqlServer.Server.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.Win32.SystemEvents.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\Mono.TextTemplating.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\Npgsql.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\RBush.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\SixLabors.Fonts.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\Spire.Pdf.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\Swashbuckle.AspNetCore.Annotations.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\Swashbuckle.AspNetCore.Swagger.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\System.CodeDom.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\System.Composition.AttributedModel.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\System.Composition.Convention.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\System.Composition.Hosting.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\System.Composition.Runtime.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\System.Composition.TypedParts.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\System.Configuration.ConfigurationManager.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\System.Drawing.Common.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\System.IO.Packaging.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\System.Memory.Data.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\System.Runtime.Caching.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\System.Security.Cryptography.ProtectedData.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\System.Security.Permissions.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\System.Windows.Extensions.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\cs\Microsoft.CodeAnalysis.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\de\Microsoft.CodeAnalysis.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\es\Microsoft.CodeAnalysis.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\fr\Microsoft.CodeAnalysis.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\it\Microsoft.CodeAnalysis.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\ja\Microsoft.CodeAnalysis.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\ko\Microsoft.CodeAnalysis.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\pl\Microsoft.CodeAnalysis.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\pt-BR\Microsoft.CodeAnalysis.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\ru\Microsoft.CodeAnalysis.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\cs\Microsoft.CodeAnalysis.CSharp.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\de\Microsoft.CodeAnalysis.CSharp.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\es\Microsoft.CodeAnalysis.CSharp.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\fr\Microsoft.CodeAnalysis.CSharp.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\it\Microsoft.CodeAnalysis.CSharp.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\ja\Microsoft.CodeAnalysis.CSharp.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\ko\Microsoft.CodeAnalysis.CSharp.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\pl\Microsoft.CodeAnalysis.CSharp.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\pt-BR\Microsoft.CodeAnalysis.CSharp.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\ru\Microsoft.CodeAnalysis.CSharp.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.CSharp.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.CSharp.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.CSharp.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\cs\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\de\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\es\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\fr\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\it\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\ja\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\ko\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\pl\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\pt-BR\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\ru\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\cs\Microsoft.CodeAnalysis.Workspaces.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\de\Microsoft.CodeAnalysis.Workspaces.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\es\Microsoft.CodeAnalysis.Workspaces.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\fr\Microsoft.CodeAnalysis.Workspaces.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\it\Microsoft.CodeAnalysis.Workspaces.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\ja\Microsoft.CodeAnalysis.Workspaces.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\ko\Microsoft.CodeAnalysis.Workspaces.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\pl\Microsoft.CodeAnalysis.Workspaces.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\pt-BR\Microsoft.CodeAnalysis.Workspaces.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\ru\Microsoft.CodeAnalysis.Workspaces.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.Workspaces.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\runtimes\unix\lib\net6.0\Microsoft.Data.SqlClient.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\runtimes\win\lib\net6.0\Microsoft.Data.SqlClient.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\runtimes\win-arm\native\Microsoft.Data.SqlClient.SNI.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\runtimes\win-arm64\native\Microsoft.Data.SqlClient.SNI.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\runtimes\win-x64\native\Microsoft.Data.SqlClient.SNI.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\runtimes\win\lib\net6.0\Microsoft.Win32.SystemEvents.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\runtimes\unix\lib\net6.0\System.Drawing.Common.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Drawing.Common.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Runtime.Caching.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\DAL.dll
+D:\LAPP\Backend\LegacyApp\bin\Debug\net8.0\DAL.pdb
+D:\LAPP\Backend\LegacyApp\obj\Debug\net8.0\LegacyApp.csproj.AssemblyReference.cache
+D:\LAPP\Backend\LegacyApp\obj\Debug\net8.0\LegacyApp.GeneratedMSBuildEditorConfig.editorconfig
+D:\LAPP\Backend\LegacyApp\obj\Debug\net8.0\LegacyApp.AssemblyInfoInputs.cache
+D:\LAPP\Backend\LegacyApp\obj\Debug\net8.0\LegacyApp.AssemblyInfo.cs
+D:\LAPP\Backend\LegacyApp\obj\Debug\net8.0\LegacyApp.csproj.CoreCompileInputs.cache
+D:\LAPP\Backend\LegacyApp\obj\Debug\net8.0\LegacyApp.MvcApplicationPartsAssemblyInfo.cs
+D:\LAPP\Backend\LegacyApp\obj\Debug\net8.0\LegacyApp.MvcApplicationPartsAssemblyInfo.cache
+D:\LAPP\Backend\LegacyApp\obj\Debug\net8.0\staticwebassets.build.json
+D:\LAPP\Backend\LegacyApp\obj\Debug\net8.0\staticwebassets.development.json
+D:\LAPP\Backend\LegacyApp\obj\Debug\net8.0\staticwebassets\msbuild.LegacyApp.Microsoft.AspNetCore.StaticWebAssets.props
+D:\LAPP\Backend\LegacyApp\obj\Debug\net8.0\staticwebassets\msbuild.build.LegacyApp.props
+D:\LAPP\Backend\LegacyApp\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.LegacyApp.props
+D:\LAPP\Backend\LegacyApp\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.LegacyApp.props
+D:\LAPP\Backend\LegacyApp\obj\Debug\net8.0\staticwebassets.pack.json
+D:\LAPP\Backend\LegacyApp\obj\Debug\net8.0\scopedcss\bundle\LegacyApp.styles.css
+D:\LAPP\Backend\LegacyApp\obj\Debug\net8.0\LegacyApp.csproj.Up2Date
+D:\LAPP\Backend\LegacyApp\obj\Debug\net8.0\LegacyApp.dll
+D:\LAPP\Backend\LegacyApp\obj\Debug\net8.0\refint\LegacyApp.dll
+D:\LAPP\Backend\LegacyApp\obj\Debug\net8.0\LegacyApp.pdb
+D:\LAPP\Backend\LegacyApp\obj\Debug\net8.0\LegacyApp.genruntimeconfig.cache
+D:\LAPP\Backend\LegacyApp\obj\Debug\net8.0\ref\LegacyApp.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\appsettings.Development.json
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\appsettings.json
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\LegacyApp.staticwebassets.runtime.json
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\LegacyApp.staticwebassets.endpoints.json
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\LegacyApp.exe
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\LegacyApp.deps.json
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\LegacyApp.runtimeconfig.json
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\LegacyApp.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\LegacyApp.pdb
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\Azure.Core.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\Azure.Identity.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\ClosedXML.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\ClosedXML.Parser.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\DocumentFormat.OpenXml.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\DocumentFormat.OpenXml.Framework.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\EPPlus.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\EPPlus.Interfaces.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\EPPlus.System.Drawing.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\ExcelNumberFormat.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\Humanizer.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.AspNetCore.OpenApi.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.Bcl.AsyncInterfaces.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.CodeAnalysis.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.CodeAnalysis.CSharp.Workspaces.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.CodeAnalysis.Workspaces.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.Data.SqlClient.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Abstractions.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Design.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Relational.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.SqlServer.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.Extensions.DependencyModel.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.Identity.Client.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.Identity.Client.Extensions.Msal.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.IdentityModel.Abstractions.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.IdentityModel.Logging.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.IO.RecyclableMemoryStream.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.OpenApi.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.SqlServer.Server.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\Microsoft.Win32.SystemEvents.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\Mono.TextTemplating.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\Npgsql.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\RBush.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\SixLabors.Fonts.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\Spire.Pdf.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\Swashbuckle.AspNetCore.Annotations.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\System.CodeDom.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\System.Composition.AttributedModel.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\System.Composition.Convention.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\System.Composition.Hosting.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\System.Composition.Runtime.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\System.Composition.TypedParts.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\System.Configuration.ConfigurationManager.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\System.Drawing.Common.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\System.IO.Packaging.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\System.Memory.Data.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\System.Runtime.Caching.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\System.Security.Cryptography.ProtectedData.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\System.Security.Permissions.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\System.Windows.Extensions.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\cs\Microsoft.CodeAnalysis.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\de\Microsoft.CodeAnalysis.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\es\Microsoft.CodeAnalysis.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\fr\Microsoft.CodeAnalysis.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\it\Microsoft.CodeAnalysis.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\ja\Microsoft.CodeAnalysis.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\ko\Microsoft.CodeAnalysis.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\pl\Microsoft.CodeAnalysis.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\pt-BR\Microsoft.CodeAnalysis.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\ru\Microsoft.CodeAnalysis.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\cs\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\de\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\es\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\fr\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\it\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\ja\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\ko\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\pl\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\pt-BR\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\ru\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\cs\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\de\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\es\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\fr\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\it\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\ja\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\ko\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\pl\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\pt-BR\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\ru\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\cs\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\de\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\es\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\fr\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\it\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\ja\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\ko\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\pl\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\pt-BR\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\ru\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\runtimes\unix\lib\net6.0\Microsoft.Data.SqlClient.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\runtimes\win\lib\net6.0\Microsoft.Data.SqlClient.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\runtimes\win-arm\native\Microsoft.Data.SqlClient.SNI.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\runtimes\win-arm64\native\Microsoft.Data.SqlClient.SNI.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\runtimes\win-x64\native\Microsoft.Data.SqlClient.SNI.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\runtimes\win\lib\net6.0\Microsoft.Win32.SystemEvents.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\runtimes\unix\lib\net6.0\System.Drawing.Common.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Drawing.Common.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Runtime.Caching.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\DAL.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\bin\Debug\net8.0\DAL.pdb
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\obj\Debug\net8.0\LegacyApp.csproj.AssemblyReference.cache
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\obj\Debug\net8.0\rpswa.dswa.cache.json
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\obj\Debug\net8.0\LegacyApp.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\obj\Debug\net8.0\LegacyApp.AssemblyInfoInputs.cache
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\obj\Debug\net8.0\LegacyApp.AssemblyInfo.cs
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\obj\Debug\net8.0\LegacyApp.csproj.CoreCompileInputs.cache
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\obj\Debug\net8.0\LegacyApp.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\obj\Debug\net8.0\LegacyApp.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\obj\Debug\net8.0\rjimswa.dswa.cache.json
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\obj\Debug\net8.0\rjsmrazor.dswa.cache.json
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\obj\Debug\net8.0\rjsmcshtml.dswa.cache.json
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\obj\Debug\net8.0\scopedcss\bundle\LegacyApp.styles.css
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\obj\Debug\net8.0\staticwebassets.build.json
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\obj\Debug\net8.0\staticwebassets.build.json.cache
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\obj\Debug\net8.0\staticwebassets.development.json
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\obj\Debug\net8.0\staticwebassets.build.endpoints.json
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\obj\Debug\net8.0\swae.build.ex.cache
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\obj\Debug\net8.0\LegacyApp.csproj.Up2Date
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\obj\Debug\net8.0\LegacyApp.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\obj\Debug\net8.0\refint\LegacyApp.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\obj\Debug\net8.0\LegacyApp.pdb
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\obj\Debug\net8.0\LegacyApp.genruntimeconfig.cache
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\LegacyApp\obj\Debug\net8.0\ref\LegacyApp.dll

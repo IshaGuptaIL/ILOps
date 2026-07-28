@@ -1,0 +1,6 @@
+wwwroot\Templates\1er Avis.docx
+wwwroot\Templates\1st Notice.docx
+wwwroot\Templates\2ieme Avis.docx
+wwwroot\Templates\2nd Notice.docx
+wwwroot\Templates\Stock Status-Template-Accessories.xlsx
+wwwroot\Templates\Stock Status-Template.xlsx

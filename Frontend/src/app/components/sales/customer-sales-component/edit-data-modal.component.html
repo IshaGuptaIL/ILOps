@@ -1,0 +1,36 @@
+<div class="modal-backdrop fade show"></div>
+<div class="modal fade show d-block" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" role="document" style="max-width: 95%;">
+    <div class="modal-content access-modal">
+      <div class="modal-header access-header">
+        <h5 class="modal-title">Edit Output Data (Datasheet View)</h5>
+        <button type="button" class="btn-close" (click)="close()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body access-body" style="padding: 0;">
+        <div class="table-responsive" style="max-height: 70vh;">
+          <table class="access-table table-sm">
+            <thead class="sticky-top">
+              <tr>
+                <th *ngFor="let f of fields" [style.min-width]="'150px'">{{ f.label }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of data">
+                <td *ngFor="let f of fields">
+                  <input type="text" 
+                         [ngModel]="getCellData(row, f.fieldName)" 
+                         (ngModelChange)="setCellData(row, f.fieldName, $event)"
+                         class="access-grid-input">
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer access-footer">
+        <button class="btn-access primary-btn" (click)="save()">Save Changes</button>
+        <button class="btn-access" (click)="close()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

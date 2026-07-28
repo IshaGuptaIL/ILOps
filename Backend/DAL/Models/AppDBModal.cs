@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -114,6 +114,9 @@ namespace DAL.Models
 
         public DateTime? PODate { get; set; }
         public int? Created_by { get; set; }
+        public DateTime? Created_date { get; set; }
+        public int? Modified_by { get; set; }
+        public DateTime? Modified_date { get; set; }
     }
 
     public class IMEIStatus
@@ -377,6 +380,9 @@ namespace DAL.Models
         public string? PART_NO { get; set; }
         public string? NUMBER { get; set; }
         public int? Created_by { get; set; }
+        public DateTime? Created_date { get; set; }
+        public int? Modified_by { get; set; }
+        public DateTime? Modified_date { get; set; }
     }
 
         public class tblOpeningBalanceACC
@@ -544,6 +550,10 @@ public class tbIACCBckOrders
         public string GUID { get; set; }      // nvarchar(200)
         public string IMEI { get; set; }      // nvarchar(200)
         public int XLSRow { get; set; }       // int
+        public int? Created_by { get; set; }
+        public DateTime? Created_date { get; set; }
+        public int? Modified_by { get; set; }
+        public DateTime? Modified_date { get; set; }
     }
 
 
@@ -656,6 +666,68 @@ public class tbIACCBckOrders
         public string SendFromName { get; set; }
     }
 
+    [Table("tblErrors")]
+    public class tblErrors
+    {
+        [Key]
+        public int ID { get; set; }
+        public string? VBCode { get; set; }
+        public string? VBDescription { get; set; }
+        public string? PONumber { get; set; }
+        public int? RecNo { get; set; }
+        public string? ErrorWhile { get; set; }
+        public int? RowCount { get; set; }
+        public bool? Resolved { get; set; }
+        public int? Created_by { get; set; }
+        public DateTime? Created_date { get; set; }
+        public int? Modified_by { get; set; }
+        public DateTime? Modified_date { get; set; }
+    }
+
+    [Table("tblIMEILengthExceptions")]
+    public class tblIMEILengthExceptions
+    {
+        [Key]
+        public string ExceptionPart { get; set; } = string.Empty;
+        public int? IMEILength { get; set; }
+        public bool? AllowAlpha { get; set; }
+    }
+
+    [Table("tblAPILog")]
+    public class tblAPILog
+    {
+        [Key]
+        public int ID { get; set; }
+        public int? ServerID { get; set; }
+        public int? CompanyID { get; set; }
+        public string? CallType { get; set; }
+        public string? Endpoint { get; set; }
+        public int? KeyValue { get; set; }
+        public string? SendString { get; set; }
+        public string? Parameters { get; set; }
+        public string? ResponseString { get; set; }
+        public string? FullURLPassed { get; set; }
+        public string? FullURLUsed { get; set; }
+        public int? HTTPStatus { get; set; }
+        public string? HTTPStatusText { get; set; }
+        public string? HeaderResponse { get; set; }
+        public string? HeaderResponseKey { get; set; }
+        public string? HeaderResponseLocation { get; set; }
+        public long? ResponseTime { get; set; }
+        public DateTime? LogDateTime { get; set; } = DateTime.Now;
+    }
+
+    [Table("tblSettings")]
+    public class tblSettings
+    {
+        [Key]
+        public int ID { get; set; }
+        public bool? LoggingEnabled { get; set; }
+        public bool? LogResponseData { get; set; }
+        public int? LogResponseMaxSize { get; set; }
+        public bool? PopUpEnabled { get; set; }
+    }
+
 
     public class WWSerialNumber
     {
@@ -706,12 +778,96 @@ public class tbIACCBckOrders
     public class tblSKU
     {
         [Key]
-        public int ID { get; set; }
         public string SKU { get; set; }
         public string Type { get; set; }
+        public int? CreatedBy { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public int? ModifiedBy { get; set; }
+        public DateTime? ModifiedDate { get; set; }
     }
 
- 
+    public class dbo_t_orderimport
+    {
+        [Key]
+        public int Id { get; set; }
+        public int ImportId { get; set; }
+
+        [NotMapped]
+        public int? order_import_id { get; set; }
+
+        // Company & Contact Info
+        public string? company_name { get; set; }
+        public string? shipping_company_name { get; set; }
+        public string? shipping_contact_name { get; set; }
+        public string? bus_tel { get; set; }
+        public string? rogers_cell_number { get; set; }
+        public string? user_name { get; set; }
+
+        // Order Details
+        public DateTime? OrderDate { get; set; }
+        public string? voice_date_label { get; set; }
+        public string? whse { get; set; }
+        public string orderID { get; set; }
+        public string? bulk_orderid { get; set; }
+        public string? org_web_orderID { get; set; }
+        public string? AccountNumber { get; set; }
+
+        public string? imported { get; set; }
+        public string? invoice_no { get; set; }
+        public bool? ChargedOnCreditCard { get; set; }
+        public bool? CreditCardPosted { get; set; }
+        public string? CreditCardAppliedTo { get; set; }
+        public int? cctypeID { get; set; }
+        public string? CreditCardTransaction { get; set; }
+
+        // Product & Hardware Details
+        public string? bvpartno { get; set; }
+        public string? imei { get; set; }
+        public int? qty { get; set; }
+        public decimal? phone_cost { get; set; }
+
+        // Address Info
+        public string? shipping_address { get; set; }
+        public string? address { get; set; }
+        public string? city { get; set; }
+        public string? shipping_city { get; set; }
+        public string? shippingprovincename { get; set; }
+        public string? hardwareprovincename { get; set; }
+        public string? shipping_postal { get; set; }
+        public string? postal { get; set; }
+
+        // Flags & Configuration
+        public string? fff_commision { get; set; }
+        public string? commission_part_no { get; set; }
+        public string? hardware_billed_by_rogers { get; set; }
+        public int? data_version { get; set; }
+        public int? nds_chanelID { get; set; }
+        public string? nds_channel_name { get; set; }
+        public string? bv_territory_code { get; set; }
+        public int? hardware_payment_methodID { get; set; }
+        public string? hardware_country_code { get; set; }
+        public string? shipping_country_code { get; set; }
+        public bool? ReadyToImport { get; set; }
+        public bool? BackOrder { get; set; }
+        public int? DeviceOfferTypeID { get; set; }
+        public decimal? UpfrontEdgePrice { get; set; }
+        public string? V21DealerCode { get; set; }
+        public decimal? gst_percent { get; set; }
+        public decimal? pst_percent { get; set; }
+        public string? authorized_cost_centre { get; set; }
+        public string? cost_centre_display_name { get; set; }
+
+        // Audit Tracking Columns
+        public int? CreatedBy { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public int? ModifiedBy { get; set; }
+        public DateTime? ModifiedDate { get; set; }
+    }
+
+
+
+
+
     public class tblAdvantageSettings
     {
         [Key]
@@ -749,6 +905,10 @@ public class tbIACCBckOrders
         public string IMEI { get; set; }          // IMEI (varchar(20))
         public int XLSRow { get; set; }           // Excel row number
         public DateTime CreatedOn { get; set; }
+        public int? Created_by { get; set; }
+        public DateTime? Created_date { get; set; }
+        public int? Modified_by { get; set; }
+        public DateTime? Modified_date { get; set; }
     }
 
     public class SalesActivationsDetail
@@ -1349,5 +1509,492 @@ public class hardwarereceived
 
 
 
+    [Table("tblBulkChangeList")]
+    public class tblBulkChangeList
+    {
+        [Key]
+        public int ID { get; set; }
+        public string InvoiceNo { get; set; }
 
+        public string CreatedBy { get; set; }
+        public DateTime? CreatedDate { get; set; }
+    }
+    [Table("tblTaxCodeHistory")]
+    public class TaxCodeHistory
+    {
+        [Key]
+        public int Id { get; set; }
+        public string ProvCode { get; set; }
+        public string ProvinceName { get; set; }
+        public decimal Tax1Rate { get; set; }
+        public decimal Tax2Rate { get; set; }
+        public string TaxType { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        public string Comments { get; set; }
+        public bool CompoundTax2OnTax1 { get; set; }
+    }
+
+    [Table("tblTaxDataOutput")]
+    public class TblTaxDataOutput
+    {
+        [Key]
+        public int ID { get; set; }
+        public int? Trans { get; set; }
+        public DateTime? InvDate { get; set; }
+        public string? Invoice { get; set; }
+        public string? WebOrderID { get; set; }
+        public string? Source { get; set; }
+        public string? CustNo { get; set; }
+        public string? CustName { get; set; }
+        public string? Territory { get; set; }
+        public string? ShipToProvince { get; set; }
+        public string? PostalDigit { get; set; }
+        public string? OneIMEI { get; set; }
+        public int? Tax1Code { get; set; }
+        public string? Tax1Name { get; set; }
+        public string? Tax1GL { get; set; }
+        public int? Tax2Code { get; set; }
+        public string? Tax2Name { get; set; }
+        public string? Tax2GL { get; set; }
+        public decimal? InvoiceNet { get; set; }
+        public decimal? Tax1Total { get; set; }
+        public decimal? Tax2Total { get; set; }
+        public decimal? ShippingAmt { get; set; }
+        public decimal? InvoiceTotalBeforeUERVValue { get; set; }
+        public decimal? UERVValue { get; set; }
+        public decimal? InvoiceTotal { get; set; }
+        public decimal? TotalOfExtendedSell { get; set; }
+        public decimal? CalcTax1 { get; set; }
+        public decimal? CalcTax2 { get; set; }
+    }
+
+    [Table("tblGLTransToTaxAccounts")]
+    public class TblGLTransToTaxAccounts
+    {
+        [Key]
+        public int ID { get; set; }
+        public string Tran_Date { get; set; }
+        public string Post_Date { get; set; }
+        public string Acct_No { get; set; }
+        public int? Trans_No { get; set; }
+        public string Where_From { get; set; }
+        public string GL_User { get; set; }
+        public string BVGLMEMOWHO { get; set; }
+        public string BVRESERVED11 { get; set; }
+        public string BVGLMEMOKEY { get; set; }
+        public string BVRESERVED13 { get; set; }
+        public string BVGLMEMOTRAN { get; set; }
+        public string BVRESERVED15 { get; set; }
+        public string MF_Who { get; set; }
+        public string MF_Key { get; set; }
+        public string MF_Tran { get; set; }
+        public decimal? Debit_Amt { get; set; }
+        public decimal? Credit_Amt { get; set; }
+    }
+
+    [Table("tblTaxAccounts")]
+    public class tblTaxAccounts
+    {
+        [Key]
+        public int ID { get; set; }
+        public string GL_ACCOUNT { get; set; }
+    }
+
+    [Table("WWGLTrans")]
+    public class WWGLTrans
+    {
+        [Key]
+        public int ID { get; set; }
+        public int? Trans_No { get; set; }
+        public string Tran_Date { get; set; }
+        public string GL_Memo { get; set; }
+        public string Acct_No { get; set; }
+        public string Where_From { get; set; }
+        public string GL_User { get; set; }
+        public decimal? Debit_Amt { get; set; }
+        public decimal? Credit_Amt { get; set; }
+        public string Source { get; set; }
+    }
+
+    [Table("tbl21410Summary")]
+    public class Tbl21410Summary
+    {
+        [Key]
+        public int TransNo { get; set; }
+        public System.DateTime? TransDate { get; set; }
+        public string Vendor { get; set; }
+        public string User { get; set; }
+        public decimal? ITCAmount { get; set; }
+        public decimal? ExpenseAmount { get; set; }
+        public string ExpenseAccounts { get; set; }
+        public string Source { get; set; }
+        public string InvoiceRef { get; set; }
+        public string Memo { get; set; }
+        public string ExpenseAccountsDesc { get; set; }
+    }
+    [Table("tblCustomerSalesOutput")]
+    public class TblCustomerSalesOutput
+    {
+        [Key]
+        public int Id { get; set; }
+        public string? WebOrderID { get; set; }
+        public string? Invoice { get; set; }
+        public DateTime? InvoiceDate { get; set; }
+        public string? VoicePlanDescription { get; set; }
+        public string? DataPlanDescription { get; set; }
+        public string? CellPhoneNo { get; set; }
+        public string? UserName { get; set; }
+        public string? PONo { get; set; }
+        public string? CostBudgetCode { get; set; }
+        public string? PartNumber { get; set; }
+        public string? HardwareDescription { get; set; }
+        public int? HDWQty { get; set; }
+        public string? IMEIESN { get; set; }
+        public string? AccParts { get; set; }
+        public string? AccessoryDescription { get; set; }
+        public string? AccQtys { get; set; }
+        public string? ShipToProvince { get; set; }
+        public decimal? InvoiceNet { get; set; }
+        public decimal? InvoiceShipping { get; set; }
+        public decimal? InvoiceTaxes { get; set; }
+        public decimal? InvoiceTotal { get; set; }
+        public string? CustGroup { get; set; }
+        public string? CustNO { get; set; }
+        public string? TypeOfService { get; set; }
+        public string? PinNumber { get; set; }
+        public decimal? HSTGST { get; set; }
+        public decimal? PSTQST { get; set; }
+        public string? MSDCode { get; set; }
+        public string? CustomerName { get; set; }
+        public string? Territory { get; set; }
+        public string? AccountCode { get; set; }
+        public string? AuthorizedDepartment { get; set; }
+        public string? ShipToAddress { get; set; }
+        public string? ShipToStreetAddress { get; set; }
+        public string? ShipToCity { get; set; }
+        public string? ShipToPostal { get; set; }
+        public decimal? GSTRate { get; set; }
+        public decimal? PSTRate { get; set; }
+        public string? GSTFlag { get; set; }
+        public string? PSTFlag { get; set; }
+        public int? Tax1Code { get; set; }
+        public int? Tax2Code { get; set; }
+        public string? PortedCTN { get; set; }
+        public string? BulkOrderID { get; set; }
+        public decimal? HardwareCharge { get; set; }
+        public decimal? AccessoryCharge { get; set; }
+        public string? ARStatus { get; set; }
+        public decimal? UserPayAmount { get; set; }
+        public string? UserPayMethod { get; set; }
+        public decimal? Balance { get; set; }
+        public int UserId { get; set; }
+        public int? CreatedBy { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public int? ModifiedBy { get; set; }
+        public DateTime? ModifiedDate { get; set; }
+    }
+    [Table("tblCustomerColumns")]
+    public class TblCustomerColumns
+    {
+        [Key]
+        public int Id { get; set; }
+        public string CustomerGroup { get; set; }
+        public string FieldName { get; set; }
+        public string Label { get; set; }
+        public bool Include { get; set; }
+        public int Sequence { get; set; }
+        public string? SummaryType { get; set; }
+        public string? FormatString { get; set; }
+        public int? Level { get; set; }
+        //public int? CreatedBy { get; set; }
+        //public DateTime? CreatedDate { get; set; }
+        //public int? ModifiedBy { get; set; }
+        //public DateTime? ModifiedDate { get; set; }
+    }
+
+    [Table("tblCustomerGroups")]
+    public class TblCustomerGroups
+    {
+        [Key]
+        public int Id { get; set; }
+        public string CustGroup { get; set; }
+        public string BVCustNo { get; set; }
+        public string GroupName { get; set; }
+        public string BVName { get; set; }
+        public int? CreatedBy { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public int? ModifiedBy { get; set; }
+        public DateTime? ModifiedDate { get; set; }
+    }
+
+    [Table("tblEventTypes")]
+    public class TblEventTypes
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int EventType { get; set; }
+        public string EventDescription { get; set; } = string.Empty;
+        public bool HasTrans { get; set; }
+        public int? CreatedBy { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public int? ModifiedBy { get; set; }
+        public DateTime? ModifiedDate { get; set; }
+    }
+
+    [Table("tblRootCauses")]
+    public class TblRootCauses
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int Code { get; set; }
+        public string Description { get; set; } = string.Empty;
+        public int? CreatedBy { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public int? ModifiedBy { get; set; }
+        public DateTime? ModifiedDate { get; set; }
+    }
+
+    [Table("tblTerritoryGroups")]
+    public class TblTerritoryGroups
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int ID { get; set; }
+        public string GroupName { get; set; } = string.Empty;
+        public string? GroupCriteria { get; set; }
+        public int? SortOrder { get; set; }
+        public string? Phone1 { get; set; }
+        public string? Phone2 { get; set; }
+        public bool RogersReporting { get; set; }
+        public string? RogersReportingName { get; set; }
+        public int? CreatedBy { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public int? ModifiedBy { get; set; }
+        public DateTime? ModifiedDate { get; set; }
+    }
+
+    [Table("tblAllowedAccounts")]
+    public class TblAllowedAccounts
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int ID { get; set; }
+        public string Account { get; set; } = string.Empty;
+        public int? CreatedBy { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public int? ModifiedBy { get; set; }
+        public DateTime? ModifiedDate { get; set; }
+    }
+
+    [Table("tblEvents")]
+    public class TblEvents
+    {
+        [Key]
+        public int ID { get; set; }
+        public int EventType { get; set; }
+        public string? CustNo { get; set; }
+        public string? CustType { get; set; }
+        public string? EventText { get; set; }
+        public double? EventAmount { get; set; }
+        public string? CommentKey { get; set; }
+        public DateTime? AddDate { get; set; }
+        public string? AddUser { get; set; }
+        public DateTime? ModDate { get; set; }
+        public string? ModUser { get; set; }
+        //public string? CreatedBy { get; set; }
+        //public DateTime? CreatedDate { get; set; }
+        //public int? ModifiedBy { get; set; }
+        //public DateTime? ModifiedDate { get; set; }
+    }
+
+    [Table("tblEventTrans")]
+    public class TblEventTrans
+    {
+        [Key]
+        public int ID { get; set; }
+        public int EventID { get; set; }
+        public string TransNo { get; set; } = string.Empty;
+        //public int? CreatedBy { get; set; }
+        //public DateTime? CreatedDate { get; set; }
+        //public int? ModifiedBy { get; set; }
+        //public DateTime? ModifiedDate { get; set; }
+    }
+
+    [Table("tblARDetailExtra")]
+    public class TblARDetailExtra
+    {
+        [Key]
+        public int ID { get; set; }
+        public string? TransNo { get; set; } = string.Empty;
+        public string? BAN { get; set; }
+        public DateTime? FirstNoticeDate { get; set; }
+        public decimal? FirstNoticeBalance { get; set; }
+        public DateTime? SecondNoticeDate { get; set; }
+        public decimal? SecondNoticeBalance { get; set; }
+        public byte? RootCauseID { get; set; }
+        public byte? NextID { get; set; }
+        public bool OPCResolved { get; set; }
+        public string? OPCDescription { get; set; }
+        public string? BulkID { get; set; }
+        public bool BulkIDChecked { get; set; }
+        public bool IgnoreGroup { get; set; }
+        public string? BillToCust { get; set; }
+        public int? CreatedBy { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public int? ModifiedBy { get; set; }
+        public DateTime? ModifiedDate { get; set; }
+    }
+
+    [Table("tblBulkCustomers")]
+    public class TblBulkCustomers
+    {
+        [Key]
+        public int ID { get; set; }
+        public string CustNo { get; set; } = string.Empty;
+        public int? CreatedBy { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public int? ModifiedBy { get; set; }
+        public DateTime? ModifiedDate { get; set; }
+    }
+
+    [Table("tblCustomerGroupsRR")]
+    public class TblCustomerGroupsRR
+    {
+        [Key]
+        public int Id { get; set; }
+        public string CustGroup { get; set; } = string.Empty;
+        public string? GroupName { get; set; }
+        public string BVCustNo { get; set; } = string.Empty;
+        public string? BVName { get; set; }
+        public int? CreatedBy { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public int? ModifiedBy { get; set; }
+        public DateTime? ModifiedDate { get; set; }
+    }
+
+    [Table("tblCustomersOpen")]
+    public class TblCustomersOpen
+    {
+        [Key]
+        public int Id { get; set; }
+        public string CUST { get; set; } = string.Empty;
+        public string? CustName { get; set; }
+        public string? CustGroup { get; set; }
+        public bool GroupAndSingle { get; set; }
+        public string? SALES_TERR { get; set; }
+        public string? PostalCode { get; set; }
+        public string? BVADDRTELNO1 { get; set; }
+        public string? BVADDREMAIL { get; set; }
+        public string? BVCOCONTACT1NAME { get; set; }
+        public string? BVCOCONTACT1TEL1 { get; set; }
+        public string? BVCOCONTACT1EMAIL { get; set; }
+        public string? BVCOCONTACT2NAME { get; set; }
+        public string? BVCOCONTACT2TEL1 { get; set; }
+        public string? BVCOCONTACT2EMAIL { get; set; }
+        public string? BVCOCONTACT3NAME { get; set; }
+        public string? BVCOCONTACT3TEL1 { get; set; }
+        public string? BVCOCONTACT3EMAIL { get; set; }
+        public string? Language { get; set; }
+        public int? ChannelID { get; set; }
+        public int? AddressID { get; set; }
+        public int UserId { get; set; }
+        public int? CreatedBy { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public int? ModifiedBy { get; set; }
+        public DateTime? ModifiedDate { get; set; }
+    }
+
+    [Table("ARDetailView")]
+    public class TblARDetailView
+    {
+        [Key]
+        public int Id { get; set; }
+        public string? CustGroup { get; set; }
+        public string CUST { get; set; } = string.Empty;
+        public string? FOLIO { get; set; }
+        public string? TopItem { get; set; }
+        public string? Type { get; set; }
+        public string TRANS_NO { get; set; } = string.Empty;
+        public string? REF_NO { get; set; }
+        public DateTime? TranDate { get; set; }
+        public decimal D_AMOUNT { get; set; }
+        public decimal C_AMOUNT { get; set; }
+        public decimal BALANCE { get; set; }
+        public int? DaysOld { get; set; }
+        public bool Checked { get; set; }
+        public int? ARID { get; set; }
+        public int UserId { get; set; }
+        public int? CreatedBy { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public int? ModifiedBy { get; set; }
+        public DateTime? ModifiedDate { get; set; }
+    }
+
+    [Table("tblARDetailViewFull")]
+    public class TblARDetailViewFull
+    {
+        [Key]
+        public int Id { get; set; }
+        public string? CustGroup { get; set; }
+        public string CUST { get; set; } = string.Empty;
+        public string? FOLIO { get; set; }
+        public string? TopItem { get; set; }
+        public string? Type { get; set; }
+        public string TRANS_NO { get; set; } = string.Empty;
+        public string? REF_NO { get; set; }
+        public DateTime? TranDate { get; set; }
+        public decimal D_AMOUNT { get; set; }
+        public decimal C_AMOUNT { get; set; }
+        public decimal BALANCE { get; set; }
+        public int? DaysOld { get; set; }
+        public bool Checked { get; set; }
+        public int? ARID { get; set; }
+        public int UserId { get; set; }
+        public int? CreatedBy { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public int? ModifiedBy { get; set; }
+        public DateTime? ModifiedDate { get; set; }
+    }
+
+    [Table("tblActivationsLookup")]
+    public class TblActivationsLookup
+    {
+        [Key]
+        public int Id { get; set; }
+        public string Invoice { get; set; } = string.Empty;
+        public DateTime? InvoiceDate { get; set; }
+        public int? MaxOfID { get; set; }
+        public string? Customer { get; set; }
+        public string? ActivationsTerritory { get; set; }
+        public string? MSD { get; set; }
+        public string? WebOrderID { get; set; }
+        public string? CustomerPostal { get; set; }
+        public string? ShipToPostal { get; set; }
+        public string? CostBudgetCode { get; set; }
+        public string? CustomerPONo { get; set; }
+        public string? UserName { get; set; }
+        public string? CellPhoneNo { get; set; }
+        public decimal? CountGovChannel { get; set; }
+        public decimal? CountGovFee { get; set; }
+        public int UserId { get; set; }
+        public int? CreatedBy { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public int? ModifiedBy { get; set; }
+        public DateTime? ModifiedDate { get; set; }
+    }
+
+    [Table("tblUsers")]
+    public class TblUsers
+    {
+        [Key]
+        public int ID { get; set; }
+        public string DomainUser { get; set; } = string.Empty;
+        public string? Initials { get; set; }
+        public int? DefaultChannel { get; set; }
+        public int? CreatedBy { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public int? ModifiedBy { get; set; }
+        public DateTime? ModifiedDate { get; set; }
+    }
 }

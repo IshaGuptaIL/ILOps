@@ -1,0 +1,385 @@
+:host {
+  --bg-primary: #f0f0f0;      /* Access background */
+  --bg-secondary: #e8e8e8;    /* Access panel */
+  --bg-tertiary: #eaeaea;     /* Access table header */
+  --border-color: #aaa;
+  --text-primary: #000;       /* Black text */
+  --accent-navy: #000080;     /* Navy blue for highlights */
+  
+  display: block;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 10px;
+}
+
+.groups-form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Access style Header mimicking Access Form Header */
+.access-form-header {
+  background-color: var(--accent-navy); /* Flat Navy Blue */
+  color: white;
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 2px solid #000040;
+}
+
+.header-icon {
+  color: white;
+  font-size: 14px;
+}
+
+.header-info h2 {
+  margin: 0;
+  font-size: 13px;
+  color: white;
+  font-weight: bold;
+}
+
+.header-info .subtitle {
+  font-size: 10px;
+  color: #dfdfdf;
+  margin: 0;
+}
+
+/* Group Type Bar styling */
+.group-type-bar {
+  background-color: #dfdfdf;
+  border: 1px solid var(--border-color);
+  padding: 6px 10px;
+  display: flex;
+  align-items: center;
+}
+
+.selector-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.selector-label {
+  font-size: 11px;
+  font-weight: bold;
+  color: #333;
+}
+
+.access-dropdown {
+  font-size: 11px;
+  padding: 2px 4px;
+  border: 1px solid #888;
+  background-color: #fff;
+  color: #000;
+  outline: none;
+}
+
+/* 3-Pane Side-by-Side Datasheet Grid Layout */
+.panes-container {
+  display: flex;
+  gap: 12px;
+  margin-top: 5px;
+}
+
+.pane {
+  flex: 1;
+  min-width: 0; /* Prevents overflow */
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  border: 1px solid var(--border-color);
+  box-shadow: inset 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+.pane-header {
+  background-color: #dfdfdf;
+  border-bottom: 1px solid var(--border-color);
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: bold;
+  color: var(--accent-navy);
+}
+
+.pane-table-wrapper {
+  height: 380px;
+  overflow-y: auto;
+  background-color: #fff;
+}
+
+/* Grid Table Styles */
+.access-grid-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.access-grid-table th {
+  background-color: var(--bg-tertiary);
+  border-right: 1px solid #ccc;
+  border-bottom: 1px solid #aaa;
+  padding: 3px 6px;
+  text-align: left;
+  font-weight: bold;
+  font-size: 11px;
+  color: #000;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  user-select: none;
+}
+
+.access-grid-table td {
+  padding: 3px 6px;
+  border-right: 1px solid #ddd;
+  border-bottom: 1px solid #eee;
+  font-size: 11px;
+  color: #000;
+  vertical-align: middle;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.access-grid-table tbody tr:hover {
+  background-color: #f2f7ff;
+}
+
+/* Row selector indicator mimicking Access */
+.row-selector-hdr {
+  background-color: #dfdfdf !important;
+  border-right: 1px solid #bbb !important;
+  width: 20px;
+  padding: 3px 2px !important;
+  text-align: center !important;
+}
+
+.row-selector-cell {
+  background-color: #dfdfdf;
+  border-right: 1px solid #bbb;
+  color: var(--accent-navy);
+  font-size: 9px;
+  text-align: center;
+  width: 20px;
+  font-weight: bold;
+  user-select: none;
+}
+
+/* Highlight Selected Row in Navy Blue, with white text (VBA Parity) */
+.selected-row td {
+  background-color: var(--accent-navy) !important;
+  color: #fff !important;
+}
+
+.selected-row .row-selector-cell {
+  background-color: #bbb !important;
+  color: #000 !important;
+}
+
+.empty-text {
+  padding: 15px !important;
+  color: #666;
+  font-style: italic;
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-center {
+  text-align: center;
+}
+
+/* Delete button in lists */
+.remove-action-btn {
+  background: none;
+  border: none;
+  color: #cc0000;
+  cursor: pointer;
+  padding: 2px 4px;
+  font-size: 11px;
+}
+
+.remove-action-btn:hover {
+  color: #ff0000;
+  transform: scale(1.1);
+}
+
+/* Bottom Actions Panel Container */
+.bottom-actions-container {
+  display: flex;
+  gap: 15px;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  padding: 10px;
+  margin-top: 5px;
+}
+
+.action-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.action-box {
+  background-color: #f7f7f7;
+  border: 1px solid #ccc;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+/* Access style raised button */
+.access-action-btn {
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: bold;
+  color: #000;
+  background-color: #dfdfdf;
+  border: 1px solid #777;
+  border-radius: 2px;
+  padding: 5px 10px;
+  cursor: pointer;
+  text-align: center;
+  box-shadow: inset 1px 1px 0 #fff, 1px 1px 2px rgba(0,0,0,0.15);
+  outline: none;
+  white-space: nowrap;
+}
+
+.access-action-btn:hover {
+  background-color: #e5e5e5;
+}
+
+.access-action-btn:active {
+  box-shadow: inset 1px 1px 2px rgba(0,0,0,0.25);
+  background-color: #d0d0d0;
+}
+
+.primary-action {
+  background-color: #d1ecf1; /* Light Blue-Cyan */
+  border-color: #8bc3eb;
+}
+
+.primary-action:hover {
+  background-color: #bbeeeb;
+}
+
+.secondary-action {
+  background-color: #e2e3e5;
+  border-color: #bbb;
+}
+
+.danger-action {
+  background-color: #f8d7da; /* Light Red tint */
+  border-color: #f5c6cb;
+  color: #721c24;
+  white-space: normal;
+}
+
+.danger-action:hover {
+  background-color: #f5c2c7;
+}
+
+/* Fields & Forms elements */
+.form-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.form-row-full {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: bold;
+  color: #333;
+}
+
+.field-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.field-item label {
+  font-size: 11px;
+  font-weight: bold;
+  color: #333;
+  white-space: nowrap;
+}
+
+.access-text-input {
+  font-family: inherit;
+  font-size: 11px;
+  padding: 2px 4px;
+  border: 1px solid #999;
+  background-color: #fff;
+  color: #000;
+  width: 90px;
+  box-sizing: border-box;
+}
+
+.access-text-input.full-width {
+  width: 100%;
+}
+
+.access-text-input:focus {
+  border-color: var(--accent-navy);
+  outline: none;
+  background-color: #ffffdd; /* Yellow highlight on focus */
+}
+
+.access-text-input:disabled {
+  background-color: #eee;
+  color: #888;
+  border-color: #ccc;
+}
+
+.access-checkbox {
+  margin: 0;
+  cursor: pointer;
+}
+
+/* Info Description Label */
+.description-label {
+  font-size: 10px;
+  line-height: 1.4;
+  color: #555;
+  background-color: #ffffe0; /* Pale yellow */
+  border: 1px dashed #ccc;
+  padding: 6px 8px;
+  text-align: justify;
+}
+
+/* Helper Utilities */
+.mt-2 {
+  margin-top: 5px;
+}
+
+.mt-3 {
+  margin-top: 8px;
+}

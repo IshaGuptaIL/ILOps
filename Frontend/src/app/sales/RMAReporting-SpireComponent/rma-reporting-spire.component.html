@@ -1,0 +1,37 @@
+<div class="ms-access-mdi">
+  <!-- MDI Title Bar -->
+  <div class="mdi-titlebar">
+    <span class="mdi-title">RMA Reporting Spire Module</span>
+    
+  </div>
+
+  <!-- MDI Toolbar / Switchboard Buttons -->
+  <div class="mdi-toolbar">
+    <div class="toolbar-group">
+      <button class="ms-btn" (click)="onMenuClick('importData')">Import Rogers CM And RMA data</button>
+      <button class="ms-btn" (click)="onMenuClick('reports')">Reports</button>
+      <button class="ms-btn" (click)="onMenuClick('utilities')">Utilities</button>
+      <button class="ms-btn" (click)="onMenuClick('imeiSearch')">IMEI Search</button>
+    </div>
+  
+  </div>
+
+  <!-- MDI Workspace Area -->
+  <div class="mdi-workspace">
+    <app-rogers-report-import *ngIf="activeMenu === 'importData'"></app-rogers-report-import>
+    
+    <!-- Placeholders for other menus -->
+    <div *ngIf="activeMenu === 'reports'" class="placeholder-content">
+      <h2>Reports Screen</h2>
+      <p>This module is under construction.</p>
+    </div>
+    <div *ngIf="activeMenu === 'utilities'" class="placeholder-content">
+      <h2>Utilities Screen</h2>
+      <p>This module is under construction.</p>
+    </div>
+    <div *ngIf="activeMenu === 'imeiSearch'" class="placeholder-content">
+      <h2>IMEI Search Screen</h2>
+      <p>This module is under construction.</p>
+    </div>
+  </div>
+</div>

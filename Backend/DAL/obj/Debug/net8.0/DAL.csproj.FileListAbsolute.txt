@@ -1,0 +1,28 @@
+D:\LAPP\Backend\DAL\obj\Debug\net8.0\DAL.csproj.AssemblyReference.cache
+D:\LAPP\Backend\DAL\obj\Debug\net8.0\DAL.GeneratedMSBuildEditorConfig.editorconfig
+D:\LAPP\Backend\DAL\obj\Debug\net8.0\DAL.AssemblyInfoInputs.cache
+D:\LAPP\Backend\DAL\obj\Debug\net8.0\DAL.AssemblyInfo.cs
+D:\LAPP\Backend\DAL\obj\Debug\net8.0\DAL.csproj.CoreCompileInputs.cache
+D:\LAPP\Backend\DAL\bin\Debug\net8.0\DAL.deps.json
+D:\LAPP\Backend\DAL\bin\Debug\net8.0\DAL.runtimeconfig.json
+D:\LAPP\Backend\DAL\bin\Debug\net8.0\DAL.dll
+D:\LAPP\Backend\DAL\bin\Debug\net8.0\DAL.pdb
+D:\LAPP\Backend\DAL\obj\Debug\net8.0\DAL.dll
+D:\LAPP\Backend\DAL\obj\Debug\net8.0\refint\DAL.dll
+D:\LAPP\Backend\DAL\obj\Debug\net8.0\DAL.pdb
+D:\LAPP\Backend\DAL\obj\Debug\net8.0\DAL.genruntimeconfig.cache
+D:\LAPP\Backend\DAL\obj\Debug\net8.0\ref\DAL.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\DAL\bin\Debug\net8.0\DAL.deps.json
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\DAL\bin\Debug\net8.0\DAL.runtimeconfig.json
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\DAL\bin\Debug\net8.0\DAL.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\DAL\bin\Debug\net8.0\DAL.pdb
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\DAL\obj\Debug\net8.0\DAL.csproj.AssemblyReference.cache
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\DAL\obj\Debug\net8.0\DAL.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\DAL\obj\Debug\net8.0\DAL.AssemblyInfoInputs.cache
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\DAL\obj\Debug\net8.0\DAL.AssemblyInfo.cs
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\DAL\obj\Debug\net8.0\DAL.csproj.CoreCompileInputs.cache
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\DAL\obj\Debug\net8.0\DAL.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\DAL\obj\Debug\net8.0\refint\DAL.dll
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\DAL\obj\Debug\net8.0\DAL.pdb
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\DAL\obj\Debug\net8.0\DAL.genruntimeconfig.cache
+C:\Users\igupta\OneDrive - Kilobytes Data Solutions Inc\Desktop\Isha_Latest_Code\Backend\DAL\obj\Debug\net8.0\ref\DAL.dll

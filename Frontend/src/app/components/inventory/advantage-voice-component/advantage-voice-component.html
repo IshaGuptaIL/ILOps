@@ -1,5 +1,23 @@
 <div class="advantage-voice-page">
-  <div class="vba-form-container">
+  <!-- View Navigation Menu -->
+  <div class="view-navigation">
+    <div class="menu-card">
+      <div class="menu-title">Advantage Voice Operations</div>
+      <div class="menu-buttons">
+        <button [class.active]="currentView === 'import'" (click)="currentView = 'import'">
+          Advantage Voice Import <span>➜</span>
+        </button>
+        <button [class.active]="currentView === 'sku'" (click)="currentView = 'sku'">
+          SKU Management <span>➜</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <hr class="view-divider" />
+
+  <!-- Import View -->
+  <div class="vba-form-container" *ngIf="currentView === 'import'">
     <!-- Blue Header Bar -->
     <div class="form-header">
       Import - Advantage Voice
@@ -106,6 +124,9 @@
       </div>
     </div>
   </div>
+
+  <!-- SKU Management View -->
+  <app-sku-management *ngIf="currentView === 'sku'"></app-sku-management>
 
   <!-- VBA Style Loader -->
 

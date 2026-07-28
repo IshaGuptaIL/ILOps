@@ -1,0 +1,326 @@
+<div class="access-container">
+  
+  <!-- Outer Window Title -->
+  <div class="form-title-bar">
+    Price Protection Claims
+  </div>
+
+  <div class="form-body-wrapper">
+    <!-- Main Form Panel -->
+    <div class="access-form-main">
+
+      <!-- TOP SECTION: Two Columns Side-by-Side -->
+      <div class="two-column-layout">
+        
+        <!-- LEFT COLUMN: Onhand Claim -->
+        <div class="form-column">
+          <div class="column-title">Generate PP Claim Based on Onhand Qty at Specific Date</div>
+          
+          <div class="form-group-row">
+            <div class="form-label-cell">Part Number:</div>
+            <div class="form-input-cell">
+              <select class="form-select-control" [(ngModel)]="selectedSku" (change)="onSkuChange()">
+                <option value="">-- Select SKU --</option>
+                <option *ngFor="let item of skus" [value]="item.sku">{{ item.sku }}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group-row">
+            <div class="form-label-cell">Description:</div>
+            <div class="form-input-cell">
+              <input type="text" class="form-input-control readonly" [value]="description" readonly />
+            </div>
+          </div>
+
+          <div class="form-group-row">
+            <div class="form-label-cell">Onhand at Start of Date:</div>
+            <div class="form-input-cell">
+              <input type="date" class="form-input-control" [(ngModel)]="onhandDate" />
+            </div>
+          </div>
+
+          <div class="form-group-row justify-center-btn">
+            <button class="access-glossy-btn" (click)="loadOnhandData()">Load Data</button>
+          </div>
+
+          <hr class="column-divider" />
+
+          <div class="form-group-row">
+            <div class="form-label-cell">Price Before:</div>
+            <div class="form-input-cell">
+              <input type="number" class="form-input-control text-right" [(ngModel)]="priceBefore" min="0" step="0.01" />
+            </div>
+          </div>
+
+          <div class="form-group-row">
+            <div class="form-label-cell">Price After:</div>
+            <div class="form-input-cell">
+              <input type="number" class="form-input-control text-right" [(ngModel)]="priceAfter" min="0" step="0.01" />
+            </div>
+          </div>
+
+          <div class="form-group-row justify-center-btn">
+            <button class="access-glossy-btn" (click)="processOnhandClaim()">Process</button>
+          </div>
+
+          <div class="form-group-row text-align-left mt-2">
+            <div class="form-label-cell">Status:</div>
+          </div>
+          <div class="form-group-row">
+            <input type="text" class="form-input-control status-text readonly" [value]="statusOnhand" readonly />
+          </div>
+
+        </div>
+
+        <!-- VERTICAL DIVIDER -->
+        <div class="vertical-divider-line"></div>
+
+        <!-- RIGHT COLUMN: Single Receipt -->
+        <div class="form-column">
+          <div class="column-title">Generate PP Claim Based on single Receipt</div>
+          
+          <div class="receipt-inputs-container">
+            <div class="receipt-fields">
+              
+              <div class="form-group-row">
+                <div class="form-label-cell">BV Receipt:</div>
+                <div class="form-input-cell">
+                  <input type="text" class="form-input-control" [(ngModel)]="receiptNo" placeholder="" />
+                </div>
+              </div>
+
+              <div class="form-group-row">
+                <div class="form-label-cell">Part Number:</div>
+                <div class="form-input-cell">
+                  <input type="text" class="form-input-control readonly" [value]="partReceipt" readonly />
+                </div>
+              </div>
+
+              <div class="form-group-row">
+                <div class="form-label-cell">Description:</div>
+                <div class="form-input-cell">
+                  <input type="text" class="form-input-control readonly" [value]="descriptionReceipt" readonly />
+                </div>
+              </div>
+
+              <div class="form-group-row side-by-side-row">
+                <div class="form-label-cell">Receipt Cost:</div>
+                <div class="form-input-cell cost-qty-wrap">
+                  <input type="text" class="form-input-control readonly text-right size-cost" [value]="receiptCost | currency" readonly />
+                  <span class="label-inline">Rec. Qty:</span>
+                  <input type="text" class="form-input-control readonly text-center size-qty" [value]="receiptQty" readonly />
+                </div>
+              </div>
+
+              <div class="form-group-row">
+                <div class="form-label-cell">PO Number:</div>
+                <div class="form-input-cell">
+                  <input type="text" class="form-input-control readonly" [value]="poNumber" readonly />
+                </div>
+              </div>
+
+            </div>
+
+            <div class="receipt-find-btn-col">
+              <button class="access-glossy-btn find-btn" (click)="findReceipt()">Find<br/>Receipt</button>
+            </div>
+          </div>
+
+          <hr class="column-divider" />
+
+          <div class="form-group-row">
+            <div class="form-label-cell">Price Drop Date:</div>
+            <div class="form-input-cell">
+              <input type="date" class="form-input-control" [(ngModel)]="priceDropDateReceipt" />
+            </div>
+          </div>
+
+          <div class="form-group-row">
+            <div class="form-label-cell">Price Before:</div>
+            <div class="form-input-cell">
+              <input type="number" class="form-input-control text-right" [(ngModel)]="priceBeforeReceipt" min="0" step="0.01" />
+            </div>
+          </div>
+
+          <div class="form-group-row">
+            <div class="form-label-cell">Price After:</div>
+            <div class="form-input-cell">
+              <input type="number" class="form-input-control text-right" [(ngModel)]="priceAfterReceipt" min="0" step="0.01" />
+            </div>
+          </div>
+
+          <div class="form-group-row justify-center-btn">
+            <button class="access-glossy-btn" (click)="processReceiptClaim()">Process</button>
+          </div>
+
+          <div class="form-group-row text-align-left mt-2">
+            <div class="form-label-cell">Status:</div>
+          </div>
+          <div class="form-group-row">
+            <input type="text" class="form-input-control status-text readonly" [value]="statusReceipt" readonly />
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- MAIN HORIZONTAL DIVIDER -->
+      <hr class="main-horizontal-divider" />
+
+      <!-- MIDDLE ACTIONS SECTION -->
+      <div class="middle-actions-layout">
+        
+        <!-- LEFT BOX: Manual IMEI add/remove -->
+        <div class="manual-imei-box">
+          <div class="action-sub-header">Manually Add IMEI to Claim</div>
+          <div class="form-group-row mb-15">
+            <span class="label-manual">IMEI:</span>
+            <input type="text" class="form-input-control size-imei" [(ngModel)]="manualImeiAdd" (keyup.enter)="manualAddImei()" />
+            <button class="access-glossy-btn manual-btn ml-15" (click)="manualAddImei()">Add</button>
+          </div>
+
+          <div class="action-sub-header">Manually Remove IMEI From Claim</div>
+          <div class="form-group-row">
+            <span class="label-manual">IMEI:</span>
+            <input type="text" class="form-input-control size-imei" [(ngModel)]="manualImeiRemove" (keyup.enter)="manualRemoveImei()" />
+            <button class="access-glossy-btn manual-btn ml-15" (click)="manualRemoveImei()">Remove</button>
+          </div>
+        </div>
+
+        <!-- CENTER BOX: Stack of action buttons -->
+        <div class="center-buttons-box">
+          <button class="access-glossy-btn stack-btn" (click)="toggleCurrentBatch()">View Price Protection</button>
+          <button class="access-glossy-btn stack-btn" (click)="appendClaimBatch()">Append Price Protection Claim</button>
+          <button class="access-glossy-btn stack-btn" (click)="exit()">Exit</button>
+        </div>
+
+        <!-- RIGHT BOX: Next Batch & Remove Batch -->
+        <div class="right-actions-box">
+          
+          <div class="next-batch-inline mb-15">
+            <div class="batch-id-wrapper">
+              <span class="label-batch-title">Next Claim Batch ID</span>
+              <input type="text" class="form-input-control text-center batch-id-input readonly" [value]="nextBatchId" readonly />
+            </div>
+            <button class="access-glossy-btn summary-link-btn" (click)="toggleSummary()">View Summary Of All Posted Claims</button>
+          </div>
+
+          <fieldset class="remove-batch-group">
+            <legend class="remove-batch-legend">Remove Claim Batch</legend>
+            <div class="remove-batch-content">
+              <span class="label-batch-no">Batch No:</span>
+              <input type="text" class="form-input-control size-batch-no" [(ngModel)]="batchNoToRemove" />
+              <button class="access-glossy-btn manual-btn ml-15" (click)="removeBatch()">Remove</button>
+            </div>
+          </fieldset>
+
+        </div>
+
+      </div>
+
+      <!-- MAIN HORIZONTAL DIVIDER 2 -->
+      <hr class="main-horizontal-divider" />
+
+      <!-- BOTTOM EXPORT SECTION -->
+      <div class="bottom-export-layout">
+        <div class="date-ranges-box">
+          <div class="form-group-row mb-10">
+            <span class="label-export-date">Price Drop Date Start:</span>
+            <input type="date" class="form-input-control size-export-date" [(ngModel)]="priceDropDateStart" />
+          </div>
+          <div class="form-group-row">
+            <span class="label-export-date">Price Drop Date End:</span>
+            <input type="date" class="form-input-control size-export-date" [(ngModel)]="priceDropDateEnd" />
+          </div>
+        </div>
+
+        <div class="export-btn-box">
+          <button class="access-glossy-btn raw-data-btn" (click)="outputRawClaimData()">Output Raw Claim Data</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ==================== SUB-GRID VIEW: CURRENT PENDING BATCH ==================== -->
+    <div *ngIf="showCurrentBatch" class="grid-display-window fade-in">
+      <div class="grid-window-title">
+        <i class="fas fa-table"></i> Current Pending Batch Details
+        <span class="grid-row-count">Count: {{ batchRows.length }}</span>
+      </div>
+      <div class="grid-table-scroll">
+        <table class="access-grid-table">
+          <thead>
+            <tr>
+              <th (click)="sortBatch('id')">ID <i class="fas" [ngClass]="batchSortKey === 'id' ? (batchSortAsc ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i></th>
+              <th (click)="sortBatch('sku')">SKU <i class="fas" [ngClass]="batchSortKey === 'sku' ? (batchSortAsc ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i></th>
+              <th (click)="sortBatch('description')">Description <i class="fas" [ngClass]="batchSortKey === 'description' ? (batchSortAsc ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i></th>
+              <th (click)="sortBatch('imei')">IMEI <i class="fas" [ngClass]="batchSortKey === 'imei' ? (batchSortAsc ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i></th>
+              <th (click)="sortBatch('receiptNo')">Receipt No <i class="fas" [ngClass]="batchSortKey === 'receiptNo' ? (batchSortAsc ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i></th>
+              <th (click)="sortBatch('receiptCost')" class="text-right">Receipt Cost <i class="fas" [ngClass]="batchSortKey === 'receiptCost' ? (batchSortAsc ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i></th>
+              <th (click)="sortBatch('priceBeforeDrop')" class="text-right">Price Before <i class="fas" [ngClass]="batchSortKey === 'priceBeforeDrop' ? (batchSortAsc ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i></th>
+              <th (click)="sortBatch('priceAfterDrop')" class="text-right">Price After <i class="fas" [ngClass]="batchSortKey === 'priceAfterDrop' ? (batchSortAsc ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i></th>
+              <th (click)="sortBatch('claimAmount')" class="text-right">Claim Amount <i class="fas" [ngClass]="batchSortKey === 'claimAmount' ? (batchSortAsc ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i></th>
+              <th (click)="sortBatch('claimDate')">Claim Date <i class="fas" [ngClass]="batchSortKey === 'claimDate' ? (batchSortAsc ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i></th>
+              <th (click)="sortBatch('poNumber')">PO Number <i class="fas" [ngClass]="batchSortKey === 'poNumber' ? (batchSortAsc ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="batchRows.length === 0">
+              <td colspan="11" class="no-records-cell">No claims currently loaded in the temporary batch.</td>
+            </tr>
+            <tr *ngFor="let row of batchRows">
+              <td>{{ row.id }}</td>
+              <td class="font-code">{{ row.sku }}</td>
+              <td>{{ row.description }}</td>
+              <td class="font-code text-muted">{{ row.imei }}</td>
+              <td class="font-code">{{ row.receiptNo }}</td>
+              <td class="text-right">{{ row.receiptCost | currency }}</td>
+              <td class="text-right">{{ row.priceBeforeDrop | currency }}</td>
+              <td class="text-right">{{ row.priceAfterDrop | currency }}</td>
+              <td class="text-right font-bold text-blue">{{ row.claimAmount | currency }}</td>
+              <td>{{ row.claimDate | date:'MM/dd/yyyy' }}</td>
+              <td class="font-code">{{ row.poNumber }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ==================== SUB-GRID VIEW: POSTED SUMMARY ==================== -->
+    <div *ngIf="showSummary" class="grid-display-window fade-in">
+      <div class="grid-window-title">
+        <i class="fas fa-archive"></i> Summary of Posted Claim Batches
+        <span class="grid-row-count">Count: {{ postedSummaries.length }}</span>
+      </div>
+      <div class="grid-table-scroll">
+        <table class="access-grid-table">
+          <thead>
+            <tr>
+              <th (click)="sortSummary('claimBatchID')">Batch ID <i class="fas" [ngClass]="summarySortKey === 'claimBatchID' ? (summarySortAsc ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i></th>
+              <th (click)="sortSummary('sku')">SKU <i class="fas" [ngClass]="summarySortKey === 'sku' ? (summarySortAsc ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i></th>
+              <th (click)="sortSummary('description')">Description <i class="fas" [ngClass]="summarySortKey === 'description' ? (summarySortAsc ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i></th>
+              <th (click)="sortSummary('unitCount')" class="text-center">Unit Count <i class="fas" [ngClass]="summarySortKey === 'unitCount' ? (summarySortAsc ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i></th>
+              <th (click)="sortSummary('totalClaimAmount')" class="text-right">Total Claim Amount <i class="fas" [ngClass]="summarySortKey === 'totalClaimAmount' ? (summarySortAsc ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i></th>
+              <th (click)="sortSummary('claimDate')">Claim Date <i class="fas" [ngClass]="summarySortKey === 'claimDate' ? (summarySortAsc ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="postedSummaries.length === 0">
+              <td colspan="6" class="no-records-cell">No posted claim batches found in the history.</td>
+            </tr>
+            <tr *ngFor="let summary of postedSummaries">
+              <td class="font-bold text-center text-muted">{{ summary.claimBatchID }}</td>
+              <td class="font-code">{{ summary.sku }}</td>
+              <td>{{ summary.description }}</td>
+              <td class="text-center">{{ summary.unitCount }}</td>
+              <td class="text-right font-bold text-green">{{ summary.totalClaimAmount | currency }}</td>
+              <td>{{ summary.claimDate | date:'MM/dd/yyyy' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>

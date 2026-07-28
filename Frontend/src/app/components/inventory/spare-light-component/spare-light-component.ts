@@ -6,10 +6,11 @@ import * as XLSX from 'xlsx-js-style';
 import { saveAs } from 'file-saver';
 import Swal from 'sweetalert2';
 import { SpinnerService } from '../../shared/spinner/spinner-service';
+import { Spinner } from '../../shared/spinner/spinner';
 
 @Component({
   selector: 'app-spare-light-component',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule,Spinner],
   templateUrl: './spare-light-component.html',
   styleUrl: './spare-light-component.css',
 })

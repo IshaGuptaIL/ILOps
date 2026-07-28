@@ -1,25 +1,77 @@
 .app-container {
   display: flex;
+  min-height: 100vh;
   height: 100vh;
+  overflow: hidden;
 }
 
 .sidebar {
   width: 320px;
-  background-color: #5b4d9d; /* purple */
+  min-width: 320px;
+  background: linear-gradient(135deg, #5b4d9d 0%, #4a3d8a 100%);
   color: white;
-  padding: 1rem;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  height: 100vh;
+  position: fixed; /* Keep sidebar fixed while content scrolls */
+  left: 0;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.2);
 }
 
 .main-content {
   flex-grow: 1;
-  background-color: #f9fafc; /* light background */
+  background-color: #f9fafc;
   padding: 2rem;
-  overflow-y: auto;
+  margin-left: 320px; /* Space for the fixed sidebar */
+  min-height: 100vh;
+  overflow-x: hidden;
+  transition: margin-left 0.3s ease;
 }
+
+.main-content.sidebar-hidden {
+  margin-left: 0 !important;
+}
+
 a.active {
   font-weight: bold;
   color: #00aaff;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 280px;
+    min-width: 280px;
+  }
+  
+  .main-content {
+    margin-left: 280px;
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .sidebar {
+    width: 100%;
+    min-width: 100%;
+    position: fixed;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+  
+  .sidebar.show {
+    transform: translateX(0);
+  }
+  
+  .main-content {
+    margin-left: 0;
+    padding: 1rem;
+    width: 100%;
+  }
+  
+  .app-container {
+    flex-direction: column;
+  }
 }

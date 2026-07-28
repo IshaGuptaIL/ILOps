@@ -1,4 +1,4 @@
-﻿using ClosedXML.Excel;
+using ClosedXML.Excel;
 using DAL.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
@@ -194,6 +194,31 @@ namespace DAL.Inventory.IMEI.HardwareIMEI
             }
         }
 
+        private async Task LogErrorAsync(string errorWhile, string description, string poNumber, int? userId)
+        {
+            try
+            {
+                var err = new tblErrors
+                {
+                    VBCode = "0",
+                    VBDescription = description,
+                    PONumber = poNumber ?? "",
+                    RecNo = 0,
+                    ErrorWhile = errorWhile,
+                    RowCount = 0,
+                    Resolved = false,
+                    Created_by = userId ?? 1,
+                    Created_date = DateTime.Now
+                };
+                _dbContext.tblErrors.Add(err);
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to log error to tblErrors: {Message}", ex.Message);
+            }
+        }
+
         // ─────────────────────────────────────────────────────────────────────
         // CheckErrors — maps to CheckErrors() Sub in frmReceive
         // ─────────────────────────────────────────────────────────────────────
@@ -205,17 +230,55 @@ namespace DAL.Inventory.IMEI.HardwareIMEI
                 ScanListCount = request.ScanListImeis.Length
             };
 
+            var userId = request.UserId ?? 1;
+            var poNum = "";
+
             try
             {
+                // First, try fetching the PO details to get the order number for logging
+                PurchaseOrder? po = null;
+                try
+                {
+                    var poJson = await _spireClient.GetPurchaseOrderAsync(request.PurchaseOrderId);
+                    if (!string.IsNullOrEmpty(poJson))
+                    {
+                        po = JsonSerializer.Deserialize<PurchaseOrder>(poJson, _jsonOpts);
+                        poNum = po?.OrderNo ?? "";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogWarning(ex, "Could not fetch PO info for error check logging");
+                }
+
+                // Clear previous unresolved errors for this user/PO in the database
+                try
+                {
+                    var oldErrors = _dbContext.tblErrors.Where(e => e.Created_by == userId && (e.Resolved == null || e.Resolved == false)).ToList();
+                    if (oldErrors.Any())
+                    {
+                        _dbContext.tblErrors.RemoveRange(oldErrors);
+                        await _dbContext.SaveChangesAsync();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Failed to clear previous errors from tblErrors");
+                }
+
                 // ── GUARD: Must have packing slip and scan list ───────────────
                 if (request.PackingSlipImeis.Length == 0)
                 {
-                    response.Errors.Add("You must import packing slip data.");
+                    var msg = "You must import packing slip data.";
+                    response.Errors.Add(msg);
+                    await LogErrorAsync("CheckErrorsAsync", msg, poNum, userId);
                     return Ok(response);
                 }
                 if (request.ScanListImeis.Length == 0)
                 {
-                    response.Errors.Add("You must import scan list data.");
+                    var msg = "You must import scan list data.";
+                    response.Errors.Add(msg);
+                    await LogErrorAsync("CheckErrorsAsync", msg, poNum, userId);
                     return Ok(response);
                 }
 
@@ -232,9 +295,17 @@ namespace DAL.Inventory.IMEI.HardwareIMEI
                 response.InvalidPackCount = invalidPack.Count;
 
                 if (invalidScan.Count > 0)
-                    response.Errors.Add($"There are {invalidScan.Count} invalid entries on the Scan List");
+                {
+                    var msg = $"There are {invalidScan.Count} invalid entries on the Scan List";
+                    response.Errors.Add(msg);
+                    await LogErrorAsync("CheckErrorsAsync", msg, poNum, userId);
+                }
                 if (invalidPack.Count > 0)
-                    response.Errors.Add($"There are {invalidPack.Count} invalid entries on the Packing Slip");
+                {
+                    var msg = $"There are {invalidPack.Count} invalid entries on the Packing Slip";
+                    response.Errors.Add(msg);
+                    await LogErrorAsync("CheckErrorsAsync", msg, poNum, userId);
+                }
 
                 // ── 2. DUPLICATES ─────────────────────────────────────────────
                 var psDups = request.PackingSlipImeis.GroupBy(x => x).Where(g => g.Count() > 1).Select(g => g.Key).ToList();
@@ -243,8 +314,18 @@ namespace DAL.Inventory.IMEI.HardwareIMEI
                 response.PackDupeCount = psDups.Count;
                 response.ScanDupeCount = slDups.Count;
 
-                if (slDups.Count > 0) response.Errors.Add("There are duplicates in the Scan List");
-                if (psDups.Count > 0) response.Errors.Add("There are duplicates on the Packing Slip");
+                if (slDups.Count > 0)
+                {
+                    var msg = "There are duplicates in the Scan List";
+                    response.Errors.Add(msg);
+                    await LogErrorAsync("CheckErrorsAsync", msg, poNum, userId);
+                }
+                if (psDups.Count > 0)
+                {
+                    var msg = "There are duplicates on the Packing Slip";
+                    response.Errors.Add(msg);
+                    await LogErrorAsync("CheckErrorsAsync", msg, poNum, userId);
+                }
 
                 // ── 3. CROSS-LIST COMPARISON ──────────────────────────────────
                 var psSet = new HashSet<string>(request.PackingSlipImeis);
@@ -255,38 +336,47 @@ namespace DAL.Inventory.IMEI.HardwareIMEI
                 response.PackNoScan = psSet.Except(slSet).ToList();
 
                 if (response.ScanNoPack.Count > 0)
-                    response.Errors.Add("There are entries on the Scan List that are not on the Packing Slip");
+                {
+                    var msg = "There are entries on the Scan List that are not on the Packing Slip";
+                    response.Errors.Add(msg);
+                    await LogErrorAsync("CheckErrorsAsync", msg, poNum, userId);
+                }
                 if (response.PackNoScan.Count > 0)
-                    response.Errors.Add("There are entries on the Packing Slip that are not on the Scan List");
+                {
+                    var msg = "There are entries on the Packing Slip that are not on the Scan List";
+                    response.Errors.Add(msg);
+                    await LogErrorAsync("CheckErrorsAsync", msg, poNum, userId);
+                }
 
                 // ── 4. QUANTITY CHECK ─────────────────────────────────────────
-                // Receipt mode:  OrdQty - RcvdQty >= ScanListCount
-                // Reversal mode: RcvdQty >= ScanListCount
                 var scanCount = request.ScanListImeis.Length;
                 if (!request.IsReversal)
                 {
                     var remaining = request.OrderQty - request.ReceivedQty;
                     if (scanCount > (double)remaining)
-                        response.Errors.Add($"Quantity to receive ({scanCount}) is greater than quantity remaining on PO ({remaining})");
+                    {
+                        var msg = $"Quantity to receive ({scanCount}) is greater than quantity remaining on PO ({remaining})";
+                        response.Errors.Add(msg);
+                        await LogErrorAsync("CheckErrorsAsync", msg, poNum, userId);
+                    }
                 }
                 else
                 {
                     if (scanCount > (double)request.ReceivedQty)
-                        response.Errors.Add($"Quantity to receive ({scanCount}) is greater than quantity already received on PO ({request.ReceivedQty})");
+                    {
+                        var msg = $"Quantity to receive ({scanCount}) is greater than quantity already received on PO ({request.ReceivedQty})";
+                        response.Errors.Add(msg);
+                        await LogErrorAsync("CheckErrorsAsync", msg, poNum, userId);
+                    }
                 }
 
                 // ── 5. ALREADY IN SPIRE CHECK ─────────────────────────────────
-                // Maps to: SELECT from wwserialtemp WHERE IsAllocated=0 (receipt)
-                //          or IsAllocated=1 (reversal)
                 if (!string.IsNullOrWhiteSpace(request.Whse) && request.ScanListImeis.Length > 0)
                 {
                     try
                     {
-                        // Get PO detail to know the part number
-                        var poJson = await _spireClient.GetPurchaseOrderAsync(request.PurchaseOrderId);
-                        if (!string.IsNullOrEmpty(poJson))
+                        if (po != null)
                         {
-                            var po = JsonSerializer.Deserialize<PurchaseOrder>(poJson, _jsonOpts);
                             var lineItem = po?.Items.FirstOrDefault(i => i.Id == request.PurchaseOrderLineId);
                             if (lineItem != null && !string.IsNullOrEmpty(lineItem.PartNo))
                             {
@@ -304,7 +394,6 @@ namespace DAL.Inventory.IMEI.HardwareIMEI
 
                                 if (serialsArray.ValueKind == JsonValueKind.Array)
                                 {
-                                    // Build set of IMEIs that are onhand and NOT allocated (free stock)
                                     var onhandFreeSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
                                     foreach (var s in serialsArray.EnumerateArray())
                                     {
@@ -313,29 +402,34 @@ namespace DAL.Inventory.IMEI.HardwareIMEI
                                         var temp = s.TryGetProperty("tempQty", out var tq) ? tq.GetDecimal() : 0;
                                         var committed = s.TryGetProperty("committedQty", out var cq) ? cq.GetDecimal() : 0;
 
-                                        // IsAllocated = 0 means free/onhand (available)
                                         bool isAllocated = onhand == 0 || temp != 0 || committed != 0;
                                         if (!isAllocated) onhandFreeSet.Add(num);
                                     }
 
                                     if (!request.IsReversal)
                                     {
-                                        // Receipt mode: scanned IMEI must NOT already be onhand
                                         response.AlreadyInInventory = request.ScanListImeis
                                             .Where(imei => onhandFreeSet.Contains(imei))
                                             .ToList();
                                         if (response.AlreadyInInventory.Count > 0)
-                                            response.Errors.Add("There are entries in the Scan List that are already onhand in Spire");
+                                        {
+                                            var msg = "There are entries in the Scan List that are already onhand in Spire";
+                                            response.Errors.Add(msg);
+                                            await LogErrorAsync("CheckErrorsAsync", msg, poNum, userId);
+                                        }
                                     }
                                     else
                                     {
-                                        // Reversal mode: scanned IMEI should be onhand (to reverse it)
                                         var notOnhand = request.ScanListImeis
                                             .Where(imei => !onhandFreeSet.Contains(imei))
                                             .ToList();
-                                        response.AlreadyInInventory = notOnhand; // reusing field for "not in Spire"
+                                        response.AlreadyInInventory = notOnhand;
                                         if (notOnhand.Count > 0)
-                                            response.Errors.Add("There are entries in the Scan List that are not onhand in Spire");
+                                        {
+                                            var msg = "There are entries in the Scan List that are not onhand in Spire";
+                                            response.Errors.Add(msg);
+                                            await LogErrorAsync("CheckErrorsAsync", msg, poNum, userId);
+                                        }
                                     }
                                 }
                             }
@@ -352,6 +446,7 @@ namespace DAL.Inventory.IMEI.HardwareIMEI
             catch (Exception ex)
             {
                 _logger.LogError(ex, "CheckErrors failed");
+                await LogErrorAsync("CheckErrorsAsync", "Exception: " + ex.Message, poNum, userId);
                 return new ApiResponse<CheckErrorsResponse> { Success = false, Message = ex.Message };
             }
         }
@@ -379,25 +474,42 @@ namespace DAL.Inventory.IMEI.HardwareIMEI
         // ─────────────────────────────────────────────────────────────────────
         public async Task<ApiResponse<string>> ReceiveImeiAsync(ReceiveImeiRequest request)
         {
+            PurchaseOrder? po = null;
             try
             {
                 // ── GUARD: CMO must be provided ───────────────────────────────
                 if (string.IsNullOrWhiteSpace(request.CmoNumber))
-                    return new ApiResponse<string> { Success = false, Message = "You must enter a CMO number" };
+                {
+                    var msg = "You must enter a CMO number";
+                    await LogErrorAsync("ReceiveImeiAsync", msg, "", request.UserId);
+                    return new ApiResponse<string> { Success = false, Message = msg };
+                }
 
                 // ── GUARD: Scan list must not be empty ────────────────────────
                 if (request.Imeis.Length == 0)
-                    return new ApiResponse<string> { Success = false, Message = "There are no IMEIs in the Scan List" };
+                {
+                    var msg = "There are no IMEIs in the Scan List";
+                    await LogErrorAsync("ReceiveImeiAsync", msg, "", request.UserId);
+                    return new ApiResponse<string> { Success = false, Message = msg };
+                }
 
                 // ── STEP 1: GET the PO (matches VBA line 175) ─────────────────
                 var poJson = await _spireClient.GetPurchaseOrderAsync(request.PurchaseOrderId);
                 if (string.IsNullOrEmpty(poJson))
-                    return new ApiResponse<string> { Success = false, Message = "PO not found in Spire" };
+                {
+                    var msg = "PO not found in Spire";
+                    await LogErrorAsync("ReceiveImeiAsync", msg, "", request.UserId);
+                    return new ApiResponse<string> { Success = false, Message = msg };
+                }
 
-                var po = JsonSerializer.Deserialize<PurchaseOrder>(poJson, _jsonOpts);
+                po = JsonSerializer.Deserialize<PurchaseOrder>(poJson, _jsonOpts);
                 var lineItem = po?.Items.FirstOrDefault(i => i.Id == request.PurchaseOrderLineId);
                 if (lineItem == null)
-                    return new ApiResponse<string> { Success = false, Message = "PO line item not found" };
+                {
+                    var msg = "PO line item not found";
+                    await LogErrorAsync("ReceiveImeiAsync", msg, po?.OrderNo, request.UserId);
+                    return new ApiResponse<string> { Success = false, Message = msg };
+                }
 
                 lineItem.Serials ??= new List<SerialNumber>();
 
@@ -435,7 +547,11 @@ namespace DAL.Inventory.IMEI.HardwareIMEI
                 var updatedJson = JsonSerializer.Serialize(updateDto, _jsonOpts);
                 var putOk = await _spireClient.UpdatePurchaseOrderAsync(request.PurchaseOrderId, updatedJson);
                 if (!putOk)
-                    return new ApiResponse<string> { Success = false, Message = "Failed to update PO in Spire (PUT)" };
+                {
+                    var msg = "Failed to update PO in Spire (PUT)";
+                    await LogErrorAsync("ReceiveImeiAsync", msg, po?.OrderNo, request.UserId);
+                    return new ApiResponse<string> { Success = false, Message = msg };
+                }
 
                 // ── STEP 4: POST /receive to finalise ──
                 string receiptNo = null;
@@ -445,7 +561,11 @@ namespace DAL.Inventory.IMEI.HardwareIMEI
                     receiptNo = await _spireClient.PostReceiptAsync(request.PurchaseOrderId, "");
 
                     if (receiptNo == null)
-                        return new ApiResponse<string> { Success = false, Message = "Failed to POST receipt to Spire" };
+                    {
+                        var msg = "Failed to POST receipt to Spire";
+                        await LogErrorAsync("ReceiveImeiAsync", msg, po?.OrderNo, request.UserId);
+                        return new ApiResponse<string> { Success = false, Message = msg };
+                    }
                 }
 
                 // ── STEP 5: Log to Local EF Database ──
@@ -486,6 +606,7 @@ namespace DAL.Inventory.IMEI.HardwareIMEI
             catch (Exception ex)
             {
                 _logger.LogError(ex, "ReceiveImei failed");
+                await LogErrorAsync("ReceiveImeiAsync", "Exception: " + ex.Message, po?.OrderNo, request.UserId);
                 return new ApiResponse<string> { Success = false, Message = ex.Message };
             }
         }

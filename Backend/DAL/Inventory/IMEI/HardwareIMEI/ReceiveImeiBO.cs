@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -20,6 +20,7 @@ namespace DAL.Inventory.IMEI.HardwareIMEI
         public bool PostReceipt { get; set; }
         public bool IsReversal { get; set; }
         public string? CmoNumber { get; set; }
+        public int? UserId { get; set; }
     }
 
     public class CheckErrorsRequest
@@ -33,6 +34,7 @@ namespace DAL.Inventory.IMEI.HardwareIMEI
         public decimal OrderQty { get; set; }
         public decimal ReceivedQty { get; set; }
         public string? Whse { get; set; }
+        public int? UserId { get; set; }
     }
 
     public class CheckErrorsResponse

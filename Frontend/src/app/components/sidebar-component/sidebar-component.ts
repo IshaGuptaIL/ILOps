@@ -63,6 +63,32 @@ export class SidebarComponent implements OnInit {
           });
 
         console.log('✅ MenuItems loaded:', this.menuItems);
+
+        const salesMenu = this.menuItems.find(m => m.label.toLowerCase().includes('sales'));
+        if (salesMenu) {
+          if (!salesMenu.children) salesMenu.children = [];
+          if (!salesMenu.children.some(c => c.menuUrl === 'rogersInvoiceSpire')) {
+            salesMenu.children.push({
+              id: 9999,
+              label: 'RogersInvoice-Spire',
+              icon: 'bi-file-earmark-bar-graph',
+              menuUrl: 'rogersInvoiceSpire',
+              route: '/rogersInvoiceSpire',
+              children: []
+            });
+          }
+        } else {
+          if (!this.menuItems.some(m => m.menuUrl === 'rogersInvoiceSpire')) {
+            this.menuItems.push({
+              id: 9999,
+              label: 'RogersInvoice-Spire',
+              icon: 'bi-file-earmark-bar-graph',
+              menuUrl: 'rogersInvoiceSpire',
+              route: '/rogersInvoiceSpire',
+              children: []
+            });
+          }
+        }
       }
       this.cdr.detectChanges();
     },

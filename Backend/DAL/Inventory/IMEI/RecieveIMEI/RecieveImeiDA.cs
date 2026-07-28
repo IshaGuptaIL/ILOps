@@ -1,4 +1,4 @@
-﻿using DAL.Common.Login;
+using DAL.Common.Login;
 using DAL.Common.Spire;
 using DAL.Models;
 using Microsoft.Data.SqlClient;
@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-using static System.Collections.Specialized.BitVector32;
 
 namespace DAL.Inventory.IMEI.RecieveIMEI
 {
@@ -20,17 +19,17 @@ namespace DAL.Inventory.IMEI.RecieveIMEI
 
         public RecieveImeiDA(IConfiguration config)
         {
-            _sqlConn = config.GetConnectionString("bvactivation_Connection"); // SQL Server connection string
-            _pgConn = config.GetConnectionString("spire_Connection"); // Postgres connection string
+            _sqlConn = config.GetConnectionString("bvactivation_Connection"); 
+            _pgConn = config.GetConnectionString("spire_Connection"); 
         }
 
         // =================== CLEAR PACKING SLIP ===================
-        public async Task<ApiResposne> ClearPackingSlipAsync()
+        public async Task<ApiResposne> ClearPackingSlipAsync(int userId)
         {
             var response = new ApiResposne();
             try
             {
-                await ExecuteNonQueryAsync("DELETE FROM TblPackingSlip");
+                await ExecuteNonQueryAsync($"DELETE FROM TblPackingSlip WHERE Created_by = {userId}");
                 response.Success = true;
                 response.Message = "Packing Slip cleared";
             }
@@ -43,7 +42,7 @@ namespace DAL.Inventory.IMEI.RecieveIMEI
         }
 
         // =================== INSERT PACKING SLIP ===================
-        public async Task<ApiResposne> InsertPackingSlipAsync(List<RecieveIMEIBO> items)
+        public async Task<ApiResposne> InsertPackingSlipAsync(List<RecieveIMEIBO> items, int userId)
         {
             var response = new ApiResposne();
             try
@@ -54,16 +53,19 @@ namespace DAL.Inventory.IMEI.RecieveIMEI
                 foreach (var item in items)
                 {
                     using var cmd = new SqlCommand(@"
-INSERT INTO TblPackingSlip(PONumber, RecNo, Whse, PartNo, GUID, IMEI, XLSRow)
-VALUES (@PO, @Rec, @Whse, @Part, @Guid, @IMEI, @Row)", con);
+                        INSERT INTO TblPackingSlip(PONumber, RecNo, Whse, PartNo, GUID, IMEI, XLSRow, Created_by, Created_date)
+                        VALUES (@PO, @Rec, @Whse, @Part, @Guid, @IMEI, @Row, @userId, @date)", con);
+                    cmd.CommandTimeout = 600;
 
-                    cmd.Parameters.AddWithValue("@PO", item.PONumber);
+                    cmd.Parameters.AddWithValue("@PO", item.PONumber.ToString());
                     cmd.Parameters.AddWithValue("@Rec", item.RecNo);
-                    cmd.Parameters.AddWithValue("@Whse", item.Whse);
-                    cmd.Parameters.AddWithValue("@Part", item.PartNo);
-                    cmd.Parameters.AddWithValue("@Guid", item.GUID);
-                    cmd.Parameters.AddWithValue("@IMEI", item.IMEI.Trim().ToUpper());
+                    cmd.Parameters.AddWithValue("@Whse", item.Whse ?? "");
+                    cmd.Parameters.AddWithValue("@Part", item.PartNo ?? "");
+                    cmd.Parameters.AddWithValue("@Guid", item.GUID ?? "");
+                    cmd.Parameters.AddWithValue("@IMEI", (item.IMEI ?? "").Trim().ToUpper());
                     cmd.Parameters.AddWithValue("@Row", item.XLSRow);
+                    cmd.Parameters.AddWithValue("@userId", userId);
+                    cmd.Parameters.AddWithValue("@date", DateTime.Now);
 
                     await cmd.ExecuteNonQueryAsync();
                 }
@@ -82,7 +84,7 @@ VALUES (@PO, @Rec, @Whse, @Part, @Guid, @IMEI, @Row)", con);
         }
 
         // =================== INSERT SCAN LIST ===================
-        public async Task<ApiResposne> InsertScanListAsync(List<RecieveIMEIBO> items)
+        public async Task<ApiResposne> InsertScanListAsync(List<RecieveIMEIBO> items, int userId)
         {
             var response = new ApiResposne();
             try
@@ -90,25 +92,30 @@ VALUES (@PO, @Rec, @Whse, @Part, @Guid, @IMEI, @Row)", con);
                 using var con = new SqlConnection(_sqlConn);
                 await con.OpenAsync();
 
-                // Clear existing scan list
-                using var deleteCmd = new SqlCommand("DELETE FROM tblScanList", con);
+                // Clear existing scan list for this user
+                using var deleteCmd = new SqlCommand("DELETE FROM tblScanList WHERE Created_by = @userId", con);
+                deleteCmd.CommandTimeout = 600;
+                deleteCmd.Parameters.AddWithValue("@userId", userId);
                 await deleteCmd.ExecuteNonQueryAsync();
 
                 foreach (var item in items)
                 {
                     using var cmd = new SqlCommand(@"
-INSERT INTO tblScanList(PONumber, RecNo, Whse, PartNo, GUID, Vendor, Location, IMEI, XLSRow)
-VALUES (@PO, @Rec, @Whse, @Part, @Guid, @Vendor, @Loc, @IMEI, @Row)", con);
+                        INSERT INTO tblScanList(PONumber, RecNo, Whse, PartNo, GUID, Vendor, Location, IMEI, XLSRow, Created_by, CreatedOn)
+                        VALUES (@PO, @Rec, @Whse, @Part, @Guid, @Vendor, @Loc, @IMEI, @Row, @userId, @date)", con);
+                    cmd.CommandTimeout = 600;
 
                     cmd.Parameters.AddWithValue("@PO", item.PONumber);
                     cmd.Parameters.AddWithValue("@Rec", item.RecNo);
-                    cmd.Parameters.AddWithValue("@Whse", item.Whse);
-                    cmd.Parameters.AddWithValue("@Part", item.PartNo);
-                    cmd.Parameters.AddWithValue("@Guid", item.GUID);
+                    cmd.Parameters.AddWithValue("@Whse", item.Whse ?? "");
+                    cmd.Parameters.AddWithValue("@Part", item.PartNo ?? "");
+                    cmd.Parameters.AddWithValue("@Guid", item.GUID ?? "");
                     cmd.Parameters.AddWithValue("@Vendor", string.IsNullOrWhiteSpace(item.Vendor) ? (object)DBNull.Value : item.Vendor);
                     cmd.Parameters.AddWithValue("@Loc", string.IsNullOrWhiteSpace(item.Location) ? (object)DBNull.Value : item.Location);
-                    cmd.Parameters.AddWithValue("@IMEI", item.IMEI.Trim().ToUpper());
+                    cmd.Parameters.AddWithValue("@IMEI", (item.IMEI ?? "").Trim().ToUpper());
                     cmd.Parameters.AddWithValue("@Row", item.XLSRow);
+                    cmd.Parameters.AddWithValue("@userId", userId);
+                    cmd.Parameters.AddWithValue("@date", DateTime.Now);
 
                     await cmd.ExecuteNonQueryAsync();
                 }
@@ -128,7 +135,6 @@ VALUES (@PO, @Rec, @Whse, @Part, @Guid, @Vendor, @Loc, @IMEI, @Row)", con);
 
         // =================== GET PURCHASE ORDERS (Postgres) ===================
         public async Task<ApiResposne> GetPurchaseOrdersAsync()
-        
         {
             var response = new ApiResposne();
             try
@@ -138,14 +144,14 @@ VALUES (@PO, @Rec, @Whse, @Part, @Guid, @Vendor, @Loc, @IMEI, @Row)", con);
                 await con.OpenAsync();
 
                 await using var cmd = new NpgsqlCommand(@"
-SELECT po.po_number, po.vendor_name, po.id AS po_id, poi.id AS po_item_id,
-       poi.part_no AS part_number, poi.whse AS whse, poi.order_qty AS order_qty,
-       COALESCE(poi.received_qty,0) AS received_qty, poi.unit_price AS unit_cost, poi.guid
-FROM purchase_orders po
-JOIN purchase_order_items poi ON poi.po_number = po.po_number
-WHERE po.status IN ('I','R','OPEN')
-ORDER BY po.po_number DESC, poi.id
-", con);
+                    SELECT po.po_number, po.vendor_name, po.id AS po_id, poi.id AS po_item_id,
+                           poi.part_no AS part_number, poi.whse AS whse, poi.order_qty AS order_qty,
+                           COALESCE(poi.received_qty,0) AS received_qty, poi.unit_price AS unit_cost, poi.guid
+                    FROM purchase_orders po
+                    JOIN purchase_order_items poi ON poi.po_number = po.po_number
+                    WHERE po.status IN ('I','R','OPEN')
+                    ORDER BY po.po_number DESC, poi.id", con);
+                cmd.CommandTimeout = 600;
 
                 await using var rdr = await cmd.ExecuteReaderAsync();
                 while (await rdr.ReadAsync())
@@ -180,7 +186,7 @@ ORDER BY po.po_number DESC, poi.id
         }
 
         // =================== MOCKED METHODS ===================
-        public async Task<ApiResposne> GetIMEIGridsAsync(string poNumber)
+        public async Task<ApiResposne> GetIMEIGridsAsync(string poNumber, int userId)
         {
             var grids = new IMEIGridsDto();
 
@@ -196,13 +202,13 @@ ORDER BY po.po_number DESC, poi.id
 
             try
             {
-                // 🔥 1. SCAN LIST - VBA: tblScanList WHERE PONumber = Me.Combo3
-                string sqlScanList = @"
-            SELECT IMEI FROM tblScanList 
-            WHERE PONumber = @poNumber";
+                // 🔥 1. SCAN LIST
+                string sqlScanList = "SELECT IMEI FROM tblScanList WHERE PONumber = @poNumber AND Created_by = @userId";
                 await using (var cmd = new SqlCommand(sqlScanList, con))
                 {
+                    cmd.CommandTimeout = 600;
                     cmd.Parameters.AddWithValue("@poNumber", poNumber);
+                    cmd.Parameters.AddWithValue("@userId", userId);
                     await using (var rdr = await cmd.ExecuteReaderAsync())
                     {
                         while (await rdr.ReadAsync())
@@ -210,13 +216,13 @@ ORDER BY po.po_number DESC, poi.id
                     }
                 }
 
-                // 🔥 2. PACKING SLIP - VBA: tblPackingSlip WHERE PONumber = Me.Combo3
-                string sqlPackingSlip = @"
-            SELECT IMEI FROM TblPackingSlip 
-            WHERE PONumber = @poNumber";
+                // 🔥 2. PACKING SLIP
+                string sqlPackingSlip = "SELECT IMEI FROM TblPackingSlip WHERE PONumber = @poNumber AND Created_by = @userId";
                 await using (var cmd = new SqlCommand(sqlPackingSlip, con))
                 {
+                    cmd.CommandTimeout = 600;
                     cmd.Parameters.AddWithValue("@poNumber", poNumber);
+                    cmd.Parameters.AddWithValue("@userId", userId);
                     await using (var rdr = await cmd.ExecuteReaderAsync())
                     {
                         while (await rdr.ReadAsync())
@@ -224,15 +230,17 @@ ORDER BY po.po_number DESC, poi.id
                     }
                 }
 
-                // 🔥 3. MATCHES - VBA: ScanList JOIN PackingSlip
+                // 🔥 3. MATCHES
                 string sqlMatches = @"
-            SELECT s.IMEI 
-            FROM tblScanList s
-            INNER JOIN TblPackingSlip p ON s.IMEI = p.IMEI
-            WHERE s.PONumber = @poNumber AND p.PONumber = @poNumber";
+                    SELECT s.IMEI 
+                    FROM tblScanList s
+                    INNER JOIN TblPackingSlip p ON s.IMEI = p.IMEI
+                    WHERE s.PONumber = @poNumber AND p.PONumber = @poNumber AND s.Created_by = @userId AND p.Created_by = @userId";
                 await using (var cmd = new SqlCommand(sqlMatches, con))
                 {
+                    cmd.CommandTimeout = 600;
                     cmd.Parameters.AddWithValue("@poNumber", poNumber);
+                    cmd.Parameters.AddWithValue("@userId", userId);
                     await using (var rdr = await cmd.ExecuteReaderAsync())
                     {
                         while (await rdr.ReadAsync())
@@ -240,14 +248,16 @@ ORDER BY po.po_number DESC, poi.id
                     }
                 }
 
-                // 🔥 4. SCAN-NoPACK - VBA: txtScan_NoPackSlipCount logic
+                // 🔥 4. SCAN-NoPACK
                 string sqlScanNoPack = @"
-            SELECT s.IMEI FROM tblScanList s
-            WHERE s.PONumber = @poNumber
-            AND s.IMEI NOT IN (SELECT p.IMEI FROM TblPackingSlip p WHERE p.PONumber = @poNumber)";
+                    SELECT s.IMEI FROM tblScanList s
+                    WHERE s.PONumber = @poNumber AND s.Created_by = @userId
+                    AND s.IMEI NOT IN (SELECT p.IMEI FROM TblPackingSlip p WHERE p.PONumber = @poNumber AND p.Created_by = @userId)";
                 await using (var cmd = new SqlCommand(sqlScanNoPack, con))
                 {
+                    cmd.CommandTimeout = 600;
                     cmd.Parameters.AddWithValue("@poNumber", poNumber);
+                    cmd.Parameters.AddWithValue("@userId", userId);
                     await using (var rdr = await cmd.ExecuteReaderAsync())
                     {
                         while (await rdr.ReadAsync())
@@ -255,14 +265,16 @@ ORDER BY po.po_number DESC, poi.id
                     }
                 }
 
-                // 🔥 5. PACK-NoSCAN - VBA: txtPackingSlip_NoScanListCount logic
+                // 🔥 5. PACK-NoSCAN
                 string sqlPackNoScan = @"
-            SELECT p.IMEI FROM TblPackingSlip p
-            WHERE p.PONumber = @poNumber
-            AND p.IMEI NOT IN (SELECT s.IMEI FROM tblScanList s WHERE s.PONumber = @poNumber)";
+                    SELECT p.IMEI FROM TblPackingSlip p
+                    WHERE p.PONumber = @poNumber AND p.Created_by = @userId
+                    AND p.IMEI NOT IN (SELECT s.IMEI FROM tblScanList s WHERE s.PONumber = @poNumber AND s.Created_by = @userId)";
                 await using (var cmd = new SqlCommand(sqlPackNoScan, con))
                 {
+                    cmd.CommandTimeout = 600;
                     cmd.Parameters.AddWithValue("@poNumber", poNumber);
+                    cmd.Parameters.AddWithValue("@userId", userId);
                     await using (var rdr = await cmd.ExecuteReaderAsync())
                     {
                         while (await rdr.ReadAsync())
@@ -270,13 +282,13 @@ ORDER BY po.po_number DESC, poi.id
                     }
                 }
 
-                // 🔥 6. ONHAND - VBA: WWSerialTemp + Spire (SetMode logic)
-                string sqlOnhand = @"
-    SELECT IMEI FROM tblScanList 
-    WHERE PONumber = @poNumber";
+                // 🔥 6. ONHAND
+                string sqlOnhand = "SELECT IMEI FROM tblScanList WHERE PONumber = @poNumber AND Created_by = @userId";
                 await using (var cmd = new SqlCommand(sqlOnhand, con))
                 {
+                    cmd.CommandTimeout = 600;
                     cmd.Parameters.AddWithValue("@poNumber", poNumber);
+                    cmd.Parameters.AddWithValue("@userId", userId);
                     await using (var rdr = await cmd.ExecuteReaderAsync())
                     {
                         while (await rdr.ReadAsync())
@@ -300,6 +312,7 @@ ORDER BY po.po_number DESC, poi.id
                 };
             }
         }
+
         public Task<ApiResposne> ReceivePOIMEIAsync(long poId, long poItemId, List<string> imeis, bool isReversal)
         {
             var response = new ApiResposne();
@@ -314,7 +327,6 @@ ORDER BY po.po_number DESC, poi.id
 
             try
             {
-                // Simulated logic
                 if (isReversal)
                 {
                     if (imeis[0].StartsWith("ERROR"))
@@ -356,8 +368,7 @@ ORDER BY po.po_number DESC, poi.id
             return Task.FromResult(response);
         }
 
-
-        public async Task<ApiResposne> PostReceiptsAsync(long poId, long poItemId, string cmo, bool isReversal)
+        public async Task<ApiResposne> PostReceiptsAsync(long poId, long poItemId, string cmo, bool isReversal, int userId)
         {
             var response = new ApiResposne();
 
@@ -371,48 +382,52 @@ ORDER BY po.po_number DESC, poi.id
 
             try
             {
-                // SQL Server connection
                 await using var con = new SqlConnection(_sqlConn);
                 await con.OpenAsync();
 
-                // 1️⃣ Check unresolved errors
-                await using (var checkCmd = new SqlCommand("SELECT COUNT(*) FROM tblErrors WHERE Resolved = 0", con))
+                // 1️⃣ Check unresolved errors for this user
+                await using (var checkCmd = new SqlCommand("SELECT COUNT(*) FROM tblErrors WHERE Resolved = 0 AND Created_by = @userId", con))
                 {
+                    checkCmd.CommandTimeout = 600;
+                    checkCmd.Parameters.AddWithValue("@userId", userId);
                     var errorCount = (int)(await checkCmd.ExecuteScalarAsync() ?? 0);
                     if (errorCount > 0)
                     {
                         response.Success = false;
-                        response.Message = "Unresolved errors exist";
+                        response.Message = "Unresolved errors exist in tblErrors. Please resolve them before posting.";
                         response.Count = 0;
                         return response;
                     }
                 }
 
-                // 2️⃣ Load Scan List
+                // 2️⃣ Load Scan List for this user
                 var scanList = new List<(string IMEI, string Vendor, string PONumber, string PartNo)>();
 
-                await using (var cmd = new SqlCommand("SELECT IMEI, Vendor, PONumber, PartNo FROM tblScanList", con))
-                await using (var rdr = await cmd.ExecuteReaderAsync())
+                await using (var cmd = new SqlCommand("SELECT IMEI, Vendor, PONumber, PartNo FROM tblScanList WHERE Created_by = @userId", con))
                 {
-                    while (await rdr.ReadAsync())
+                    cmd.CommandTimeout = 600;
+                    cmd.Parameters.AddWithValue("@userId", userId);
+                    await using (var rdr = await cmd.ExecuteReaderAsync())
                     {
-                        scanList.Add((
-                            rdr["IMEI"].ToString(),
-                            rdr["Vendor"] == DBNull.Value ? "UNKNOWN" : rdr["Vendor"].ToString(),
-                            rdr["PONumber"] == DBNull.Value ? "" : rdr["PONumber"].ToString(),
-                            rdr["PartNo"] == DBNull.Value ? "" : rdr["PartNo"].ToString()
-                        ));
+                        while (await rdr.ReadAsync())
+                        {
+                            scanList.Add((
+                                rdr["IMEI"].ToString(),
+                                rdr["Vendor"] == DBNull.Value ? "UNKNOWN" : rdr["Vendor"].ToString(),
+                                rdr["PONumber"] == DBNull.Value ? "" : rdr["PONumber"].ToString(),
+                                rdr["PartNo"] == DBNull.Value ? "" : rdr["PartNo"].ToString()
+                            ));
+                        }
                     }
                 }
 
                 if (!scanList.Any())
                 {
                     response.Success = false;
-                    response.Message = "No IMEIs found";
+                    response.Message = "No IMEIs found in Scan List for this user";
                     response.Count = 0;
                     return response;
                 }
-
 
                 var receiveResult = await ReceivePOIMEIAsync(poId, poItemId, scanList.Select(x => x.IMEI).ToList(), isReversal);
 
@@ -430,10 +445,11 @@ ORDER BY po.po_number DESC, poi.id
                 await pg.OpenAsync();
                 await using (var rcmd = new NpgsqlCommand(
                     @"SELECT inventory_receipt_id 
-              FROM purchase_receipts 
-              WHERE order_id=@poId 
-              ORDER BY id DESC LIMIT 1", pg))
+                      FROM purchase_receipts 
+                      WHERE order_id=@poId 
+                      ORDER BY id DESC LIMIT 1", pg))
                 {
+                    rcmd.CommandTimeout = 600;
                     rcmd.Parameters.AddWithValue("@poId", poId);
                     receiptNo = Convert.ToInt64(await rcmd.ExecuteScalarAsync() ?? 0);
                 }
@@ -441,16 +457,16 @@ ORDER BY po.po_number DESC, poi.id
                 if (receiptNo == 0)
                 {
                     response.Success = false;
-                    response.Message = "Receipt not found";
+                    response.Message = "Receipt not found in Spire database";
                     response.Count = 0;
                     return response;
                 }
 
                 // 5️⃣ Get unit cost
                 decimal unitCost;
-                await using (var costCmd = new NpgsqlCommand(
-                    "SELECT unit_price FROM purchase_order_items WHERE id=@id", pg))
+                await using (var costCmd = new NpgsqlCommand("SELECT unit_price FROM purchase_order_items WHERE id=@id", pg))
                 {
+                    costCmd.CommandTimeout = 600;
                     costCmd.Parameters.AddWithValue("@id", poItemId);
                     unitCost = Convert.ToDecimal(await costCmd.ExecuteScalarAsync() ?? 0);
                 }
@@ -459,13 +475,14 @@ ORDER BY po.po_number DESC, poi.id
                 int processed = 0;
                 await using (var icmd = new SqlCommand("", con))
                 {
+                    icmd.CommandTimeout = 600;
                     foreach (var item in scanList)
                     {
                         icmd.CommandText = @"
-INSERT INTO HardwareReceived
-(Vendor,BVReceiptNo,BVReceiptDate,CMO,PO,Part,Qty,ReceiptUnitCost,IMEI,ItemType)
-VALUES
-(@Vendor,@No,@Date,@CMO,@PO,@Part,@Qty,@Cost,@IMEI,'HDW')";
+                            INSERT INTO HardwareReceived
+                            (Vendor,BVReceiptNo,BVReceiptDate,CMO,PO,Part,Qty,ReceiptUnitCost,IMEI,ItemType)
+                            VALUES
+                            (@Vendor,@No,@Date,@CMO,@PO,@Part,@Qty,@Cost,@IMEI,'HDW')";
 
                         icmd.Parameters.Clear();
                         icmd.Parameters.AddWithValue("@Vendor", item.Vendor);
@@ -484,7 +501,7 @@ VALUES
                 }
 
                 response.Success = true;
-                response.Message = $"Processed {processed} IMEIs";
+                response.Message = $"Processed {processed} IMEIs successfully";
                 response.Count = processed;
             }
             catch (Exception ex)
@@ -497,8 +514,7 @@ VALUES
             return response;
         }
 
-
-        public async Task<ApiResposne> CheckErrorsAsync(long poId, long poItemId, bool isReversal)
+        public async Task<ApiResposne> CheckErrorsAsync(long poId, long poItemId, bool isReversal, int userId)
         {
             var response = new ApiResposne();
             var errors = new List<string>();
@@ -509,137 +525,171 @@ VALUES
                 await using var con = new SqlConnection(_sqlConn);
                 await con.OpenAsync();
 
-                // 🧹 Clear previous errors
-                await using (var cmdClear = new SqlCommand("DELETE FROM tblErrors", con))
+                // 🧹 Clear previous errors for this user
+                await using (var cmdClear = new SqlCommand("DELETE FROM tblErrors WHERE Created_by = @userId", con))
                 {
+                    cmdClear.CommandTimeout = 600;
+                    cmdClear.Parameters.AddWithValue("@userId", userId);
                     await cmdClear.ExecuteNonQueryAsync();
                 }
 
-                // 📝 Get Scan List count
+                // 📝 Get Scan List count for this user
                 int scanListCount = 0;
-                await using (var cmd = new SqlCommand("SELECT COUNT(*) FROM tblScanList", con))
+                await using (var cmd = new SqlCommand("SELECT COUNT(*) FROM tblScanList WHERE Created_by = @userId", con))
                 {
+                    cmd.CommandTimeout = 600;
+                    cmd.Parameters.AddWithValue("@userId", userId);
                     scanListCount = (int)(await cmd.ExecuteScalarAsync() ?? 0);
                 }
 
-                // 📝 Get Packing Slip count
+                // 📝 Get Packing Slip count for this user
                 int packingSlipCount = 0;
-                await using (var cmd = new SqlCommand("SELECT COUNT(*) FROM TblPackingSlip", con))
+                await using (var cmd = new SqlCommand("SELECT COUNT(*) FROM TblPackingSlip WHERE Created_by = @userId", con))
                 {
+                    cmd.CommandTimeout = 600;
+                    cmd.Parameters.AddWithValue("@userId", userId);
                     packingSlipCount = (int)(await cmd.ExecuteScalarAsync() ?? 0);
                 }
 
                 // ========== VALIDATION 1: Scan List Empty ==========
                 if (scanListCount == 0)
                 {
-                    errors.Add("You must import Scan List data");
+                    string msg = "You must import Scan List data";
+                    errors.Add(msg);
+                    await LogErrorAsync(con, "CheckErrorsAsync", msg, userId);
                     errorCount++;
                 }
 
                 // ========== VALIDATION 2: Packing Slip Empty ==========
                 if (packingSlipCount == 0)
                 {
-                    errors.Add("You must import Packing Slip data");
+                    string msg = "You must import Packing Slip data";
+                    errors.Add(msg);
+                    await LogErrorAsync(con, "CheckErrorsAsync", msg, userId);
                     errorCount++;
                 }
 
                 // ========== VALIDATION 3: Scan IMEI not in Packing Slip ==========
                 int scanNotInPack;
                 await using (var cmd = new SqlCommand(@"
-            SELECT COUNT(*) FROM (
-                SELECT IMEI FROM tblScanList
-                EXCEPT
-                SELECT IMEI FROM TblPackingSlip
-            ) x", con))
+                    SELECT COUNT(*) FROM (
+                        SELECT IMEI FROM tblScanList WHERE Created_by = @userId
+                        EXCEPT
+                        SELECT IMEI FROM TblPackingSlip WHERE Created_by = @userId
+                    ) x", con))
                 {
+                    cmd.CommandTimeout = 600;
+                    cmd.Parameters.AddWithValue("@userId", userId);
                     scanNotInPack = (int)(await cmd.ExecuteScalarAsync() ?? 0);
                 }
 
                 if (scanNotInPack > 0)
                 {
-                    errors.Add($"There are {scanNotInPack} entries on the Scan List that are not on the Packing Slip");
+                    string msg = $"There are {scanNotInPack} entries on the Scan List that are not on the Packing Slip";
+                    errors.Add(msg);
+                    await LogErrorAsync(con, "CheckErrorsAsync", msg, userId);
                     errorCount++;
                 }
 
                 // ========== VALIDATION 4: Packing Slip IMEI not in Scan List ==========
                 int packNotInScan;
                 await using (var cmd = new SqlCommand(@"
-            SELECT COUNT(*) FROM (
-                SELECT IMEI FROM TblPackingSlip
-                EXCEPT
-                SELECT IMEI FROM tblScanList
-            ) x", con))
+                    SELECT COUNT(*) FROM (
+                        SELECT IMEI FROM TblPackingSlip WHERE Created_by = @userId
+                        EXCEPT
+                        SELECT IMEI FROM tblScanList WHERE Created_by = @userId
+                    ) x", con))
                 {
+                    cmd.CommandTimeout = 600;
+                    cmd.Parameters.AddWithValue("@userId", userId);
                     packNotInScan = (int)(await cmd.ExecuteScalarAsync() ?? 0);
                 }
 
                 if (packNotInScan > 0)
                 {
-                    errors.Add($"There are {packNotInScan} entries on the Packing Slip that are not on the Scan List");
+                    string msg = $"There are {packNotInScan} entries on the Packing Slip that are not on the Scan List";
+                    errors.Add(msg);
+                    await LogErrorAsync(con, "CheckErrorsAsync", msg, userId);
                     errorCount++;
                 }
 
                 // ========== VALIDATION 5: Duplicate Scan List ==========
                 int dupScan;
                 await using (var cmd = new SqlCommand(@"
-            SELECT COUNT(*) FROM (
-                SELECT IMEI FROM tblScanList
-                GROUP BY IMEI HAVING COUNT(*) > 1
-            ) x", con))
+                    SELECT COUNT(*) FROM (
+                        SELECT IMEI FROM tblScanList WHERE Created_by = @userId
+                        GROUP BY IMEI HAVING COUNT(*) > 1
+                    ) x", con))
                 {
+                    cmd.CommandTimeout = 600;
+                    cmd.Parameters.AddWithValue("@userId", userId);
                     dupScan = (int)(await cmd.ExecuteScalarAsync() ?? 0);
                 }
 
                 if (dupScan > 0)
                 {
-                    errors.Add($"There are {dupScan} duplicate IMEIs in the Scan List");
+                    string msg = $"There are {dupScan} duplicate IMEIs in the Scan List";
+                    errors.Add(msg);
+                    await LogErrorAsync(con, "CheckErrorsAsync", msg, userId);
                     errorCount++;
                 }
 
                 // ========== VALIDATION 6: Duplicate Packing Slip ==========
                 int dupPack;
                 await using (var cmd = new SqlCommand(@"
-            SELECT COUNT(*) FROM (
-                SELECT IMEI FROM TblPackingSlip
-                GROUP BY IMEI HAVING COUNT(*) > 1
-            ) x", con))
+                    SELECT COUNT(*) FROM (
+                        SELECT IMEI FROM TblPackingSlip WHERE Created_by = @userId
+                        GROUP BY IMEI HAVING COUNT(*) > 1
+                    ) x", con))
                 {
+                    cmd.CommandTimeout = 600;
+                    cmd.Parameters.AddWithValue("@userId", userId);
                     dupPack = (int)(await cmd.ExecuteScalarAsync() ?? 0);
                 }
 
                 if (dupPack > 0)
                 {
-                    errors.Add($"There are {dupPack} duplicate IMEIs in the Packing Slip");
+                    string msg = $"There are {dupPack} duplicate IMEIs in the Packing Slip";
+                    errors.Add(msg);
+                    await LogErrorAsync(con, "CheckErrorsAsync", msg, userId);
                     errorCount++;
                 }
 
                 // ========== VALIDATION 7: Invalid IMEI Format (Scan List) ==========
                 int invalidScan;
                 await using (var cmd = new SqlCommand(@"
-            SELECT COUNT(*) FROM tblScanList 
-            WHERE LEN(ISNULL(IMEI,'')) < 10", con))
+                    SELECT COUNT(*) FROM tblScanList 
+                    WHERE Created_by = @userId AND LEN(ISNULL(IMEI,'')) < 10", con))
                 {
+                    cmd.CommandTimeout = 600;
+                    cmd.Parameters.AddWithValue("@userId", userId);
                     invalidScan = (int)(await cmd.ExecuteScalarAsync() ?? 0);
                 }
 
                 if (invalidScan > 0)
                 {
-                    errors.Add($"There are {invalidScan} invalid entries in the Scan List");
+                    string msg = $"There are {invalidScan} invalid entries in the Scan List";
+                    errors.Add(msg);
+                    await LogErrorAsync(con, "CheckErrorsAsync", msg, userId);
                     errorCount++;
                 }
 
                 // ========== VALIDATION 8: Invalid IMEI Format (Packing Slip) ==========
                 int invalidPack;
                 await using (var cmd = new SqlCommand(@"
-            SELECT COUNT(*) FROM TblPackingSlip 
-            WHERE LEN(ISNULL(IMEI,'')) < 10", con))
+                    SELECT COUNT(*) FROM TblPackingSlip 
+                    WHERE Created_by = @userId AND LEN(ISNULL(IMEI,'')) < 10", con))
                 {
+                    cmd.CommandTimeout = 600;
+                    cmd.Parameters.AddWithValue("@userId", userId);
                     invalidPack = (int)(await cmd.ExecuteScalarAsync() ?? 0);
                 }
 
                 if (invalidPack > 0)
                 {
-                    errors.Add($"There are {invalidPack} invalid entries in the Packing Slip");
+                    string msg = $"There are {invalidPack} invalid entries in the Packing Slip";
+                    errors.Add(msg);
+                    await LogErrorAsync(con, "CheckErrorsAsync", msg, userId);
                     errorCount++;
                 }
 
@@ -650,7 +700,7 @@ VALUES
                 {
                     ErrorCount = errorCount,
                     Errors = errors,
-                    CanPost = errorCount == 0  // ✅ This enables Post button
+                    CanPost = errorCount == 0  
                 };
             }
             catch (Exception ex)
@@ -665,27 +715,30 @@ VALUES
                 };
             }
 
-                return response;
+            return response;
         }
 
-        // Async version of LogError
-        private static async Task LogErrorAsync(SqlConnection con, string errorWhile)
+        private static async Task LogErrorAsync(SqlConnection con, string errorWhile, string description, int userId)
         {
             await using var cmd = new SqlCommand(@"
-        INSERT INTO tblErrors
-        (VBCode, VBDescription, PONumber, RecNo, ErrorWhile, [RowCount], Resolved)
-        VALUES
-        (0, @desc, '', 0, @while, 0, 0)", con);
+                INSERT INTO tblErrors
+                (VBCode, VBDescription, PONumber, RecNo, ErrorWhile, [RowCount], Resolved, Created_by, Created_date)
+                VALUES
+                ('0', @desc, '', 0, @while, 0, 0, @userId, @date)", con);
+            cmd.CommandTimeout = 600;
 
-            cmd.Parameters.AddWithValue("@desc", errorWhile);
-            cmd.Parameters.AddWithValue("@while", "CheckErrorsAsync");
+            cmd.Parameters.AddWithValue("@desc", description);
+            cmd.Parameters.AddWithValue("@while", errorWhile);
+            cmd.Parameters.AddWithValue("@userId", userId);
+            cmd.Parameters.AddWithValue("@date", DateTime.Now);
             await cmd.ExecuteNonQueryAsync();
         }
-        // =================== HELPER ===================
+
         private async Task ExecuteNonQueryAsync(string sql)
         {
             using var con = new SqlConnection(_sqlConn);
             using var cmd = new SqlCommand(sql, con);
+            cmd.CommandTimeout = 600;
             await con.OpenAsync();
             await cmd.ExecuteNonQueryAsync();
         }

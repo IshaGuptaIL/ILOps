@@ -1,19 +1,30 @@
-<div class="imei-wrapper">
-    <div class="imei-card">
-        <div class="imei-title">IMEI Management</div>
-
-        <div class="imei-menu">
-            <button (click)="navigate('receive')">Receive IMEI's <span>➜</span></button>
-            <button (click)="navigate('credit')">Enter Invoice / Credits <span>➜</span></button>
-            <button (click)="navigate('find')">Find By IMEI <span>➜</span></button>
-            <button (click)="navigate('exception')">IMEI Exceptions <span>➜</span></button>
-            <button (click)="navigate('reports')">Reports <span>➜</span></button>
-        </div>
-
-        <hr />
-
-        <div class="imei-content-area">
-            <router-outlet></router-outlet>
-        </div>
+<div class="ms-access-mdi">
+  <!-- MDI Title Bar -->
+  <div class="mdi-titlebar">
+    <span class="mdi-title">Microsoft Access - [IMEI Management Module: IMEIReceive-Spire]</span>
+    <div class="mdi-window-controls">
+      <button class="win-btn">_</button>
+      <button class="win-btn">□</button>
+      <button class="win-btn win-close">×</button>
     </div>
+  </div>
+
+  <!-- MDI Toolbar / Switchboard Buttons -->
+  <div class="mdi-toolbar">
+    <div class="toolbar-group">
+      <button class="ms-btn" (click)="navigate('receive')">Receive IMEI's</button>
+      <button class="ms-btn" (click)="navigate('credit')">Enter Invoice / Credits</button>
+      <button class="ms-btn" (click)="navigate('find')">Find By IMEI</button>
+      <button class="ms-btn" (click)="navigate('exception')">IMEI Exceptions</button>
+      <button class="ms-btn" (click)="navigate('reports')">Reports</button>
+    </div>
+    <div class="toolbar-group">
+      <button class="ms-btn ms-exit" (click)="navigate('exit')">Exit System</button>
+    </div>
+  </div>
+
+  <!-- MDI Workspace Area -->
+  <div class="mdi-workspace">
+    <router-outlet></router-outlet>
+  </div>
 </div>

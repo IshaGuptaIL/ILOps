@@ -1,0 +1,741 @@
+/* Host Component Container */
+:host {
+  display: block;
+  background-color: #d4d0c8; /* Classic gray desktop background */
+  font-family: 'Tahoma', 'Segoe UI', Arial, sans-serif;
+  font-size: 11px;
+  color: #000;
+  padding: 10px;
+  box-sizing: border-box;
+  min-height: 100vh;
+}
+
+/* Access Form Outer Window Bevel */
+.access-form-window {
+  background-color: #d4d0c8;
+  border: 2px outset #ffffff;
+  padding: 1px;
+  box-sizing: border-box;
+  box-shadow: 1px 1px 4px rgba(0,0,0,0.3);
+}
+
+/* MS Access Style Navy Title Bar */
+.access-title-bar {
+  background: linear-gradient(90deg, #000080, #1084d0); /* Active Navy gradient */
+  color: #ffffff;
+  padding: 3px 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  font-size: 11.5px;
+}
+
+.access-title-bar .title-text {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.access-title-bar .access-icon {
+  font-size: 12px;
+}
+
+.access-title-bar .window-controls {
+  display: flex;
+  gap: 2px;
+}
+
+.access-title-bar .win-btn {
+  background-color: #d4d0c8;
+  color: #000000;
+  border: 1px outset #ffffff;
+  padding: 1px 5px;
+  font-size: 9px;
+  cursor: pointer;
+  line-height: 1;
+  text-align: center;
+  font-weight: bold;
+}
+
+.access-title-bar .close-btn {
+  margin-left: 2px;
+  color: #000000;
+}
+
+.access-title-bar .win-btn:active {
+  border: 1px inset #808080;
+}
+
+/* Form Body */
+.access-form-body {
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+/* Responsive 2-Column Layout */
+.access-main-grid {
+  display: grid;
+  grid-template-columns: 68fr 32fr; /* Ratio matching 18900 twips vs 8900 twips */
+  gap: 12px;
+  width: 100%;
+}
+
+@media (max-width: 1200px) {
+  .access-main-grid {
+    grid-template-columns: 100%; /* Stack columns on narrow screens */
+  }
+}
+
+/* Left & Right Workspace Panel wrappers */
+.left-panel-workspace {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0; /* Prevent flex blowout */
+}
+
+.right-panel-workspace {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0; /* Prevent flex blowout */
+}
+
+/* Fieldset Frames (Beveled Container Sections) */
+.access-section {
+  border-top: 2px solid #808080;
+  border-left: 2px solid #808080;
+  border-bottom: 2px solid #ffffff;
+  border-right: 2px solid #ffffff;
+  margin: 0;
+  padding: 8px;
+  background-color: #d4d0c8;
+  box-sizing: border-box;
+}
+
+.access-section legend {
+  font-weight: bold;
+  color: #000080;
+  font-size: 11px;
+  padding: 0 4px;
+  background-color: #d4d0c8;
+}
+
+/* Left Header: Side-by-Side Filters and Aging Buckets */
+.left-header-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 10px;
+  width: 100%;
+  align-items: stretch;
+}
+
+.filters-fieldset {
+  flex: 1 1 500px;
+  min-width: 0;
+}
+
+.aging-balances-fieldset {
+  flex: 0 0 260px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 860px) {
+  .aging-balances-fieldset {
+    flex: 1 1 100%; /* Wrap to full width on mobile viewports */
+  }
+}
+
+/* Filters Internal layout split */
+.filters-flex-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+/* Option Group: Select By... */
+.frame-select-by {
+  border-top: 2px solid #808080;
+  border-left: 2px solid #808080;
+  border-bottom: 2px solid #ffffff;
+  border-right: 2px solid #ffffff;
+  padding: 8px;
+  width: 90px;
+  flex-shrink: 0;
+  position: relative;
+  margin-top: 4px;
+  box-sizing: border-box;
+}
+
+.frame-select-by .frame-label {
+  position: absolute;
+  top: -8px;
+  left: 6px;
+  background-color: #d4d0c8;
+  padding: 0 2px;
+  font-weight: bold;
+  font-size: 10.5px;
+  color: #000000;
+}
+
+.frame-select-by .radio-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.access-radio {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.access-radio input {
+  margin: 0;
+  cursor: pointer;
+}
+
+/* Filters Inputs Area */
+.filters-fields-container {
+  flex: 1 1 350px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* Filter Row & Columns */
+.filter-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  width: 100%;
+}
+
+.filter-col {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.filter-col label {
+  font-weight: bold;
+  color: #000000;
+  white-space: nowrap;
+  min-width: 80px;
+  text-align: right;
+}
+
+.flex-1 { flex: 1 1 120px; }
+.flex-2 { flex: 2 1 200px; }
+.flex-grow-input { flex-grow: 1; width: 100%; }
+
+.width-60 { width: 60px; }
+.width-80 { width: 80px; }
+.width-120 { width: 120px; }
+.width-full { width: 100%; }
+
+.access-input-date {
+  width: 110px;
+  height: 20px;
+  box-sizing: border-box;
+}
+
+.spacing-top {
+  margin-top: 3px;
+}
+
+.spacing-top-small {
+  margin-top: 1px;
+}
+
+/* Buttons inside filters */
+.button-group-filters {
+  display: flex;
+  gap: 6px;
+  margin-left: auto;
+  flex-wrap: wrap;
+}
+
+/* Input Fields (Flat Inset Box Look) */
+select, input[type="text"], input[type="date"], textarea {
+  background-color: #ffffff;
+  color: #000000;
+  border-top: 2px solid #808080;
+  border-left: 2px solid #808080;
+  border-bottom: 1px solid #ffffff;
+  border-right: 1px solid #ffffff;
+  padding: 1px 3px;
+  font-family: 'Tahoma', Arial, sans-serif;
+  font-size: 11px;
+  height: 20px;
+  box-sizing: border-box;
+  outline: none;
+}
+
+select {
+  padding-right: 1px;
+  cursor: pointer;
+}
+
+textarea {
+  height: auto;
+  font-family: inherit;
+  resize: vertical;
+}
+
+/* Yellow Focus Highlighting (MS Access style) */
+select:focus, input:focus, textarea:focus {
+  background-color: #ffffdd !important; /* Light yellow focus */
+  color: #000000 !important;
+  border-top: 2px solid #000000 !important;
+  border-left: 2px solid #000000 !important;
+  border-bottom: 1px solid #d4d0c8 !important;
+  border-right: 1px solid #d4d0c8 !important;
+}
+
+/* Disabled Fields (Microsoft Flat Gray style) */
+.disabled-input, input[disabled], select[disabled], textarea[disabled] {
+  background-color: #d4d0c8 !important;
+  color: #808080 !important;
+  border: 1px solid #808080 !important;
+  cursor: not-allowed;
+}
+
+/* Checkbox Style */
+.access-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.access-checkbox input {
+  margin: 0;
+  cursor: pointer;
+}
+
+/* Retro Beveled Push Button Styling */
+.access-btn {
+  background-color: #d4d0c8;
+  color: #000000;
+  border-top: 2px solid #ffffff;
+  border-left: 2px solid #ffffff;
+  border-bottom: 2px solid #808080;
+  border-right: 2px solid #808080;
+  padding: 2px 10px;
+  font-family: 'Tahoma', Arial, sans-serif;
+  font-size: 11px;
+  font-weight: bold;
+  cursor: pointer;
+  outline: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  box-sizing: border-box;
+  height: 22px;
+  border-radius: 0; /* Strict sharp corners */
+}
+
+.access-btn:hover {
+  background-color: #dedad2;
+}
+
+.access-btn:active {
+  border-top: 2px solid #808080;
+  border-left: 2px solid #808080;
+  border-bottom: 2px solid #ffffff;
+  border-right: 2px solid #ffffff;
+  padding: 3px 9px 1px 11px; /* Bevel offset click effect */
+}
+
+.access-btn[disabled] {
+  color: #808080 !important;
+  border: 1px solid #808080 !important;
+  background-color: #d4d0c8 !important;
+  cursor: not-allowed !important;
+  padding: 2px 10px !important;
+}
+
+/* Subform containers styling (looks like inner frames in Access) */
+.subform-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background-color: #808080; /* Gray border frame around the subform sheet */
+  border-top: 2px solid #808080;
+  border-left: 2px solid #808080;
+  border-bottom: 2px solid #ffffff;
+  border-right: 2px solid #ffffff;
+  padding: 2px;
+  box-sizing: border-box;
+}
+
+.subform-container legend {
+  color: #ffffff;
+  background-color: #808080;
+  font-weight: bold;
+  padding: 1px 4px;
+  font-size: 10.5px;
+}
+
+.subform-header {
+  background-color: #000080; /* Solid navy title bar for subform headers */
+  color: #ffffff;
+  padding: 2px 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.subform-title {
+  font-weight: bold;
+  font-size: 11px;
+}
+
+/* Datasheet Table Views Parity */
+.datasheet-scroll-wrapper {
+  overflow: auto;
+  background-color: #ffffff;
+  border: 1px solid #404040;
+  max-height: 240px;
+  box-sizing: border-box;
+}
+
+.min-height-120 {
+  max-height: 120px;
+}
+
+.min-height-200 {
+  max-height: 200px;
+}
+
+.access-datasheet {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #ffffff;
+}
+
+.access-datasheet th {
+  background-color: #d4d0c8;
+  color: #000000;
+  font-weight: bold;
+  padding: 2px 4px;
+  border-right: 1px solid #808080;
+  border-bottom: 2px solid #808080;
+  text-align: left;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  white-space: nowrap;
+}
+
+.access-datasheet td {
+  padding: 2px 4px;
+  border-right: 1px solid #d4d0c8;
+  border-bottom: 1px solid #d4d0c8;
+  color: #000000;
+  white-space: nowrap;
+  font-size: 11px;
+}
+
+/* Grid Alternating backgrounds */
+.access-datasheet tbody tr:nth-child(even) {
+  background-color: #f6f6f6;
+}
+
+/* Grid hover & active rows */
+.access-datasheet tbody tr:hover {
+  background-color: #eaeaea;
+}
+
+.access-datasheet tbody tr.active-row {
+  background-color: #0a246a !important; /* Access active row navy */
+  color: #ffffff !important;
+}
+
+.access-datasheet tbody tr.active-row td {
+  color: #ffffff !important;
+}
+
+/* Column sizes */
+.col-check { width: 26px; }
+.col-cust { width: 65px; }
+.col-trans { width: 75px; }
+.col-ref { width: 75px; }
+.col-type { width: 35px; }
+.col-date { width: 80px; }
+.col-amount { width: 85px; }
+.col-balance { width: 85px; }
+.col-aging { width: 80px; }
+.col-ban { width: 90px; }
+.col-cause { width: 140px; }
+.col-opc-resolved { width: 55px; }
+.col-notice { width: 80px; }
+
+/* Totals Row */
+.datasheet-totals td {
+  background-color: #d4d0c8 !important;
+  border-top: 2px double #808080;
+  font-weight: bold;
+  color: #000000 !important;
+}
+
+.datasheet-totals .total-cell {
+  border-bottom: 4px double #808080;
+}
+
+.negative-balance {
+  color: #cc0000 !important;
+}
+.active-row .negative-balance {
+  color: #ffb3b3 !important;
+}
+
+/* Badges for grid items */
+.badge-type {
+  font-weight: bold;
+}
+.type-I { color: #0000ff; }
+.type-P { color: #008000; }
+.type-C { color: #800080; }
+.type-A { color: #ff6600; }
+
+.active-row .type-I { color: #b3caff; }
+.active-row .type-P { color: #b3ffb3; }
+.active-row .type-C { color: #ffb3ff; }
+.active-row .type-A { color: #ffdfc0; }
+
+/* Subform Separator Row */
+.subform-toolbar-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 4px 0;
+  width: 100%;
+}
+
+.subform-title-text {
+  font-weight: bold;
+  color: #000000;
+  font-size: 11px;
+}
+
+/* Edit Panel Details Box */
+.transaction-edit-panel {
+  background-color: #d4d0c8;
+}
+
+.edit-inputs-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.edit-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  width: 100%;
+}
+
+.edit-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.edit-group.flex-grow {
+  flex-grow: 1;
+}
+
+.edit-group label {
+  font-weight: bold;
+  color: #000000;
+  white-space: nowrap;
+}
+
+.edit-group input, .edit-group select {
+  width: 100%;
+  flex-grow: 1;
+}
+
+.checkbox-group-inline {
+  display: flex;
+  gap: 12px;
+  font-weight: bold;
+}
+
+.edit-actions {
+  margin-left: auto;
+}
+
+.btn-save {
+  color: #006600 !important;
+}
+
+.btn-xs {
+  height: 18px !important;
+  font-size: 10px !important;
+  padding: 0 5px !important;
+}
+
+.disabled-panel {
+  opacity: 0.6;
+}
+
+/* Aging balances layout */
+.aging-balances-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-grow: 1;
+}
+
+.explore-folder-btn {
+  width: 100%;
+  height: 22px;
+}
+
+.aging-readouts-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.readout-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.readout-row label {
+  font-weight: bold;
+  width: 80px;
+}
+
+.readonly-box {
+  width: 130px;
+  background-color: #d4d0c8 !important;
+  border: 1px solid #808080 !important;
+  text-align: right;
+  padding: 1px 3px;
+  font-family: 'Tahoma', Arial, sans-serif;
+  font-size: 11px;
+}
+
+.readout-row.total-row label {
+  font-size: 11px;
+  color: #000080;
+}
+
+.readout-row.total-row .readonly-box {
+  font-size: 11px;
+  border: 2px solid #000080 !important;
+  color: #000080 !important;
+}
+
+/* Notice actions panel */
+.notice-actions-frame {
+  margin: 0;
+}
+
+.notice-buttons-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.row-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px;
+}
+
+.row-2col button {
+  width: 100%;
+}
+
+.logger-buttons-label {
+  font-weight: bold;
+  font-size: 10px;
+  color: #000000;
+  margin-top: 3px;
+}
+
+.logger-grid-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 4px;
+  width: 100%;
+}
+
+.logger-grid-buttons button {
+  height: 20px;
+  font-size: 9.5px;
+  padding: 0 2px;
+}
+
+/* Comment logger box */
+.comment-logger-frame .logger-box {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.comment-logger-frame .logger-box label {
+  font-weight: bold;
+}
+
+.comment-logger-frame .logger-box textarea {
+  width: 100%;
+  resize: vertical;
+}
+
+/* All Customer Events Toolbar */
+.events-actions-toolbar {
+  display: flex;
+  gap: 3px;
+}
+
+.badge-event {
+  font-weight: bold;
+  padding: 0 2px;
+}
+
+.event-type-1 { color: #000000; }
+.event-type-5 { color: #0000cc; }
+.event-type-6 { color: #008000; }
+.event-type-7 { color: #cc0000; }
+.event-type-8 { color: #800080; }
+
+.inline-comment-edit {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+  width: 100%;
+}
+
+.inline-edit-input {
+  flex-grow: 1;
+  height: 18px !important;
+  font-size: 11px;
+}

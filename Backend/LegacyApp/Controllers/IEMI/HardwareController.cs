@@ -1,4 +1,4 @@
-﻿using DAL.Inventory.IMEI.HardwareIMEI;
+using DAL.Inventory.IMEI.HardwareIMEI;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -31,9 +31,19 @@ namespace LegacyApp.Controllers.IEMI
             return response.Success ? Ok(response.Data) : BadRequest(response.Message);
         }
 
+        private int GetUserId()
+        {
+            if (Request.Cookies.TryGetValue("userId", out var cookieUserId) && int.TryParse(cookieUserId, out var parsedId))
+                return parsedId;
+            if (Request.Headers.TryGetValue("userId", out var headerUserId) && int.TryParse(headerUserId.ToString(), out var parsedHeaderId))
+                return parsedHeaderId;
+            return 1; // Default fallback legacy user ID
+        }
+
         [HttpPost("check-errors")]
         public async Task<IActionResult> CheckErrors([FromBody] CheckErrorsRequest request)
         {
+            request.UserId = GetUserId();
             var response = await _hardwareService.CheckErrorsAsync(request);
             return response.Success ? Ok(response.Data) : BadRequest(response.Message);
         }
@@ -41,6 +51,7 @@ namespace LegacyApp.Controllers.IEMI
         [HttpPost("receive")]
         public async Task<IActionResult> ReceiveImei([FromBody] ReceiveImeiRequest request)
         {
+            request.UserId = GetUserId();
             var response = await _hardwareService.ReceiveImeiAsync(request);
             return response.Success ? Ok(response.Data) : BadRequest(response.Message);
         }

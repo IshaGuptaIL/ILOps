@@ -1,0 +1,716 @@
+/* Responsive Bulk Invoice Edit Styles */
+:host {
+    display: block;
+    width: 100%;
+    background-color: #ffffff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 13px;
+}
+
+.bulk-id-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .bulk-id-container {
+    grid-template-columns: 1fr;
+    padding: 10px;
+    gap: 15px;
+  }
+}
+
+.bulk-column {
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 20px;
+  min-height: 500px;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 768px) {
+  .bulk-column {
+    padding: 15px;
+    min-height: auto;
+  }
+}
+
+.column-header {
+  font-size: 16px;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #3498db;
+}
+
+.column-description {
+  font-size: 13px;
+  color: #6c757d;
+  line-height: 1.4;
+  margin-bottom: 20px;
+  padding: 10px;
+  background: #e9ecef;
+  border-radius: 4px;
+}
+
+.form-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.input-row {
+  display: flex;
+  gap: 10px;
+  align-items: end;
+}
+
+@media (max-width: 768px) {
+  .input-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.flex-grow {
+  flex: 1;
+}
+
+.input-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 3px;
+}
+
+.form-input {
+  padding: 8px 12px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 13px;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #80bdff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.form-input.readonly {
+  background-color: #e9ecef;
+  color: #6c757d;
+}
+
+.form-input:disabled {
+  background-color: #e9ecef;
+  opacity: 0.6;
+}
+
+.char-counter {
+  font-size: 11px;
+  color: #6c757d;
+  text-align: right;
+  margin-top: 2px;
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  margin: 10px 0;
+}
+
+.button-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .button-row {
+    flex-direction: column;
+  }
+}
+
+.action-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 120px;
+}
+
+.action-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.action-button.primary {
+  background-color: #007bff;
+  color: white;
+}
+
+.action-button.primary:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+.action-button.success {
+  background-color: #28a745;
+  color: white;
+}
+
+.action-button.success:hover:not(:disabled) {
+  background-color: #1e7e34;
+}
+
+.action-button.secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.action-button.secondary:hover:not(:disabled) {
+  background-color: #545b62;
+}
+
+/* Invoice List Preview */
+.invoice-list-preview {
+  background: white;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  padding: 15px;
+  margin: 10px 0;
+}
+
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.list-count {
+  font-weight: 600;
+  color: #28a745;
+}
+
+.list-sample {
+  font-size: 12px;
+  color: #6c757d;
+}
+
+.list-items {
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 8px;
+  margin: 2px 0;
+  background: #f8f9fa;
+  border-radius: 3px;
+  font-size: 12px;
+}
+
+.remove-btn {
+  background: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.remove-btn:hover {
+  background: #c82333;
+}
+
+.more-items {
+  text-align: center;
+  color: #6c757d;
+  font-style: italic;
+  font-size: 12px;
+  padding: 5px;
+}
+
+/* Authentic VBA/MS Access Modal with Excel-style Grid */
+.vba-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.vba-modal-window {
+  background: #c0c0c0;
+  border: 2px outset #c0c0c0;
+  border-radius: 0;
+  width: 100%;
+  max-width: 700px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  font-family: 'MS Sans Serif', sans-serif;
+  font-size: 11px;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+
+/* VBA Title Bar */
+.vba-title-bar {
+  background: linear-gradient(to right, #0a246a, #a6caf0);
+  color: white;
+  padding: 2px 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 18px;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.vba-title-text {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.vba-app-icon {
+  font-size: 12px;
+}
+
+.vba-title-buttons {
+  display: flex;
+  gap: 1px;
+}
+
+.vba-minimize-btn, .vba-maximize-btn, .vba-close-btn {
+  background: #c0c0c0;
+  border: 1px outset #c0c0c0;
+  color: black;
+  width: 16px;
+  height: 14px;
+  font-size: 9px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vba-close-btn {
+  background: #ff4444;
+  color: white;
+}
+
+.vba-minimize-btn:hover, .vba-maximize-btn:hover {
+  background: #d4d4d4;
+}
+
+.vba-close-btn:hover {
+  background: #cc0000;
+}
+
+/* VBA Menu Bar */
+.vba-menu-bar {
+  background: #c0c0c0;
+  border-bottom: 1px solid #808080;
+  padding: 2px 8px;
+  display: flex;
+  gap: 15px;
+  font-size: 11px;
+}
+
+.vba-menu-item {
+  padding: 2px 6px;
+  cursor: pointer;
+  color: black;
+}
+
+.vba-menu-item:hover {
+  background: #316ac5;
+  color: white;
+}
+
+/* VBA Toolbar */
+.vba-toolbar {
+  background: #c0c0c0;
+  border-bottom: 1px solid #808080;
+  padding: 3px 8px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.vba-tool-btn {
+  background: #c0c0c0;
+  border: 1px solid transparent;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+.vba-tool-btn:hover {
+  border: 1px outset #c0c0c0;
+  background: #d4d4d4;
+}
+
+.vba-separator {
+  width: 1px;
+  height: 18px;
+  background: #808080;
+  margin: 0 4px;
+}
+
+/* VBA Form Content */
+.vba-form-content {
+  background: #c0c0c0;
+  padding: 12px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: auto;
+}
+
+.vba-form-header {
+  margin-bottom: 8px;
+}
+
+.vba-form-title {
+  font-size: 12px;
+  font-weight: bold;
+  color: #000080;
+  margin-bottom: 2px;
+}
+
+.vba-form-subtitle {
+  font-size: 10px;
+  color: #666;
+}
+
+.vba-data-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.vba-section-label {
+  font-size: 11px;
+  font-weight: bold;
+  color: black;
+  margin-bottom: 4px;
+}
+
+/* VBA Form Content */
+.vba-form-content {
+  background: #c0c0c0;
+  padding: 12px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: auto;
+}
+
+.vba-data-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Excel-style Grid */
+.excel-grid-container {
+  border: 2px inset #c0c0c0;
+  background: white;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 300px;
+}
+
+.excel-header-row {
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  background: #c0c0c0;
+  border-bottom: 1px solid #808080;
+  font-weight: bold;
+  font-size: 10px;
+}
+
+.excel-row-number-header, .excel-column-header {
+  padding: 4px 6px;
+  border-right: 1px solid #808080;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(to bottom, #e0e0e0, #c0c0c0);
+}
+
+.excel-column-header {
+  justify-content: flex-start;
+}
+
+.excel-data-area {
+  flex: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.excel-textarea {
+  width: 100%;
+  height: 180px;
+  border: none;
+  padding: 8px;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  background: white;
+  resize: vertical;
+  outline: none;
+}
+
+.excel-preview-container {
+  border-top: 1px solid #808080;
+  background: #f0f0f0;
+  display: flex;
+  flex-direction: column;
+}
+
+.excel-preview-header {
+  background: #d4d4d4;
+  padding: 2px 8px;
+  font-weight: bold;
+  font-size: 9px;
+  border-bottom: 1px solid #808080;
+}
+
+.excel-preview-grid {
+  max-height: 150px;
+  overflow-y: auto;
+  background: white;
+}
+
+.excel-preview-row, .excel-more-rows {
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 10px;
+}
+
+.excel-row-number {
+  background: #f0f0f0;
+  border-right: 1px solid #d0d0d0;
+  padding: 2px 4px;
+  text-align: center;
+  font-weight: bold;
+  color: #666;
+}
+
+.excel-cell {
+  padding: 2px 6px;
+  border-right: 1px solid #e0e0e0;
+  font-family: 'Courier New', monospace;
+  background: white;
+}
+
+/* VBA Status Info */
+.vba-status-info {
+  display: flex;
+  gap: 15px;
+  padding: 6px 8px;
+  background: #e0e0e0;
+  border: 1px inset #c0c0c0;
+  font-size: 10px;
+}
+
+.vba-status-item {
+  display: flex;
+  gap: 4px;
+}
+
+.vba-status-label {
+  font-weight: bold;
+  color: #333;
+}
+
+.vba-status-value {
+  color: #000080;
+  font-weight: bold;
+}
+
+/* VBA Button Panel */
+.vba-button-panel {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  padding: 8px 0;
+  border-top: 1px solid #808080;
+}
+
+.vba-form-button {
+  padding: 4px 12px;
+  border: 1px outset #c0c0c0;
+  background: #c0c0c0;
+  font-size: 11px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 70px;
+  justify-content: center;
+  font-family: 'MS Sans Serif', sans-serif;
+}
+
+.vba-form-button:hover:not(:disabled) {
+  background: #d4d4d4;
+}
+
+.vba-form-button:active {
+  border: 1px inset #c0c0c0;
+}
+
+.vba-form-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  color: #808080;
+}
+
+.vba-btn-ok {
+  background: #e0e0e0;
+  font-weight: bold;
+}
+
+.vba-btn-cancel {
+  background: #c0c0c0;
+}
+
+.vba-btn-clear {
+  background: #c0c0c0;
+}
+
+.vba-btn-icon {
+  font-size: 10px;
+}
+
+/* VBA Status Bar */
+.vba-status-bar {
+  background: #c0c0c0;
+  border-top: 1px solid #808080;
+  padding: 2px 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 10px;
+  height: 18px;
+}
+
+.vba-status-left {
+  display: flex;
+  gap: 10px;
+}
+
+.vba-status-right {
+  display: flex;
+  gap: 8px;
+}
+
+.vba-status-text {
+  color: black;
+  font-size: 10px;
+}
+
+/* Mobile Responsiveness for VBA Modal */
+@media (max-width: 768px) {
+  .vba-modal-overlay {
+    padding: 10px;
+  }
+  
+  .vba-modal-window {
+    max-width: 100%;
+    max-height: 95vh;
+  }
+  
+  .vba-menu-bar {
+    display: none; /* Hide menu on mobile */
+  }
+  
+  .vba-toolbar {
+    padding: 2px 4px;
+  }
+  
+  .vba-tool-btn {
+    width: 18px;
+    height: 18px;
+    font-size: 10px;
+  }
+  
+  .vba-form-content {
+    padding: 8px;
+  }
+  
+  .excel-grid-container {
+    min-height: 250px;
+  }
+  
+  .excel-header-row {
+    grid-template-columns: 30px 1fr 60px;
+  }
+  
+  .excel-preview-row, .excel-more-rows {
+    grid-template-columns: 30px 1fr 60px;
+  }
+  
+  .vba-button-panel {
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .vba-form-button {
+    width: 100%;
+  }
+  
+  .vba-status-info {
+    flex-direction: column;
+    gap: 4px;
+  }
+}

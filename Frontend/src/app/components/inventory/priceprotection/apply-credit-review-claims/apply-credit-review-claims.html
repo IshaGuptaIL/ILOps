@@ -1,0 +1,314 @@
+<div class="access-container fade-in">
+  <div class="form-body-wrapper">
+    <h1 class="form-title-bar">Apply Credits / Review Claims</h1>
+
+    <!-- GRID 1: Claims Summary -->
+    <div class="grid-panel">
+      <div class="grid-header-row">
+        <span class="grid-title">Claims Summary</span>
+        <div class="grid-actions">
+          <button class="access-glossy-btn" (click)="exportClaimsSummary()">
+            <i class="fa fa-file-excel"></i> Output Claims Summary
+          </button>
+        </div>
+      </div>
+      <div class="grid-table-container">
+        <table class="access-grid-table">
+          <thead>
+            <tr>
+              <th>Claim Batch ID</th>
+              <th>Date Price Drop</th>
+              <th>Part No</th>
+              <th class="text-right">Price Before</th>
+              <th class="text-right">Price After</th>
+              <th class="text-center">Count</th>
+              <th class="text-right">Total Claimed</th>
+              <th class="text-right">Total Paid</th>
+              <th>Min Of ID</th>
+              <th class="text-right">Total Outstanding</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of claimsSummary" 
+                [class.selected-row]="selectedBatchId === row.claimBatchID"
+                (click)="onSelectBatch(row)">
+              <td>{{ row.claimBatchID }}</td>
+              <td>{{ row.datePriceDrop | date:'yyyy-MM-dd' }}</td>
+              <td>{{ row.partNo }}</td>
+              <td class="text-right">{{ row.priceBefore | currency }}</td>
+              <td class="text-right">{{ row.priceAfter | currency }}</td>
+              <td class="text-center">{{ row.count }}</td>
+              <td class="text-right">{{ row.totalClaimed | currency }}</td>
+              <td class="text-right">{{ row.totalPaid | currency }}</td>
+              <td>{{ row.minOfID }}</td>
+              <td class="text-right" [class.text-green]="row.totalOutstanding <= 0" [class.text-blue]="row.totalOutstanding > 0">
+                {{ row.totalOutstanding | currency }}
+              </td>
+            </tr>
+            <tr *ngIf="claimsSummary.length === 0">
+              <td colspan="10" class="no-records">No claims found.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- GRID 2: Credit Summary for Claim Selected -->
+    <div class="grid-panel">
+      <div class="grid-header-row">
+        <span class="grid-title">Credit Summary for Claim Selected</span>
+        <div class="grid-actions">
+          <div class="modifier-wrapper">
+            <button class="access-glossy-btn" 
+                    [disabled]="!selectedCreditRow" 
+                    (click)="onModifyCreditNoteNumber()">
+              Modify Credit Note Number Below
+            </button>
+            <div class="modifier-input-group">
+              <span class="modifier-label">Current:</span>
+              <input type="text" class="modifier-input" [value]="selectedCreditRow?.creditNoteNumber || 'Unassigned'" readonly style="background-color: #f1f1f1;">
+              <span class="modifier-label">New Number:</span>
+              <input type="text" class="modifier-input" [(ngModel)]="newCreditNoteNumber" placeholder="Enter new note #">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="grid-table-container">
+        <table class="access-grid-table">
+          <thead>
+            <tr>
+              <th>Claim Batch ID</th>
+              <th>Credit Note Number</th>
+              <th>Date Price Drop</th>
+              <th>Part No</th>
+              <th>Credit Date</th>
+              <th class="text-right">Max Of Price Before Drop</th>
+              <th class="text-right">Max Of Price After Drop</th>
+              <th class="text-center">Count</th>
+              <th class="text-right">Unit Amount</th>
+              <th class="text-right">Total Claimed</th>
+              <th class="text-right">Total Paid</th>
+              <th class="text-center">Credit Count</th>
+              <th>Min Of ID</th>
+              <th class="text-right">Total Outstanding</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of creditSummary" 
+                [class.selected-row]="selectedCreditRow === row"
+                (click)="onSelectCreditRow(row)">
+              <td>{{ row.claimBatchID }}</td>
+              <td>{{ row.creditNoteNumber || 'Unassigned (Unpaid)' }}</td>
+              <td>{{ row.datePriceDrop | date:'yyyy-MM-dd' }}</td>
+              <td>{{ row.partNo }}</td>
+              <td>{{ row.creditDate | date:'yyyy-MM-dd' }}</td>
+              <td class="text-right">{{ row.maxOfPriceBeforeDrop | currency }}</td>
+              <td class="text-right">{{ row.maxOfPriceAfterDrop | currency }}</td>
+              <td class="text-center">{{ row.count }}</td>
+              <td class="text-right">{{ row.unitAmount | currency }}</td>
+              <td class="text-right">{{ row.totalClaimed | currency }}</td>
+              <td class="text-right">{{ row.totalPaid | currency }}</td>
+              <td class="text-center">{{ row.creditCount }}</td>
+              <td>{{ row.minOfID }}</td>
+              <td class="text-right">{{ row.totalOutstanding | currency }}</td>
+            </tr>
+            <tr *ngIf="creditSummary.length === 0">
+              <td colspan="14" class="no-records">Select a batch in Grid 1 to display credit summary.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- GRID 3: Totals for the Units linked to Credit Selected -->
+    <div class="grid-panel">
+      <div class="grid-header-row">
+        <span class="grid-title">Totals for the Units linked to Credit Selected (Amounts shown are for ALL credits for each unit)</span>
+      </div>
+      <div class="grid-table-container">
+        <table class="access-grid-table">
+          <thead>
+            <tr>
+              <th>Claim Batch ID</th>
+              <th>ID</th>
+              <th>Price Drop Date</th>
+              <th>SKU</th>
+              <th>Credit Note Number</th>
+              <th>IMEI</th>
+              <th>Receipt Date</th>
+              <th class="text-right">Receipt Cost</th>
+              <th class="text-right">Price Before Drop</th>
+              <th class="text-right">Price After Drop</th>
+              <th class="text-right">Claim Amount</th>
+              <th class="text-right">Claim Amount Paid</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of unpaidClaimsDetail" 
+                [class.selected-row]="selectedClaimDetailId === row.id"
+                (click)="onSelectClaimDetail(row)">
+              <td>{{ row.claimBatchID }}</td>
+              <td>{{ row.id }}</td>
+              <td>{{ row.priceDropDate | date:'yyyy-MM-dd' }}</td>
+              <td>{{ row.sku }}</td>
+              <td>{{ row.creditNoteNumber || 'Unassigned' }}</td>
+              <td>{{ row.imei }}</td>
+              <td>{{ row.receiptDate | date:'yyyy-MM-dd' }}</td>
+              <td class="text-right">{{ row.receiptCost | currency }}</td>
+              <td class="text-right">{{ row.priceBeforeDrop | currency }}</td>
+              <td class="text-right">{{ row.priceAfterDrop | currency }}</td>
+              <td class="text-right">{{ row.claimAmount | currency }}</td>
+              <td class="text-right">{{ row.claimAmountPaid | currency }}</td>
+            </tr>
+            <tr *ngIf="unpaidClaimsDetail.length === 0">
+              <td colspan="12" class="no-records">Select a credit group in Grid 2 to view linked units.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- GRID 4: Credit Details -->
+    <div class="grid-panel">
+      <div class="grid-header-row">
+        <span class="grid-title">Credit Details for individual IMEI selection above.</span>
+      </div>
+      <div class="grid-table-container">
+        <table class="access-grid-table">
+          <thead>
+            <tr>
+              <th class="text-right">Unit Credit Amount</th>
+              <th>Credit Note Number</th>
+              <th>Credit Note Date</th>
+              <th>PP Claim ID</th>
+              <th>IMEI</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of creditDetail" class="selected-row">
+              <td class="text-right">{{ row.unitCreditAmount | currency }}</td>
+              <td>{{ row.creditNoteNumber }}</td>
+              <td>{{ row.creditNoteDate | date:'yyyy-MM-dd' }}</td>
+              <td>{{ row.ppClaimID }}</td>
+              <td>{{ row.imei }}</td>
+            </tr>
+            <tr *ngIf="creditDetail.length === 0">
+              <td colspan="5" class="no-records">Select an IMEI row in Grid 3 to view individual credit details.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Bottom Actions Toolbar -->
+    <div class="bottom-actions">
+      <button class="access-glossy-btn btn-large" 
+              [disabled]="!selectedCreditRow" 
+              (click)="openApplyCreditsModal()">
+        Enter Credits
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- RETRO DIALOG MODAL: Apply Credits -->
+<div class="modal-overlay" *ngIf="showModal">
+  <div class="modal-dialog">
+    <div class="modal-header">
+      <span>frmApplyCredits</span>
+      <button class="close-btn" (click)="closeApplyCreditsModal()">&times;</button>
+    </div>
+    <div class="modal-body-layout">
+      
+      <!-- Left Column: Grid and Record Navigation Bar -->
+      <div class="modal-left-column">
+        <div class="modal-table-container">
+          <table class="access-grid-table">
+            <thead>
+              <tr>
+                <th class="text-center" style="width: 45px;">Selected</th>
+                <th>IMEI</th>
+                <th class="text-right">Claim Amount</th>
+                <th class="text-right">Paid Amount</th>
+                <th class="text-right">Due Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of modalItems" (click)="toggleModalItem(item)" [class.selected-row]="item.selected">
+                <td class="text-center" (click)="$event.stopPropagation()">
+                  <input type="checkbox" [(ngModel)]="item.selected" (change)="onModalMathChange()">
+                </td>
+                <td class="font-code">{{ item.imei }}</td>
+                <td class="text-right">{{ (item.claimAmount || 0) | currency }}</td>
+                <td class="text-right">{{ (item.claimAmountPaid || 0) | currency }}</td>
+                <td class="text-right">{{ ((item.claimAmount || 0) - (item.claimAmountPaid || 0)) | currency }}</td>
+              </tr>
+              <tr *ngIf="modalItems.length === 0">
+                <td colspan="5" class="no-records">No items to select.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        
+        <!-- Retro record navigation bar -->
+        <div class="access-record-bar">
+          <span>Record:</span>
+          <button class="record-nav-btn"><i class="fas fa-step-backward"></i></button>
+          <button class="record-nav-btn"><i class="fas fa-caret-left"></i></button>
+          <input type="text" class="record-nav-input" [value]="modalItems.length > 0 ? '1' : '0'" readonly />
+          <span>of {{ modalItems.length }}</span>
+          <button class="record-nav-btn"><i class="fas fa-caret-right"></i></button>
+          <button class="record-nav-btn"><i class="fas fa-step-forward"></i></button>
+          <span class="record-nav-divider">|</span>
+          <span class="record-nav-status"><i class="fas fa-filter"></i> No Filter</span>
+          <span class="record-nav-divider">|</span>
+          <span class="record-nav-search">Search: <input type="text" class="record-search-input" /></span>
+        </div>
+      </div>
+
+      <!-- Right Column: Details & Actions -->
+      <div class="modal-right-column">
+        <!-- Count and Due amount -->
+        <div class="modal-info-row">
+          <label>Count Selected:</label>
+          <input type="text" class="modal-input-readonly" [value]="modalTotalCountSelected" readonly>
+        </div>
+        <div class="modal-info-row">
+          <label>Total Due for Selected Items:</label>
+          <input type="text" class="modal-input-readonly" [value]="modalTotalDueSelected | currency" readonly>
+        </div>
+
+        <!-- Credit Details Fieldset -->
+        <fieldset class="modal-fieldset">
+          <legend class="modal-legend">Credit Details</legend>
+          <div class="modal-fieldset-content">
+            <div class="modal-form-field">
+              <label>Credit Note Number:</label>
+              <input type="text" class="modal-input" [(ngModel)]="modalCreditNoteNumber">
+            </div>
+            <div class="modal-form-field">
+              <label>Credit Note Date:</label>
+              <input type="date" class="modal-input" [(ngModel)]="modalCreditNoteDate" [max]="maxDate">
+            </div>
+            <div class="modal-form-field">
+              <label>Credit Unit Amount:</label>
+              <input type="number" class="modal-input" [(ngModel)]="modalCreditUnitAmount" (ngModelChange)="onModalMathChange()">
+            </div>
+            <div class="modal-form-field">
+              <label>Credit Total:</label>
+              <input type="text" class="modal-input-readonly" [value]="modalCreditTotal | currency" readonly>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- 2x2 Button Layout -->
+        <div class="modal-button-grid">
+          <button class="access-glossy-btn modal-action-btn" (click)="selectAllModalItems()">Select All</button>
+          <button class="access-glossy-btn modal-action-btn" (click)="submitApplyCredit()">Apply Credit</button>
+          <button class="access-glossy-btn modal-action-btn" (click)="selectNoneModalItems()">Select None</button>
+          <button class="access-glossy-btn modal-action-btn" (click)="closeApplyCreditsModal()">Exit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

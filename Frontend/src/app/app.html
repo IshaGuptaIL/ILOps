@@ -4,7 +4,7 @@
     <app-sidebar-component></app-sidebar-component>
   </aside>
 
-  <main class="main-content">
+  <main class="main-content" [class.sidebar-hidden]="!showSidebar">
     <app-spinner></app-spinner>
     <router-outlet></router-outlet>
   </main>

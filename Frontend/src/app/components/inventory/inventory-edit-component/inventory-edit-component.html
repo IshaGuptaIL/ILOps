@@ -1,0 +1,37 @@
+<div class="inventory-edit-page">
+    <!-- Switchboard Style Navigation (VBA Style) -->
+    <div class="view-navigation">
+        <div class="menu-card">
+            <div class="menu-title"> Invoice Edit </div>
+            <div class="menu-buttons">
+                <button routerLink="./terms" routerLinkActive="active">
+                    <span>Invoice Terms Edit</span>
+                    <span>→</span>
+                </button>
+                <button routerLink="./bulk" routerLinkActive="active">
+                    <span>Change Bulk Invoice ID</span>
+                    <span>→</span>
+                </button>
+                <button routerLink="./address" routerLinkActive="active">
+                    <span>Edit Invoice Address</span>
+                    <span>→</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <hr class="view-divider">
+
+    <!-- Sub-Component Container (VBA Form Style) -->
+    <div class="vba-form-container">
+        <div class="form-header">
+            <span>Inventory Management System</span>
+            <span style="font-size: 10px; cursor: pointer;">X</span>
+        </div>
+        
+        <div class="form-content">
+            <!-- Router outlet for child components -->
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>

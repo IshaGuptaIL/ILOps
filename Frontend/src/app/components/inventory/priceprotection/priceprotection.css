@@ -1,0 +1,625 @@
+/* MS Access Form Styling - Exact Replica of "Price Protection Claims" */
+
+.access-container {
+  background-color: #eaeaea;
+  font-family: Arial, "MS Sans Serif", sans-serif;
+  font-size: 11px;
+  color: #333333;
+  padding: 20px;
+  min-height: calc(100vh - 56px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.form-body-wrapper {
+  width: 980px;
+  margin: 0 auto;
+}
+
+/* Outer Window Title */
+.form-title-bar {
+  text-align: center;
+  font-family: Arial, sans-serif;
+  font-size: 20px;
+  color: #6d6d6d;
+  margin-bottom: 25px;
+  margin-top: 10px;
+  font-weight: normal;
+  letter-spacing: 0.5px;
+}
+
+/* Form Panel Body */
+.access-form-main {
+  background-color: #eaeaea;
+  border: none;
+  padding: 0;
+}
+
+/* Two-Column Top Layout */
+.two-column-layout {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+}
+
+.form-column {
+  width: 465px;
+  display: flex;
+  flex-direction: column;
+}
+
+.column-title {
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  font-weight: bold;
+  color: #555555;
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+.vertical-divider-line {
+  width: 1px;
+  background-color: #9c9c9c;
+  margin: 0 15px;
+  align-self: stretch;
+}
+
+/* Labels and Inputs Alignment */
+.form-group-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.form-label-cell {
+  width: 145px;
+  text-align: right;
+  padding-right: 8px;
+  color: #444444;
+  box-sizing: border-box;
+}
+
+.form-input-cell {
+  flex-grow: 1;
+}
+
+/* Access Control Inputs */
+.form-input-control, .form-select-control {
+  width: 100%;
+  height: 22px;
+  border: 1px solid #7f9db9;
+  background-color: #ffffff;
+  padding: 2px 4px;
+  font-family: Arial, sans-serif;
+  font-size: 11px;
+  box-sizing: border-box;
+  color: #000000;
+  border-radius: 0; /* MS Access classic has sharp corners */
+}
+
+.form-input-control:focus, .form-select-control:focus {
+  outline: none;
+  border-color: #3e5875;
+}
+
+.form-input-control.readonly {
+  background-color: #ffffff;
+  color: #555555;
+}
+
+/* Center button rows in columns */
+.justify-center-btn {
+  justify-content: center;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+/* Column Divider inside each column */
+.column-divider {
+  border: 0;
+  border-top: 1px solid #9c9c9c;
+  margin: 12px 50px;
+}
+
+/* Status textbox styling */
+.status-text {
+  width: 100%;
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.text-align-left {
+  justify-content: flex-start;
+}
+
+.mt-2 {
+  margin-top: 12px;
+}
+
+/* Single Receipt Row Configuration */
+.receipt-inputs-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.receipt-fields {
+  width: 360px;
+}
+
+.receipt-find-btn-col {
+  width: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.find-btn {
+  height: 48px;
+  width: 80px;
+  white-space: normal;
+  line-height: 1.2;
+}
+
+/* side by side cost and qty inside receipt fields */
+.side-by-side-row {
+  display: flex;
+  align-items: center;
+}
+
+.cost-qty-wrap {
+  display: flex;
+  align-items: center;
+}
+
+.size-cost {
+  width: 90px !important;
+  flex-grow: 0 !important;
+}
+
+.size-qty {
+  width: 50px !important;
+  flex-grow: 0 !important;
+}
+
+.label-inline {
+  margin: 0 6px 0 10px;
+  color: #444444;
+}
+
+/* Main horizontal line dividers */
+.main-horizontal-divider {
+  border: 0;
+  border-top: 1px solid #8c8c8c;
+  margin: 18px 0;
+}
+
+/* Glossy Access Blue Buttons */
+.access-glossy-btn {
+  background: linear-gradient(to bottom, #ffffff 0%, #f0f5fc 25%, #d6e5f7 50%, #b8d2f2 100%);
+  border: 1px solid #7a96df;
+  color: #1e395b;
+  font-family: Arial, sans-serif;
+  font-size: 11px;
+  font-weight: normal;
+  padding: 4px 15px;
+  cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.5), 0 1px 1px rgba(0,0,0,0.1);
+  outline: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-radius: 3px;
+}
+
+.access-glossy-btn:hover {
+  background: linear-gradient(to bottom, #ffffff 0%, #f5f9fe 25%, #e1ecfa 50%, #c4ddf8 100%);
+  border-color: #5d7cca;
+}
+
+.access-glossy-btn:active {
+  background: linear-gradient(to bottom, #a0c4ec 0%, #bcd3f1 50%, #e2ecf9 100%);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.15);
+}
+
+/* MIDDLE ACTIONS LAYOUT */
+.middle-actions-layout {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+/* Manual IMEI Panel */
+.manual-imei-box {
+  width: 330px;
+}
+
+.action-sub-header {
+  font-family: Arial, sans-serif;
+  font-size: 11px;
+  color: #444444;
+  margin-bottom: 4px;
+}
+
+.mb-15 {
+  margin-bottom: 15px;
+}
+
+.label-manual {
+  width: 40px;
+  display: inline-block;
+  color: #444444;
+}
+
+.size-imei {
+  width: 170px !important;
+}
+
+.manual-btn {
+  height: 22px;
+  width: 70px;
+}
+
+.ml-15 {
+  margin-left: 15px;
+}
+
+/* Center stacked buttons */
+.center-buttons-box {
+  width: 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.stack-btn {
+  width: 220px;
+  height: 32px;
+  font-size: 11px;
+}
+
+/* Right Actions Panel: Next batch ID and groupbox */
+.right-actions-box {
+  width: 350px;
+  display: flex;
+  flex-direction: column;
+}
+
+.next-batch-inline {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.batch-id-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 120px;
+}
+
+.label-batch-title {
+  color: #444444;
+  font-size: 10px;
+  margin-bottom: 3px;
+  text-align: center;
+}
+
+.batch-id-input {
+  width: 100% !important;
+  text-align: center;
+  font-weight: bold;
+}
+
+.summary-link-btn {
+  width: 210px;
+  height: 32px;
+}
+
+/* Fieldset group box */
+.remove-batch-group {
+  border: 1px solid #b0b0b0;
+  border-radius: 3px;
+  padding: 10px;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.remove-batch-legend {
+  font-family: Arial, sans-serif;
+  font-size: 11px;
+  color: #444444;
+  padding: 0 4px;
+  font-weight: normal;
+  width: auto;
+  float: none;
+  margin: 0;
+  border: 0;
+}
+
+.remove-batch-content {
+  display: flex;
+  align-items: center;
+}
+
+.label-batch-no {
+  color: #444444;
+  margin-right: 10px;
+}
+
+.size-batch-no {
+  width: 80px !important;
+}
+
+/* BOTTOM EXPORT SECTION */
+.bottom-export-layout {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.date-ranges-box {
+  width: 400px;
+}
+
+.label-export-date {
+  width: 150px;
+  text-align: right;
+  padding-right: 10px;
+  color: #444444;
+}
+
+.size-export-date {
+  width: 150px !important;
+}
+
+.mb-10 {
+  margin-bottom: 8px;
+}
+
+.export-btn-box {
+  width: 500px;
+  display: flex;
+  justify-content: flex-start;
+  padding-left: 20px;
+}
+
+.raw-data-btn {
+  width: 180px;
+  height: 30px;
+  font-size: 11px;
+}
+
+/* GRID DISPLAY SUB-WINDOWS */
+.grid-display-window {
+  margin-top: 30px;
+  background-color: #ffffff;
+  border: 1px solid #9c9c9c;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+}
+
+.grid-window-title {
+  background: linear-gradient(180deg, #5c7b9e 0%, #3e5875 100%);
+  color: #ffffff;
+  padding: 8px 12px;
+  font-weight: bold;
+  font-size: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.grid-row-count {
+  font-size: 11px;
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 2px 6px;
+  border-radius: 2px;
+}
+
+.grid-table-scroll {
+  max-height: 300px;
+  overflow-y: auto;
+  overflow-x: auto;
+}
+
+.access-grid-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+  font-size: 11px;
+}
+
+.access-grid-table th {
+  background-color: #f1f1f1;
+  color: #444444;
+  font-weight: bold;
+  padding: 6px 8px;
+  border-right: 1px solid #d0d0d0;
+  border-bottom: 2px solid #b8c0cc;
+  cursor: pointer;
+  user-select: none;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.access-grid-table th:hover {
+  background-color: #e5e5e5;
+}
+
+.access-grid-table td {
+  padding: 5px 8px;
+  border-right: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
+  color: #333333;
+}
+
+.access-grid-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.access-grid-table tbody tr:hover {
+  background-color: #eaf2fc;
+}
+
+.no-records-cell {
+  text-align: center;
+  padding: 20px !important;
+  color: #888888;
+  font-style: italic;
+}
+
+/* Utility alignments and styles */
+.text-right {
+  text-align: right;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.font-bold {
+  font-weight: bold;
+}
+
+.text-blue {
+  color: #1e395b;
+}
+
+.text-green {
+  color: #1a5c1a;
+}
+
+.font-code {
+  font-family: monospace;
+}
+
+.fade-in {
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsiveness / Media Queries */
+@media (max-width: 1024px) {
+  .form-body-wrapper {
+    width: 100%;
+    max-width: 720px;
+    padding: 0 10px;
+  }
+  
+  .two-column-layout {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .form-column {
+    width: 100%;
+  }
+  
+  .vertical-divider-line {
+    display: none;
+  }
+  
+  .middle-actions-layout {
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+  }
+  
+  .manual-imei-box, .center-buttons-box, .right-actions-box {
+    width: 100%;
+    max-width: 450px;
+  }
+  
+  .bottom-export-layout {
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+  }
+  
+  .date-ranges-box {
+    width: 100%;
+    max-width: 450px;
+  }
+  
+  .export-btn-box {
+    width: 100%;
+    max-width: 450px;
+    padding-left: 0;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 576px) {
+  .form-group-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .form-label-cell {
+    width: 100%;
+    text-align: left;
+    margin-bottom: 4px;
+    padding-right: 0;
+  }
+  
+  .receipt-inputs-container {
+    flex-direction: column;
+  }
+  
+  .receipt-fields {
+    width: 100%;
+  }
+  
+  .receipt-find-btn-col {
+    width: 100%;
+    margin-top: 10px;
+  }
+  
+  .find-btn {
+    width: 100%;
+    height: 32px;
+  }
+  
+  .cost-qty-wrap {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .size-cost, .size-qty {
+    width: 100% !important;
+  }
+  
+  .label-inline {
+    margin: 5px 0;
+    width: 100%;
+  }
+  
+  .next-batch-inline {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  
+  .batch-id-wrapper {
+    width: 100%;
+  }
+  
+  .summary-link-btn {
+    width: 100%;
+  }
+}

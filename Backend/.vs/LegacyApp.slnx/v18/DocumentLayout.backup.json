@@ -1,26 +1,34 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\igupta\\OneDrive - Kilobytes Data Solutions Inc\\Desktop\\Commited Code\\ILOps\\Backend\\",
+  "WorkspaceRootPath": "C:\\Users\\igupta\\OneDrive - Kilobytes Data Solutions Inc\\Desktop\\Isha_Latest_Code\\Backend\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{D81ABFC1-5CB7-B2FE-4B59-B274ABF3D445}|LegacyApp\\LegacyApp.csproj|c:\\users\\igupta\\onedrive - kilobytes data solutions inc\\desktop\\commited code\\ilops\\backend\\legacyapp\\controllers\\inventory\\runratecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D81ABFC1-5CB7-B2FE-4B59-B274ABF3D445}|LegacyApp\\LegacyApp.csproj|solutionrelative:legacyapp\\controllers\\inventory\\runratecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D81ABFC1-5CB7-B2FE-4B59-B274ABF3D445}|LegacyApp\\LegacyApp.csproj|c:\\users\\igupta\\onedrive - kilobytes data solutions inc\\desktop\\commited code\\ilops\\backend\\legacyapp\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{D81ABFC1-5CB7-B2FE-4B59-B274ABF3D445}|LegacyApp\\LegacyApp.csproj|c:\\users\\igupta\\onedrive - kilobytes data solutions inc\\desktop\\isha_latest_code\\backend\\legacyapp\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D81ABFC1-5CB7-B2FE-4B59-B274ABF3D445}|LegacyApp\\LegacyApp.csproj|solutionrelative:legacyapp\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0C6FEEE3-3A29-447C-B848-FBBC97A9475B}|DAL\\DAL.csproj|c:\\users\\igupta\\onedrive - kilobytes data solutions inc\\desktop\\commited code\\ilops\\backend\\dal\\inventory\\runrate\\runrateda.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0C6FEEE3-3A29-447C-B848-FBBC97A9475B}|DAL\\DAL.csproj|solutionrelative:dal\\inventory\\runrate\\runrateda.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{D81ABFC1-5CB7-B2FE-4B59-B274ABF3D445}|LegacyApp\\LegacyApp.csproj|c:\\users\\igupta\\onedrive - kilobytes data solutions inc\\desktop\\isha_latest_code\\backend\\legacyapp\\controllers\\inventory\\addinventorycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D81ABFC1-5CB7-B2FE-4B59-B274ABF3D445}|LegacyApp\\LegacyApp.csproj|solutionrelative:legacyapp\\controllers\\inventory\\addinventorycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0C6FEEE3-3A29-447C-B848-FBBC97A9475B}|DAL\\DAL.csproj|c:\\users\\igupta\\onedrive - kilobytes data solutions inc\\desktop\\commited code\\ilops\\backend\\dal\\inventory\\outputinvoice\\outputinvoiceda.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0C6FEEE3-3A29-447C-B848-FBBC97A9475B}|DAL\\DAL.csproj|solutionrelative:dal\\inventory\\outputinvoice\\outputinvoiceda.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{0C6FEEE3-3A29-447C-B848-FBBC97A9475B}|DAL\\DAL.csproj|c:\\users\\igupta\\onedrive - kilobytes data solutions inc\\desktop\\isha_latest_code\\backend\\dal\\sales\\da\\rogersreportimportda.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0C6FEEE3-3A29-447C-B848-FBBC97A9475B}|DAL\\DAL.csproj|solutionrelative:dal\\sales\\da\\rogersreportimportda.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0C6FEEE3-3A29-447C-B848-FBBC97A9475B}|DAL\\DAL.csproj|c:\\users\\igupta\\onedrive - kilobytes data solutions inc\\desktop\\commited code\\ilops\\backend\\dal\\inventory\\runrate\\runratebo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0C6FEEE3-3A29-447C-B848-FBBC97A9475B}|DAL\\DAL.csproj|solutionrelative:dal\\inventory\\runrate\\runratebo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{0C6FEEE3-3A29-447C-B848-FBBC97A9475B}|DAL\\DAL.csproj|c:\\users\\igupta\\onedrive - kilobytes data solutions inc\\desktop\\isha_latest_code\\backend\\dal\\sales\\rogersinvoicespire\\rogersinvoicespireda.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0C6FEEE3-3A29-447C-B848-FBBC97A9475B}|DAL\\DAL.csproj|solutionrelative:dal\\sales\\rogersinvoicespire\\rogersinvoicespireda.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0C6FEEE3-3A29-447C-B848-FBBC97A9475B}|DAL\\DAL.csproj|c:\\users\\igupta\\onedrive - kilobytes data solutions inc\\desktop\\isha_latest_code\\backend\\dal\\common\\login\\loginda.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0C6FEEE3-3A29-447C-B848-FBBC97A9475B}|DAL\\DAL.csproj|solutionrelative:dal\\common\\login\\loginda.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D81ABFC1-5CB7-B2FE-4B59-B274ABF3D445}|LegacyApp\\LegacyApp.csproj|c:\\users\\igupta\\onedrive - kilobytes data solutions inc\\desktop\\isha_latest_code\\backend\\legacyapp\\controllers\\inventory\\rogeroverpaymentscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D81ABFC1-5CB7-B2FE-4B59-B274ABF3D445}|LegacyApp\\LegacyApp.csproj|solutionrelative:legacyapp\\controllers\\inventory\\rogeroverpaymentscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D81ABFC1-5CB7-B2FE-4B59-B274ABF3D445}|LegacyApp\\LegacyApp.csproj|c:\\users\\igupta\\onedrive - kilobytes data solutions inc\\desktop\\isha_latest_code\\backend\\legacyapp\\controllers\\inventory\\priceprotectioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D81ABFC1-5CB7-B2FE-4B59-B274ABF3D445}|LegacyApp\\LegacyApp.csproj|solutionrelative:legacyapp\\controllers\\inventory\\priceprotectioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,71 +38,93 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\igupta\\OneDrive - Kilobytes Data Solutions Inc\\Desktop\\Commited Code\\ILOps\\Backend\\LegacyApp\\Program.cs",
-              "RelativeDocumentMoniker": "LegacyApp\\Program.cs",
-              "ToolTip": "C:\\Users\\igupta\\OneDrive - Kilobytes Data Solutions Inc\\Desktop\\Commited Code\\ILOps\\Backend\\LegacyApp\\Program.cs",
-              "RelativeToolTip": "LegacyApp\\Program.cs",
-              "ViewState": "AgIAAEAAAAAAAAAAAAAAAFMAAAA0AAAAAAAAAA==",
+              "Title": "AddInventoryController.cs",
+              "DocumentMoniker": "C:\\Users\\igupta\\OneDrive - Kilobytes Data Solutions Inc\\Desktop\\Isha_Latest_Code\\Backend\\LegacyApp\\Controllers\\Inventory\\AddInventoryController.cs",
+              "RelativeDocumentMoniker": "LegacyApp\\Controllers\\Inventory\\AddInventoryController.cs",
+              "ToolTip": "C:\\Users\\igupta\\OneDrive - Kilobytes Data Solutions Inc\\Desktop\\Isha_Latest_Code\\Backend\\LegacyApp\\Controllers\\Inventory\\AddInventoryController.cs",
+              "RelativeToolTip": "LegacyApp\\Controllers\\Inventory\\AddInventoryController.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAABoAAAAiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-20T15:55:25.914Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "OutputInvoiceDA.cs",
-              "DocumentMoniker": "C:\\Users\\igupta\\OneDrive - Kilobytes Data Solutions Inc\\Desktop\\Commited Code\\ILOps\\Backend\\DAL\\Inventory\\OutputInvoice\\OutputInvoiceDA.cs",
-              "RelativeDocumentMoniker": "DAL\\Inventory\\OutputInvoice\\OutputInvoiceDA.cs",
-              "ToolTip": "C:\\Users\\igupta\\OneDrive - Kilobytes Data Solutions Inc\\Desktop\\Commited Code\\ILOps\\Backend\\DAL\\Inventory\\OutputInvoice\\OutputInvoiceDA.cs",
-              "RelativeToolTip": "DAL\\Inventory\\OutputInvoice\\OutputInvoiceDA.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAA1AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-20T15:49:42.315Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "RunRateController.cs",
-              "DocumentMoniker": "C:\\Users\\igupta\\OneDrive - Kilobytes Data Solutions Inc\\Desktop\\Commited Code\\ILOps\\Backend\\LegacyApp\\Controllers\\Inventory\\RunRateController.cs",
-              "RelativeDocumentMoniker": "LegacyApp\\Controllers\\Inventory\\RunRateController.cs",
-              "ToolTip": "C:\\Users\\igupta\\OneDrive - Kilobytes Data Solutions Inc\\Desktop\\Commited Code\\ILOps\\Backend\\LegacyApp\\Controllers\\Inventory\\RunRateController.cs",
-              "RelativeToolTip": "LegacyApp\\Controllers\\Inventory\\RunRateController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAhAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-20T15:41:31.475Z",
+              "WhenOpened": "2026-07-28T16:07:06.395Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "RunRateDA.cs",
-              "DocumentMoniker": "C:\\Users\\igupta\\OneDrive - Kilobytes Data Solutions Inc\\Desktop\\Commited Code\\ILOps\\Backend\\DAL\\Inventory\\RunRate\\RunRateDA.cs",
-              "RelativeDocumentMoniker": "DAL\\Inventory\\RunRate\\RunRateDA.cs",
-              "ToolTip": "C:\\Users\\igupta\\OneDrive - Kilobytes Data Solutions Inc\\Desktop\\Commited Code\\ILOps\\Backend\\DAL\\Inventory\\RunRate\\RunRateDA.cs",
-              "RelativeToolTip": "DAL\\Inventory\\RunRate\\RunRateDA.cs",
-              "ViewState": "AgIAAAQAAAAAAAAAAAAswAkAAAAkAAAAAAAAAA==",
+              "Title": "RogersReportImportDa.cs",
+              "DocumentMoniker": "C:\\Users\\igupta\\OneDrive - Kilobytes Data Solutions Inc\\Desktop\\Isha_Latest_Code\\Backend\\DAL\\Sales\\Da\\RogersReportImportDa.cs",
+              "RelativeDocumentMoniker": "DAL\\Sales\\Da\\RogersReportImportDa.cs",
+              "ToolTip": "C:\\Users\\igupta\\OneDrive - Kilobytes Data Solutions Inc\\Desktop\\Isha_Latest_Code\\Backend\\DAL\\Sales\\Da\\RogersReportImportDa.cs",
+              "RelativeToolTip": "DAL\\Sales\\Da\\RogersReportImportDa.cs",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAgwBcAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-20T15:40:48.214Z",
+              "WhenOpened": "2026-07-24T14:51:48.902Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "RunRateBO.cs",
-              "DocumentMoniker": "C:\\Users\\igupta\\OneDrive - Kilobytes Data Solutions Inc\\Desktop\\Commited Code\\ILOps\\Backend\\DAL\\Inventory\\RunRate\\RunRateBO.cs",
-              "RelativeDocumentMoniker": "DAL\\Inventory\\RunRate\\RunRateBO.cs",
-              "ToolTip": "C:\\Users\\igupta\\OneDrive - Kilobytes Data Solutions Inc\\Desktop\\Commited Code\\ILOps\\Backend\\DAL\\Inventory\\RunRate\\RunRateBO.cs",
-              "RelativeToolTip": "DAL\\Inventory\\RunRate\\RunRateBO.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAFAAAAAAAAAA==",
+              "DocumentIndex": 3,
+              "Title": "RogersInvoiceSpireDA.cs",
+              "DocumentMoniker": "C:\\Users\\igupta\\OneDrive - Kilobytes Data Solutions Inc\\Desktop\\Isha_Latest_Code\\Backend\\DAL\\Sales\\RogersInvoiceSpire\\RogersInvoiceSpireDA.cs",
+              "RelativeDocumentMoniker": "DAL\\Sales\\RogersInvoiceSpire\\RogersInvoiceSpireDA.cs",
+              "ToolTip": "C:\\Users\\igupta\\OneDrive - Kilobytes Data Solutions Inc\\Desktop\\Isha_Latest_Code\\Backend\\DAL\\Sales\\RogersInvoiceSpire\\RogersInvoiceSpireDA.cs",
+              "RelativeToolTip": "DAL\\Sales\\RogersInvoiceSpire\\RogersInvoiceSpireDA.cs",
+              "ViewState": "AgIAALsPAAAAAAAAAAAIwMQPAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-20T15:40:38.342Z",
+              "WhenOpened": "2026-07-07T14:57:33.135Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "RogerOverPaymentsController.cs",
+              "DocumentMoniker": "C:\\Users\\igupta\\OneDrive - Kilobytes Data Solutions Inc\\Desktop\\Isha_Latest_Code\\Backend\\LegacyApp\\Controllers\\Inventory\\RogerOverPaymentsController.cs",
+              "RelativeDocumentMoniker": "LegacyApp\\Controllers\\Inventory\\RogerOverPaymentsController.cs",
+              "ToolTip": "C:\\Users\\igupta\\OneDrive - Kilobytes Data Solutions Inc\\Desktop\\Isha_Latest_Code\\Backend\\LegacyApp\\Controllers\\Inventory\\RogerOverPaymentsController.cs",
+              "RelativeToolTip": "LegacyApp\\Controllers\\Inventory\\RogerOverPaymentsController.cs",
+              "ViewState": "AgIAAGsAAAAAAAAAAADwv4IAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-25T15:46:00.346Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "LoginDA.cs",
+              "DocumentMoniker": "C:\\Users\\igupta\\OneDrive - Kilobytes Data Solutions Inc\\Desktop\\Isha_Latest_Code\\Backend\\DAL\\Common\\Login\\LoginDA.cs",
+              "RelativeDocumentMoniker": "DAL\\Common\\Login\\LoginDA.cs",
+              "ToolTip": "C:\\Users\\igupta\\OneDrive - Kilobytes Data Solutions Inc\\Desktop\\Isha_Latest_Code\\Backend\\DAL\\Common\\Login\\LoginDA.cs",
+              "RelativeToolTip": "DAL\\Common\\Login\\LoginDA.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAgwBQAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-19T15:34:51.085Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "PriceProtectionController.cs",
+              "DocumentMoniker": "C:\\Users\\igupta\\OneDrive - Kilobytes Data Solutions Inc\\Desktop\\Isha_Latest_Code\\Backend\\LegacyApp\\Controllers\\Inventory\\PriceProtectionController.cs",
+              "RelativeDocumentMoniker": "LegacyApp\\Controllers\\Inventory\\PriceProtectionController.cs",
+              "ToolTip": "C:\\Users\\igupta\\OneDrive - Kilobytes Data Solutions Inc\\Desktop\\Isha_Latest_Code\\Backend\\LegacyApp\\Controllers\\Inventory\\PriceProtectionController.cs",
+              "RelativeToolTip": "LegacyApp\\Controllers\\Inventory\\PriceProtectionController.cs",
+              "ViewState": "AgIAADwAAAAAAAAAAAAmwEoAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-09T10:00:57.637Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\igupta\\OneDrive - Kilobytes Data Solutions Inc\\Desktop\\Isha_Latest_Code\\Backend\\LegacyApp\\Program.cs",
+              "RelativeDocumentMoniker": "LegacyApp\\Program.cs",
+              "ToolTip": "C:\\Users\\igupta\\OneDrive - Kilobytes Data Solutions Inc\\Desktop\\Isha_Latest_Code\\Backend\\LegacyApp\\Program.cs",
+              "RelativeToolTip": "LegacyApp\\Program.cs",
+              "ViewState": "AgIAAHQAAAAAAAAAAAAIwIsAAABNAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-09T09:13:27.354Z",
               "EditorCaption": ""
             }
           ]

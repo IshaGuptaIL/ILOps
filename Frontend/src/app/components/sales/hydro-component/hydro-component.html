@@ -1,0 +1,74 @@
+<div class="mb-3">
+    <h2>Hydro One Fixes</h2>
+</div>
+
+<div class="form-container">
+    <!-- Section 1: Post Payment -->
+    <div class="frame-access mb-4">
+        <span class="frame-label">Post Payment</span>
+        <div class="row align-items-center py-2">
+            <div class="col-auto">
+                <div class="form-group mb-0">
+                    <label for="txtInvoice">Invoice No:</label>
+                    <input type="text" id="txtInvoice" class="form-control" [(ngModel)]="postInvoiceNo" placeholder="Enter Invoice No">
+                </div>
+            </div>
+            <div class="col-auto">
+                <button class="btn-access btn-large ms-3" (click)="postPayment()">Post payment</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 2: Generate Memo for Manual Entry -->
+    <div class="frame-access mb-4">
+        <span class="frame-label">Generate Memo for Manual Entry</span>
+        
+        <div class="row mb-3 align-items-center">
+            <div class="col-md-5">
+                <div class="form-group">
+                    <label for="txtInvoiceMemo">Invoice:</label>
+                    <input type="text" id="txtInvoiceMemo" class="form-control" [(ngModel)]="memoInvoiceNo" placeholder="Enter Invoice">
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div class="form-group">
+                    <label for="txtOriginalInvAmount" style="width: 140px;">Original Inv Amount:</label>
+                    <input type="number" id="txtOriginalInvAmount" class="form-control" [(ngModel)]="originalAmount" placeholder="0.00" step="0.01">
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-3 align-items-center">
+            <div class="col-md-5">
+                <div class="form-group">
+                    <label for="txtWebOrderID">Web Order ID:</label>
+                    <input type="text" id="txtWebOrderID" class="form-control" [(ngModel)]="webOrderID" placeholder="Enter Web Order ID">
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div class="form-group">
+                    <label for="cmbCardType" style="width: 140px;">Card Type:</label>
+                    <select id="cmbCardType" class="form-select" [(ngModel)]="cardType">
+                        <option value="" disabled selected>Select Card Type</option>
+                        <option *ngFor="let ct of cardTypes" [value]="ct">{{ ct }}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4 align-items-center">
+            <div class="col-12 text-center my-2">
+                <button class="btn-access btn-large" (click)="generateMemo()">Generate Memo</button>
+            </div>
+        </div>
+
+        <div class="row align-items-center pt-2 border-top">
+            <div class="col-12">
+                <div class="form-group mb-0">
+                    <label for="txtMemo" style="width: 80px; font-weight: bold;">Memo:</label>
+                    <input type="text" id="txtMemo" class="form-control memo-output" [(ngModel)]="generatedMemo" readonly placeholder="Generated memo will appear here">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

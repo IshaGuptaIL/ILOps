@@ -1,4 +1,4 @@
-﻿using DAL.Common.Login;
+using DAL.Common.Login;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
@@ -81,9 +81,11 @@ LIMIT 1000;
                 await conn.OpenAsync();
 
                 using (var cmd = new NpgsqlCommand(sql, conn))
-                using (var reader = await cmd.ExecuteReaderAsync())
                 {
-                    while (await reader.ReadAsync())
+                    cmd.CommandTimeout = 600;
+                    using (var reader = await cmd.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
                     {
                         var item = new InventoryStockBO
                         {
@@ -112,9 +114,10 @@ LIMIT 1000;
                     }
                 }
             }
-
-            return list;
         }
+
+        return list;
+    }
 
 
 
@@ -136,17 +139,20 @@ LIMIT 1000;
                     var vendors = new List<VendorBO>();
 
                     using (var cmd = new SqlCommand(sql, conn))
-                    using (var reader = await cmd.ExecuteReaderAsync())
                     {
-                        while (await reader.ReadAsync())
+                        cmd.CommandTimeout = 600;
+                        using (var reader = await cmd.ExecuteReaderAsync())
                         {
-                            var name = reader["Vendor"].ToString().Trim();
-
-                            vendors.Add(new VendorBO
+                            while (await reader.ReadAsync())
                             {
-                                Id = name,   // 👈 Use Vendor Name as ID
-                                Name = name
-                            });
+                                var name = reader["Vendor"].ToString().Trim();
+
+                                vendors.Add(new VendorBO
+                                {
+                                    Id = name,   // 👈 Use Vendor Name as ID
+                                    Name = name
+                                });
+                            }
                         }
                     }
 
@@ -179,6 +185,7 @@ LIMIT 1000;
 
                     using (var cmd = new SqlCommand(sql, conn))
                     {
+                        cmd.CommandTimeout = 600;
                         cmd.Parameters.AddWithValue("@ItemType", itemType);
 
                         using (var reader = await cmd.ExecuteReaderAsync())
@@ -467,6 +474,7 @@ ORDER BY r.receive_date;
             await conn.OpenAsync();
 
             using var cmd = new NpgsqlCommand(sql, conn);
+            cmd.CommandTimeout = 600;
 
             // ✅ Convert DateOnly to DateTime explicitly
             DateTime startDateTime = startDate.ToDateTime(TimeOnly.MinValue);
@@ -482,24 +490,51 @@ ORDER BY r.receive_date;
             {
                 list.Add(new SpireReceiptBO
                 {
-                    Id = Convert.ToInt32(reader["id"]),
-                    ReceiveDate = ((DateOnly)reader["receive_date"]).ToDateTime(TimeOnly.MinValue),
-                    Whse = reader["whse"].ToString(),
-                    PartNo = reader["part_no"].ToString(),
-                    Description = reader["description"].ToString(),
-                    ProductCode = reader["product_code"].ToString(),
-                    Qty = Convert.ToDecimal(reader["qty"]),
-                    Cost = Convert.ToDecimal(reader["cost"]),
-                    Selling = Convert.ToDecimal(reader["selling"]),
-                    LinkNo = reader["link_no"].ToString(),
-                    LinkTable = reader["link_table"].ToString(),
-                    RefNo = reader["ref_no"].ToString(),
-                    NewAverageCost = Convert.ToDecimal(reader["new_average_cost"]),
-                    NewOnhandQty = Convert.ToDecimal(reader["new_onhand_qty"])
+                    Id = reader["id"] != DBNull.Value
+         ? Convert.ToInt32(reader["id"])
+         : 0,
+
+                    ReceiveDate = reader["receive_date"] != DBNull.Value
+         ? ((DateOnly)reader["receive_date"]).ToDateTime(TimeOnly.MinValue)
+         : DateTime.MinValue,
+
+                    Whse = reader["whse"]?.ToString(),
+
+                    PartNo = reader["part_no"]?.ToString(),
+
+                    Description = reader["description"]?.ToString(),
+
+                    ProductCode = reader["product_code"]?.ToString(),
+
+                    Qty = reader["qty"] != DBNull.Value
+         ? Convert.ToDecimal(reader["qty"])
+         : 0,
+
+                    Cost = reader["cost"] != DBNull.Value
+         ? Convert.ToDecimal(reader["cost"])
+         : 0,
+
+                    Selling = reader["selling"] != DBNull.Value
+         ? Convert.ToDecimal(reader["selling"])
+         : 0,
+
+                    LinkNo = reader["link_no"]?.ToString(),
+
+                    LinkTable = reader["link_table"]?.ToString(),
+
+                    RefNo = reader["ref_no"]?.ToString(),
+
+                    NewAverageCost = reader["new_average_cost"] != DBNull.Value
+         ? Convert.ToDecimal(reader["new_average_cost"])
+         : 0,
+
+                    NewOnhandQty = reader["new_onhand_qty"] != DBNull.Value
+         ? Convert.ToDecimal(reader["new_onhand_qty"])
+         : 0
                 });
             }
 
-            return list;
+                return list;
         }
 
 
@@ -546,6 +581,7 @@ ORDER BY r.receive_date;
             await conn.OpenAsync();
 
             using var cmd = new SqlCommand(sql, conn);
+            cmd.CommandTimeout = 600;
             cmd.Parameters.AddWithValue("@ReceiptNo", string.IsNullOrEmpty(receiptNo) ? DBNull.Value : receiptNo);
             cmd.Parameters.AddWithValue("@PONumber", string.IsNullOrEmpty(poNumber) ? DBNull.Value : poNumber);
 

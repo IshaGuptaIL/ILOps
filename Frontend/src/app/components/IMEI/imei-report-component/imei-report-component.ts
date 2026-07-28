@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 import { HardwareReceipt, IMEIReportService } from '../imeireport-service';
 import { SpinnerService } from '../../shared/spinner/spinner-service';
 import { hidden } from '@angular/forms/signals';
@@ -52,6 +53,7 @@ export class ImeiReportComponent implements OnInit {
     private reportService: IMEIReportService,
     private cdr: ChangeDetectorRef,
     private spinner: SpinnerService,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit() {
@@ -84,9 +86,11 @@ export class ImeiReportComponent implements OnInit {
     this.reportService.getVendors().subscribe({
       next: (res: any) => {
         this.vendors = res.result || [];
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Vendor API Error:', err);
+        this.cdr.detectChanges();
       }
     });
   }
@@ -105,10 +109,9 @@ export class ImeiReportComponent implements OnInit {
   }
 
   generateIMEIReport() {
-    debugger
     this.spinner.show();
     if (!this.imeiStartDate || !this.imeiEndDate) {
-      alert('Please select Start Date and End Date');
+      this.toastr.warning('Please select Start Date and End Date', 'Selection Required');
       this.spinner.hide();
       return;
     }
@@ -130,12 +133,14 @@ export class ImeiReportComponent implements OnInit {
 
     this.reportService.getIMEIReport(payload).subscribe({
       next: res => {
+        this.spinner.hide();
         if (this.chkExcel) this.reportService.exportToExcel(res, 'IMEIReport');
         else this.reportData = res;
 
         this.cdr.detectChanges();
       },
       error: err => {
+        this.spinner.hide();
         console.error(err);
         this.error = 'Failed to load IMEI report';
         this.cdr.detectChanges();
@@ -240,13 +245,13 @@ export class ImeiReportComponent implements OnInit {
 
 
   searchReceipts() {
-    debugger
     this.spinner.show()
     this.error = '';
     this.receipts = [];
     if (!this.receiptNo && !this.poNumber) {
       this.error = 'Please enter either Receipt No or PO Number';
       this.spinner.hide()
+      this.cdr.detectChanges();
       return;
     }
     const params: any = {};
@@ -266,14 +271,14 @@ export class ImeiReportComponent implements OnInit {
           this.error = 'No records found';
           this.spinner.hide()
           Swal.fire('Info', 'No records to download', 'info');
-          return;
         }
-
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error(err);
         this.spinner.hide()
         this.error = 'Failed to load receipts';
+        this.cdr.detectChanges();
       }
     });
   }
@@ -284,8 +289,8 @@ export class ImeiReportComponent implements OnInit {
 
 
 
+
   spireReceivedReport() {
-    debugger
     this.spinner.show()
     if (!this.combo8) {
       Swal.fire('Error', 'Please select Item Type (Hardware/Accessory)', 'error');
@@ -326,6 +331,7 @@ export class ImeiReportComponent implements OnInit {
           Swal.fire('Info', 'No records to download', 'info');
           this.imeiStartDate = '';
           this.imeiEndDate = '';
+          this.cdr.detectChanges();
           return;
         }
 
@@ -336,12 +342,14 @@ export class ImeiReportComponent implements OnInit {
 
         this.reportService.exportToExcel(data, fileName);
         this.clearInputs();
+        this.cdr.detectChanges();
       },
       error: (err) => {
         this.spinner.hide();
         console.error(err);
         Swal.fire('Error', 'Failed to load report', 'error');
         this.error = 'Failed to load report';
+        this.cdr.detectChanges();
       }
     });
   }
@@ -350,6 +358,7 @@ export class ImeiReportComponent implements OnInit {
     this.imeiEndDate = '';
     this.vendor = '';
     this.part = '';
+    this.cdr.detectChanges();
   }
 
 }

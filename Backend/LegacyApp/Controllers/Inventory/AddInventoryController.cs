@@ -1,4 +1,4 @@
-﻿using DAL.Common.Login;
+using DAL.Common.Login;
 using DAL.Inventory.AddInventory;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -83,6 +83,7 @@ namespace LegacyApp.Controllers.Inventory
             {
                 if (model.ProductCode != "HCC") errors["ProductCode"] = "Must be HCC for Hardware";
                 if (model.SalesDept != 4) errors["SalesDept"] = "Must be 4 for Hardware";
+                if (string.IsNullOrEmpty(model.AccessoryGroup)) errors["AccessoryGroup"] = "Manufacturer required for Hardware";
             }
             else if (model.Type == "Accessory")
             {

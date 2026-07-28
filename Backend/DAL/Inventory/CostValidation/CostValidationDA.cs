@@ -1,4 +1,4 @@
-﻿using DAL.Common.Login;
+using DAL.Common.Login;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
@@ -136,6 +136,7 @@ namespace DAL.Inventory.CostValidation
                 using (var bulk = new SqlBulkCopy(_sqlConn))
                 {
                     bulk.DestinationTableName = "HPCExtract";
+                    bulk.BulkCopyTimeout = 600; // 10 minutes timeout
                     // Map Excel Headers -> Database Columns
                     bulk.ColumnMappings.Add("Part", "SKU");
                     bulk.ColumnMappings.Add("RogersCost", "DealerCost");
@@ -145,15 +146,22 @@ namespace DAL.Inventory.CostValidation
                     await bulk.WriteToServerAsync(valid);
                 }
 
-                // Summary Insert into HPCExtractSummary
+                // Summary Insert into HPCExtractSummary (Grouped by Part/SKU with Max StartDate matching VBA qryAppendHPCExtractSummary)
+                var summaryRows = valid.AsEnumerable()
+                    .GroupBy(r => r["Part"]?.ToString()?.Trim() ?? "")
+                    .Where(g => !string.IsNullOrEmpty(g.Key) && g.Key != "Models")
+                    .Select(g => g.OrderByDescending(r => DateTime.TryParse(r["StartDate"]?.ToString(), out var d) ? d : DateTime.MinValue).First())
+                    .ToList();
+
                 using (var con = new SqlConnection(_sqlConn))
                 {
                     await con.OpenAsync();
-                    foreach (DataRow r in valid.Rows)
+                    foreach (DataRow r in summaryRows)
                     {
                         using var cmd = new SqlCommand(@"
                     INSERT INTO HPCExtractSummary (Whse, Part, Cost, MaxOfF3, DelistDate)
                     VALUES ('CO', @Part, @Cost, @Date, @Delist)", con);
+                        cmd.CommandTimeout = 600; // 10 minutes timeout
 
                         cmd.Parameters.AddWithValue("@Part", r["Part"]);
                         cmd.Parameters.AddWithValue("@Cost", Math.Round(decimal.Parse(r["RogersCost"].ToString()), 2));

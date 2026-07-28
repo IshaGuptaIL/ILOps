@@ -1,0 +1,175 @@
+<div class="access-form">
+  <!-- Ageing Date Row -->
+  <div class="access-row" style="margin-top: 20px;">
+    <div class="access-label" style="width: 85px;">Ageing Date:</div>
+    <div style="width: 85px;">
+      <input type="date" class="access-input" [(ngModel)]="agingDate" style="width: 100%; box-sizing: border-box;" />
+    </div>
+    <div style="margin-left: 15px;">
+      <button class="access-btn generate-btn" (click)="onGenerateData()">Generate Data For All Channels</button>
+    </div>
+    <div style="margin-left: 60px;">
+      <input type="text" class="access-input" style="width: 110px;" readonly />
+    </div>
+  </div>
+
+  <div class="access-divider"></div>
+
+  <!-- Channel Row -->
+  <div class="access-row" style="margin-top: 15px;">
+    <div class="access-label" style="width: 85px;">Channel Name:</div>
+    <div style="width: 115px;">
+      <select class="access-dropdown" [(ngModel)]="selectedChannelId" style="width: 100%;">
+        <option value="">All</option>
+        <option *ngFor="let g of territoryGroups" [value]="g.id">{{ g.groupName }}</option>
+      </select>
+    </div>
+    <div style="margin-left: 35px;">
+      <input type="text" class="access-input readonly" readonly [value]="getGroupName()" style="width: 290px;" />
+    </div>
+  </div>
+
+  <!-- Filters & Action Buttons -->
+  <div class="access-row" style="margin-top: 30px; position: relative; height: 60px;">
+    <!-- Filters Block -->
+    <div style="display: flex; flex-direction: column; width: 300px;">
+      <div class="access-row align-center mb-10">
+        <div class="access-label text-right" style="width: 65px; margin-right: 10px;">Between:</div>
+        <input type="number" class="access-input text-center" style="width: 40px;" [(ngModel)]="startDays" />
+        <div style="margin: 0 10px; color: #555; font-size: 11px;">days and</div>
+        <input type="number" class="access-input text-center" style="width: 40px;" [(ngModel)]="endDays" />
+        <div style="margin-left: 10px; color: #555; font-size: 11px;">inclusive.</div>
+      </div>
+      
+      <div class="access-row align-center">
+        <div class="access-label text-right" style="width: 65px; margin-right: 10px;">Notice Type:</div>
+        <select class="access-dropdown" [(ngModel)]="selectedNoticeType" style="width: 110px;">
+          <option value="">Select Notice</option>
+          <option *ngFor="let t of noticeTypes" [value]="t">{{ t }}</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Show Button -->
+    <div style="position: absolute; left: 310px; top: 0;">
+      <button class="access-btn show-btn" (click)="onShowData()">Show</button>
+    </div>
+
+    <!-- Output Notice Button -->
+    <div style="position: absolute; left: 630px; top: 10px;">
+      <button class="access-btn output-btn" (click)="onOutputNotice()">Output Notice</button>
+    </div>
+  </div>
+
+  <!-- Grids -->
+  <div style="margin-top: 20px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 10px;">
+      <h3 style="margin: 0;">Summary</h3>
+      <!-- Search Input -->
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <label for="searchSummary" style="font-size: 12px; font-weight: bold; color: #333;">Search Account:</label>
+        <input type="text" id="searchSummary" class="access-input" [(ngModel)]="searchTerm" (input)="onSearchTermChange()" placeholder="Search Name or Group ID..." style="width: 250px; padding: 4px 8px; font-size: 12px;" />
+      </div>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th class="text-center" style="width: 50px;">
+              <input type="checkbox" [checked]="isAllSummarySelected()" (change)="toggleAllSummary($event)" title="Select/Deselect All" />
+            </th>
+            <th>Group ID</th>
+            <th>Customer Name</th>
+            <th>Territory</th>
+            <th>Type</th>
+            <th>Sum of Balance</th>
+            <th>Invoices</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="summaryData.length === 0">
+            <td colspan="7" class="text-center py-4 text-muted">
+              <div class="d-flex flex-column align-items-center justify-content-center p-3">
+                <i class="fas fa-inbox fa-2x mb-2 opacity-50"></i>
+                <div class="fw-bold">No Records Found</div>
+                <small>{{ searchTerm ? 'No groups or customers match "' + searchTerm + '"' : 'No data available' }}</small>
+              </div>
+            </td>
+          </tr>
+          <tr *ngFor="let row of pagedSummaryData">
+            <td class="text-center">
+              <input type="checkbox" [checked]="selectedGroupIds.has(row.groupID)" (change)="toggleGroupSelection(row.groupID, $event)" />
+            </td>
+            <td>{{ row.groupID }}</td>
+            <td>{{ row.customerName }}</td>
+            <td>{{ row.maxOfSALES_TERR }}</td>
+            <td>{{ row.arType }}</td>
+            <td class="text-right">{{ row.sumOfBALANCE | currency }}</td>
+            <td class="text-center">{{ row.sumOfInvoiceCount }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- Summary Pagination Controls -->
+    <div class="access-row" style="justify-content: space-between; margin-bottom: 20px;" *ngIf="totalSummaryPages > 1">
+      <button class="access-btn" (click)="prevSummaryPage()" [disabled]="summaryPage === 1">Previous</button>
+      <div style="font-size: 11px;">Page {{ summaryPage }} of {{ totalSummaryPages }}</div>
+      <button class="access-btn" (click)="nextSummaryPage()" [disabled]="summaryPage === totalSummaryPages">Next</button>
+    </div>
+
+    <h3 style="margin-top: 10px;">Details</h3>
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>Group ID</th>
+            <th>Cust Name</th>
+            <th>Type</th>
+            <th>Trans No</th>
+            <th>Ref No</th>
+            <th>Date</th>
+            <th>Balance</th>
+            <th>Days Old</th>
+            <th>1st Notice</th>
+            <th>2nd Notice</th>
+            <th>Bulk ID</th>
+            <th>Language</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="detailData.length === 0">
+            <td colspan="12" class="text-center py-4 text-muted">
+              <div class="d-flex flex-column align-items-center justify-content-center p-3">
+                <i class="fas fa-inbox fa-2x mb-2 opacity-50"></i>
+                <div class="fw-bold">No Records Found</div>
+                <small>No details found for the selected filter or groups.</small>
+              </div>
+            </td>
+          </tr>
+          <tr *ngFor="let row of pagedDetailData">
+            <td>{{ row.groupID }}</td>
+            <td>{{ row.custName }}</td>
+            <td>{{ row.type }}</td>
+            <td>{{ row.tranS_NO }}</td>
+            <td>{{ row.reF_NO }}</td>
+            <td>{{ row.tranDate | date:'MM/dd/yyyy' }}</td>
+            <td class="text-right">{{ row.balance | currency }}</td>
+            <td class="text-right">{{ row.daysOld }}</td>
+            <td>{{ row.firstNoticeDate | date:'MM/dd/yyyy' }}</td>
+            <td>{{ row.secondNoticeDate | date:'MM/dd/yyyy' }}</td>
+            <td>{{ row.bulkID }}</td>
+            <td>{{ row.language }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Detail Pagination Controls -->
+    <div class="access-row" style="justify-content: space-between; margin-bottom: 20px;" *ngIf="totalDetailPages > 1">
+      <button class="access-btn" (click)="prevDetailPage()" [disabled]="detailPage === 1">Previous</button>
+      <div style="font-size: 11px;">Page {{ detailPage }} of {{ totalDetailPages }}</div>
+      <button class="access-btn" (click)="nextDetailPage()" [disabled]="detailPage === totalDetailPages">Next</button>
+    </div>
+  </div>
+</div>

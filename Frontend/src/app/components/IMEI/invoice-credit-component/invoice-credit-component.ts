@@ -1,10 +1,11 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
+import Swal from 'sweetalert2';
 import { InvoiceCreditService, ApiResponse } from '../invoice-credit-service';
 import { SpinnerService } from '../../shared/spinner/spinner-service';
 import { finalize } from 'rxjs/operators';
-import { Console } from 'console';
 
 interface RogersInvoice {
   transType: string;
@@ -58,6 +59,7 @@ export class InvoiceCreditComponent implements OnInit {
   constructor(
     private invoiceService: InvoiceCreditService,
     private spinner: SpinnerService,
+    private toastr: ToastrService,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -77,6 +79,7 @@ export class InvoiceCreditComponent implements OnInit {
   setPage(page: number) {
     if (page >= 1 && page <= this.totalPages) {
       this.currentPage = page;
+      this.cdr.detectChanges();
     }
   }
 
@@ -84,6 +87,7 @@ export class InvoiceCreditComponent implements OnInit {
     this.loading = state;
     if (state) this.spinner.show();
     else this.spinner.hide();
+    this.cdr.detectChanges();
   }
 
   loadAllReceipts() {
@@ -95,28 +99,28 @@ export class InvoiceCreditComponent implements OnInit {
         this.receipts = res.result.map((r: any) => this.mapReceipt(r));
         this.filterReceiptsByType();
       }
+      this.cdr.detectChanges();
     });
   }
 
   filterReceiptsByType() {
-  // Target fix karein
-  const target = this.searchType === 'Hardware' ? 'HDW' : 'ACC';
-  
-  this.filteredReceipts = this.receipts.filter(r => {
-    // Null check aur clean string comparison
-    const rType = (r.type || '').trim().toUpperCase();
-    return rType === target || rType.includes(target);
-  });
+    const target = this.searchType === 'Hardware' ? 'HDW' : 'ACC';
+    
+    this.filteredReceipts = this.receipts.filter(r => {
+      const rType = (r.type || '').trim().toUpperCase();
+      return rType === target || rType.includes(target);
+    });
 
-  this.currentPage = 1;
-  
-  if (this.filteredReceipts.length > 0) {
-    this.selectReceipt(this.filteredReceipts[0]);
-  } else {
-    this.selectedReceipt = null;
-    // Debugging ke liye: console.log('No match for:', target, 'in', this.receipts);
+    this.currentPage = 1;
+    
+    if (this.filteredReceipts.length > 0) {
+      this.selectReceipt(this.filteredReceipts[0]);
+    } else {
+      this.selectedReceipt = null;
+    }
+    this.cdr.detectChanges();
   }
-}
+
   findReceiptByBVNo() {
     const term = this.bvReceiptNo.trim();
     if (!term) { this.loadAllReceipts(); return; }
@@ -125,8 +129,8 @@ export class InvoiceCreditComponent implements OnInit {
     this.invoiceService.findReceiptByBVNo(term, this.searchType).pipe(
       finalize(() => this.toggleLoading(false))
     ).subscribe(res => {
+      this.currentPage = 1;
       if (res.success && res.result) {
-        // Result array ho ya single object, handle karein
         const data = Array.isArray(res.result) ? res.result : [res.result];
         this.filteredReceipts = data.map(r => this.mapReceipt(r));
         
@@ -136,24 +140,31 @@ export class InvoiceCreditComponent implements OnInit {
       } else {
         this.filteredReceipts = [];
         this.selectedReceipt = null;
-        alert(res.message || "No Receipts Found");
+        this.toastr.info(res.message || "No Receipts Found", 'Search Result');
       }
+      this.cdr.detectChanges();
     });
-} 
+  } 
 
   findByPONumber() {
-    if (!this.poNumber.trim()) return;
+    const term = this.poNumber.trim();
+    if (!term) { this.loadAllReceipts(); return; }
+
     this.toggleLoading(true);
-    this.invoiceService.getMissingReceiptsByPO(this.poNumber.trim()).pipe(
+    this.invoiceService.getMissingReceiptsByPO(term).pipe(
       finalize(() => this.toggleLoading(false))
     ).subscribe(res => {
+      this.currentPage = 1;
       if (res.success && res.result) {
-        console.log(res)
+        console.log(res);
         this.filteredReceipts = res.result.map((r: any) => this.mapReceipt(r));
         if (this.filteredReceipts.length > 0) this.selectReceipt(this.filteredReceipts[0]);
       } else {
-        alert(res.message || "No records found");
+        this.filteredReceipts = [];
+        this.selectedReceipt = null;
+        this.toastr.info(res.message || "No records found", 'Search Result');
       }
+      this.cdr.detectChanges();
     });
   }
 
@@ -169,6 +180,7 @@ export class InvoiceCreditComponent implements OnInit {
           remarks: inv.remarks || inv.Remarks || ''
         }));
       }
+      this.cdr.detectChanges();
     });
   }
 
@@ -195,12 +207,19 @@ export class InvoiceCreditComponent implements OnInit {
     this.invAmount = invoice?.perUnitAmount || 0;
     this.invRemarks = invoice?.remarks || '';
     this.invoiceModalVisible = true;
+    this.cdr.detectChanges();
   }
 
-  closeInvoiceModal() { this.invoiceModalVisible = false; }
+  closeInvoiceModal() { 
+    this.invoiceModalVisible = false; 
+    this.cdr.detectChanges();
+  }
 
   saveInvoice() {
-    if (!this.invRefNo) { alert('Ref No is required'); return; }
+    if (!this.invRefNo) { 
+      this.toastr.warning('Ref No is required', 'Validation Error'); 
+      return; 
+    }
     const payload = {
       BVReceiptNo: this.selectedReceipt?.bvReceiptNo,
       TransType: this.invTransType,
@@ -215,9 +234,13 @@ export class InvoiceCreditComponent implements OnInit {
       finalize(() => this.toggleLoading(false))
     ).subscribe(res => {
       if (res.success) {
+        this.toastr.success('Invoice details saved successfully', 'Success');
         this.selectReceipt(this.selectedReceipt!); 
         this.closeInvoiceModal();
-      } else { alert(res.message); }
+      } else { 
+        this.toastr.error(res.message || 'Failed to save invoice', 'Error'); 
+      }
+      this.cdr.detectChanges();
     });
   }
 
@@ -226,7 +249,13 @@ export class InvoiceCreditComponent implements OnInit {
     this.invoiceService.loadAccReceipts().pipe(
       finalize(() => this.toggleLoading(false))
     ).subscribe(res => {
-      if (res.success) { alert("Success!"); this.loadAllReceipts(); }
+      if (res.success) { 
+        Swal.fire('Success', 'Accessory Receipts Loaded Successfully', 'success');
+        this.loadAllReceipts(); 
+      } else {
+        this.toastr.error(res.message || 'Failed to load receipts', 'Error');
+      }
+      this.cdr.detectChanges();
     });
   }
 }

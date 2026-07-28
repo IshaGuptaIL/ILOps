@@ -1,0 +1,160 @@
+<div class="comment-review-container">
+  <!-- Access Form Window Frame -->
+  <div class="access-window">
+    <div class="access-titlebar">
+      <span class="title-text">
+        <i class="fa fa-window-maximize"></i> frmCommentReviewNEW : Form
+      </span>
+      <div class="window-actions">
+        <span class="win-btn">_</span>
+        <span class="win-btn">🗖</span>
+        <span class="win-btn win-close">✕</span>
+      </div>
+    </div>
+
+    <div class="access-body">
+      <!-- Top Filters Panel -->
+      <div class="filter-panel beveled-out">
+        <!-- Row 1: Ageing Date & Generate Data Button -->
+        <div class="filter-row">
+          <div class="filter-group">
+            <span class="filter-label">Ageing Date:</span>
+            <input type="date" [(ngModel)]="txtAgeingDate" class="access-input date-input" />
+          </div>
+          <button (click)="generateData()" class="access-btn btn-generate" title="Generate Cached Data">
+            Generate Data for All Channels
+          </button>
+        </div>
+
+        <!-- Row 2: Channel Name, Criteria, Show, XLSX -->
+        <div class="filter-row">
+          <div class="filter-group">
+            <span class="filter-label">Channel Name:</span>
+            <div class="select-wrapper">
+              <select [(ngModel)]="selectedGroup" (change)="onGroupChange()" class="access-select">
+                <option *ngFor="let g of territoryGroups" [value]="g.groupName">{{ g.groupName }}</option>
+              </select>
+              <span class="select-arrow">▼</span>
+            </div>
+          </div>
+          
+          <div class="filter-group criteria-group">
+            <input type="text" [value]="txtGroupCriteria" readonly class="access-input readonly-input criteria-input" placeholder="[Group Criteria]" />
+          </div>
+          
+          <button (click)="loadSummary()" class="access-btn btn-show">Show</button>
+          <button (click)="exportExcel()" class="access-btn btn-xlsx">
+            Output All Summary<br>Comments XLSX
+          </button>
+        </div>
+
+        <!-- Row 3: Greater than days -->
+        <div class="filter-row">
+          <div class="filter-group">
+            <span class="filter-label">Greater than:</span>
+            <input type="number" [(ngModel)]="txtStartDays" class="access-input days-input" />
+            <span class="filter-unit">days.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Divider line -->
+      <div class="form-divider"></div>
+
+      <!-- Main Form Area (VBA Single Form Representation) -->
+      <div class="main-form-panel beveled-out">
+        
+        <div class="form-record-fields">
+          <!-- Left Column: Customer details and Arrow buttons -->
+          <div class="customer-details-pane">
+            <div class="detail-row">
+              <span class="detail-label">Customer:</span>
+              <input type="text" [value]="selectedSummary?.groupID || ''" readonly class="access-input readonly-input id-input" />
+              <input type="text" [value]="selectedSummary?.customerName || ''" readonly class="access-input readonly-input name-input" />
+            </div>
+
+            <div class="detail-row spacing-top">
+              <span class="detail-label">ARType:</span>
+              <input type="text" [value]="selectedSummary?.arType || ''" readonly class="access-input readonly-input type-input" />
+              
+              <!-- Arrow Buttons side by side next to ARType -->
+              <div class="arrow-buttons-group">
+                <button (click)="movePrevious()" [disabled]="!selectedSummary || currentIndex <= 0" class="arrow-btn" title="Previous Record">◀</button>
+                <button (click)="moveNext()" [disabled]="!selectedSummary || currentIndex >= summaries.length - 1" class="arrow-btn" title="Next Record">▶</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Summary Comment -->
+          <div class="summary-comment-pane">
+            <div class="comment-textarea-row">
+              <span class="detail-label comment-label">Summary<br>Comment:</span>
+              <textarea [(ngModel)]="txtSummaryComment" [disabled]="!selectedSummary" class="access-textarea" placeholder=""></textarea>
+            </div>
+            
+            <div class="comment-actions-row">
+              <span class="detail-label date-label">Date:</span>
+              <input type="text" [value]="txtSummaryCommentDate || ''" readonly class="access-input readonly-input comment-date-input" />
+              <button (click)="updateSummaryComment()" [disabled]="!selectedSummary" class="access-btn btn-update">
+                Update Comment
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- History Log Subform (frmCommentReviewDetail) -->
+        <div class="history-log-subform beveled-in">
+          <div class="subform-title-bar">
+            <span class="sub-title">History Log (frmCommentReviewDetail)</span>
+          </div>
+
+          <div class="history-table-wrapper beveled-in-thin">
+            <table class="history-table">
+              <thead>
+                <tr>
+                  <th style="width: 100px;">CustKey</th>
+                  <th style="width: 120px;">ModDate</th>
+                  <th style="width: 80px;">ModUser</th>
+                  <th style="width: 140px;">EventDescription</th>
+                  <th>EventText</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let ev of commentsHistory">
+                  <td>{{ ev.custNo || selectedSummary?.groupID }}</td>
+                  <td>{{ ev.addDate | date:'M/d/yyyy H:mm' }}</td>
+                  <td class="center-align">{{ ev.addUser }}</td>
+                  <td>{{ ev.eventDescription }}</td>
+                  <td class="comment-text-cell">{{ ev.eventText }}</td>
+                </tr>
+                <tr *ngIf="commentsHistory.length === 0">
+                  <td colspan="5" class="no-records-cell">
+                    {{ selectedSummary ? 'No history records found.' : 'No customer record selected.' }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Bottom Access Navigation Bar -->
+        <div class="access-navigation-bar">
+          <span class="nav-label">Record:</span>
+          <button (click)="moveFirst()" [disabled]="!selectedSummary || currentIndex <= 0" class="nav-bar-btn" title="First Record">⏮</button>
+          <button (click)="movePrevious()" [disabled]="!selectedSummary || currentIndex <= 0" class="nav-bar-btn" title="Previous Record">◀</button>
+          <input type="text" [value]="summaries.length > 0 ? currentIndex + 1 : 0" readonly class="nav-bar-input" />
+          <span class="nav-of">of {{ summaries.length }}</span>
+          <button (click)="moveNext()" [disabled]="!selectedSummary || currentIndex >= summaries.length - 1" class="nav-bar-btn" title="Next Record">▶</button>
+          <button (click)="moveLast()" [disabled]="!selectedSummary || currentIndex >= summaries.length - 1" class="nav-bar-btn" title="Last Record">⏭</button>
+          <span class="nav-separator">|</span>
+          <span class="nav-filter">No Filter</span>
+          <span class="nav-separator">|</span>
+          <span class="nav-search-label">Search</span>
+          <input type="text" class="nav-search-input" placeholder="Search..." disabled />
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -1,4 +1,4 @@
-﻿using DAL.Inventory.AdvantageVoice;
+using DAL.Inventory.AdvantageVoice;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.IO;
@@ -33,7 +33,7 @@ namespace LegacyApp.Controllers.Inventory
         }
 
         [HttpPost("ImportExcel")]
-        public async Task<ActionResult<bool>> ImportExcel([FromForm] IFormFile file, [FromQuery] int userId)
+        public async Task<ActionResult<bool>> ImportExcel(IFormFile file, [FromQuery] int userId)
         {
             try
             {

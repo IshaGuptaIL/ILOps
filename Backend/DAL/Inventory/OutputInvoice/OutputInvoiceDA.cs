@@ -1,4 +1,5 @@
-﻿using DAL.Common.Login;
+﻿
+using DAL.Common.Login;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
@@ -187,8 +188,8 @@ namespace DAL.Inventory.OutputInvoice
                         await conn.OpenAsync();
 
                         string headerSql = @"SELECT cust_name, cust_no, invoice_date, order_no, 
-                                                 ship_to_name, ship_to_addr1, ship_to_addr2, ship_to_city,
-                                                 tax_amount
+                                                 '' as ship_name, '' as ship_address1, '' as ship_address2, '' as ship_city,
+                                                 0 as tax_amount
                                          FROM sales_history
                                          WHERE invoice_no=@inv
                                          LIMIT 1";
@@ -203,10 +204,10 @@ namespace DAL.Inventory.OutputInvoice
                                     detail.BillToName = r["cust_name"]?.ToString() ?? "N/A";
                                     detail.CustNo = r["cust_no"]?.ToString() ?? "N/A";
                                     detail.OrderNo = r["order_no"]?.ToString() ?? "";
-                                    detail.ShipToName = r["ship_to_name"]?.ToString() ?? detail.BillToName;
-                                    detail.ShipToAddress1 = r["ship_to_addr1"]?.ToString() ?? "";
-                                    detail.ShipToAddress2 = r["ship_to_addr2"]?.ToString() ?? "";
-                                    detail.ShipToCity = r["ship_to_city"]?.ToString() ?? "";
+                                    detail.ShipToName = r["ship_name"]?.ToString() ?? detail.BillToName;
+                                    detail.ShipToAddress1 = r["ship_address1"]?.ToString() ?? "";
+                                    detail.ShipToAddress2 = r["ship_address2"]?.ToString() ?? "";
+                                    detail.ShipToCity = r["ship_city"]?.ToString() ?? "";
                                     detail.GST_HST = r["tax_amount"] != DBNull.Value ? Convert.ToDecimal(r["tax_amount"]) : 0;
 
                                     var dateVal = r["invoice_date"];

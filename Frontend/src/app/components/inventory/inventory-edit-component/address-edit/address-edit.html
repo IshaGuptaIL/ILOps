@@ -1,0 +1,59 @@
+<div class="address-edit-wrapper">
+  <!-- Top Control Bar -->
+  <div class="control-bar card">
+    <div class="input-group">
+      <label for="invoiceNo">Invoice:</label>
+      <input 
+        id="invoiceNo" 
+        type="text" 
+        [(ngModel)]="searchInvoice" 
+        (keypress)="onInvoiceKeyPress($event)"
+        placeholder="Enter Invoice #"
+      >
+    </div>
+    
+    <div class="button-group">
+      <button class="btn btn-find" (click)="onFindClick()">
+        <i class="fas fa-search"></i> Find Invoice
+      </button>
+      <button class="btn btn-update" (click)="onUpdateClick()">
+        <i class="fas fa-save"></i> Update
+      </button>
+    </div>
+  </div>
+
+  <!-- Address Sections -->
+  <div class="address-container">
+    <!-- Bill To -->
+    <div class="address-section card">
+      <h3 class="section-title">Bill To:</h3>
+      <div class="address-fields">
+        <input type="text" [(ngModel)]="billTo.name" placeholder="Name">
+        <input type="text" [(ngModel)]="billTo.address1" placeholder="Address Line 1">
+        <input type="text" [(ngModel)]="billTo.address2" placeholder="Address Line 2">
+        <input type="text" [(ngModel)]="billTo.address3" placeholder="Address Line 3">
+        <input type="text" [(ngModel)]="billTo.address4" placeholder="Address Line 4">
+        <input type="text" [(ngModel)]="billTo.city" placeholder="City" class="inline-field">
+        <input type="text" [(ngModel)]="billTo.provState" placeholder="Prov/State" class="inline-field">
+        <input type="text" [(ngModel)]="billTo.postalZip" placeholder="Postal Code" class="inline-field">
+        <input type="text" [(ngModel)]="billTo.countryCode" placeholder="Country" class="inline-field">
+      </div>
+    </div>
+
+    <!-- Ship To -->
+    <div class="address-section card">
+      <h3 class="section-title">Ship To:</h3>
+      <div class="address-fields">
+        <input type="text" [(ngModel)]="shipTo.name" placeholder="Name">
+        <input type="text" [(ngModel)]="shipTo.address1" placeholder="Address Line 1">
+        <input type="text" [(ngModel)]="shipTo.address2" placeholder="Address Line 2">
+        <input type="text" [(ngModel)]="shipTo.address3" placeholder="Address Line 3">
+        <input type="text" [(ngModel)]="shipTo.address4" placeholder="Address Line 4">
+        <input type="text" [(ngModel)]="shipTo.city" placeholder="City" class="inline-field">
+        <input type="text" [(ngModel)]="shipTo.provState" placeholder="Prov/State" class="inline-field">
+        <input type="text" [(ngModel)]="shipTo.postalZip" placeholder="Postal Code" class="inline-field">
+        <input type="text" [(ngModel)]="shipTo.countryCode" placeholder="Country" class="inline-field">
+      </div>
+    </div>
+  </div>
+</div>

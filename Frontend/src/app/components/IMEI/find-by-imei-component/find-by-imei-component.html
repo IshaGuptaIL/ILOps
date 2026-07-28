@@ -1,81 +1,76 @@
-<div class="container mt-4">
-  <div class="card shadow-sm mb-4">
-    <div class="card-header bg-primary text-white">
-      <h5 class="mb-0">Find By IMEI</h5>
+<div class="ms-access-form">
+  <div class="form-titlebar">
+    <span>Find By IMEI</span>
+    <button class="win-btn win-close">×</button>
+  </div>
+
+  <div class="form-body">
+    <!-- Search Box -->
+    <div class="search-panel">
+      <label>Enter IMEI Number:</label>
+      <input type="text" class="ms-input" [(ngModel)]="imei" placeholder="Enter IMEI..." (keyup.enter)="searchIMEI()" />
+      <button class="ms-btn" [disabled]="isLoading" (click)="searchIMEI()">Search</button>
     </div>
 
-    <div class="card-body">
-      <div class="row mb-3 align-items-center">
-        <div class="col-md-4">
-          <input class="form-control form-control-sm" [(ngModel)]="imei" placeholder="Enter IMEI" (keyup.enter)="searchIMEI()" />
-        </div>
-        <div class="col-md-2">
-          <button class="btn btn-primary btn-sm w-100" [disabled]="isLoading" (click)="searchIMEI()">
-            Search
-          </button>
-        </div>
-      </div>
-
-      <div class="table-responsive mb-4">
-        <h6 class="text-secondary fw-bold">Hardware Receipt</h6>
-        <table class="table table-bordered table-sm">
-          <thead class="table-light">
+    <!-- Hardware Receipt Table -->
+    <div class="table-section">
+      <div class="section-header">Hardware Receipt Details</div>
+      <div class="table-container">
+        <table class="ms-table">
+          <thead>
             <tr>
               <th>Vendor</th><th>BVReceiptNo</th><th>BVReceiptDate</th><th>CMO</th><th>PO</th>
               <th>Part</th><th>Qty</th><th>Receipt Unit Cost</th><th>Rogers Total</th><th>Variance</th><th>Rogers Count</th>
             </tr>
           </thead>
           <tbody>
-            @if (receipt.length > 0) {
-              <tr>
-                <td>{{ receipt[0].vendorName }}</td>
-                <td>{{ receipt[0].bvReceiptNo }}</td>
-                <td>{{ receipt[0].receiptDate | date:'shortDate' }}</td>
-                <td>{{ receipt[0].cmo }}</td>
-                <td>{{ receipt[0].poNumber }}</td>
-                <td>{{ receipt[0].partNo }}</td>
-                <td>{{ receipt[0].qtyReceived }}</td>
-                <td>{{ receipt[0].unitCost | number:'1.2-2' }}</td>
-                <td>{{ rogersTotal | number:'1.2-2' }}</td>
-                <td>{{ variance | number:'1.2-2' }}</td>
-                <td>{{ rogersCount }}</td>
-              </tr>
-            } @else {
-              <tr>
-                <td colspan="11" class="text-center text-muted">
-                  {{ isLoading ? 'Loading data...' : 'No data found' }}
-                </td>
-              </tr>
-            }
+            <tr *ngIf="receipt && receipt.length > 0">
+              <td>{{ receipt[0].vendorName }}</td>
+              <td>{{ receipt[0].bvReceiptNo }}</td>
+              <td>{{ receipt[0].receiptDate | date:'shortDate' }}</td>
+              <td>{{ receipt[0].cmo }}</td>
+              <td>{{ receipt[0].poNumber }}</td>
+              <td>{{ receipt[0].partNo }}</td>
+              <td>{{ receipt[0].qtyReceived }}</td>
+              <td>{{ receipt[0].unitCost | number:'1.2-2' }}</td>
+              <td>{{ rogersTotal | number:'1.2-2' }}</td>
+              <td>{{ variance | number:'1.2-2' }}</td>
+              <td>{{ rogersCount }}</td>
+            </tr>
+            <tr *ngIf="!receipt || receipt.length === 0">
+              <td colspan="11" class="no-data">
+                {{ isLoading ? 'Searching database...' : 'No hardware receipt records found for this IMEI.' }}
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
+    </div>
 
-      <div class="table-responsive">
-        <h6 class="text-secondary fw-bold">Rogers Invoices</h6>
-        <table class="table table-bordered table-sm">
-          <thead class="table-light">
+    <!-- Rogers Invoices Table -->
+    <div class="table-section">
+      <div class="section-header">Rogers Invoices / Credits</div>
+      <div class="table-container">
+        <table class="ms-table">
+          <thead>
             <tr>
               <th>Trans Type</th><th>RefNo</th><th>Trans Date</th><th>Per Unit Amount</th><th>Qty</th><th>Remarks</th>
             </tr>
           </thead>
           <tbody>
-            @for (item of rogersList; track $index) {
-              <tr>
-                <td>{{ item.transType }}</td>
-                <td>{{ item.refNo }}</td>
-                <td>{{ item.transDate | date:'shortDate' }}</td>
-                <td>{{ item.perUnitAmount | number:'1.2-2' }}</td>
-                <td>{{ item.qty }}</td>
-                <td>{{ item.remarks }}</td>
-              </tr>
-            } @empty {
-              <tr>
-                <td colspan="6" class="text-center text-muted">
-                  {{ isLoading ? 'Fetching...' : 'No invoices found' }}
-                </td>
-              </tr>
-            }
+            <tr *ngFor="let item of rogersList">
+              <td>{{ item.transType }}</td>
+              <td>{{ item.refNo }}</td>
+              <td>{{ item.transDate | date:'shortDate' }}</td>
+              <td>{{ item.perUnitAmount | number:'1.2-2' }}</td>
+              <td>{{ item.qty }}</td>
+              <td>{{ item.remarks }}</td>
+            </tr>
+            <tr *ngIf="rogersList.length === 0">
+              <td colspan="6" class="no-data">
+                {{ isLoading ? 'Fetching invoices...' : 'No Rogers invoice records found.' }}
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>

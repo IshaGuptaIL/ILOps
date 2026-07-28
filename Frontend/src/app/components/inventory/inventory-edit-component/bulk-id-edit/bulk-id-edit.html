@@ -1,0 +1,214 @@
+<div class="bulk-id-container">
+    
+    <!-- Column 1: Search and Replace -->
+    <div class="bulk-column">
+        <div class="column-header">Bulk Invoice - "Search and Replace"</div>
+        <div class="column-description">
+            This process is used to change all instances of a specific Bulk Invoice ID from one ID to another. 
+            The invoice must already have a Bulk Invoice ID and cannot be 'Your Dock'. You cannot just 
+            change some of them, it's all or nothing.
+        </div>
+
+        <div class="form-section">
+            <div class="input-group">
+                <label class="input-label">Bulk Invoice No:</label>
+                <input type="text" class="form-input" [(ngModel)]="bulkSearchData.oldBulkId" maxlength="20" placeholder="Enter existing Bulk ID">
+            </div>
+
+            <div class="button-group">
+                <button class="action-button primary" (click)="findBulkIdCount()" [disabled]="!bulkSearchData.oldBulkId">Find</button>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">Count of BV Invoices:</label>
+                <input type="text" class="form-input readonly" [value]="bulkSearchData.count || ''" readonly>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">New Bulk Invoice:</label>
+                <input type="text" class="form-input" [(ngModel)]="bulkSearchData.newBulkId" maxlength="20" placeholder="Enter new Bulk ID (max 20 chars)">
+                <div class="char-counter" *ngIf="bulkSearchData.newBulkId">
+                    {{bulkSearchData.newBulkId.length}}/20 characters
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button class="action-button success" (click)="updateBulkId()" [disabled]="!bulkSearchData.count || !bulkSearchData.newBulkId">Update All</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Column 2: Modify Single Invoice -->
+    <div class="bulk-column">
+        <div class="column-header">Bulk Invoice - Modify Single Invoice</div>
+        
+        <div class="form-section">
+            <div class="input-row">
+                <div class="input-group flex-grow">
+                    <label class="input-label">Single Invoice:</label>
+                    <input type="text" class="form-input" [(ngModel)]="singleInvoiceData.invoiceNo" placeholder="Enter invoice number">
+                </div>
+                <button class="action-button primary" (click)="findSingleInvoiceBulkId()" [disabled]="!singleInvoiceData.invoiceNo">Get Bulk ID</button>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">Existing Bulk:</label>
+                <input type="text" class="form-input readonly" [value]="singleInvoiceData.currentBulkId" readonly>
+            </div>
+
+            <div class="input-row">
+                <div class="input-group flex-grow">
+                    <label class="input-label">New Bulk:</label>
+                    <input type="text" class="form-input" [(ngModel)]="singleInvoiceData.newBulkId" maxlength="20" placeholder="Enter new Bulk ID" [disabled]="!singleInvoiceData.found">
+                    <div class="char-counter" *ngIf="singleInvoiceData.newBulkId">
+                        {{singleInvoiceData.newBulkId.length}}/20 characters
+                    </div>
+                </div>
+                <button class="action-button success" (click)="updateSingleInvoiceBulkId()" [disabled]="!singleInvoiceData.found || !singleInvoiceData.newBulkId">Update Bulk ID</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Column 3: Modify Multiple Invoices -->
+    <div class="bulk-column">
+        <div class="column-header">Bulk Invoice - Modify Multiple Invoices</div>
+        <div class="column-description">
+            This process is used to change the bulk ID for a list of invoice numbers you have in the clipboard. 
+            Every invoice number pasted will be updated to the Bulk ID you provide.
+        </div>
+
+        <div class="form-section">
+            <div class="button-row">
+                <button class="action-button secondary" (click)="clearInvoiceList()">Clear Invoice List</button>
+                <button class="action-button primary" (click)="togglePasteModal(true)">View/Paste Invoice List</button>
+            </div>
+
+            <div class="invoice-list-preview" *ngIf="multiInvoiceData.invoiceNos.length > 0">
+                <div class="list-header">
+                    <span class="list-count">{{multiInvoiceData.invoiceNos.length}} invoices in list</span>
+                    <span class="list-sample">({{multiInvoiceData.invoiceNos[0]}}...)</span>
+                </div>
+                <div class="list-items">
+                    <div class="list-item" *ngFor="let invoice of multiInvoiceData.invoiceNos.slice(0, 5); let i = index">
+                        <span>{{invoice}}</span>
+                        <button class="remove-btn" (click)="removeInvoiceFromList(i)" title="Remove">×</button>
+                    </div>
+                    <div class="more-items" *ngIf="multiInvoiceData.invoiceNos.length > 5">
+                        ... and {{multiInvoiceData.invoiceNos.length - 5}} more
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-row">
+                <div class="input-group flex-grow">
+                    <label class="input-label">New Bulk ID:</label>
+                    <input type="text" class="form-input" [(ngModel)]="multiInvoiceData.newBulkId" maxlength="20" placeholder="Enter new Bulk ID for all invoices">
+                    <div class="char-counter" *ngIf="multiInvoiceData.newBulkId">
+                        {{multiInvoiceData.newBulkId.length}}/20 characters
+                    </div>
+                </div>
+                <button class="action-button success" (click)="updateMultipleBulkIds()" [disabled]="multiInvoiceData.invoiceNos.length === 0 || !multiInvoiceData.newBulkId">Update Bulk ID's</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- VBA/MS Access Style Modal for Pasting - Clean Simple Design -->
+<div class="vba-modal-overlay" *ngIf="isPasteModalOpen" (click)="togglePasteModal(false)">
+    <div class="vba-modal-window" (click)="$event.stopPropagation()">
+        <!-- VBA Title Bar -->
+        <div class="vba-title-bar">
+            <div class="vba-title-text">
+                <span class="vba-app-icon">📊</span>
+                Microsoft Access - [Paste Invoice List]
+            </div>
+            <div class="vba-title-buttons">
+                <button class="vba-minimize-btn">_</button>
+                <button class="vba-maximize-btn">□</button>
+                <button class="vba-close-btn" (click)="togglePasteModal(false)">×</button>
+            </div>
+        </div>
+        
+        <!-- VBA Form Content -->
+        <div class="vba-form-content">
+            <!-- Excel-style Data Grid -->
+            <div class="vba-data-section">
+                <!-- Excel-like Grid Container -->
+                <div class="excel-grid-container">
+                    <!-- Column Headers -->
+                    <div class="excel-header-row">
+                        <div class="excel-row-number-header">#</div>
+                        <div class="excel-column-header">Invoice Number</div>
+                    </div>
+                    
+                    <!-- Data Input Area -->
+                    <div class="excel-data-area">
+                        <textarea 
+                            class="excel-textarea" 
+                            [(ngModel)]="multiInvoiceInput" 
+                            placeholder="Paste invoice numbers here (one per line)&#10;&#10;Example:&#10;INV123456&#10;INV123457&#10;INV123458&#10;&#10;Or paste from Excel column..."
+                            rows="10"
+                            (input)="onTextareaInput()">
+                        </textarea>
+                    </div>
+
+                    <!-- Preview Grid (Moved below textarea to prevent cursor jumping) -->
+                    <div class="excel-preview-container" *ngIf="previewInvoices.length > 0">
+                        <div class="excel-preview-header">Parsed Invoices Preview:</div>
+                        <div class="excel-preview-grid">
+                            <div class="excel-preview-row" *ngFor="let invoice of previewInvoices.slice(0, 50); let i = index">
+                                <div class="excel-row-number">{{i + 1}}</div>
+                                <div class="excel-cell">{{invoice}}</div>
+                            </div>
+                            <div class="excel-more-rows" *ngIf="previewInvoices.length > 50">
+                                <div class="excel-row-number">...</div>
+                                <div class="excel-cell">... and {{previewInvoices.length - 50}} more rows</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- VBA Status Bar -->
+                <div class="vba-status-info">
+                    <div class="vba-status-item">
+                        <span class="vba-status-label">Records:</span>
+                        <span class="vba-status-value">{{previewInvoices.length}}</span>
+                    </div>
+                    <div class="vba-status-item">
+                        <span class="vba-status-label">Ready:</span>
+                        <span class="vba-status-value">{{multiInvoiceInput.trim() ? 'Yes' : 'No'}}</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- VBA Button Panel -->
+            <div class="vba-button-panel">
+                <button class="vba-form-button vba-btn-ok" (click)="addInvoiceToList()" [disabled]="!multiInvoiceInput.trim()">
+                    <span class="vba-btn-icon">✓</span>
+                    OK
+                </button>
+                <button class="vba-form-button vba-btn-cancel" (click)="togglePasteModal(false)">
+                    <span class="vba-btn-icon">✕</span>
+                    Cancel
+                </button>
+                <button class="vba-form-button vba-btn-clear" (click)="clearTextarea()">
+                    <span class="vba-btn-icon">🗑️</span>
+                    Clear All
+                </button>
+            </div>
+        </div>
+        
+        <!-- VBA Status Bar -->
+        <div class="vba-status-bar">
+            <div class="vba-status-left">
+                <span class="vba-status-text">Ready</span>
+            </div>
+            <div class="vba-status-right">
+                <span class="vba-status-text">NUM</span>
+                <span class="vba-status-text">CAPS</span>
+                <span class="vba-status-text">SCRL</span>
+            </div>
+        </div>
+    </div>
+</div>
