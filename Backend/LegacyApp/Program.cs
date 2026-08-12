@@ -1,3 +1,4 @@
+using DAL.Common.Jwt;
 using DAL.Common.Login;
 using DAL.Common.Spire;
 using DAL.Common.User;
@@ -79,13 +80,36 @@ builder.Services.AddDbContext<AppDBContext>(options =>
 
 
 // =======================
+// JWT Authentication
+// =======================
+var jwtKey = "ILOps_Super_Secret_Key_For_JWT_Authentication_1234567890!!!";
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.RequireHttpsMetadata = false;
+    options.SaveToken = true;
+    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(System.Text.Encoding.ASCII.GetBytes(jwtKey)),
+        ValidateIssuer = false,
+        ValidateAudience = false
+    };
+});
+
+
+// =======================
 // CORS
 // =======================
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy.SetIsOriginAllowed(origin =>true)
+        policy.SetIsOriginAllowed(origin => true)
               .AllowAnyHeader()
               .AllowCredentials()
               .AllowAnyMethod();
@@ -100,6 +124,32 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
     options.CustomSchemaIds(type => type.FullName);
+
+    // Add JWT Authentication support to Swagger UI
+    options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+        Description = "Paste your JWT token directly below (you DO NOT need to type 'Bearer')."
+    });
+
+    options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+    {
+        {
+            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+            {
+                Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                {
+                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] {}
+        }
+    });
 });
 
 // =======================
@@ -107,29 +157,30 @@ builder.Services.AddSwaggerGen(options =>
 // =======================
 
 // Login
+builder.Services.AddScoped<JwtTokenService>();
 builder.Services.AddTransient<ILogin, LoginDA>();
 builder.Services.AddTransient<IModifyInventory, ModifyInventoryDA>();
-builder.Services.AddTransient<IUser,UserDA>();
-builder.Services.AddTransient<ICostValidation,CostValidationDA>();
+builder.Services.AddTransient<IUser, UserDA>();
+builder.Services.AddTransient<ICostValidation, CostValidationDA>();
 builder.Services.AddTransient<Iiemi, ImeiDA>();
 builder.Services.AddScoped<IRecieveImei, RecieveImeiDA>();
-builder.Services.AddScoped<IReports,ReportsDA>();
-builder.Services.AddScoped<IInvoiceCredit,InvoiceCreditDA>();
+builder.Services.AddScoped<IReports, ReportsDA>();
+builder.Services.AddScoped<IInvoiceCredit, InvoiceCreditDA>();
 builder.Services.AddScoped<IExceptions, ExceptionDA>();
 builder.Services.AddScoped<ICount, CountDA>();
-builder.Services.AddScoped<ICountAnalysis,CountAnalysisDA>();
+builder.Services.AddScoped<ICountAnalysis, CountAnalysisDA>();
 builder.Services.AddScoped<IInventoryType, InventoryTypeDA>();
-builder.Services.AddTransient<IOutputInvoice,OutputInvoiceDA>();
-builder.Services.AddTransient<ICustomSearch,CustomSearchDA>();
-builder.Services.AddTransient<IRunRate,RunRateDA>();
+builder.Services.AddTransient<IOutputInvoice, OutputInvoiceDA>();
+builder.Services.AddTransient<ICustomSearch, CustomSearchDA>();
+builder.Services.AddTransient<IRunRate, RunRateDA>();
 builder.Services.AddTransient<ISpareLight, SpareLightDA>();
 builder.Services.AddTransient<IRoger, RogerDA>();
 builder.Services.AddTransient<ISku, SkuDA>();
-builder.Services.AddTransient<ISalesTaxReport,SalesTaxReportDA>();
-builder.Services.AddTransient<IAdvantageVoice,AdvantageVoiceDA>();
+builder.Services.AddTransient<ISalesTaxReport, SalesTaxReportDA>();
+builder.Services.AddTransient<IAdvantageVoice, AdvantageVoiceDA>();
 builder.Services.AddTransient<IInventoryEdit, InventoryEditDA>();
-builder.Services.AddTransient<ICustomerSales,CustomerSalesDA>();
-builder.Services.AddTransient<IHydroSales,HydroSalesDA>();
+builder.Services.AddTransient<ICustomerSales, CustomerSalesDA>();
+builder.Services.AddTransient<IHydroSales, HydroSalesDA>();
 builder.Services.AddTransient<IRogerSalesReportingDAL, RogerSalesReportingDAL>();
 builder.Services.AddTransient<IARCollectionsDA, ARCollectionsDA>();
 builder.Services.AddTransient<IRogersInvoiceSpireDA, RogersInvoiceSpireDA>();
@@ -137,7 +188,7 @@ builder.Services.AddTransient<IPriceProtection, PriceProtectionDA>();
 builder.Services.AddTransient<IImeiSearch, ImeiSearchDA>();
 builder.Services.AddTransient<IOutputToExcel, OutputToExcelDA>();
 builder.Services.AddTransient<IRogerOverPayments, RogerOverPaymentsDA>();
-builder.Services.AddTransient<IApplyCreditReviewClaims,ApplyCreditReviewClaimsDA>();
+builder.Services.AddTransient<IApplyCreditReviewClaims, ApplyCreditReviewClaimsDA>();
 
 builder.Services.AddHttpClient<ISpireClient, SpireClient>((sp, client) =>
 {
@@ -237,8 +288,9 @@ app.UseSwaggerUI(c =>
 });
 
 app.UseHttpsRedirection();
+app.UseAuthentication();
 app.UseAuthorization();
-app.MapControllers();
+app.MapControllers().RequireAuthorization();
 
 // =======================
 // Generate Sample Excel Files for Testing

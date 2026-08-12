@@ -1,15 +1,19 @@
-﻿using DAL.Models;
+using DAL.Models;
 using Microsoft.EntityFrameworkCore;
+
+using DAL.Common.Jwt;
 
 namespace DAL.Common.Login
 {
     public class LoginDA : ILogin
     {
         public readonly AppDBContext _dbContext;
+        private readonly JwtTokenService _jwtService;
 
-        public LoginDA(AppDBContext context)
+        public LoginDA(AppDBContext context, JwtTokenService jwtService)
         {
             _dbContext = context;
+            _jwtService = jwtService;
         }
 
         #region Login
@@ -35,15 +39,23 @@ namespace DAL.Common.Login
                     response.Message = "Invalid email or password";
                     return response;
                 }
+                // Generate JWT Token
+                var token = _jwtService.GenerateToken(user);
+
+                // Save token to database
+                user.JwtToken = token;
+                await _dbContext.SaveChangesAsync();
 
                 response.Success = true;
                 response.Message = "Login successful";
+                response.Token = token;
                 response.Result = new
                 {
                     UserId = (short)user.Id,
                     Email = user.Email,
                     UserName = user.Email,
-                    UserRoleId=user.UserRoleId
+                    UserRoleId=user.UserRoleId,
+                    Token = token
                 };
             }
             catch

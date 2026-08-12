@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -18,7 +18,7 @@ namespace DAL.Common.Login
         public int Count { get; set; }
         public int StatusCode { get; set; }
         public bool Success { get; set; }
-        
+        public string? Token { get; set; }
     }
     public class userRole
     {

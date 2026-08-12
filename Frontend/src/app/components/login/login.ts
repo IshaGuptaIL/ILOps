@@ -60,11 +60,11 @@ export class Login {
       next: (res: any) => {
         if (res.success) {
 
-          this.cookieService.set('token', res.token, 1);
-          this.cookieService.set('UserID', res.result.userId, 1);
-          this.cookieService.set('UserRoleId', res.result.userRoleId, 1);
-          this.cookieService.set('Name', res.result.name, 1);
-          this.cookieService.set('Email', res.result.email, 1);
+          this.cookieService.set('token', res.token, 3);
+          this.cookieService.set('UserID', res.result.userId, 3);
+          this.cookieService.set('UserRoleId', res.result.userRoleId, 3);
+          this.cookieService.set('Name', res.result.name, 3);
+          this.cookieService.set('Email', res.result.email, 3);
 
           // Compute user initials from name (e.g. "Super Admin" -> "SA")
           let initials = 'SA';
@@ -78,7 +78,7 @@ export class Login {
               initials = parts[0].toUpperCase() + 'A';
             }
           }
-          this.cookieService.set('userInitials', initials, 1);
+          this.cookieService.set('userInitials', initials, 3);
 
           this.toastr.success('Login successful', 'Success');
           this.router.navigate(['/dashboard']);

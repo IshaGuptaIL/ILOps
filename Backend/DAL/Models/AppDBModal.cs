@@ -422,7 +422,7 @@ namespace DAL.Models
         [MaxLength(100)]
         public string? State { get; set; } = "";
 
-
+        public string? JwtToken { get; set; }
 
         [MaxLength(20)]
         public string? ZipCode { get; set; } = "";
