@@ -3,9 +3,9 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { forkJoin } from 'rxjs';
-import { SpinnerService } from '../../../components/shared/spinner/spinner-service';
-import { Spinner } from '../../../components/shared/spinner/spinner';
-import { environment } from '../../../../environments/environment';
+import { SpinnerService } from '../../../shared/spinner/spinner-service';
+import { Spinner } from '../../../shared/spinner/spinner';
+import { environment } from '../../../../../environments/environment';
 import * as XLSX from 'xlsx';
 import Swal from 'sweetalert2';
 

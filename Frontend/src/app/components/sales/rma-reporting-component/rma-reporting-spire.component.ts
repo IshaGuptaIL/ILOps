@@ -6,8 +6,8 @@ import { RogersReportImportComponent } from './rogers-report-import/rogers-repor
 import { ImeiSearchComponent } from './imei-search/imei-search.component';
 import { RMAReportsComponent } from './reports/reports.component';
 import { RMAUtilitiesComponent } from './utilities/utilities.component';
-import { SpinnerService } from '../../components/shared/spinner/spinner-service';
-import { Spinner } from '../../components/shared/spinner/spinner';
+import { SpinnerService } from '../../shared/spinner/spinner-service';
+import { Spinner } from '../../shared/spinner/spinner';
 import Swal from 'sweetalert2';
 
 @Component({

@@ -37,6 +37,7 @@ using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 using DAL.Inventory.PriceProtection.ApplyCredit_ReviewClaims;
+using DAL.Sales.RMAReporting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -109,7 +110,7 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy.SetIsOriginAllowed(origin => true)
+        policy.SetIsOriginAllowed(origin =>true)
               .AllowAnyHeader()
               .AllowCredentials()
               .AllowAnyMethod();
@@ -124,7 +125,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
     options.CustomSchemaIds(type => type.FullName);
-
+    
     // Add JWT Authentication support to Swagger UI
     options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
     {
@@ -135,7 +136,7 @@ builder.Services.AddSwaggerGen(options =>
         In = Microsoft.OpenApi.Models.ParameterLocation.Header,
         Description = "Paste your JWT token directly below (you DO NOT need to type 'Bearer')."
     });
-
+    
     options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
     {
         {
@@ -160,27 +161,27 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddScoped<JwtTokenService>();
 builder.Services.AddTransient<ILogin, LoginDA>();
 builder.Services.AddTransient<IModifyInventory, ModifyInventoryDA>();
-builder.Services.AddTransient<IUser, UserDA>();
-builder.Services.AddTransient<ICostValidation, CostValidationDA>();
+builder.Services.AddTransient<IUser,UserDA>();
+builder.Services.AddTransient<ICostValidation,CostValidationDA>();
 builder.Services.AddTransient<Iiemi, ImeiDA>();
 builder.Services.AddScoped<IRecieveImei, RecieveImeiDA>();
-builder.Services.AddScoped<IReports, ReportsDA>();
-builder.Services.AddScoped<IInvoiceCredit, InvoiceCreditDA>();
+builder.Services.AddScoped<IReports,ReportsDA>();
+builder.Services.AddScoped<IInvoiceCredit,InvoiceCreditDA>();
 builder.Services.AddScoped<IExceptions, ExceptionDA>();
 builder.Services.AddScoped<ICount, CountDA>();
-builder.Services.AddScoped<ICountAnalysis, CountAnalysisDA>();
+builder.Services.AddScoped<ICountAnalysis,CountAnalysisDA>();
 builder.Services.AddScoped<IInventoryType, InventoryTypeDA>();
-builder.Services.AddTransient<IOutputInvoice, OutputInvoiceDA>();
-builder.Services.AddTransient<ICustomSearch, CustomSearchDA>();
-builder.Services.AddTransient<IRunRate, RunRateDA>();
+builder.Services.AddTransient<IOutputInvoice,OutputInvoiceDA>();
+builder.Services.AddTransient<ICustomSearch,CustomSearchDA>();
+builder.Services.AddTransient<IRunRate,RunRateDA>();
 builder.Services.AddTransient<ISpareLight, SpareLightDA>();
 builder.Services.AddTransient<IRoger, RogerDA>();
 builder.Services.AddTransient<ISku, SkuDA>();
-builder.Services.AddTransient<ISalesTaxReport, SalesTaxReportDA>();
-builder.Services.AddTransient<IAdvantageVoice, AdvantageVoiceDA>();
+builder.Services.AddTransient<ISalesTaxReport,SalesTaxReportDA>();
+builder.Services.AddTransient<IAdvantageVoice,AdvantageVoiceDA>();
 builder.Services.AddTransient<IInventoryEdit, InventoryEditDA>();
-builder.Services.AddTransient<ICustomerSales, CustomerSalesDA>();
-builder.Services.AddTransient<IHydroSales, HydroSalesDA>();
+builder.Services.AddTransient<ICustomerSales,CustomerSalesDA>();
+builder.Services.AddTransient<IHydroSales,HydroSalesDA>();
 builder.Services.AddTransient<IRogerSalesReportingDAL, RogerSalesReportingDAL>();
 builder.Services.AddTransient<IARCollectionsDA, ARCollectionsDA>();
 builder.Services.AddTransient<IRogersInvoiceSpireDA, RogersInvoiceSpireDA>();
@@ -188,7 +189,8 @@ builder.Services.AddTransient<IPriceProtection, PriceProtectionDA>();
 builder.Services.AddTransient<IImeiSearch, ImeiSearchDA>();
 builder.Services.AddTransient<IOutputToExcel, OutputToExcelDA>();
 builder.Services.AddTransient<IRogerOverPayments, RogerOverPaymentsDA>();
-builder.Services.AddTransient<IApplyCreditReviewClaims, ApplyCreditReviewClaimsDA>();
+builder.Services.AddTransient<IApplyCreditReviewClaims,ApplyCreditReviewClaimsDA>();
+builder.Services.AddTransient<IRMAReportingDA, RMAReportingDA>();
 
 builder.Services.AddHttpClient<ISpireClient, SpireClient>((sp, client) =>
 {

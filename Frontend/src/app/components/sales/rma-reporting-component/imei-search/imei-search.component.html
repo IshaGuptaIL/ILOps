@@ -1,0 +1,324 @@
+<div class="access-form-container">
+  <!-- Shared Global Spinner Component -->
+  <app-spinner></app-spinner>
+
+  <!-- Search Control Bar -->
+  <div class="search-bar-row">
+    <label class="search-label">Search By:</label>
+    <select class="access-dropdown" [(ngModel)]="selectedCriteria" (ngModelChange)="onCriteriaChange()" id="cmbCriteria">
+      <option *ngFor="let opt of criteriaOptions" [value]="opt">{{ opt }}</option>
+    </select>
+    <input 
+      type="text" 
+      class="access-textbox search-input" 
+      [(ngModel)]="searchQuery" 
+      (ngModelChange)="onSearchQueryChange()"
+      id="txtIMEI" 
+      (keyup.enter)="executeSearch()"
+      [placeholder]="'Enter ' + selectedCriteria + '...'"
+    />
+    <button class="access-btn-primary" (click)="executeSearch()" id="cmdSearch">Search</button>
+    <button class="access-btn-secondary" (click)="exportToExcel()" id="cmdExportExcel">Export to Excel</button>
+  </div>
+
+  <div *ngIf="errorMessage" class="access-error-bar">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Section 1: RMA Results (All 27 Columns from qryIMEISearch subform.frm) -->
+  <div class="grid-section">
+    <div class="grid-section-header">
+      <span class="header-icon">&#x1F4CB;</span>
+      <span class="header-text">RMA Results - Double click record selector at left of a row to view the Rogers Response</span>
+    </div>
+
+    <div class="datasheet-scroll-wrapper">
+      <table class="access-datasheet" id="tblRmaResults">
+        <thead>
+          <tr>
+            <th class="col-selector"></th>
+            <th>ID</th>
+            <th>SKU</th>
+            <th>IMEI</th>
+            <th>ReturnReasonCode</th>
+            <th>ExtraInfo</th>
+            <th>OutputCSV</th>
+            <th>OutputCSVDate</th>
+            <th>OutputCSVBatch</th>
+            <th>ValidationResults</th>
+            <th>RogersResponse</th>
+            <th>InvoiceSold</th>
+            <th>InvoiceSoldDate</th>
+            <th>WhseSold</th>
+            <th>BVCreditOrder</th>
+            <th>ReturnedRogers</th>
+            <th>ReturnedRogersBVOrder</th>
+            <th>Swap</th>
+            <th>SwapCMO</th>
+            <th>Pristine</th>
+            <th>RejectedACT</th>
+            <th>Closed</th>
+            <th>FinalDisposition</th>
+            <th>ReturnWaybill</th>
+            <th>LogInDate</th>
+            <th>CreditAmtClaimed</th>
+            <th>User</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let rma of rmaResults; let i = index" 
+              [class.selected-row]="i === selectedRmaIndex"
+              (click)="selectRmaRow(i)"
+              (dblclick)="onRmaRowDoubleClick(rma)">
+            <td class="col-selector" (dblclick)="onRmaRowDoubleClick(rma)">
+              <span *ngIf="i === selectedRmaIndex" class="selector-arrow">&#x25B6;</span>
+            </td>
+            <td class="text-right">{{ rma.id }}</td>
+            <td class="font-semibold">{{ rma.sku }}</td>
+            <td class="font-semibold link-cell">{{ rma.imei }}</td>
+            <td>{{ rma.returnReasonCode }}</td>
+            <td class="text-muted">{{ rma.extraInfo }}</td>
+            <td class="text-center">
+              <input type="checkbox" [checked]="rma.outputCSV" disabled class="access-check" />
+            </td>
+            <td>{{ formatDate(rma.outputCSVDate) }}</td>
+            <td class="text-center">{{ rma.outputCSVBatch }}</td>
+            <td class="text-success font-semibold">{{ rma.validationResults }}</td>
+            <td>{{ rma.rogersResponse }}</td>
+            <td>{{ rma.invoiceSold }}</td>
+            <td>{{ formatDate(rma.invoiceSoldDate) }}</td>
+            <td>{{ rma.whseSold }}</td>
+            <td>{{ rma.bvCreditOrder }}</td>
+            <td>{{ rma.returnedRogers }}</td>
+            <td>{{ rma.returnedRogersBVOrder }}</td>
+            <td>{{ rma.swap }}</td>
+            <td>{{ rma.swapCMO }}</td>
+            <td class="text-center">
+              <input type="checkbox" [checked]="rma.pristine" disabled class="access-check" />
+            </td>
+            <td class="text-center">
+              <input type="checkbox" [checked]="rma.rejectedACT" disabled class="access-check" />
+            </td>
+            <td class="text-center">
+              <input type="checkbox" [checked]="rma.closed" disabled class="access-check" />
+            </td>
+            <td>{{ rma.finalDisposition }}</td>
+            <td>{{ rma.returnWaybill }}</td>
+            <td>{{ formatDate(rma.logInDate) }}</td>
+            <td class="text-right">{{ formatCurrency(rma.creditAmtClaimed) }}</td>
+            <td>{{ rma.user }}</td>
+            <td>{{ rma.status }}</td>
+          </tr>
+          <tr *ngIf="rmaResults.length === 0">
+            <td colspan="28" class="no-records">No RMA records found.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Access Record Selector Bar 1 -->
+    <div class="access-record-bar">
+      <span class="rec-label">Record:</span>
+      <button class="nav-btn" (click)="navFirstRma()" [disabled]="selectedRmaIndex <= 0" title="First Record">&#x23EE;</button>
+      <button class="nav-btn" (click)="navPrevRma()" [disabled]="selectedRmaIndex <= 0" title="Previous Record">&#x25C0;</button>
+      <input type="text" class="rec-current-input" [value]="rmaResults.length > 0 ? selectedRmaIndex + 1 : 0" readonly />
+      <span class="rec-of">of {{ rmaResults.length }}</span>
+      <button class="nav-btn" (click)="navNextRma()" [disabled]="selectedRmaIndex >= rmaResults.length - 1" title="Next Record">&#x25B6;</button>
+      <button class="nav-btn" (click)="navLastRma()" [disabled]="selectedRmaIndex >= rmaResults.length - 1" title="Last Record">&#x23ED;</button>
+      <button class="nav-btn new-rec-btn" title="New Record">&#x2731;</button>
+      <span class="nav-divider">|</span>
+      <span class="filter-status">Unfiltered</span>
+      <span class="nav-divider">|</span>
+      <span class="search-box-label">Search</span>
+      <input type="text" class="nav-search-input" [(ngModel)]="rmaFilterText" placeholder="" />
+    </div>
+  </div>
+
+  <!-- Section 2: RMA Rogers Responses for IMEI (All 21 Columns from qryIMEI-SearchResponses subform.frm) -->
+  <div class="grid-section">
+    <div class="grid-section-header">
+      <span class="header-icon">&#x1F4C4;</span>
+      <span class="header-text">RMA Rogers Responses for IMEI</span>
+    </div>
+
+    <div class="datasheet-scroll-wrapper">
+      <table class="access-datasheet" id="tblRogersResponses">
+        <thead>
+          <tr>
+            <th class="col-selector"></th>
+            <th>ID</th>
+            <th>RogersResponse</th>
+            <th>RMANumber</th>
+            <th>RMADate</th>
+            <th>HeaderReturnReason</th>
+            <th>FileName</th>
+            <th>ITEM</th>
+            <th>Qty</th>
+            <th>DateReceived</th>
+            <th>DateIssued</th>
+            <th>VPFLastMoveDate</th>
+            <th>VPFAssignDate</th>
+            <th>ReturnReason</th>
+            <th>CreditAmount</th>
+            <th>RestockFee</th>
+            <th>TotalCredit</th>
+            <th>Status</th>
+            <th>LastStatusMessage</th>
+            <th>RMAUpdated</th>
+            <th>RejectReason</th>
+            <th>RejectReasonComment</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let resp of rogersResponses; let i = index"
+              [class.selected-row]="i === selectedResponseIndex"
+              (click)="selectResponseRow(i)">
+            <td class="col-selector">
+              <span *ngIf="i === selectedResponseIndex" class="selector-arrow">&#x25B6;</span>
+            </td>
+            <td class="text-right">{{ resp.id }}</td>
+            <td class="font-semibold text-primary">{{ resp.rogersResponse }}</td>
+            <td class="font-semibold">{{ resp.rmaNumber }}</td>
+            <td>{{ formatDate(resp.rmaDate) }}</td>
+            <td>{{ resp.headerReturnReason }}</td>
+            <td class="text-blue">{{ resp.fileName }}</td>
+            <td class="font-semibold">{{ resp.item }}</td>
+            <td class="text-center">{{ resp.qty }}</td>
+            <td>{{ formatDate(resp.dateReceived) }}</td>
+            <td>{{ formatDate(resp.dateIssued) }}</td>
+            <td>{{ formatDate(resp.vpfLastMoveDate) }}</td>
+            <td>{{ formatDate(resp.vpfAssignDate) }}</td>
+            <td>{{ resp.returnReason }}</td>
+            <td class="text-right">{{ formatCurrency(resp.creditAmount) }}</td>
+            <td class="text-right">{{ formatCurrency(resp.restockFee) }}</td>
+            <td class="text-right font-semibold">{{ formatCurrency(resp.totalCredit) }}</td>
+            <td>{{ resp.status }}</td>
+            <td>{{ resp.lastStatusMessage }}</td>
+            <td class="text-center">
+              <input type="checkbox" [checked]="resp.rmaUpdated" disabled class="access-check" />
+            </td>
+            <td>{{ resp.rejectReason }}</td>
+            <td>{{ resp.rejectReasonComment }}</td>
+          </tr>
+          <tr *ngIf="rogersResponses.length === 0">
+            <td colspan="22" class="no-records">No Rogers Response records found.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Access Record Selector Bar 2 -->
+    <div class="access-record-bar">
+      <span class="rec-label">Record:</span>
+      <button class="nav-btn" (click)="navFirstResponse()" [disabled]="selectedResponseIndex <= 0" title="First Record">&#x23EE;</button>
+      <button class="nav-btn" (click)="navPrevResponse()" [disabled]="selectedResponseIndex <= 0" title="Previous Record">&#x25C0;</button>
+      <input type="text" class="rec-current-input" [value]="rogersResponses.length > 0 ? selectedResponseIndex + 1 : 0" readonly />
+      <span class="rec-of">of {{ rogersResponses.length }}</span>
+      <button class="nav-btn" (click)="navNextResponse()" [disabled]="selectedResponseIndex >= rogersResponses.length - 1" title="Next Record">&#x25B6;</button>
+      <button class="nav-btn" (click)="navLastResponse()" [disabled]="selectedResponseIndex >= rogersResponses.length - 1" title="Last Record">&#x23ED;</button>
+      <button class="nav-btn new-rec-btn" title="New Record">&#x2731;</button>
+      <span class="nav-divider">|</span>
+      <span class="filter-status">Unfiltered</span>
+      <span class="nav-divider">|</span>
+      <span class="search-box-label">Search</span>
+      <input type="text" class="nav-search-input" [(ngModel)]="responseFilterText" placeholder="" />
+    </div>
+  </div>
+
+  <!-- Section 3: frmRogersReportCMRMA (All 11 Columns from frmRogersReportCMRMA.frm) -->
+  <div class="grid-section">
+    <div class="grid-section-header">
+      <span class="header-icon">&#x1F4B0;</span>
+      <span class="header-text">frmRogersReportCMRMA</span>
+    </div>
+
+    <div class="datasheet-scroll-wrapper">
+      <table class="access-datasheet" id="tblRogersCMRMA">
+        <thead>
+          <tr>
+            <th class="col-selector"></th>
+            <th>ID</th>
+            <th>CMNumber</th>
+            <th>CMDate</th>
+            <th>CMAmount</th>
+            <th>RMA</th>
+            <th>SKU</th>
+            <th>Qty</th>
+            <th>UnitPrice</th>
+            <th>RMAmount</th>
+            <th>RMAmountTotal</th>
+            <th>IMEIRMA</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let cm of cmRmaResults; let i = index"
+              [class.selected-row]="i === selectedCmRmaIndex"
+              (click)="selectCmRmaRow(i)">
+            <td class="col-selector">
+              <span *ngIf="i === selectedCmRmaIndex" class="selector-arrow">&#x25B6;</span>
+            </td>
+            <td class="text-right">{{ cm.id }}</td>
+            <td class="font-semibold link-cell">{{ cm.cmNumber }}</td>
+            <td>{{ formatDate(cm.cmDate) }}</td>
+            <td class="text-right font-semibold">{{ formatCurrency(cm.cmAmount) }}</td>
+            <td>{{ cm.rma }}</td>
+            <td class="font-semibold">{{ cm.sku }}</td>
+            <td class="text-center">{{ cm.qty }}</td>
+            <td class="text-right">{{ formatCurrency(cm.unitPrice) }}</td>
+            <td class="text-right">{{ formatCurrency(cm.rmAmount) }}</td>
+            <td class="text-right font-semibold">{{ formatCurrency(cm.rmAmountTotal) }}</td>
+            <td class="link-cell font-mono">{{ cm.imeirma }}</td>
+          </tr>
+          <tr *ngIf="cmRmaResults.length === 0">
+            <td colspan="12" class="no-records">No CM RMA records found.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Access Record Selector Bar 3 -->
+    <div class="access-record-bar">
+      <span class="rec-label">Record:</span>
+      <button class="nav-btn" (click)="navFirstCmRma()" [disabled]="selectedCmRmaIndex <= 0" title="First Record">&#x23EE;</button>
+      <button class="nav-btn" (click)="navPrevCmRma()" [disabled]="selectedCmRmaIndex <= 0" title="Previous Record">&#x25C0;</button>
+      <input type="text" class="rec-current-input" [value]="cmRmaResults.length > 0 ? selectedCmRmaIndex + 1 : 0" readonly />
+      <span class="rec-of">of {{ cmRmaResults.length }}</span>
+      <button class="nav-btn" (click)="navNextCmRma()" [disabled]="selectedCmRmaIndex >= cmRmaResults.length - 1" title="Next Record">&#x25B6;</button>
+      <button class="nav-btn" (click)="navLastCmRma()" [disabled]="selectedCmRmaIndex >= cmRmaResults.length - 1" title="Last Record">&#x23ED;</button>
+      <button class="nav-btn new-rec-btn" title="New Record">&#x2731;</button>
+      <span class="nav-divider">|</span>
+      <span class="filter-status">Unfiltered</span>
+      <span class="nav-divider">|</span>
+      <span class="search-box-label">Search</span>
+      <input type="text" class="nav-search-input" [(ngModel)]="cmRmaFilterText" placeholder="" />
+    </div>
+  </div>
+
+  <!-- Detail Dialog Modal for Double Click -->
+  <div class="access-modal-overlay" *ngIf="showDetailModal" (click)="closeDetailModal()">
+    <div class="access-modal-dialog" (click)="$event.stopPropagation()">
+      <div class="access-modal-header">
+        <span>RMA Rogers Response Detail</span>
+        <button class="close-btn" (click)="closeDetailModal()">&times;</button>
+      </div>
+      <div class="access-modal-body" *ngIf="viewingResponseDetail">
+        <div class="modal-grid">
+          <div class="modal-field"><label>ID:</label> <span>{{ viewingResponseDetail.id }}</span></div>
+          <div class="modal-field"><label>IMEI:</label> <span class="font-mono">{{ viewingResponseDetail.imei }}</span></div>
+          <div class="modal-field"><label>Response:</label> <span class="badge-approved">{{ viewingResponseDetail.rogersResponse }}</span></div>
+          <div class="modal-field"><label>RMA Number:</label> <span>{{ viewingResponseDetail.rmaNumber }}</span></div>
+          <div class="modal-field"><label>RMA Date:</label> <span>{{ formatDate(viewingResponseDetail.rmaDate) }}</span></div>
+          <div class="modal-field"><label>Item / SKU:</label> <span>{{ viewingResponseDetail.item }}</span></div>
+          <div class="modal-field"><label>Quantity:</label> <span>{{ viewingResponseDetail.qty }}</span></div>
+          <div class="modal-field"><label>Date Received:</label> <span>{{ formatDate(viewingResponseDetail.dateReceived) }}</span></div>
+          <div class="modal-field"><label>Date Issued:</label> <span>{{ formatDate(viewingResponseDetail.dateIssued) }}</span></div>
+          <div class="modal-field"><label>File Name:</label> <span class="text-blue">{{ viewingResponseDetail.fileName }}</span></div>
+        </div>
+      </div>
+      <div class="access-modal-footer">
+        <button class="access-btn-primary" (click)="closeDetailModal()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -117,6 +117,12 @@ namespace DAL.Models
         public DbSet<TblActivationsLookup> tblActivationsLookup { get; set; }
         public DbSet<TblUsers> tblUsers { get; set; }
 
+        // RMA Reporting Spire
+        public DbSet<TblRMA> tblRMA { get; set; }
+        public DbSet<TblRMAResponses> tblRMAResponses { get; set; }
+        public DbSet<TblRogersReportCMRMA> tblRogersReportCMRMA { get; set; }
+        public DbSet<TblRogersReportCM> tblRogersReportCM { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

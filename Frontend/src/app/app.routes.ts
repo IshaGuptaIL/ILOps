@@ -32,7 +32,7 @@ import { CustomerSalesComponent } from './components/sales/customer-sales-compon
 import { HydroComponent } from './components/sales/hydro-component/hydro-component';
 import { RogerSalesReportingComponent } from './components/sales/roger-sales-reporting-component/roger-sales-reporting-component';
 import { RogersInvoiceSpireComponent } from './components/sales/rogers-invoice-spire/rogers-invoice-spire.component';
-import { RMAReportingSpireComponent } from './sales/RMAReporting-SpireComponent/rma-reporting-spire.component';
+import { RMAReportingSpireComponent } from './components/sales/rma-reporting-component/rma-reporting-spire.component';
 
 export const routes: Routes = [
   { path: '', component: Login },           // default login page

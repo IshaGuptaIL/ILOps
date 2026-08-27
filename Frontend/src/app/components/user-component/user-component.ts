@@ -1,16 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RoleService } from '../../user-role-component/role-service';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { SpinnerService } from '../shared/spinner/spinner-service';
+import { Spinner } from '../shared/spinner/spinner';
+import Swal from 'sweetalert2';
 
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-user-component',
   templateUrl: './user-component.html',
-  imports: [CommonModule, ReactiveFormsModule],
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, Spinner],
   styleUrls: ['./user-component.css']
 })
 export class UserComponent implements OnInit {
@@ -26,107 +29,127 @@ export class UserComponent implements OnInit {
   userForm!: FormGroup;
   isEdit = false;
 
- 
   constructor(
     private fb: FormBuilder,
     private userService: RoleService,
     private toastr: ToastrService,
-    private spinner:SpinnerService
+    public spinner: SpinnerService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
     this.buildForm();
-    this.loadUsers();
     this.loadRoles();
+    this.loadUsers();
   }
 
-   loadRoles() {
-    this.spinner.show();  // ✅ Show before API
+  loadRoles() {
+    this.spinner.show();
     this.userService.getRoles().subscribe({
       next: (res: any) => {
         if (res.success) {
-          this.roles = res.result;
+          this.roles = res.result || [];
         } else {
           this.toastr.error(res.message, 'Roles');
         }
-        this.spinner.hide();  // ✅ Hide after success
+        this.spinner.hide();
+        this.cdr.detectChanges();
       },
-      error: (err) => {
+      error: () => {
         this.toastr.error('Failed to load roles', 'Error');
-        this.spinner.hide();  // ✅ Hide on error
+        this.spinner.hide();
+        this.cdr.detectChanges();
       }
     });
   }
 
-
   buildForm() {
     this.userForm = this.fb.group({
       id: [0],
-      fullName: ['', Validators.required],
-      email: ['', Validators.required],
-      contactNumber: [''],
+      fullName: ['', [Validators.required, Validators.maxLength(100)]],
+      email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
+      contactNumber: ['', Validators.maxLength(20)],
       password: [''],
+      address: ['', Validators.maxLength(200)],
+      state: ['', Validators.maxLength(100)],
+      zipCode: ['', Validators.maxLength(20)],
+      country: ['', Validators.maxLength(100)],
+      city: ['', Validators.maxLength(100)],
       userRoleId: ['', Validators.required],
       isActive: [true]
     });
   }
 
   loadUsers() {
-    this.spinner.show();  // ✅ Show before API
+    this.spinner.show();
     this.userService.getUsers(this.currentPage, this.pageSize).subscribe({
       next: (res: any) => {
         if (res.success) {
-          this.users = res.result;
-          this.totalUsers = res.count;
-          this.totalPages = Math.ceil(this.totalUsers / this.pageSize);
+          this.users = res.result || [];
+          this.totalUsers = res.count || this.users.length;
+          this.totalPages = Math.ceil(this.totalUsers / this.pageSize) || 1;
         } else {
           this.toastr.error(res.message, 'Users');
         }
-        this.spinner.hide();  // ✅ Hide after success
+        this.spinner.hide();
+        this.cdr.detectChanges();
       },
       error: () => {
         this.toastr.error('Failed to load users', 'Error');
-        this.spinner.hide();  // ✅ Hide on error
+        this.spinner.hide();
+        this.cdr.detectChanges();
       }
     });
   }
 
   openModal() {
     this.isEdit = false;
-    this.userForm.reset({ isActive: true });
-    new bootstrap.Modal('#userModal').show();
+    this.userForm.reset({ id: 0, isActive: true, userRoleId: '' });
+    try {
+      new bootstrap.Modal('#userModal').show();
+    } catch (e) {}
+    this.cdr.detectChanges();
   }
 
- editUser(id: number) {
+  editUser(id: number) {
     this.isEdit = true;
-    this.spinner.show();  // ✅ Show before API
+    this.spinner.show();
     this.userService.getUserById(id).subscribe({
       next: (res: any) => {
         if (res.success) {
           this.userForm.patchValue(res.result);
-          new bootstrap.Modal('#userModal').show();
+          try {
+            new bootstrap.Modal('#userModal').show();
+          } catch (e) {}
         } else {
           this.toastr.error(res.message, 'Edit User');
         }
-        this.spinner.hide();  // ✅ Hide after success
+        this.spinner.hide();
+        this.cdr.detectChanges();
       },
       error: () => {
         this.toastr.error('Failed to fetch user', 'Error');
-        this.spinner.hide();  // ✅ Hide on error
+        this.spinner.hide();
+        this.cdr.detectChanges();
       }
     });
   }
 
-  // ✅ saveUser - Spinner fix
   saveUser() {
-    if (this.userForm.invalid) return;
+    if (this.userForm.invalid) {
+      this.userForm.markAllAsTouched();
+      this.toastr.warning('Please fill in all required fields correctly.', 'Validation');
+      this.cdr.detectChanges();
+      return;
+    }
 
-    this.spinner.show();  // ✅ Show before API
+    this.spinner.show();
 
+    const formVal = this.userForm.value;
     const formData = { 
-      ...this.userForm.value, 
-      userRoleId: Number(this.userForm.value.userRoleId),
-      id: this.isEdit ? Number(this.userForm.value.id) : 0
+      ...formVal, 
+      userRoleId: Number(formVal.userRoleId),
+      id: this.isEdit ? Number(formVal.id) : 0
     };
 
     const apiCall = this.isEdit
@@ -135,40 +158,60 @@ export class UserComponent implements OnInit {
 
     apiCall.subscribe({
       next: (res: any) => {
-        this.spinner.hide();  // ✅ Hide after success
+        this.spinner.hide();
         if (res.success) {
-          bootstrap.Modal.getInstance(document.getElementById('userModal'))?.hide();
+          try {
+            const modalEl = document.getElementById('userModal');
+            if (modalEl) {
+              const modalInst = bootstrap.Modal.getInstance(modalEl);
+              modalInst?.hide();
+            }
+          } catch (e) {}
           this.loadUsers();
-          this.toastr.success(this.isEdit ? 'User updated successfully' : 'User created successfully');
+          this.toastr.success(this.isEdit ? 'User updated successfully' : 'User created successfully', 'Success');
         } else {
           this.toastr.error(res.message, 'Save User');
         }
+        this.cdr.detectChanges();
       },
       error: () => {
-        this.spinner.hide();  // ✅ Hide on error
+        this.spinner.hide();
         this.toastr.error('Failed to save user', 'Error');
+        this.cdr.detectChanges();
       }
     });
   }
 
-  // ✅ deleteUser - Spinner fix
   deleteUser(id: number) {
-    if (!confirm('Deactivate this user?')) return;
-
-    this.spinner.show();  // ✅ Show before API
-    this.userService.deleteUser(id).subscribe({
-      next: (res: any) => {
-        this.spinner.hide();  // ✅ Hide after success
-        if (res.success) {
-          this.loadUsers();
-          this.toastr.success('User deactivated successfully');
-        } else {
-          this.toastr.error(res.message, 'Delete User');
-        }
-      },
-      error: () => {
-        this.spinner.hide();  // ✅ Hide on error
-        this.toastr.error('Failed to delete user', 'Error');
+    Swal.fire({
+      title: 'Deactivate User?',
+      text: 'Are you sure you want to deactivate this user?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, deactivate',
+      cancelButtonText: 'Cancel'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.spinner.show();
+        this.userService.deleteUser(id).subscribe({
+          next: (res: any) => {
+            this.spinner.hide();
+            if (res.success) {
+              this.loadUsers();
+              this.toastr.success('User deactivated successfully', 'Success');
+            } else {
+              this.toastr.error(res.message, 'Delete User');
+            }
+            this.cdr.detectChanges();
+          },
+          error: () => {
+            this.spinner.hide();
+            this.toastr.error('Failed to delete user', 'Error');
+            this.cdr.detectChanges();
+          }
+        });
       }
     });
   }
@@ -177,6 +220,7 @@ export class UserComponent implements OnInit {
     if (page < 1 || page > this.totalPages) return;
     this.currentPage = page;
     this.loadUsers();
+    this.cdr.detectChanges();
   }
 
   get pages() {
