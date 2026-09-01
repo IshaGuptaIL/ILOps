@@ -156,7 +156,7 @@ namespace DAL.Sales.RMAReporting
                     string type = colMap.TryGetValue("Type", out var ct) ? worksheet.Cells[row, ct].Value?.ToString()?.Trim() ?? "Dealer Credit Memo" : "Dealer Credit Memo";
                     string opUnit = colMap.TryGetValue("Operating Unit", out var cou) ? worksheet.Cells[row, cou].Value?.ToString()?.Trim() ?? "RCI Operating Unit" : "RCI Operating Unit";
                     string leName = colMap.TryGetValue("Legal Entity Name", out var cle) ? worksheet.Cells[row, cle].Value?.ToString()?.Trim() ?? "RCI Legal Entity" : "RCI Legal Entity";
-
+                    
                     DateTime date = DateTime.UtcNow;
                     if (colMap.TryGetValue("Date", out var cd) && DateTime.TryParse(worksheet.Cells[row, cd].Value?.ToString(), out var dtVal)) date = dtVal;
                     else if (colMap.TryGetValue("CMDate", out var cdt) && DateTime.TryParse(worksheet.Cells[row, cdt].Value?.ToString(), out var dtVal2)) date = dtVal2;
@@ -297,7 +297,7 @@ namespace DAL.Sales.RMAReporting
                     string itemDesc = colMap.TryGetValue("Item Description", out var cdesc) ? worksheet.Cells[row, cdesc].Value?.ToString()?.Trim() ?? "" : (colMap.TryGetValue("Description", out var cdesc2) ? worksheet.Cells[row, cdesc2].Value?.ToString()?.Trim() ?? "" : "");
                     string rogersResp = colMap.TryGetValue("RogersResponse", out var crsp) ? worksheet.Cells[row, crsp].Value?.ToString()?.Trim() ?? "Approved" : "Approved";
                     int qty = colMap.TryGetValue("Qty", out var cq) && int.TryParse(worksheet.Cells[row, cq].Value?.ToString(), out var qVal) ? qVal : 1;
-
+                    
                     decimal unitPrice = 0;
                     if (colMap.TryGetValue("Price", out var cp) && decimal.TryParse(worksheet.Cells[row, cp].Value?.ToString(), out var pVal)) unitPrice = pVal;
                     else if (colMap.TryGetValue("UnitPrice", out var cup) && decimal.TryParse(worksheet.Cells[row, cup].Value?.ToString(), out var upVal)) unitPrice = upVal;

@@ -1,9 +1,13 @@
-﻿using DAL.Inventory.RunRate;
+using DAL.Inventory.RunRate;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LegacyApp.Controllers.Inventory
 {
+    /// <summary>
+    /// Computes inventory run-rate velocity, sales movement patterns, and days-of-supply inventory projections.
+    /// Provides WFH stock tracking, date-range sales loading, and supply days filtration.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class RunRateController : ControllerBase
@@ -15,6 +19,10 @@ namespace LegacyApp.Controllers.Inventory
             _runRateDA = new RunRateDA(config);
         }
 
+        /// <summary>
+        /// Retrieves active inventory items held in Work-From-Home (WFH) and remote rep locations.
+        /// Displays field stock balances for sales rep accountability.
+        /// </summary>
         [HttpGet("GetWfhInventory")]
         public async Task<ActionResult<List<RunRateItem>>> GetWFHInventory()
         {
@@ -29,6 +37,10 @@ namespace LegacyApp.Controllers.Inventory
             }
         }
 
+        /// <summary>
+        /// Ingests historical sales movement data and calculates average daily consumption rates across working days.
+        /// Prepares velocity metrics for replenishment analysis.
+        /// </summary>
         [HttpPost("LoadRunRateData")]
         public async Task<ActionResult<int>> LoadRunRateDataAsync([FromBody] RunRateRequest request)
         {
@@ -44,6 +56,10 @@ namespace LegacyApp.Controllers.Inventory
             }
         }
 
+        /// <summary>
+        /// Retrieves calculated inventory run rate metrics filtered by minimum and maximum days of stock coverage.
+        /// Identifies fast-moving stockouts and slow-moving excess inventory.
+        /// </summary>
         [HttpGet("GetRunRate")]
         public async Task<ActionResult<List<RunRateItemBO>>> GetRunRate(int minDays, int maxDays, int userId)
         {

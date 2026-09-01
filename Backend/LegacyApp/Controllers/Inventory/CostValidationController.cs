@@ -1,4 +1,4 @@
-﻿using DAL.Common.Login;
+using DAL.Common.Login;
 using DAL.Inventory.CostValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 
 namespace LegacyApp.Controllers.Inventory
 {
+    /// <summary>
+    /// Audits inventory costs against Hardware Price Catalog (HPC) benchmarks and Spire ERP cost layers.
+    /// Detects purchase price variances, cross-warehouse cost discrepancies, and handles HPC master catalog uploads.
+    /// </summary>
     [Route("api/cost-validation")]
     [ApiController]
     public class CostValidationController : ControllerBase
@@ -18,6 +22,10 @@ namespace LegacyApp.Controllers.Inventory
             _costValidation = costValidation;
         }
 
+        /// <summary>
+        /// Retrieves the most recent Hardware Price Catalog (HPC) benchmark rates.
+        /// Displays latest vendor pricing baselines in the cost validation module.
+        /// </summary>
         [HttpGet("HpcLatest")]
         public async Task<ApiResposne> GetHpcLatest()
         {
@@ -42,6 +50,10 @@ namespace LegacyApp.Controllers.Inventory
             return response;
         }
 
+        /// <summary>
+        /// Identifies pricing discrepancies between HPC benchmark costs and current Spire purchase costs.
+        /// Highlights potential vendor overcharges or understated inventory values.
+        /// </summary>
         [HttpGet("HpcDiscrepancies")]
         public async Task<ApiResposne> GetHpcDiscrepancies()
         {
@@ -66,6 +78,10 @@ namespace LegacyApp.Controllers.Inventory
             return response;
         }
 
+        /// <summary>
+        /// Compares Rogers Distribution hardware pricing against Spire ERP item costs.
+        /// Audits agreement pricing compliance across carrier inventory lines.
+        /// </summary>
         [HttpGet("RDHardwareVsSpire")]
         public async Task<ApiResposne> GetRDHardwareVsSpire()
         {
@@ -90,6 +106,10 @@ namespace LegacyApp.Controllers.Inventory
             return response;
         }
 
+        /// <summary>
+        /// Analyzes cost variance between current replacement cost and historical average inventory cost.
+        /// Detects margin compression or sudden price inflation on inventory assets.
+        /// </summary>
         [HttpGet("CostVarianceCurrentVsAvg")]
         public async Task<ApiResposne> GetCostVarianceCurrentVsAvg()
         {
@@ -113,6 +133,11 @@ namespace LegacyApp.Controllers.Inventory
 
             return response;
         }
+
+        /// <summary>
+        /// Identifies unit cost discrepancies for identical SKU items across different physical warehouses.
+        /// Used for inventory transfer revaluations and inter-branch cost equalization.
+        /// </summary>
         [HttpGet("CostVarianceAcrossWarehouses")]
         public async Task<ApiResposne> GetCostVarianceAcrossWarehouses()
         {
@@ -137,7 +162,10 @@ namespace LegacyApp.Controllers.Inventory
             return response;
         }
 
-
+        /// <summary>
+        /// Imports an updated Hardware Price Catalog (HPC) Excel spreadsheet into the master benchmark store.
+        /// Replaces or appends new price lists for subsequent cost audit runs.
+        /// </summary>
         [HttpPost("upload-hpc")]
         [AllowAnonymous]
         [Consumes("multipart/form-data")]

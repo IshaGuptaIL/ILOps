@@ -1,4 +1,4 @@
-﻿using DAL.Common.Login;
+using DAL.Common.Login;
 using DAL.Inventory.Count;
 using DAL.Inventory.CountAnalysis;
 using Microsoft.AspNetCore.Http;
@@ -9,20 +9,26 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace LegacyApp.Controllers.Inventory
 {
+    /// <summary>
+    /// Performs physical inventory count analysis, discrepancy auditing, and warehouse stock reconciliation.
+    /// Handles IMEI / accessory count uploads, duplicate serial detection, Spire sync, and variance reporting.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class CountAnalysisController : ControllerBase
     {
-
         public readonly ICountAnalysis countAnalysis;
-
 
         public CountAnalysisController(ICountAnalysis countService)
         {
             countAnalysis = countService;
         }
-        //1 ROW
 
+        //1 ROW
+        /// <summary>
+        /// Uploads physical IMEI counts from an Excel spreadsheet into the analysis staging tables.
+        /// Parses scanned serial numbers, models, and locations for audit comparison.
+        /// </summary>
         [HttpPost("upload-imei")]
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> UploadIMEICounts( IFormFile excelFile)
@@ -42,6 +48,11 @@ namespace LegacyApp.Controllers.Inventory
 
             return Ok(response);
         }
+
+        /// <summary>
+        /// Retrieves all imported physical count records currently staged for analysis.
+        /// Used by the Physical Count review grid.
+        /// </summary>
         [HttpGet("view-counts")]
         public async Task<IActionResult> GetCounts()
         {
@@ -49,6 +60,10 @@ namespace LegacyApp.Controllers.Inventory
             return Ok(result);
         }
 
+        /// <summary>
+        /// Identifies inventory items registered as on-hand in Spire that were omitted from physical counts.
+        /// Highlights potential inventory shrinkage or missing stock.
+        /// </summary>
         [HttpGet("onhand-not-counteds")]
         public async Task<IActionResult> GetOnhandNotCounteds()
         {
@@ -56,6 +71,10 @@ namespace LegacyApp.Controllers.Inventory
             return Ok(response);
         }
 
+        /// <summary>
+        /// Retrieves paginated list of duplicate IMEI serial numbers found within physical count sheets.
+        /// Identifies serial numbers scanned more than once.
+        /// </summary>
         [HttpGet("duplicate-counts")]
         public async Task<IActionResult> GetDuplicateIMEICounts([FromQuery] int pageNumber , [FromQuery] int pageSize)
         {

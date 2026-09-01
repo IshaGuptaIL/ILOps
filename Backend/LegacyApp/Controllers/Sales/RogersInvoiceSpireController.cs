@@ -7,6 +7,10 @@ using System.IO.Compression;
 
 namespace LegacyApp.Controllers.Sales
 {
+    /// <summary>
+    /// Processes Rogers sales invoice reconciliation against Spire ERP sales records.
+    /// Provides cost verification, payment summaries, returns audit, hardware fee checks, and estimate exports.
+    /// </summary>
     [Route("api/Sales/[controller]")]
     [ApiController]
     public class RogersInvoiceSpireController : ControllerBase
@@ -31,6 +35,10 @@ namespace LegacyApp.Controllers.Sales
             return 1; // Fallback for testing
         }
 
+        /// <summary>
+        /// Executes staging data processing and cross-reconciliation between Rogers invoices and Spire records.
+        /// Identifies matching sales lines, adjustments, and pricing variances.
+        /// </summary>
         [HttpPost("ProcessData")]
         public async Task<ActionResult<ProcessDataResult>> ProcessData([FromBody] ProcessDataRequest request, [FromQuery] int? userId)
         {
@@ -40,6 +48,10 @@ namespace LegacyApp.Controllers.Sales
             return Ok(result);
         }
 
+        /// <summary>
+        /// Generates cost verification report comparing billed amounts against standard costs.
+        /// Highlights cost discrepancies across sales invoices within a date range.
+        /// </summary>
         [HttpGet("CostVerificationReport")]
         public async Task<ActionResult<List<CostVerificationRow>>> GetCostVerificationReport([FromQuery] string startDate, [FromQuery] string endDate)
         {
@@ -51,6 +63,10 @@ namespace LegacyApp.Controllers.Sales
             return Ok(result);
         }
 
+        /// <summary>
+        /// Retrieves daily sales summaries categorized by payment method for a specified date range.
+        /// Provides high-level revenue totals across tender types.
+        /// </summary>
         [HttpGet("DailySalesSummary")]
         public async Task<ActionResult<List<DailySalesRow>>> GetDailySalesSummary([FromQuery] string startDate, [FromQuery] string endDate)
         {
@@ -62,6 +78,10 @@ namespace LegacyApp.Controllers.Sales
             return Ok(result);
         }
 
+        /// <summary>
+        /// Generates returns verification report auditing return items against Rogers return authorizations.
+        /// Identifies missing credits, return date mismatches, and quantity differences.
+        /// </summary>
         [HttpGet("ReturnsVerificationReport")]
         public async Task<ActionResult<List<ReturnsVerificationRow>>> GetReturnsVerificationReport(
             [FromQuery] string startDate, 
@@ -80,6 +100,10 @@ namespace LegacyApp.Controllers.Sales
             return Ok(result);
         }
 
+        /// <summary>
+        /// Audits hardware fee adjustments to detect missing or mismatched fee calculations.
+        /// Outputs report of hardware transactions requiring fee correction.
+        /// </summary>
         [HttpGet("HdwFeeCheck")]
         public async Task<ActionResult<List<CostVerificationRow>>> HdwFeeCheck([FromQuery] int? userId)
         {
@@ -88,6 +112,10 @@ namespace LegacyApp.Controllers.Sales
             return Ok(result);
         }
 
+        /// <summary>
+        /// Generates and exports Rogers invoice estimate calculations into a downloadable CSV file.
+        /// Facilitates external review of expected commission and invoice charges.
+        /// </summary>
         [HttpGet("DownloadRogersEstimate")]
         public async Task<IActionResult> DownloadRogersEstimate([FromQuery] int? userId)
         {

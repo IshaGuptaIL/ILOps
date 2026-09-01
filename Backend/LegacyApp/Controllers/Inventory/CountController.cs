@@ -1,9 +1,13 @@
-﻿using DAL.Common.Login;
+using DAL.Common.Login;
 using DAL.Inventory.Count;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LegacyApp.Controllers.Inventory
 {
+    /// <summary>
+    /// Manages physical inventory count dataset maintenance, snapshot captures, file deletions, and count exports.
+    /// Supports batch data clearing, snapshot generation, hardware/accessory exports, and count synchronization.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class CountController : ControllerBase
@@ -15,6 +19,10 @@ namespace LegacyApp.Controllers.Inventory
             _countRepo = count;
         }
 
+        /// <summary>
+        /// Deletes all staged count entries imported from a specific file.
+        /// Allows operators to retract an incorrect or duplicate count file upload.
+        /// </summary>
         [HttpDelete("delete-by-file")]
         public async Task<IActionResult> DeleteByFile(string fileName, bool isACC)
         {
@@ -36,6 +44,10 @@ namespace LegacyApp.Controllers.Inventory
             }
         }
 
+        /// <summary>
+        /// Retrieves the list of unique uploaded count file names for hardware or accessories.
+        /// Populates file selection dropdowns in the count management interface.
+        /// </summary>
         [HttpGet("file-names")]
         public async Task<IActionResult> GetFileNames(bool isACC)
         {
@@ -50,6 +62,10 @@ namespace LegacyApp.Controllers.Inventory
             }
         }
 
+        /// <summary>
+        /// Deletes all physical count records for hardware or accessory lines.
+        /// Performs full reset of staged count data prior to a new inventory cycle.
+        /// </summary>
         [HttpDelete("delete-all/{isACC}")]
         public async Task<IActionResult> DeleteAll(bool isACC)
         {
@@ -64,6 +80,10 @@ namespace LegacyApp.Controllers.Inventory
             }
         }
 
+        /// <summary>
+        /// Takes a frozen snapshot of current Spire on-hand inventory levels for count audit comparison.
+        /// Establishes the system baseline for subsequent physical count reconciliation.
+        /// </summary>
         [HttpPost("load-snapshot")]
         public async Task<ApiResposne> LoadSnapshot([FromBody] InventorySnapshotBO bo)
         {
@@ -88,7 +108,10 @@ namespace LegacyApp.Controllers.Inventory
             }
         }
 
-
+        /// <summary>
+        /// Exports all hardware physical count data to an Excel (.xlsx) spreadsheet.
+        /// Used for external validation and finance review of counted stock.
+        /// </summary>
         [HttpGet("export-hardware")]
         public async Task<IActionResult> ExportHardware()
         {
@@ -111,6 +134,11 @@ namespace LegacyApp.Controllers.Inventory
                 return BadRequest(ex.Message);
             }
         }
+
+        /// <summary>
+        /// Exports all accessory physical count data to an Excel (.xlsx) spreadsheet.
+        /// Used for accessory stocktaking audit records.
+        /// </summary>
         [HttpGet("export-accessories")]
         public async Task<IActionResult> ExportAccessories()
         {
@@ -132,6 +160,11 @@ namespace LegacyApp.Controllers.Inventory
                 return BadRequest(ex.Message);
             }
         }
+
+        /// <summary>
+        /// Verifies access permissions and folder path availability for inventory count files.
+        /// Diagnostics endpoint for network share accessibility.
+        /// </summary>
         [HttpGet("test-access")]
         public async Task<IActionResult> TestAccess()
         {
@@ -139,6 +172,10 @@ namespace LegacyApp.Controllers.Inventory
             return Ok(new { status = result });
         }
 
+        /// <summary>
+        /// Synchronizes physical count spreadsheets from network drop folders into the count database.
+        /// Automates batch count ingestion across scanner stations.
+        /// </summary>
         [HttpPost("sync-inventory-files")]
         public async Task<IActionResult> SyncInventoryFiles()
         {
@@ -153,7 +190,10 @@ namespace LegacyApp.Controllers.Inventory
             }
         }
 
-
+        /// <summary>
+        /// Retrieves the synchronization status and timestamps of inventory count data files.
+        /// Used to display file freshness on the physical count dashboard.
+        /// </summary>
         [HttpGet("file-status")]
         public async Task<ApiResposne> GetFileStatus()
         {

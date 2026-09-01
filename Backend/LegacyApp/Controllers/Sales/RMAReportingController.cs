@@ -8,6 +8,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LegacyApp.Controllers.Sales
 {
+    /// <summary>
+    /// Manages RMA reporting, Rogers Credit Memo (CM) and RMA file imports, cascading reconciliation grids, and audit reports.
+    /// Replicates the Access RMA Reporting module functionality including file batch management and discrepancy auditing.
+    /// </summary>
     [ApiController]
     [Route("api/sales/rmareporting")]
     public class RMAReportingController : ControllerBase
@@ -35,6 +39,10 @@ namespace LegacyApp.Controllers.Sales
         // ==========================================
         // 1. IMEI SEARCH ENDPOINTS
         // ==========================================
+        /// <summary>
+        /// Searches RMA tracking database by IMEI, waybill, claim number, or SKU criteria.
+        /// Returns detailed lifecycle history and current credit claim status.
+        /// </summary>
         [HttpGet("imeisearch/search")]
         public async Task<IActionResult> SearchIMEI([FromQuery] string criteria = "IMEI", [FromQuery] string query = "")
         {
@@ -57,6 +65,10 @@ namespace LegacyApp.Controllers.Sales
         // ==========================================
         // 2. FILE IMPORT ENDPOINTS (frmRogersReportImport)
         // ==========================================
+        /// <summary>
+        /// Imports Rogers Credit Memo (CM) Excel files into staging table (tblRogersReportCM).
+        /// Parses transaction dates, invoice numbers, legal entity, and balance due.
+        /// </summary>
         [HttpPost("import/cm")]
         public async Task<IActionResult> ImportCMFile(IFormFile file)
         {
@@ -75,6 +87,10 @@ namespace LegacyApp.Controllers.Sales
             }
         }
 
+        /// <summary>
+        /// Imports Rogers RMA response files and performs automated matching against staged CM records.
+        /// Populates tblRogersReportCMRMA with matched credit and return records.
+        /// </summary>
         [HttpPost("import/rm")]
         public async Task<IActionResult> ImportRMFile(IFormFile file)
         {
@@ -93,6 +109,10 @@ namespace LegacyApp.Controllers.Sales
             }
         }
 
+        /// <summary>
+        /// Imports Manual RMA spreadsheet files into the RMA database.
+        /// Used for handling offline or manual credit adjustments and returns.
+        /// </summary>
         [HttpPost("import/manual")]
         public async Task<IActionResult> ImportManualFile(IFormFile file)
         {
@@ -111,6 +131,10 @@ namespace LegacyApp.Controllers.Sales
             }
         }
 
+        /// <summary>
+        /// Retrieves lists of imported file batch names for CM, RM, and Manual files.
+        /// Populates the batch deletion and filter selection dropdowns.
+        /// </summary>
         [HttpGet("import/batches")]
         public async Task<IActionResult> GetImportBatches()
         {
@@ -126,6 +150,10 @@ namespace LegacyApp.Controllers.Sales
             }
         }
 
+        /// <summary>
+        /// Deletes a specified batch of imported CM or RM records from staging and match tables.
+        /// Reverses an accidental or invalid file import batch.
+        /// </summary>
         [HttpPost("import/delete-batch")]
         public async Task<IActionResult> DeleteImportBatch([FromBody] DeleteBatchRequestDTO request)
         {
@@ -142,6 +170,10 @@ namespace LegacyApp.Controllers.Sales
             }
         }
 
+        /// <summary>
+        /// Retrieves summary statistics of imported CM files including total records, amounts, and matched counts.
+        /// Populates the CM summary view.
+        /// </summary>
         [HttpGet("import/cm-summary")]
         public async Task<IActionResult> GetCMSummary()
         {
@@ -160,6 +192,10 @@ namespace LegacyApp.Controllers.Sales
         // ==========================================
         // 2.1. RECONCILE CASCADING GRIDS (frmFILESReconcile)
         // ==========================================
+        /// <summary>
+        /// Retrieves top-tier summary list of imported CM files (file name, date ranges, total transaction count).
+        /// Represents the primary selection grid on the cascading reconciliation screen.
+        /// </summary>
         [HttpGet("reconcile/files")]
         public async Task<IActionResult> GetReconcileFiles()
         {
@@ -175,6 +211,10 @@ namespace LegacyApp.Controllers.Sales
             }
         }
 
+        /// <summary>
+        /// Retrieves second-tier grouped classifications (Class, Type, Source, Total Other, CMTotal, RMTotal) for a file.
+        /// Represents the middle cascading grid on the reconciliation screen.
+        /// </summary>
         [HttpGet("reconcile/file-types")]
         public async Task<IActionResult> GetReconcileFileTypes([FromQuery] string fileName = "")
         {
@@ -190,6 +230,10 @@ namespace LegacyApp.Controllers.Sales
             }
         }
 
+        /// <summary>
+        /// Retrieves third-tier itemized transaction records (frmRogersReportCM) filtered by file and classification.
+        /// Displays individual invoice lines, balance due, and discovery comments.
+        /// </summary>
         [HttpGet("reconcile/details")]
         public async Task<IActionResult> GetReconcileDetails(
             [FromQuery] string fileName = "",
@@ -212,6 +256,10 @@ namespace LegacyApp.Controllers.Sales
         // ==========================================
         // 3. REPORTS ENDPOINTS (frmReports2)
         // ==========================================
+        /// <summary>
+        /// Executes specialized RMA reporting queries (credit matches, credits not expected, returns no credit, price variance).
+        /// Returns report dataset for on-screen review.
+        /// </summary>
         [HttpGet("reports/query")]
         [HttpPost("reports/query")]
         public async Task<IActionResult> RunReportQuery([FromQuery] string queryType = "creditMatches", [FromQuery] DateTime? startDate = null, [FromQuery] DateTime? endDate = null)
@@ -234,6 +282,10 @@ namespace LegacyApp.Controllers.Sales
             }
         }
 
+        /// <summary>
+        /// Generates and exports an RMA report query result into a downloadable Excel (.xlsx) file.
+        /// Provides formatted spreadsheet export for auditing and finance reconciliation.
+        /// </summary>
         [HttpGet("reports/export")]
         public async Task<IActionResult> ExportReport([FromQuery] string queryType = "creditMatches", [FromQuery] DateTime? startDate = null, [FromQuery] DateTime? endDate = null)
         {
@@ -255,6 +307,10 @@ namespace LegacyApp.Controllers.Sales
             }
         }
 
+        /// <summary>
+        /// Executes the Read Rogers Returns workflow to sync return transaction logs within a date range.
+        /// Updates local return tracking records.
+        /// </summary>
         [HttpPost("reports/read-returns")]
         public async Task<IActionResult> ReadRogersReturns([FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate)
         {
@@ -274,6 +330,10 @@ namespace LegacyApp.Controllers.Sales
         // ==========================================
         // 4. UTILITIES & USERS ENDPOINTS (frmUtility / frmUsers)
         // ==========================================
+        /// <summary>
+        /// Retrieves the list of active RMA system users.
+        /// Displays user accounts on the RMA utilities user management screen.
+        /// </summary>
         [HttpGet("utilities/users")]
         public async Task<IActionResult> GetUsers()
         {
@@ -289,6 +349,10 @@ namespace LegacyApp.Controllers.Sales
             }
         }
 
+        /// <summary>
+        /// Saves or updates an RMA system user's profile and active status.
+        /// Modifies user definitions in the usermaster table.
+        /// </summary>
         [HttpPost("utilities/save-user")]
         public async Task<IActionResult> SaveUser([FromBody] SaveRMAUserRequestDTO request)
         {
@@ -305,6 +369,10 @@ namespace LegacyApp.Controllers.Sales
             }
         }
 
+        /// <summary>
+        /// Executes administrative data cleanup and staging table reset procedures.
+        /// Clears temporary staging data across selected scopes.
+        /// </summary>
         [HttpPost("utilities/reset-data")]
         public async Task<IActionResult> ResetData([FromQuery] string scope = "all")
         {

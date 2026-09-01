@@ -8,6 +8,10 @@ using OfficeOpenXml;
 
 namespace LegacyApp.Controllers.Inventory
 {
+    /// <summary>
+    /// Manages Rogers overpayment file imports, batch summaries, deletion by file, and Excel reporting.
+    /// Tracks excess carrier disbursements, supports file cleanup, and provides standardized Excel templates.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class RogerOverPaymentsController : ControllerBase
@@ -19,6 +23,10 @@ namespace LegacyApp.Controllers.Inventory
             _da = da;
         }
 
+        /// <summary>
+        /// Retrieves summary statistics of all uploaded Rogers overpayment files.
+        /// Displays file names, import dates, and total record counts on the summary grid.
+        /// </summary>
         [HttpGet("imported-files")]
         public async Task<ApiResposne> GetImportedFilesSummary()
         {
@@ -39,6 +47,10 @@ namespace LegacyApp.Controllers.Inventory
             }
         }
 
+        /// <summary>
+        /// Imports Rogers overpayment spreadsheet data into the database.
+        /// Validates dealer codes, invoice references, and credit memo numbers.
+        /// </summary>
         [HttpPost("import")]
         public async Task<ApiResposne> ImportRogersOverpayments(IFormFile file)
         {
@@ -63,6 +75,10 @@ namespace LegacyApp.Controllers.Inventory
             }
         }
 
+        /// <summary>
+        /// Deletes all overpayment records originating from a specified uploaded file name.
+        /// Allows operators to retract an incorrect or duplicate overpayment file upload.
+        /// </summary>
         [HttpDelete("remove-file")]
         public async Task<ApiResposne> RemoveRecordsByFile([FromQuery] string filename)
         {
@@ -81,6 +97,10 @@ namespace LegacyApp.Controllers.Inventory
             }
         }
 
+        /// <summary>
+        /// Exports all active Rogers overpayment records into a formatted Excel (.xlsx) file.
+        /// Used by finance to reconcile carrier deductions and recovery balances.
+        /// </summary>
         [HttpGet("export")]
         public async Task<IActionResult> ExportAllOverpayments()
         {
@@ -96,6 +116,10 @@ namespace LegacyApp.Controllers.Inventory
             }
         }
 
+        /// <summary>
+        /// Generates and provides the standard Excel template file for importing Rogers overpayments.
+        /// Contains required headers (Dealer, Order Number, Invoice Number, IMEI, SKU, Price, CM No).
+        /// </summary>
         [HttpGet("template")]
         public IActionResult DownloadTemplate()
         {

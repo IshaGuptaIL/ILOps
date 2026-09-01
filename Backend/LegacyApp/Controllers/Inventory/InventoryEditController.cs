@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace LegacyApp.Controllers.Inventory
 {
+    /// <summary>
+    /// Manages invoice metadata adjustments including payment terms, bulk billing IDs, and customer billing/shipping addresses.
+    /// Allows operators to correct sales invoice attributes in historical sales records.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class InventoryEditController : ControllerBase
@@ -19,7 +23,10 @@ namespace LegacyApp.Controllers.Inventory
 
         // ─── Terms Edit ───────────────────────────────────────────────────────
 
-        /// <summary>GET /api/InventoryEdit/GetInvoiceTerms?invoiceNo=...</summary>
+        /// <summary>
+        /// Retrieves the current payment terms assigned to a specific sales invoice.
+        /// Displays payment terms on the invoice terms edit screen.
+        /// </summary>
         [HttpGet("GetInvoiceTerms")]
         public async Task<ActionResult<sales_history>> GetInvoiceTerms([FromQuery] string invoiceNo)
         {
@@ -31,7 +38,10 @@ namespace LegacyApp.Controllers.Inventory
             return Ok(result);
         }
 
-        /// <summary>POST /api/InventoryEdit/UpdateInvoiceTerms</summary>
+        /// <summary>
+        /// Updates the payment terms code and label on an existing sales invoice.
+        /// Modifies credit and due date terms in the sales history database.
+        /// </summary>
         [HttpPost("UpdateInvoiceTerms")]
         public async Task<ActionResult<bool>> UpdateInvoiceTerms([FromBody] UpdateTermsRequest request)
         {
@@ -46,7 +56,10 @@ namespace LegacyApp.Controllers.Inventory
 
         // ─── Bulk ID Edit ─────────────────────────────────────────────────────
 
-        /// <summary>GET /api/InventoryEdit/GetBulkIdCount?bulkId=...</summary>
+        /// <summary>
+        /// Returns the count of sales invoices sharing a designated bulk billing identifier.
+        /// Used to verify batch size before executing bulk ID reassignments.
+        /// </summary>
         [HttpGet("GetBulkIdCount")]
         public async Task<ActionResult> GetBulkIdCount([FromQuery] string bulkId)
         {
@@ -57,7 +70,10 @@ namespace LegacyApp.Controllers.Inventory
             return Ok(new { count });
         }
 
-        /// <summary>POST /api/InventoryEdit/UpdateBulkId</summary>
+        /// <summary>
+        /// Updates all sales invoice records associated with an old bulk ID to a new bulk ID.
+        /// Performs batch ID reassignments across grouped corporate invoices.
+        /// </summary>
         [HttpPost("UpdateBulkId")]
         public async Task<ActionResult<bool>> UpdateBulkId([FromBody] UpdateBulkIdRequest request)
         {
@@ -70,7 +86,10 @@ namespace LegacyApp.Controllers.Inventory
             return Ok(success);
         }
 
-        /// <summary>GET /api/InventoryEdit/GetSingleInvoiceBulkId?invoiceNo=...</summary>
+        /// <summary>
+        /// Retrieves the bulk billing identifier assigned to a single specific invoice.
+        /// Displays current bulk assignment on the invoice editor.
+        /// </summary>
         [HttpGet("GetSingleInvoiceBulkId")]
         public async Task<ActionResult<sales_history>> GetSingleInvoiceBulkId([FromQuery] string invoiceNo)
         {
@@ -82,7 +101,10 @@ namespace LegacyApp.Controllers.Inventory
             return Ok(result);
         }
 
-        /// <summary>POST /api/InventoryEdit/UpdateSingleInvoiceBulkId</summary>
+        /// <summary>
+        /// Reassigns the bulk billing identifier for a single invoice number.
+        /// Modifies group billing associations on an individual invoice.
+        /// </summary>
         [HttpPost("UpdateSingleInvoiceBulkId")]
         public async Task<ActionResult<bool>> UpdateSingleInvoiceBulkId([FromBody] UpdateSingleInvoiceBulkIdRequest request)
         {
@@ -95,7 +117,10 @@ namespace LegacyApp.Controllers.Inventory
             return Ok(success);
         }
 
-        /// <summary>POST /api/InventoryEdit/UpdateMultipleBulkIds</summary>
+        /// <summary>
+        /// Updates the bulk billing identifier across an explicit list of multiple invoice numbers.
+        /// Groups selected invoices under a common corporate billing ID.
+        /// </summary>
         [HttpPost("UpdateMultipleBulkIds")]
         public async Task<ActionResult<bool>> UpdateMultipleBulkIds([FromBody] UpdateMultipleBulkIdsRequest request)
         {
@@ -110,7 +135,10 @@ namespace LegacyApp.Controllers.Inventory
 
         // ─── Address Edit ─────────────────────────────────────────────────────
 
-        /// <summary>GET /api/InventoryEdit/GetInvoiceAddress?invoiceNo=...</summary>
+        /// <summary>
+        /// Retrieves the billing and shipping address records saved on an invoice.
+        /// Populates the invoice address correction form.
+        /// </summary>
         [HttpGet("GetInvoiceAddress")]
         public async Task<ActionResult<InvoiceAddressEditModel>> GetInvoiceAddress([FromQuery] string invoiceNo)
         {
@@ -122,7 +150,10 @@ namespace LegacyApp.Controllers.Inventory
             return Ok(result);
         }
 
-        /// <summary>POST /api/InventoryEdit/UpdateInvoiceAddress</summary>
+        /// <summary>
+        /// Updates the Bill-To and Ship-To address information recorded on a sales invoice.
+        /// Corrects customer shipping or billing destinations after invoice creation.
+        /// </summary>
         [HttpPost("UpdateInvoiceAddress")]
         public async Task<ActionResult<bool>> UpdateInvoiceAddress([FromBody] UpdateAddressRequest request)
         {

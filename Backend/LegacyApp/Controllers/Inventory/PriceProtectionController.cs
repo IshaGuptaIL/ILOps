@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LegacyApp.Controllers.Inventory
 {
+    /// <summary>
+    /// Manages Price Protection claim processing for on-hand stock and purchase receipt items.
+    /// Handles on-hand calculations, receipt-based price drops, manual IMEI adjustments, claim batches, and raw data exports.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class PriceProtectionController : ControllerBase
@@ -18,6 +22,10 @@ namespace LegacyApp.Controllers.Inventory
             _priceProtection = priceProtection;
         }
 
+        /// <summary>
+        /// Loads on-hand inventory claim records for a specified SKU on a designated effective price drop date.
+        /// Extracts qualifying serial numbers and stock counts from the inventory database.
+        /// </summary>
         [HttpPost("load-claim-data")]
         public async Task<ApiResposne> LoadClaimData([FromBody] LoadOnhandClaimRequest request)
         {
@@ -36,6 +44,10 @@ namespace LegacyApp.Controllers.Inventory
             }
         }
 
+        /// <summary>
+        /// Calculates price protection claim amounts across on-hand inventory units based on old vs new unit prices.
+        /// Staged units are credited for the price drop difference.
+        /// </summary>
         [HttpPost("process-onhand-claim")]
         public async Task<ApiResposne> ProcessOnhandClaim([FromBody] ProcessOnhandClaimRequest request)
         {
@@ -58,6 +70,10 @@ namespace LegacyApp.Controllers.Inventory
             }
         }
 
+        /// <summary>
+        /// Looks up vendor purchase receipt details to verify eligibility for price protection claims.
+        /// Retrieves received quantities, dates, and billed unit costs.
+        /// </summary>
         [HttpGet("find-receipt")]
         public async Task<ApiResposne> FindReceipt([FromQuery] string receiptNo)
         {
@@ -77,6 +93,10 @@ namespace LegacyApp.Controllers.Inventory
             }
         }
 
+        /// <summary>
+        /// Processes a price protection claim against units received on a specific purchase receipt number.
+        /// Computes rebate difference for all serial numbers attached to the receipt.
+        /// </summary>
         [HttpPost("process-receipt-claim")]
         public async Task<ApiResposne> ProcessReceiptClaim([FromBody] ProcessReceiptClaimRequest request)
         {
@@ -99,6 +119,10 @@ namespace LegacyApp.Controllers.Inventory
             }
         }
 
+        /// <summary>
+        /// Manually appends an individual IMEI serial number into the current price protection staging batch.
+        /// Used for manual claim overrides and exception handling.
+        /// </summary>
         [HttpPost("manual-add-imei")]
         public async Task<ApiResposne> ManualAddImei([FromBody] ManualAddImeiRequest request)
         {
@@ -120,6 +144,10 @@ namespace LegacyApp.Controllers.Inventory
             }
         }
 
+        /// <summary>
+        /// Removes an IMEI serial number from the pending price protection staging batch.
+        /// Excludes erroneous or ineligible serial numbers prior to final batch submission.
+        /// </summary>
         [HttpPost("manual-remove-imei")]
         public async Task<ApiResposne> ManualRemoveImei([FromBody] string imei)
         {
@@ -138,6 +166,10 @@ namespace LegacyApp.Controllers.Inventory
             }
         }
 
+        /// <summary>
+        /// Retrieves all claim records currently staged in the active price protection batch.
+        /// Displays pending items in the Price Protection batch grid.
+        /// </summary>
         [HttpGet("batch-data")]
         public async Task<ApiResposne> GetBatchData()
         {
@@ -157,6 +189,10 @@ namespace LegacyApp.Controllers.Inventory
             }
         }
 
+        /// <summary>
+        /// Finalizes the active price protection batch, assigns a permanent Batch ID, and appends to master claim records.
+        /// Requires supervisor password authorization.
+        /// </summary>
         [HttpPost("append-claim")]
         public async Task<ApiResposne> AppendClaim([FromBody] AppendClaimRequest request)
         {
@@ -180,6 +216,10 @@ namespace LegacyApp.Controllers.Inventory
             }
         }
 
+        /// <summary>
+        /// Deletes an entire unposted or invalid price protection claim batch by batch number.
+        /// Reverses staged claim lines from the database.
+        /// </summary>
         [HttpDelete("remove-batch/{batchNo}")]
         public async Task<ApiResposne> RemoveBatch(int batchNo)
         {
@@ -198,6 +238,10 @@ namespace LegacyApp.Controllers.Inventory
             }
         }
 
+        /// <summary>
+        /// Retrieves summary totals and status for all posted historical Price Protection claim batches.
+        /// Displays posted claim records on the historical summary table.
+        /// </summary>
         [HttpGet("posted-summary")]
         public async Task<ApiResposne> GetPostedSummary()
         {
@@ -217,6 +261,10 @@ namespace LegacyApp.Controllers.Inventory
             }
         }
 
+        /// <summary>
+        /// Exports raw price protection claim records across a date range to an Excel (.xlsx) file.
+        /// Used for external auditor review and vendor dispute resolution.
+        /// </summary>
         [HttpGet("export-raw-data")]
         public async Task<IActionResult> ExportRawData([FromQuery] DateTime start, [FromQuery] DateTime end)
         {
@@ -232,6 +280,10 @@ namespace LegacyApp.Controllers.Inventory
             }
         }
 
+        /// <summary>
+        /// Retrieves the next available sequential Batch ID number for new price protection submissions.
+        /// Pre-populates the batch ID indicator on the claim creation form.
+        /// </summary>
         [HttpGet("next-batch-id")]
         public async Task<ApiResposne> GetNextBatchID()
         {

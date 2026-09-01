@@ -1,11 +1,5 @@
-using Azure.Core;
 using DAL.Models;
 using DAL.Sales.ARCollections;
-using Microsoft.AspNetCore.Mvc;
-
-
-using DAL.Sales.ARCollections;
-using DAL.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -14,6 +8,10 @@ using System.Threading.Tasks;
 
 namespace LegacyApp.Controllers.Sales
 {
+    /// <summary>
+    /// Manages Accounts Receivable (AR) collections, aged debtor analysis, customer comments, and overdue notices.
+    /// Provides debtor aging grids, GL activity audits, bulk customer management, and batch overdue notice generation.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class ARCollectionsController : ControllerBase
@@ -43,6 +41,10 @@ namespace LegacyApp.Controllers.Sales
             return "SYS"; // Fallback initials
         }
 
+        /// <summary>
+        /// Retrieves territory groups configuration for AR debtor segmentation.
+        /// Populates territory filter criteria dropdowns in the collections review dashboard.
+        /// </summary>
         [HttpGet("TerritoryGroups")]
         public async Task<ActionResult<List<TerritoryGroup>>> GetTerritoryGroups()
         {
@@ -50,6 +52,10 @@ namespace LegacyApp.Controllers.Sales
             return Ok(result);
         }
 
+        /// <summary>
+        /// Loads open AR customers and aged balance buckets based on selection criteria and aging cutoff date.
+        /// Returns customer list with current, 30, 60, 90, and 120+ day balances.
+        /// </summary>
         [HttpGet("Customers")]
         public async Task<ActionResult<List<ARCustomerRow>>> LoadOpenCustomers(
             [FromQuery] int selectBy,

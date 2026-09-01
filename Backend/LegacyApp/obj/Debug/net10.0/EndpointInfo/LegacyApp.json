@@ -7803,21 +7803,42 @@
         }
       }
     },
-    "/api/sales/rmareporting/import/upload/{fileType}": {
-      "post": {
+    "/api/sales/rmareporting/imeisearch/search": {
+      "get": {
         "tags": [
-          "RMAReportingImport"
+          "RMAReporting"
         ],
         "parameters": [
           {
-            "name": "fileType",
-            "in": "path",
-            "required": true,
-            "style": "simple",
+            "name": "criteria",
+            "in": "query",
+            "style": "form",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "default": "IMEI"
+            }
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "style": "form",
+            "schema": {
+              "type": "string",
+              "default": ""
             }
           }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/sales/rmareporting/import/cm": {
+      "post": {
+        "tags": [
+          "RMAReporting"
         ],
         "requestBody": {
           "content": {
@@ -7846,19 +7867,150 @@
         }
       }
     },
-    "/api/sales/rmareporting/import/template/{fileType}": {
+    "/api/sales/rmareporting/import/rm": {
+      "post": {
+        "tags": [
+          "RMAReporting"
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "file": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/sales/rmareporting/import/manual": {
+      "post": {
+        "tags": [
+          "RMAReporting"
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "file": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/sales/rmareporting/import/batches": {
       "get": {
         "tags": [
-          "RMAReportingImport"
+          "RMAReporting"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/sales/rmareporting/import/delete-batch": {
+      "post": {
+        "tags": [
+          "RMAReporting"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DAL.Sales.RMAReporting.DeleteBatchRequestDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DAL.Sales.RMAReporting.DeleteBatchRequestDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DAL.Sales.RMAReporting.DeleteBatchRequestDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/sales/rmareporting/import/cm-summary": {
+      "get": {
+        "tags": [
+          "RMAReporting"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/sales/rmareporting/reconcile/files": {
+      "get": {
+        "tags": [
+          "RMAReporting"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/sales/rmareporting/reconcile/file-types": {
+      "get": {
+        "tags": [
+          "RMAReporting"
         ],
         "parameters": [
           {
-            "name": "fileType",
-            "in": "path",
-            "required": true,
-            "style": "simple",
+            "name": "fileName",
+            "in": "query",
+            "style": "form",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "default": ""
             }
           }
         ],
@@ -7869,38 +8021,23 @@
         }
       }
     },
-    "/api/sales/rmareporting/import/cmsummary": {
-      "post": {
+    "/api/sales/rmareporting/reconcile/details": {
+      "get": {
         "tags": [
-          "RMAReportingImport"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success"
-          }
-        }
-      }
-    },
-    "/api/sales/rmareporting/import/manualimport": {
-      "post": {
-        "tags": [
-          "RMAReportingImport"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success"
-          }
-        }
-      }
-    },
-    "/api/sales/rmareporting/import/deletebatch": {
-      "delete": {
-        "tags": [
-          "RMAReportingImport"
+          "RMAReporting"
         ],
         "parameters": [
           {
-            "name": "cmFile",
+            "name": "fileName",
+            "in": "query",
+            "style": "form",
+            "schema": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          {
+            "name": "className",
             "in": "query",
             "style": "form",
             "schema": {
@@ -7908,7 +8045,7 @@
             }
           },
           {
-            "name": "rmFile",
+            "name": "typeName",
             "in": "query",
             "style": "form",
             "schema": {
@@ -7916,11 +8053,230 @@
             }
           },
           {
-            "name": "manualFile",
+            "name": "sourceName",
             "in": "query",
             "style": "form",
             "schema": {
               "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/sales/rmareporting/reports/query": {
+      "get": {
+        "tags": [
+          "RMAReporting"
+        ],
+        "parameters": [
+          {
+            "name": "queryType",
+            "in": "query",
+            "style": "form",
+            "schema": {
+              "type": "string",
+              "default": "creditMatches"
+            }
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "style": "form",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "style": "form",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "RMAReporting"
+        ],
+        "parameters": [
+          {
+            "name": "queryType",
+            "in": "query",
+            "style": "form",
+            "schema": {
+              "type": "string",
+              "default": "creditMatches"
+            }
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "style": "form",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "style": "form",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/sales/rmareporting/reports/export": {
+      "get": {
+        "tags": [
+          "RMAReporting"
+        ],
+        "parameters": [
+          {
+            "name": "queryType",
+            "in": "query",
+            "style": "form",
+            "schema": {
+              "type": "string",
+              "default": "creditMatches"
+            }
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "style": "form",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "style": "form",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/sales/rmareporting/reports/read-returns": {
+      "post": {
+        "tags": [
+          "RMAReporting"
+        ],
+        "parameters": [
+          {
+            "name": "startDate",
+            "in": "query",
+            "style": "form",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "style": "form",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/sales/rmareporting/utilities/users": {
+      "get": {
+        "tags": [
+          "RMAReporting"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/sales/rmareporting/utilities/save-user": {
+      "post": {
+        "tags": [
+          "RMAReporting"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DAL.Sales.RMAReporting.SaveRMAUserRequestDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DAL.Sales.RMAReporting.SaveRMAUserRequestDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DAL.Sales.RMAReporting.SaveRMAUserRequestDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/sales/rmareporting/utilities/reset-data": {
+      "post": {
+        "tags": [
+          "RMAReporting"
+        ],
+        "parameters": [
+          {
+            "name": "scope",
+            "in": "query",
+            "style": "form",
+            "schema": {
+              "type": "string",
+              "default": "all"
             }
           }
         ],
@@ -13444,6 +13800,50 @@
           "message": {
             "type": "string",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DAL.Sales.RMAReporting.DeleteBatchRequestDTO": {
+        "type": "object",
+        "properties": {
+          "cmFile": {
+            "type": "string",
+            "nullable": true
+          },
+          "rmFile": {
+            "type": "string",
+            "nullable": true
+          },
+          "manualFile": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DAL.Sales.RMAReporting.SaveRMAUserRequestDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "userName": {
+            "type": "string",
+            "nullable": true
+          },
+          "userInitials": {
+            "type": "string",
+            "nullable": true
+          },
+          "userRole": {
+            "type": "string",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false

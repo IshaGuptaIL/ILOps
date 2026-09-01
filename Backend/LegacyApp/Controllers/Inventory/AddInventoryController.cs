@@ -5,6 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LegacyApp.Controllers.Inventory
 {
+    /// <summary>
+    /// Handles new inventory item creation and validation across Spire ERP warehouses.
+    /// Validates part numbers, bilingual descriptions, product codes, and initializes inventory records.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class AddInventoryController : ControllerBase
@@ -15,6 +19,11 @@ namespace LegacyApp.Controllers.Inventory
         {
             _inventory = inventory;
         }
+
+        /// <summary>
+        /// Checks whether a specified part number already exists in a given warehouse.
+        /// Prevents duplicate part code creation across the inventory master.
+        /// </summary>
         [HttpGet("CheckPartNo")]
         public async Task<ApiResposne> CheckPartNo(string partNo, string whse)
         {
@@ -24,6 +33,10 @@ namespace LegacyApp.Controllers.Inventory
         // ==============================
         // Add inventory item
         // ==============================
+        /// <summary>
+        /// Validates item attributes and creates a new inventory master record in Spire ERP.
+        /// Enforces description character limits, cost constraints, and product type rules.
+        /// </summary>
         [HttpPost("InventoryAdd")]
         public async Task<ApiResposne> InventoryAdd([FromBody] AddInventoryBO model)
         {

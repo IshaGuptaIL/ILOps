@@ -1,0 +1,125 @@
+<div class="access-form-container">
+  <!-- Form Header -->
+  <div class="form-title-bar">
+    <span class="header-icon">&#x1F4CA;</span>
+    <span class="header-title">frmReports2 - RMA & Rogers Reconciliation Reports</span>
+  </div>
+
+  <!-- Messages Bar -->
+  <div *ngIf="statusMessage" class="access-success-bar">{{ statusMessage }}</div>
+  <div *ngIf="errorMessage" class="access-error-bar">{{ errorMessage }}</div>
+
+  <!-- Filter & Parameters Bar -->
+  <div class="reports-filter-bar">
+    <div class="filter-group">
+      <label class="filter-label">Date Start:</label>
+      <input type="date" class="access-textbox" [(ngModel)]="startDate" />
+      <label class="filter-label">Date End:</label>
+      <input type="date" class="access-textbox" [(ngModel)]="endDate" />
+    </div>
+    <div class="filter-actions">
+      <button class="access-btn-primary" (click)="runQuery(activeQuery, queryTitle)">Run Query</button>
+      <button class="access-btn-secondary" (click)="exportExcel()">Output to Excel</button>
+    </div>
+  </div>
+
+  <!-- Main Body Layout -->
+  <div class="reports-layout-grid">
+    
+    <!-- Left Buttons Sidebar -->
+    <div class="reports-sidebar">
+      
+      <!-- Section 1 -->
+      <div class="sidebar-box">
+        <div class="sidebar-heading">Comparison Queries</div>
+        <p class="sidebar-desc">Compare Rogers CM and RM data to RMA database</p>
+        <button class="report-btn" [class.active-btn]="activeQuery === 'creditMatches'" (click)="runQuery('creditMatches', 'Credit Matches')">Credit Matches</button>
+        <button class="report-btn" [class.active-btn]="activeQuery === 'creditsNotExpected'" (click)="runQuery('creditsNotExpected', 'Credit Not Expected')">Credit Not Expected</button>
+        <button class="report-btn" [class.active-btn]="activeQuery === 'returnsNoCredit'" (click)="runQuery('returnsNoCredit', 'Returns - No Credit')">Returns - No Credit</button>
+        <button class="report-btn" [class.active-btn]="activeQuery === 'creditVariance'" (click)="runQuery('creditVariance', 'Credit Variance')">Credit Variance</button>
+      </div>
+
+      <!-- Section 2 -->
+      <div class="sidebar-box">
+        <div class="sidebar-heading">Audit & Verification Queries</div>
+        <p class="sidebar-desc">Verify RMA database against BusinessVision / Spire invoices</p>
+        <button class="report-btn" [class.active-btn]="activeQuery === 'missingRrt'" (click)="runQuery('missingRrt', 'Missing RRT Invoice')">Missing RRT Invoice</button>
+        <button class="report-btn" [class.active-btn]="activeQuery === 'rrtMismatch'" (click)="runQuery('rrtMismatch', 'RRT Invoice Mismatch')">RRT Invoice Mismatch</button>
+        <button class="report-btn" [class.active-btn]="activeQuery === 'rrtMissingData'" (click)="runQuery('rrtMissingData', 'RRT Invoice Missing Data')">RRT Invoice Missing Data</button>
+        <button class="report-btn" [class.active-btn]="activeQuery === 'rrtNoRma'" (click)="runQuery('rrtNoRma', 'RRT Invoice - No RMA record')">RRT Invoice - No RMA record</button>
+      </div>
+
+      <!-- Section 3 -->
+      <div class="sidebar-box">
+        <div class="sidebar-heading">Returns Processing</div>
+        <button class="report-btn btn-highlight" (click)="readRogersReturns()">Read In Rogers Returns</button>
+        <small class="text-muted">Run before executing reconciliation queries.</small>
+      </div>
+
+    </div>
+
+    <!-- Right Results Datasheet Area -->
+    <div class="reports-results-panel">
+      <div class="results-header">
+        <span class="font-semibold">{{ queryTitle }} ({{ results.length }} records)</span>
+      </div>
+
+      <div class="datasheet-scroll-wrapper">
+        <table class="access-datasheet">
+          <thead>
+            <tr>
+              <th class="col-selector"></th>
+              <th>ID</th>
+              <th>Col 1 / Ref</th>
+              <th>Col 2 / Item</th>
+              <th>Col 3 / Detail</th>
+              <th>Col 4 / SKU</th>
+              <th>Amount 1</th>
+              <th>Amount 2</th>
+              <th>Date</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let r of results; let i = index" [class.selected-row]="i === selectedRowIndex" (click)="selectedRowIndex = i">
+              <td class="col-selector">
+                <span *ngIf="i === selectedRowIndex" class="selector-arrow">&#x25B6;</span>
+              </td>
+              <td>{{ r.id }}</td>
+              <td class="font-semibold">{{ r.col1 }}</td>
+              <td>{{ r.col2 }}</td>
+              <td>{{ r.col3 }}</td>
+              <td>{{ r.col4 }}</td>
+              <td class="text-right" *ngIf="r.amount1 !== null && r.amount1 !== undefined">${{ r.amount1 | number:'1.2-2' }}</td>
+              <td class="text-right" *ngIf="r.amount1 === null || r.amount1 === undefined">-</td>
+              <td class="text-right font-semibold" *ngIf="r.amount2 !== null && r.amount2 !== undefined">${{ r.amount2 | number:'1.2-2' }}</td>
+              <td class="text-right" *ngIf="r.amount2 === null || r.amount2 === undefined">-</td>
+              <td>{{ r.date1 | date:'M/d/yyyy' }}</td>
+              <td>
+                <span class="badge-status">{{ r.status }}</span>
+              </td>
+            </tr>
+            <tr *ngIf="results.length === 0">
+              <td colspan="10" class="no-records">No records returned for selected query criteria.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Access Record Selector Bar -->
+      <div class="access-record-bar">
+        <span class="rec-label">Record:</span>
+        <button class="nav-btn" [disabled]="selectedRowIndex <= 0" (click)="selectedRowIndex = 0">&#x23EE;</button>
+        <button class="nav-btn" [disabled]="selectedRowIndex <= 0" (click)="selectedRowIndex = selectedRowIndex - 1">&#x25C0;</button>
+        <input type="text" class="rec-current-input" [value]="results.length > 0 ? selectedRowIndex + 1 : 0" readonly />
+        <span class="rec-of">of {{ results.length }}</span>
+        <button class="nav-btn" [disabled]="selectedRowIndex >= results.length - 1" (click)="selectedRowIndex = selectedRowIndex + 1">&#x25B6;</button>
+        <button class="nav-btn" [disabled]="selectedRowIndex >= results.length - 1" (click)="selectedRowIndex = results.length - 1">&#x23ED;</button>
+        <span class="nav-divider">|</span>
+        <span class="filter-status">Filtered by Date Range</span>
+      </div>
+
+    </div>
+
+  </div>
+</div>

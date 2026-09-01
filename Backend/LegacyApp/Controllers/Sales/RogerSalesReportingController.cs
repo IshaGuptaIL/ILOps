@@ -11,6 +11,10 @@ using System.Threading.Tasks;
 
 namespace LegacyApp.Controllers.Sales
 {
+    /// <summary>
+    /// Executes Rogers sales reporting queries, outputs sales reports to Excel, and updates sales activation records.
+    /// Supports dynamic action routing (dealer, territory, activation types), inline line adjustments, and file exports.
+    /// </summary>
     [Route("api/sales/rogerssalesreporting")]
     [ApiController]
     public class RogerSalesReportingController : ControllerBase
@@ -32,6 +36,10 @@ namespace LegacyApp.Controllers.Sales
             return "System";
         }
 
+        /// <summary>
+        /// Executes a dynamic sales reporting query action and returns tabular JSON data with department revenue columns.
+        /// Used by the Rogers Sales Reporting grid for live data viewing.
+        /// </summary>
         [HttpGet("{endpoint}/view")]
         public async Task<IActionResult> ExecuteViewAction(
             string endpoint,
@@ -69,6 +77,10 @@ namespace LegacyApp.Controllers.Sales
             }
         }
 
+        /// <summary>
+        /// Executes a specified sales query and generates a downloadable Excel (.xlsx) workbook.
+        /// Produces customized reporting spreadsheets directly from database queries.
+        /// </summary>
         [HttpGet("{endpoint}/output")]
         public async Task<IActionResult> ExecuteOutputAction(
             string endpoint,
@@ -100,6 +112,10 @@ namespace LegacyApp.Controllers.Sales
             }
         }
 
+        /// <summary>
+        /// Updates line-item attributes on a Rogers sales activation record (e.g. fees, suppress flag, adjustments).
+        /// Modifies commission calculations and invoice details in the sales ledger.
+        /// </summary>
         [HttpPut("update")]
         public async Task<IActionResult> UpdateSalesActivationRow([FromBody] System.Text.Json.JsonElement jsonRow)
         {
@@ -139,6 +155,10 @@ namespace LegacyApp.Controllers.Sales
             }
         }
 
+        /// <summary>
+        /// Converts client-side filtered sales grid rows into a formatted Excel export file.
+        /// Retains UI column arrangements and applied filters in the resulting spreadsheet.
+        /// </summary>
         [HttpPost("export-filtered")]
         public async Task<IActionResult> ExportFilteredData([FromBody] FilteredDataRequest request)
         {
@@ -228,7 +248,10 @@ namespace LegacyApp.Controllers.Sales
             }
         }
 
-        // Legacy endpoint for backward compatibility
+        /// <summary>
+        /// Unified legacy dispatcher endpoint supporting backwards-compatible view and export requests.
+        /// Routes report actions based on endpoint parameter.
+        /// </summary>
         [HttpGet("{endpoint}")]
         public async Task<IActionResult> ExecuteAction(
             string endpoint,

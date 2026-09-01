@@ -1,0 +1,206 @@
+<app-spinner></app-spinner>
+
+<div class="switchboard-wrapper">
+  
+  <!-- VIEW 1: UTILITIES SWITCHBOARD (Matching uploaded screenshot) -->
+  <div class="switchboard-container" *ngIf="activeView === 'switchboard'">
+    
+    <!-- Teal Header Box -->
+    <div class="switchboard-header-teal">
+      <h2 class="switchboard-title">Utilities</h2>
+    </div>
+
+    <!-- Switchboard Menu Items List -->
+    <div class="switchboard-body">
+      <div class="switchboard-menu">
+        
+        <!-- Option 1: IMEI Search -->
+        <div class="menu-item" (click)="onOptionClick('imeiSearch')">
+          <button class="square-btn" type="button" title="IMEI Search"></button>
+          <span class="menu-label">IMEI Search</span>
+        </div>
+
+        <!-- Option 2: Edit Users -->
+        <div class="menu-item" (click)="onOptionClick('editUsers')">
+          <button class="square-btn" type="button" title="Edit Users"></button>
+          <span class="menu-label">Edit Users</span>
+        </div>
+
+        <!-- Option 3: Previous Menu -->
+        <div class="menu-item" (click)="onOptionClick('previousMenu')">
+          <button class="square-btn" type="button" title="Previous Menu"></button>
+          <span class="menu-label">Previous Menu</span>
+        </div>
+
+        <!-- Option 4: Exit Application -->
+        <div class="menu-item" (click)="onOptionClick('exitApplication')">
+          <button class="square-btn" type="button" title="Exit Application"></button>
+          <span class="menu-label">Exit Application</span>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- VIEW 2: MAIN SWITCHBOARD MENU -->
+  <div class="switchboard-container" *ngIf="activeView === 'mainSwitchboard'">
+    
+    <div class="switchboard-header-teal">
+      <h2 class="switchboard-title">Main Switchboard</h2>
+    </div>
+
+    <div class="switchboard-body">
+      <div class="switchboard-menu">
+        
+        <div class="menu-item" (click)="onOptionClick('rogersReportImport')">
+          <button class="square-btn" type="button"></button>
+          <span class="menu-label">Import Rogers CM and RMA data.</span>
+        </div>
+
+        <div class="menu-item" (click)="onOptionClick('reports2')">
+          <button class="square-btn" type="button"></button>
+          <span class="menu-label">Reports</span>
+        </div>
+
+        <div class="menu-item" (click)="onOptionClick('utilities')">
+          <button class="square-btn" type="button"></button>
+          <span class="menu-label">Utilities</span>
+        </div>
+
+        <div class="menu-item" (click)="onOptionClick('exitApplication')">
+          <button class="square-btn" type="button"></button>
+          <span class="menu-label">Exit Application</span>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- VIEW 3: EDIT USERS (frmUsers Management Datasheet) -->
+  <div class="access-form-container" *ngIf="activeView === 'editUsers'">
+    
+    <!-- Form Header -->
+    <div class="form-title-bar">
+      <div class="d-flex align-items-center gap-2">
+        <span class="header-icon">&#x1F6E0;</span>
+        <span class="header-title">frmUsers - User Management</span>
+      </div>
+      <button class="btn btn-sm btn-outline-light ms-auto" (click)="activeView = 'switchboard'">
+        <i class="fa fa-arrow-left me-1"></i>Back to Utilities
+      </button>
+    </div>
+
+    <!-- Messages Bar -->
+    <div *ngIf="statusMessage" class="access-success-bar">{{ statusMessage }}</div>
+    <div *ngIf="errorMessage" class="access-error-bar">{{ errorMessage }}</div>
+
+    <!-- Action Bar -->
+    <div class="utilities-action-bar">
+      <div class="action-left">
+        <button class="access-btn-danger" (click)="resetDataProcedure()">Reset Data Procedure</button>
+        <span class="text-muted small ms-2">(Clears and resets temporary RMA staging calculation tables)</span>
+      </div>
+      <div class="action-right">
+        <button class="access-btn-primary" (click)="openAddUser()">+ Add New User</button>
+        <button class="access-btn-secondary" (click)="loadUsers()">Refresh Users</button>
+      </div>
+    </div>
+
+    <!-- Users Datasheet -->
+    <div class="users-panel mt-3">
+      <div class="users-header">
+        <span class="fw-bold text-dark">tblUsers - Authorized RMA Users ({{ users.length }} users)</span>
+      </div>
+
+      <div class="datasheet-scroll-wrapper">
+        <table class="access-datasheet">
+          <thead>
+            <tr>
+              <th class="col-selector"></th>
+              <th>ID</th>
+              <th>UserName</th>
+              <th>UserInitials</th>
+              <th>UserRole</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let u of users; let i = index" [class.selected-row]="i === selectedUserIndex" (click)="selectedUserIndex = i">
+              <td class="col-selector">
+                <span *ngIf="i === selectedUserIndex" class="selector-arrow">&#x25B6;</span>
+              </td>
+              <td>{{ u.id }}</td>
+              <td class="font-semibold">{{ u.userName }}</td>
+              <td class="text-center font-mono">{{ u.userInitials }}</td>
+              <td>{{ u.userRole }}</td>
+              <td>
+                <span class="badge bg-success" *ngIf="u.isActive">Active</span>
+                <span class="badge bg-danger" *ngIf="!u.isActive">Inactive</span>
+              </td>
+              <td class="text-center">
+                <button class="btn btn-sm btn-outline-primary py-0 px-2" (click)="openEditUser(u)">Edit</button>
+              </td>
+            </tr>
+            <tr *ngIf="users.length === 0">
+              <td colspan="7" class="no-records">No users found.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Access Record Selector Bar -->
+      <div class="access-record-bar">
+        <span class="rec-label">Record:</span>
+        <button class="nav-btn" [disabled]="selectedUserIndex <= 0" (click)="selectedUserIndex = 0">&#x23EE;</button>
+        <button class="nav-btn" [disabled]="selectedUserIndex <= 0" (click)="selectedUserIndex = selectedUserIndex - 1">&#x25C0;</button>
+        <input type="text" class="rec-current-input" [value]="users.length > 0 ? selectedUserIndex + 1 : 0" readonly />
+        <span class="rec-of">of {{ users.length }}</span>
+        <button class="nav-btn" [disabled]="selectedUserIndex >= users.length - 1" (click)="selectedUserIndex = selectedUserIndex + 1">&#x25B6;</button>
+        <button class="nav-btn" [disabled]="selectedUserIndex >= users.length - 1" (click)="selectedUserIndex = users.length - 1">&#x23ED;</button>
+      </div>
+    </div>
+
+    <!-- User Edit Modal -->
+    <div class="access-modal-overlay" *ngIf="showUserModal" (click)="closeUserModal()">
+      <div class="access-modal-dialog" (click)="$event.stopPropagation()">
+        <div class="access-modal-header">
+          <span>{{ editingUser.id ? 'Edit RMA User' : 'Add New RMA User' }}</span>
+          <button class="close-btn" (click)="closeUserModal()">&times;</button>
+        </div>
+        <div class="access-modal-body">
+          <div class="modal-form-row">
+            <label class="modal-label">User Name:</label>
+            <input type="text" class="access-textbox flex-1" [(ngModel)]="editingUser.userName" placeholder="Enter user full name" />
+          </div>
+          <div class="modal-form-row">
+            <label class="modal-label">User Initials:</label>
+            <input type="text" class="access-textbox flex-1" [(ngModel)]="editingUser.userInitials" placeholder="e.g. JD" />
+          </div>
+          <div class="modal-form-row">
+            <label class="modal-label">Role:</label>
+            <select class="access-dropdown flex-1" [(ngModel)]="editingUser.userRole">
+              <option value="Admin">Admin</option>
+              <option value="User">User</option>
+              <option value="Manager">Manager</option>
+            </select>
+          </div>
+          <div class="modal-form-row">
+            <label class="modal-label">Status:</label>
+            <label class="d-flex align-items-center gap-1">
+              <input type="checkbox" [(ngModel)]="editingUser.isActive" /> Active User
+            </label>
+          </div>
+        </div>
+        <div class="access-modal-footer">
+          <button class="access-btn-secondary" (click)="closeUserModal()">Cancel</button>
+          <button class="access-btn-primary" (click)="saveUser()">Save User</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>

@@ -8,6 +8,10 @@ using System.Threading.Tasks;
 
 namespace LegacyApp.Controllers.IEMI
 {
+    /// <summary>
+    /// Handles staging-based IMEI receiving operations, error checking, and receipt posting.
+    /// Manages user-specific staging tables (tblScanList / tblPackingSlip) and Spire inventory receiving transactions.
+    /// </summary>
     [Route("api/RecieveImei")]
     [ApiController]
     public class RecieveImeiController : ControllerBase
@@ -28,6 +32,10 @@ namespace LegacyApp.Controllers.IEMI
             return 1; // Default fallback legacy user ID
         }
 
+        /// <summary>
+        /// Clears previous staging and imports new Packing Slip IMEIs for the current user.
+        /// Saves records to tblPackingSlip for subsequent verification.
+        /// </summary>
         [HttpPost("ImportPackingSlip")]
         public async Task<ApiResposne> ImportPackingSlip([FromBody] List<RecieveIMEIBO> items)
         {
@@ -37,12 +45,20 @@ namespace LegacyApp.Controllers.IEMI
             return result;
         }
 
+        /// <summary>
+        /// Retrieves open purchase orders from Spire to populate the receiving dropdown.
+        /// Used by the receiving interface to select active purchase order lines.
+        /// </summary>
         [HttpGet("GetPurchaseOrdersAsync")]
         public async Task<ApiResposne> GetPurchaseOrdersAsync()
         {
             return await _recieveImei.GetPurchaseOrdersAsync();
         }
 
+        /// <summary>
+        /// Inserts scanned IMEI serial numbers into the user's scan list staging table (tblScanList).
+        /// Prepares scanned serial numbers for cross-verification against the packing slip.
+        /// </summary>
         [HttpPost("InsertScanList")]
         public async Task<IActionResult> InsertScanList([FromBody] List<RecieveIMEIBO> items)
         {
@@ -57,6 +73,10 @@ namespace LegacyApp.Controllers.IEMI
                 return StatusCode(500, result);
         }
 
+        /// <summary>
+        /// Compares staged scan list against packing slip and inventory to generate verification grids.
+        /// Returns matched IMEIs, scan discrepancies, pack discrepancies, and existing inventory conflicts.
+        /// </summary>
         [HttpGet("GetIMEIGrids/{poNumber}")]
         public async Task<ApiResposne> GetIMEIGridsAsync(string poNumber)
         {
@@ -64,6 +84,10 @@ namespace LegacyApp.Controllers.IEMI
             return await _recieveImei.GetIMEIGridsAsync(poNumber, userId);
         }
 
+        /// <summary>
+        /// Finalizes verified receiving by posting serial receipts to Spire and logging to HardwareReceived.
+        /// Supports normal receiving as well as receipt reversals.
+        /// </summary>
         [HttpPost("PostReceiptsAsync")]
         public async Task<ApiResposne> PostReceiptsAsync([FromBody] PostReceiptsRequest request)
         {
@@ -71,6 +95,10 @@ namespace LegacyApp.Controllers.IEMI
             return await _recieveImei.PostReceiptsAsync(request.PoId, request.PoItemId, request.Cmo, request.IsReversal, userId);
         }
 
+        /// <summary>
+        /// Executes validation rules against staged IMEIs, verifying format, duplicates, remaining PO qty, and onhand status.
+        /// Returns detailed error messages if discrepancies exist.
+        /// </summary>
         [HttpGet("CheckErrorsAsync")]
         public async Task<ApiResposne> CheckErrorsAsync(long poId, long poItemId, bool isReversal)
         {
@@ -78,6 +106,10 @@ namespace LegacyApp.Controllers.IEMI
             return await _recieveImei.CheckErrorsAsync(poId, poItemId, isReversal, userId);
         }
 
+        /// <summary>
+        /// Generates sample Excel templates for Scan List and Packing Slip imports on local filesystem.
+        /// Helper utility for creating correctly formatted import spreadsheets.
+        /// </summary>
         [HttpGet("GenerateSampleExcels")]
         public IActionResult GenerateSampleExcels()
         {

@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LegacyApp.Controllers.Inventory
 {
+    /// <summary>
+    /// Manages Price Protection credit application, unpaid claims review, and credit note number maintenance.
+    /// Provides batch summaries, claim detail inspection, credit application posting, and Excel reporting.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class ApplyCreditReviewClaimsController : ControllerBase
@@ -18,6 +22,10 @@ namespace LegacyApp.Controllers.Inventory
             _da = da;
         }
 
+        /// <summary>
+        /// Retrieves high-level summary of Price Protection claim batches and their approval status.
+        /// Populates the claims summary dashboard.
+        /// </summary>
         [HttpGet("claims-summary")]
         public async Task<ApiResposne> GetClaimsSummary()
         {
@@ -38,6 +46,10 @@ namespace LegacyApp.Controllers.Inventory
             }
         }
 
+        /// <summary>
+        /// Retrieves credit totals and reconciliation status for a specified claim batch.
+        /// Displays batch totals in the credit review grid.
+        /// </summary>
         [HttpGet("credit-summary/{batchId}")]
         public async Task<ApiResposne> GetCreditSummary(int batchId)
         {
@@ -58,6 +70,10 @@ namespace LegacyApp.Controllers.Inventory
             }
         }
 
+        /// <summary>
+        /// Retrieves itemized unpaid Price Protection claim lines filtered by batch or credit note number.
+        /// Used by finance to review pending credit amounts awaiting vendor approval.
+        /// </summary>
         [HttpGet("unpaid-claims-detail")]
         public async Task<ApiResposne> GetUnpaidClaimsDetail([FromQuery] int batchId, [FromQuery] string? creditNoteNumber)
         {
@@ -78,6 +94,10 @@ namespace LegacyApp.Controllers.Inventory
             }
         }
 
+        /// <summary>
+        /// Retrieves detailed line-item attributes for a specific price protection claim ID.
+        /// Used to inspect individual item quantities, price deltas, and serial numbers.
+        /// </summary>
         [HttpGet("credit-detail/{claimId}")]
         public async Task<ApiResposne> GetCreditDetail(int claimId)
         {
@@ -98,6 +118,10 @@ namespace LegacyApp.Controllers.Inventory
             }
         }
 
+        /// <summary>
+        /// Updates or reassigns credit note reference numbers across Price Protection records.
+        /// Modifies credit tracking references when vendor credit notes are re-issued.
+        /// </summary>
         [HttpPost("modify-credit-number")]
         public async Task<ApiResposne> ModifyCreditNoteNumber([FromBody] ModifyCreditNumberRequest request)
         {
@@ -117,6 +141,10 @@ namespace LegacyApp.Controllers.Inventory
             }
         }
 
+        /// <summary>
+        /// Applies approved Price Protection credits against vendor payable balances.
+        /// Updates claim records with applied status and posting timestamp.
+        /// </summary>
         [HttpPost("apply-credit")]
         public async Task<ApiResposne> ApplyCredit([FromBody] ApplyCreditRequest request)
         {
@@ -136,6 +164,10 @@ namespace LegacyApp.Controllers.Inventory
             }
         }
 
+        /// <summary>
+        /// Exports Price Protection claims summary report into a downloadable Excel (.xlsx) file.
+        /// Provides offline audit documentation of price protection claims.
+        /// </summary>
         [HttpGet("export-claims-summary")]
         public async Task<IActionResult> ExportClaimsSummary()
         {

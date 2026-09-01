@@ -1,9 +1,15 @@
-﻿using DAL.Inventory.OutputInvoice;
+using DAL.Inventory.OutputInvoice;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using System;
 
 namespace LegacyApp.Controllers.Inventory
 {
+    /// <summary>
+    /// Generates, matches, and exports sales invoice document batches into downloadable ZIP packages.
+    /// Handles invoice queuing, template matching, bulk printing pipelines, and archive generation.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class OutputInvoiceController : ControllerBase
@@ -15,6 +21,10 @@ namespace LegacyApp.Controllers.Inventory
             _repo = repo;
         }
 
+        /// <summary>
+        /// Retrieves a paginated list of queued invoices awaiting PDF generation or printing.
+        /// Displays staged invoice lines in the output queue table.
+        /// </summary>
         [HttpGet("list")]
         public async Task<IActionResult> GetInvoiceList([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
@@ -22,6 +32,10 @@ namespace LegacyApp.Controllers.Inventory
             return Ok(result);
         }
 
+        /// <summary>
+        /// Clears all queued invoice records from the generation pipeline.
+        /// Resets the invoice output staging list.
+        /// </summary>
         [HttpDelete("clear")]
         public async Task<IActionResult> ClearInvoices()
         {
@@ -29,6 +43,10 @@ namespace LegacyApp.Controllers.Inventory
             return Ok(result);
         }
 
+        /// <summary>
+        /// Processes and renders all queued invoices according to selected output criteria and format.
+        /// Generates document files on the server for archiving.
+        /// </summary>
         [HttpPost("output-all")]
         public async Task<IActionResult> OutputInvoices([FromBody] InvoiceOutputRequest request)
         {
@@ -43,7 +61,10 @@ namespace LegacyApp.Controllers.Inventory
             });
         }
 
-
+        /// <summary>
+        /// Uploads an external invoice template spreadsheet and matches invoice numbers against staging.
+        /// Identifies matched invoice files for batch processing.
+        /// </summary>
         [HttpPost("upload-template")]
         public async Task<IActionResult> Upload(IFormFile file)
         {
@@ -52,6 +73,10 @@ namespace LegacyApp.Controllers.Inventory
             return Ok(result);
         }
 
+        /// <summary>
+        /// Compresses generated invoice PDF documents into a downloadable ZIP archive.
+        /// Facilitates single-download distribution of large invoice batches.
+        /// </summary>
         [HttpPost("generate-zip")]
         public async Task<IActionResult> GenerateZip([FromBody] InvoiceOutputRequest request)
         {
@@ -63,9 +88,5 @@ namespace LegacyApp.Controllers.Inventory
             string fileName = $"Invoices_{DateTime.Now:yyyyMMddHHmmss}.zip";
             return File(zipBytes, "application/zip", fileName);
         }
-
-
     }
-
-
 }

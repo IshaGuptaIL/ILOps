@@ -6,6 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LegacyApp.Controllers.Inventory
 {
+    /// <summary>
+    /// Searches Price Protection claims, credits, and overpayments associated with specific IMEI numbers.
+    /// Provides consolidated serial number lookup across all price protection tables.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class ImeiSearchController : ControllerBase
@@ -17,6 +21,10 @@ namespace LegacyApp.Controllers.Inventory
             _da = da;
         }
 
+        /// <summary>
+        /// Retrieves all Price Protection claims, issued credits, and overpayments linked to an IMEI serial number.
+        /// Consolidates claim and credit history into a unified response.
+        /// </summary>
         [HttpGet("search")]
         [HttpGet("search/{imei?}")]
         public async Task<ApiResposne> SearchImei(string imei = null)

@@ -5,6 +5,10 @@ using System.IO;
 
 namespace LegacyApp.Controllers.Inventory
 {
+    /// <summary>
+    /// Manages Advantage Voice bulk order imports, staging validation, and automated Spire order submissions.
+    /// Handles Excel file uploads, validation error reporting, order generation, and import template downloads.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class AdvantageVoiceController : ControllerBase
@@ -18,6 +22,10 @@ namespace LegacyApp.Controllers.Inventory
             _env = env;
         }
 
+        /// <summary>
+        /// Retrieves pending imported Advantage Voice rows for the specified user ID.
+        /// Displays staged items in the import review grid.
+        /// </summary>
         [HttpGet("GetPendingImports")]
         public async Task<ActionResult<List<AdvantageImportVM>>> GetPendingImports([FromQuery] int userId)
         {
@@ -32,6 +40,10 @@ namespace LegacyApp.Controllers.Inventory
             }
         }
 
+        /// <summary>
+        /// Imports Advantage Voice orders from an uploaded Excel spreadsheet into the user's staging table.
+        /// Parses customer, part, quantity, and pricing details.
+        /// </summary>
         [HttpPost("ImportExcel")]
         public async Task<ActionResult<bool>> ImportExcel(IFormFile file, [FromQuery] int userId)
         {
@@ -52,6 +64,10 @@ namespace LegacyApp.Controllers.Inventory
             }
         }
 
+        /// <summary>
+        /// Validates staged Advantage Voice import lines against customer, inventory, and warehouse rules.
+        /// Flags invalid accounts, inactive items, or pricing discrepancies.
+        /// </summary>
         [HttpPost("ValidateData")]
         public async Task<ActionResult<List<AdvantageImportVM>>> ValidateData([FromQuery] int userId)
         {
@@ -66,6 +82,10 @@ namespace LegacyApp.Controllers.Inventory
             }
         }
 
+        /// <summary>
+        /// Submits validated Advantage Voice staging lines to Spire to create formal sales orders.
+        /// Clears staging records upon successful order generation.
+        /// </summary>
         [HttpPost("SubmitOrders")]
         public async Task<ActionResult<bool>> SubmitOrders([FromQuery] int userId)
         {
@@ -80,6 +100,10 @@ namespace LegacyApp.Controllers.Inventory
             }
         }
 
+        /// <summary>
+        /// Serves the standardized Advantage Voice Excel import template (ADVImport.xlsx) for download.
+        /// Provides users with the correctly formatted spreadsheet structure.
+        /// </summary>
         [HttpGet("DownloadTemplate")]
         public IActionResult DownloadTemplate()
         {

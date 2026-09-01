@@ -4600,7 +4600,7 @@
   },
   {
     "ContainingType": "LegacyApp.Controllers.Inventory.RogerController",
-    "Method": "ExportToExcel",
+    "Method": "ExportARData",
     "RelativePath": "api/Roger/export",
     "HttpMethod": "GET",
     "IsController": true,
@@ -4998,86 +4998,306 @@
     ]
   },
   {
-    "ContainingType": "LegacyApp.Controllers.RMAReportingImportController",
-    "Method": "GenerateCmSummary",
-    "RelativePath": "api/sales/rmareporting/import/cmsummary",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "LegacyApp.Controllers.RMAReportingImportController",
-    "Method": "DeleteBatch",
-    "RelativePath": "api/sales/rmareporting/import/deletebatch",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "cmFile",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "rmFile",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "manualFile",
-        "Type": "System.String",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "LegacyApp.Controllers.RMAReportingImportController",
-    "Method": "ProcessManualImport",
-    "RelativePath": "api/sales/rmareporting/import/manualimport",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "LegacyApp.Controllers.RMAReportingImportController",
-    "Method": "DownloadTemplate",
-    "RelativePath": "api/sales/rmareporting/import/template/{fileType}",
+    "ContainingType": "LegacyApp.Controllers.Sales.RMAReportingController",
+    "Method": "SearchIMEI",
+    "RelativePath": "api/sales/rmareporting/imeisearch/search",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "fileType",
+        "Name": "criteria",
         "Type": "System.String",
-        "IsRequired": true
+        "IsRequired": false
+      },
+      {
+        "Name": "query",
+        "Type": "System.String",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
   },
   {
-    "ContainingType": "LegacyApp.Controllers.RMAReportingImportController",
-    "Method": "UploadFile",
-    "RelativePath": "api/sales/rmareporting/import/upload/{fileType}",
+    "ContainingType": "LegacyApp.Controllers.Sales.RMAReportingController",
+    "Method": "GetImportBatches",
+    "RelativePath": "api/sales/rmareporting/import/batches",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.RMAReportingController",
+    "Method": "ImportCMFile",
+    "RelativePath": "api/sales/rmareporting/import/cm",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
-      {
-        "Name": "fileType",
-        "Type": "System.String",
-        "IsRequired": true
-      },
       {
         "Name": "file",
         "Type": "Microsoft.AspNetCore.Http.IFormFile",
         "IsRequired": false
       }
     ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.RMAReportingController",
+    "Method": "GetCMSummary",
+    "RelativePath": "api/sales/rmareporting/import/cm-summary",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.RMAReportingController",
+    "Method": "DeleteImportBatch",
+    "RelativePath": "api/sales/rmareporting/import/delete-batch",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "DAL.Sales.RMAReporting.DeleteBatchRequestDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.RMAReportingController",
+    "Method": "ImportManualFile",
+    "RelativePath": "api/sales/rmareporting/import/manual",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "file",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.RMAReportingController",
+    "Method": "ImportRMFile",
+    "RelativePath": "api/sales/rmareporting/import/rm",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "file",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.RMAReportingController",
+    "Method": "GetReconcileDetails",
+    "RelativePath": "api/sales/rmareporting/reconcile/details",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "fileName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "className",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "typeName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "sourceName",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.RMAReportingController",
+    "Method": "GetReconcileFileTypes",
+    "RelativePath": "api/sales/rmareporting/reconcile/file-types",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "fileName",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.RMAReportingController",
+    "Method": "GetReconcileFiles",
+    "RelativePath": "api/sales/rmareporting/reconcile/files",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.RMAReportingController",
+    "Method": "ExportReport",
+    "RelativePath": "api/sales/rmareporting/reports/export",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "queryType",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "startDate",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "endDate",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.RMAReportingController",
+    "Method": "RunReportQuery",
+    "RelativePath": "api/sales/rmareporting/reports/query",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "queryType",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "startDate",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "endDate",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.RMAReportingController",
+    "Method": "RunReportQuery",
+    "RelativePath": "api/sales/rmareporting/reports/query",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "queryType",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "startDate",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "endDate",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.RMAReportingController",
+    "Method": "ReadRogersReturns",
+    "RelativePath": "api/sales/rmareporting/reports/read-returns",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "startDate",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "endDate",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.RMAReportingController",
+    "Method": "ResetData",
+    "RelativePath": "api/sales/rmareporting/utilities/reset-data",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "scope",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.RMAReportingController",
+    "Method": "SaveUser",
+    "RelativePath": "api/sales/rmareporting/utilities/save-user",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "DAL.Sales.RMAReporting.SaveRMAUserRequestDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LegacyApp.Controllers.Sales.RMAReportingController",
+    "Method": "GetUsers",
+    "RelativePath": "api/sales/rmareporting/utilities/users",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": []
   },
   {
